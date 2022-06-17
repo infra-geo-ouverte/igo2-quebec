@@ -1,0 +1,15 @@
+<igo-map-browser
+  igoHoverFeature
+  [igoHoverFeatureDelay]="250"
+  [igoHoverFeatureEnabled]="true"
+  #mapBrowser
+  igoMapContext
+  igoLayerContext
+  igoDropGeoFile
+  [map]="map"
+  [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
+
+  <igo-zoom-button [map]="map" color="primary">
+  </igo-zoom-button>
+  <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+</igo-map-browser>

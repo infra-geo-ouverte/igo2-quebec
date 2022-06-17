@@ -1,0 +1,3 @@
+@mixin app-portal-theming($theme) {
+  $primary: map-get($theme, primary);
+}

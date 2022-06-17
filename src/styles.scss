@@ -1,0 +1,6 @@
+@import 'style/reset.scss';
+@import 'style/theme.scss';
+
+.mat-tooltip-trigger {
+  touch-action: auto !important;
+}
