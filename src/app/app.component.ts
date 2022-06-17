@@ -7,11 +7,9 @@ import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
   ConfigService,
-  AnalyticsService,
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
-import { AnalyticsListenerService } from '@igo2/integration';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +23,6 @@ export class AppComponent {
   constructor(
     protected languageService: LanguageService,
     private configService: ConfigService,
-    private analyticsService: AnalyticsService,
-    private analyticsListenerService: AnalyticsListenerService,
     private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
@@ -37,8 +33,6 @@ export class AppComponent {
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
-
-    this.analyticsListenerService.listen();
 
     this.detectOldBrowser();
   }
