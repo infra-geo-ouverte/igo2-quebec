@@ -1,0 +1,45 @@
+.order2 {
+    order: 2;
+    width: 100%;
+    justify-content: flex-end;
+    display: flex;
+    margin-right: 0.5%;
+}
+
+$footer-margin-top: 0px;
+$footer-height: 29px;
+
+.footer-right {
+    z-index: 666;
+    background: #ffffffa3;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    height: $footer-height;
+    display: flex;
+}
+
+span.footer-text {
+    align-items: baseline;
+    color: #095797;
+    align-items: center;
+    margin-left: 0.5rem;
+}
+
+span.footer-text a{
+    color: #095797;
+    text-decoration: none;
+}
+
+//legend
+
+::ng-deep div.ol-scale-line.ol-unselectable {
+    display: flex;
+    position: fixed!important;
+    flex-direction: row;
+    left: 70px!important;
+    bottom: 3px;
+    margin-left: .5%;
+    padding: 2px;
+}
+

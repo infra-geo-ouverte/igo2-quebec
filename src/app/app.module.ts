@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
+import { FooterModule } from './pages/footer/footer.module';
 
 import {
   provideConfigOptions,
@@ -32,7 +33,8 @@ import { AppComponent } from './app.component';
     IgoStopPropagationModule,
     PortalModule,
     HammerModule,
-    HeaderModule
+    HeaderModule,
+    FooterModule
   ],
   providers: [
     provideConfigOptions({
