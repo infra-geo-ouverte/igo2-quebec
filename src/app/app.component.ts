@@ -10,6 +10,7 @@ import {
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
+import { HeaderComponent } from './pages/header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ import { AuthOptions } from '@igo2/auth';
 export class AppComponent {
   public authConfig: AuthOptions;
   private themeClass = 'blue-theme';
+  public hasHeader = true;
+  public HeaderComponent = HeaderComponent;
 
   constructor(
     protected languageService: LanguageService,
@@ -35,6 +38,9 @@ export class AppComponent {
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
+
+    this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
+    this.configService.getConfig('header.hasHeader');
   }
 
   private readTitleConfig() {
