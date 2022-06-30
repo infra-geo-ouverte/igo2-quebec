@@ -6,5 +6,6 @@
     "hasHeader": true,
     "logo": "assets/images/signature-PIV.svg",
     "logoPrint": "assets/images/signature-PIV.svg"
-  }
+  },
+  "hasFooter": true
 }
