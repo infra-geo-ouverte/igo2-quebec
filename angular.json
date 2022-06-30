@@ -201,7 +201,6 @@
   },
   "defaultProject": "igo2-quebec",
   "cli": {
-    "analytics": "629bd73f-eea4-4422-8d77-37537e6b84af",
     "defaultCollection": "@angular-eslint/schematics"
   }
 }
