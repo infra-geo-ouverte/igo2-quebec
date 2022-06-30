@@ -3,5 +3,12 @@
   "oldBrowser": {
     "title": "Too old browser",
     "message": "IGO2 does not fully support your browser. Please update it or use a different one."
+  },
+  "header": {
+    "title": "IGO",
+    "language": "Français",
+    "contactUsUrl" : "https://www.igouverte.org/#footer",
+    "contactUs" : "Contact us",
+    "externallinks": "This link will open in a new window"
   }
 }
