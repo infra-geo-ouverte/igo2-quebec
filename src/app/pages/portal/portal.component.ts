@@ -17,6 +17,8 @@ import {
   MapState
 } from '@igo2/integration';
 
+import { Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
+
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -24,6 +26,18 @@ import {
 })
 export class PortalComponent implements OnInit {
   public showRotationButtonIfNoRotation = false;
+  public hasSideSearch = true;
+  public showSearchBar = true;
+  public showMenuButton = true;
+  public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  get sidenavOpened(): boolean {
+    return this.sidenavOpened$.value;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this.sidenavOpened$.next(value);
+  }
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
@@ -38,6 +52,26 @@ export class PortalComponent implements OnInit {
   ) {
     this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
       this.configService.getConfig('showRotationButtonIfNoRotation');
+    this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
+      this.configService.getConfig('hasSideSearch');
+      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
+      this.configService.getConfig('showSearchBar');
+    this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
+      this.configService.getConfig('showMenuButton');
+  }
+
+  private closeSidenav() {
+    this.sidenavOpened = false;
+    this.map.viewController.padding[3] = 0;
+  }
+
+  private openSidenav() {
+    this.sidenavOpened = true;
+    this.map.viewController.padding[3] = 400;
+  }
+
+  private toggleSidenav() {
+    this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
   }
 
   ngOnInit() {

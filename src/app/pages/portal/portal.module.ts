@@ -1,10 +1,10 @@
+import { SideSearchModule} from '././side-search/side-search.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
 import { IgoCoreModule } from '@igo2/core';
 import {
   IgoEntityModule,
@@ -37,7 +37,9 @@ import { PortalComponent } from './portal.component';
     IgoFlexibleModule,
     IgoIntegrationModule,
     IgoContextManagerModule,
-    IgoContextMapButtonModule
+    IgoContextMapButtonModule,
+    SideSearchModule,
+    MatSidenavModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

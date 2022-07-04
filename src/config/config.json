@@ -8,5 +8,8 @@
     "logoPrint": "assets/images/signature-PIV.svg"
   },
   "hasMenu": true,
-  "hasFooter": true
+  "hasFooter": true,
+  "hasSideSearch": true,
+  "showSearchBar": true,
+  "showMenuButton": true
 }

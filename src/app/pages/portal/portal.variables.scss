@@ -1,4 +1,5 @@
 @import '~@igo2/core/style/partial/media';
+@import '~@igo2/core/style/partial/core.variables';
 @import 'variables';
 
 $menu-height : 72px;
@@ -6,3 +7,9 @@ $menu-height-mobile: 40px;
 $header-height: 72px;
 $header-height-mobile: 72px;
 $footer-height: 29px;
+
+$app-sidenav-width: 400px;
+$search-bar-left: $igo-icon-size + $igo-margin;
+$search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
+$app-sidenav-margin-top: 50px;
+$app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
