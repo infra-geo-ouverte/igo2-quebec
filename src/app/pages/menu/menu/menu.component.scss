@@ -1,18 +1,5 @@
 @import '../../portal/portal.variables.scss';
 
-
-// If there is a menu, header and/or footer
-/*
-::ng-deep app-portal {
-  height: calc(100% - #{$header-height-mobile} - #{$menu-height-mobile} - #{$footer-height})!important;
-}
-
-@media (min-width: 768px){
-  ::ng-deep app-portal {
-    height: calc(100% - #{$header-height} - #{$menu-height} - #{$footer-height})!important;
-  }
-}*/
-
   .navbar {
     position: relative;
     display: flex;
@@ -21,7 +8,7 @@
     flex-direction: row;
     flex-flow: row nowrap;
     justify-content: flex-start;
-    height: 56px;
+    height: $menu-height-mobile;
     width: 100%;
     margin: 0 auto 0 auto;
     padding: 0;
@@ -115,7 +102,7 @@ div.slick-track {
 
   @media (min-width: 768px){
     .navbar {
-      height: 72px;
+      height: $menu-height;
     }
 
     .navbar a {

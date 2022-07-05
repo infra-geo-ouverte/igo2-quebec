@@ -1,10 +1,49 @@
 @import './map.variables';
 @import '../portal/portal.variables.scss';
 
-/*** header-footer ***/
+/*** header-footer-menu overlay adjustment ***/
 
 ::ng-deep .portal-with-footer {
   height: calc( 100% - #{$footer-height} )!important;
+}
+
+::ng-deep .portal-with-header {
+  height: calc( 100% - #{$header-height-mobile} )!important;
+}
+
+::ng-deep .portal-with-footer-header {
+  height: calc( 100% - #{$footer-height} - #{$header-height-mobile} )!important;
+}
+
+::ng-deep .portal-with-header-menu {
+  height: calc( 100% - #{$header-height-mobile} - #{$menu-height-mobile} )!important;
+}
+
+::ng-deep .portal-with-footer-header-menu {
+  height: calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} )!important;
+}
+
+@media (min-width: 768px){
+  
+  ::ng-deep .portal-with-footer {
+    height: calc( 100% - #{$footer-height} )!important;
+  }
+
+  ::ng-deep .portal-with-header {
+    height: calc( 100% - #{$header-height} )!important;
+  }
+
+  ::ng-deep .portal-with-footer-header {
+    height: calc( 100% - #{$footer-height} - #{$header-height} )!important;
+  }
+  
+  ::ng-deep .portal-with-header-menu {
+    height: calc( 100% - #{$header-height} - #{$menu-height} )!important;
+  }
+
+  ::ng-deep .portal-with-footer-header-menu-height {
+    height: calc( 100% - #{$footer-height} - #{$header-height} - #{$menu-height} )!important;
+  }
 }
 
 ::ng-deep igo-search-bar {
