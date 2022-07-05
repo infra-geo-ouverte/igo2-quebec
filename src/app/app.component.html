@@ -3,5 +3,3 @@
 <app-header *ngIf="hasHeader" #header></app-header>
 
 <app-menu></app-menu>
-
-<app-portal [ngClass]=" hasHeader? (hasMenu? 'portal-with-header-menu' : 'portal-with-header') : (hasMenu? 'portal-with-menu' : 'portal') " igoStopDropPropagation></app-portal>

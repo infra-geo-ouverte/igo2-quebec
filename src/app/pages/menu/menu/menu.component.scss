@@ -2,6 +2,7 @@
 
 
 // If there is a menu, header and/or footer
+/*
 ::ng-deep app-portal {
   height: calc(100% - #{$header-height-mobile} - #{$menu-height-mobile} - #{$footer-height})!important;
 }
@@ -10,7 +11,7 @@
   ::ng-deep app-portal {
     height: calc(100% - #{$header-height} - #{$menu-height} - #{$footer-height})!important;
   }
-}
+}*/
 
   .navbar {
     position: relative;
@@ -20,7 +21,7 @@
     flex-direction: row;
     flex-flow: row nowrap;
     justify-content: flex-start;
-    height: 40px;
+    height: 56px;
     width: 100%;
     margin: 0 auto 0 auto;
     padding: 0;
