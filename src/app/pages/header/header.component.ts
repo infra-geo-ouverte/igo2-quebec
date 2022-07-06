@@ -10,16 +10,11 @@ export class HeaderComponent {
 
   public headerLogo: string;
   public headerLogoPrint: string;
-  public HeaderComponent = HeaderComponent;
-  public hasHeader = true;
 
   constructor(
     private configService: ConfigService,
     protected languageService: LanguageService) {
       this.computeHeader();
-
-      this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
-      this.configService.getConfig('header.hasHeader');
     }
 
   computeHeader() {

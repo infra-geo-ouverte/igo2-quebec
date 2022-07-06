@@ -27,7 +27,7 @@ $footer-height: 29px;
 height: calc( 100% - #{$header-height-mobile} )!important;
 }
 
-::ng-deep .portal-with-menu {
+::ng-deep .portal-with-header-footer {
   height: calc( 100% - #{$header-height-mobile} - #{$footer-height} )!important;
 }
 
@@ -35,23 +35,7 @@ height: calc( 100% - #{$header-height-mobile} )!important;
   height: calc( 100% - #{$footer-height} )!important;
 }
 
-::ng-deep .portal-with-header-menu {
-  height: calc( 100% - #{$header-height-mobile} - #{$footer-height} )!important;
-}
-
-::ng-deep .portal-with-header-menu-footer {
-  height: calc( 100% - #{$header-height-mobile} - #{$footer-height} )!important;
-}
-
-::ng-deep .portal-with-header-footer {
-  height: calc( 100% - #{$header-height-mobile} - #{$footer-height} )!important;
-}
-
-::ng-deep .portal-with-menu-footer {
-  height: calc( 100% - #{$header-height-mobile} - #{$footer-height} )!important;
-}
-
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 824px) {
   ::ng-deep .portal-with-header {
         height: calc( 100% - #{$header-height} )!important;
         }
