@@ -24,6 +24,7 @@ import {
 })
 export class PortalComponent implements OnInit {
   public showRotationButtonIfNoRotation = false;
+  public hasGeolocateButton = true;
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
@@ -42,5 +43,7 @@ export class PortalComponent implements OnInit {
 
   ngOnInit() {
     window['IGO'] = this;
+    this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
+      this.configService.getConfig('hasGeolocateButton');
   }
 }

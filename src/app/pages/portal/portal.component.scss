@@ -80,3 +80,14 @@ igo-zoom-button {
   }
 }
 
+igo-geolocate-button {
+  margin-bottom: 130px;
+
+  @include mobile {
+    margin-bottom: 0px;
+  }
+  @include tablet {
+    margin-bottom: 0px;
+  }
+}
+
