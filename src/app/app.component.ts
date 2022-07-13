@@ -10,8 +10,6 @@ import {
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
-import { HeaderComponent } from './pages/header/header.component';
-import { FooterComponent } from './pages/footer/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -22,9 +20,7 @@ export class AppComponent {
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
   public hasHeader = true;
-  public HeaderComponent = HeaderComponent;
   public hasFooter = true;
-  public FooterComponent = FooterComponent;
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 
