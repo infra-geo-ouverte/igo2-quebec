@@ -1,3 +1,4 @@
+import { FooterModule } from './../footer/footer.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -37,7 +38,9 @@ import { PortalComponent } from './portal.component';
     IgoFlexibleModule,
     IgoIntegrationModule,
     IgoContextManagerModule,
-    IgoContextMapButtonModule
+    IgoContextMapButtonModule,
+    FooterModule
+
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

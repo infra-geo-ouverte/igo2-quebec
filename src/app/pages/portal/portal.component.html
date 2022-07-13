@@ -1,4 +1,4 @@
-<igo-map-browser
+<igo-map-browser [ngClass]=" hasFooter? 'igo-map-browser map-hasfooter' : 'igo-map-browser' " igoStopDropPropagation
   igoHoverFeature
   [igoHoverFeatureDelay]="250"
   [igoHoverFeatureEnabled]="true"
@@ -13,3 +13,4 @@
   </igo-zoom-button>
   <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
 </igo-map-browser>
+<!--app-footer *ngIf="hasFooter" ></app-footer-->

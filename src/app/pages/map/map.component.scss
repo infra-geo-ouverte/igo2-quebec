@@ -1,12 +1,6 @@
 @import './map.variables';
 @import '../portal/portal.variables.scss';
 
-/*** header-footer ***/
-
-::ng-deep .portal-with-footer {
-  height: calc( 100% - #{$footer-height} )!important;
-}
-
 ::ng-deep igo-search-bar {
 top: calc(#{$menu-height} + #{$header-height} + 4px)!important;
 position: fixed;
@@ -408,3 +402,23 @@ igo-simple-feature-list {
   width: 100%;
 }
 
+/*** header-footer-menu overlay adjustment ***/
+
+::ng-deep .portal-hasheader {
+  height: $portal-height-hasheader-mobile!important;
+}
+
+::ng-deep .portal-hasheader-hasmenu {
+  height: $portal-height-hasmenu-hasheader-mobile!important;
+}
+
+@media (min-width: 768px){
+
+  ::ng-deep .portal-hasheader {
+    height: $portal-height-hasheader!important;
+  }
+  
+  ::ng-deep .portal-hasheader-hasmenu {
+    height: $portal-height-hasmenu-hasheader!important;
+  }
+}

@@ -24,6 +24,7 @@ import {
 })
 export class PortalComponent implements OnInit {
   public showRotationButtonIfNoRotation = false;
+  public hasFooter = true;
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
@@ -38,6 +39,8 @@ export class PortalComponent implements OnInit {
   ) {
     this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
       this.configService.getConfig('showRotationButtonIfNoRotation');
+    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
+      this.configService.getConfig('hasFooter');
   }
 
   ngOnInit() {
