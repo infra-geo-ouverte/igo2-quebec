@@ -44,3 +44,34 @@ height: calc( 100% - #{$header-height-mobile} )!important;
       height: calc( 100% - #{$header-height} - #{$footer-height} )!important;
       }
 }
+
+
+// spinner
+
+igo-spinner {
+  position: absolute;
+  top: calc(#{$header-height-mobile} + 4px)!important;
+  right: 4px;
+  z-index: 100;
+}
+
+spinner-with-legend-dialog {
+  position: absolute;
+  top: calc(#{$header-height-mobile} + 4px)!important;
+  right: 345px;
+  z-index: 100;
+}
+
+@media (min-width: 768px){
+  igo-spinner {
+    top: calc(#{$header-height} + 4px)!important;
+    right: 4px;
+    z-index: 100;
+  }
+
+  spinner-with-legend-dialog {
+    top: calc(#{$header-height} + 4px)!important;
+    right: 345px!important;
+    z-index: 100;
+  }
+}
