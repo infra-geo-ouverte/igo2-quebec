@@ -216,3 +216,6 @@ $ npm run e2e
 ## Contribution
 
 Before contributing, please read the [guidelines](.github/CONTRIBUTING.md), the [LICENCE](LICENSE_ENGLISH.txt) and the [WIKI](https://github.com/infra-geo-ouverte/igo2/wiki). If you have any question and want to contribute, contact the main email of IGO info(a)igouverte.org or on [Gitter](https://gitter.im/igo2/)
+
+
+test !! 
