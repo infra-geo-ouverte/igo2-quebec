@@ -1,5 +1,4 @@
 import { HeaderComponent } from './../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
 import { MapComponent } from './map.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,13 +11,10 @@ import { IgoLanguageModule } from '@igo2/core';
   imports: [
     CommonModule,
     IgoLanguageModule,
-    HeaderComponent,
-    FooterComponent
+    HeaderComponent
     ],
   exports: [
-    MapComponent,
-    HeaderComponent,
-    FooterComponent
+    MapComponent
   ]
 })
 export class MapModule { }

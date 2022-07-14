@@ -40,7 +40,6 @@ import { PortalComponent } from './portal.component';
     IgoContextManagerModule,
     IgoContextMapButtonModule,
     FooterModule
-
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

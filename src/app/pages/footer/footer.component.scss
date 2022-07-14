@@ -1,4 +1,4 @@
-@import 'portal.variables';
+@import '../portal/portal.variables.scss';
 
 .order2 {
     order: 2;
@@ -6,6 +6,7 @@
     justify-content: flex-end;
     display: flex;
     margin-right: 0.5%;
+    margin-left: 140px;
 }
 
 .footer-right {
@@ -16,6 +17,7 @@
     align-items: center;
     height: $footer-height;
     display: flex;
+    margin-left: auto;
 }
 
 span.footer-text {
@@ -30,7 +32,7 @@ span.footer-text a{
     text-decoration: none;
 }
 
-//legend
+//**Scale**//
 
 ::ng-deep div.ol-scale-line.ol-unselectable {
     display: flex;
@@ -41,4 +43,8 @@ span.footer-text a{
     margin-left: .5%;
     padding: 2px;
 }
+
+::ng-deep .map-hasfooter {
+    height: calc( 100% - #{$footer-height} )!important;
+  }
 

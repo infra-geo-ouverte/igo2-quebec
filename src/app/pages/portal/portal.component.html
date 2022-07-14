@@ -1,4 +1,4 @@
-<igo-map-browser [ngClass]=" hasFooter? 'igo-map-browser map-hasfooter' : 'igo-map-browser' " igoStopDropPropagation
+<igo-map-browser
   igoHoverFeature
   [igoHoverFeatureDelay]="250"
   [igoHoverFeatureEnabled]="true"
@@ -7,10 +7,12 @@
   igoLayerContext
   igoDropGeoFile
   [map]="map"
-  [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
+  [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
 
   <igo-zoom-button [map]="map" color="primary">
   </igo-zoom-button>
   <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+  <igo-geolocate-button [map]="map" color="primary"></igo-geolocate-button>
+  <igo-baselayers-switcher [map]="map" [useStaticIcon]="true"></igo-baselayers-switcher>
 </igo-map-browser>
-<!--app-footer *ngIf="hasFooter" ></app-footer-->
+<app-footer *ngIf="hasFooter" ></app-footer>

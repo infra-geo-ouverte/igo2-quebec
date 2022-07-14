@@ -1,3 +1,4 @@
+import { HeaderComponent } from '../header/header.component';
 import { Component } from '@angular/core';
 import { ConfigService } from '@igo2/core';
 
@@ -7,17 +8,13 @@ import { ConfigService } from '@igo2/core';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent {
+  public HeaderComponent = HeaderComponent;
   public hasHeader = true;
-  public hasMenu = true;
 
   constructor(private configService: ConfigService) {
 
-    this.hasHeader = this.configService.getConfig('hasHeader') === undefined ? false :
-      this.configService.getConfig('hasHeader');
-
-    this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
-      this.configService.getConfig('hasmenu');
-
+    this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
+      this.configService.getConfig('header.hasHeader');
    }
 
 }

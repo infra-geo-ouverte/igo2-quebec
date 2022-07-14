@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
+  public color = 'accent';
 
   constructor() { }
 
