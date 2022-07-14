@@ -15,11 +15,10 @@ height: calc(100% - #{$header-height-mobile})!important;
 
 // Grids
 :root {
---breakpoint-pgu-sm: 403px;
---breakpoint-sm: 576px;
+--breakpoint-sm: 320px;
 --breakpoint-md: 768px;
---breakpoint-lg: 992px;
---breakpoint-xl: 1200px;
+--breakpoint-lg: 960px;
+--breakpoint-xl: 1024px;
 }
 
 html,body {

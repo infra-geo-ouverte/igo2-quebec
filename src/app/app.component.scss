@@ -17,7 +17,6 @@ igo-spinner {
 igo-message-center ::ng-deep simple-notifications ::ng-deep div.simple-notification-wrapper {
   right: 10px;
 }
-
 /*** header-footer ***/
 $header-height: 72px;
 $header-height-mobile: 72px;
@@ -35,7 +34,7 @@ height: calc( 100% - #{$header-height-mobile} )!important;
   height: calc( 100% - #{$footer-height} )!important;
 }
 
-@media screen and (min-width: 824px) {
+@media screen and (min-width: 768px) {
   ::ng-deep .portal-with-header {
         height: calc( 100% - #{$header-height} )!important;
         }
