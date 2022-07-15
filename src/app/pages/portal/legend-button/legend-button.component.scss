@@ -11,6 +11,11 @@ app-legend-button, ::ng-deep .mat-raised-button {
     border-radius: 0 !important;
 }
 
+::ng-deep .qcca-theme app-legend-button button, ::ng-deep .qcca-theme .mat-raised-button {
+  color: #095797 !important;
+  border-color: #095797 !important;
+}
+
 // DIALOG
 
 // FLEX
