@@ -1,4 +1,3 @@
-import { FooterComponent } from '../footer/footer.component';
 import {
   Component,
   OnInit,
@@ -25,8 +24,7 @@ import {
 })
 export class PortalComponent implements OnInit {
   public showRotationButtonIfNoRotation = false;
-  public hasFooter = true;
-  public FooterComponent = FooterComponent;
+  public hasFooter: boolean = undefined;
   public hasGeolocateButton = true;
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true })

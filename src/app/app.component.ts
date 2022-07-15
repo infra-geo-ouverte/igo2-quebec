@@ -9,9 +9,6 @@ import {
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
-import { FooterComponent } from './pages/footer/footer.component';
-import { MenuComponent } from './pages/menu/menu/menu.component';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,11 +17,9 @@ import { MenuComponent } from './pages/menu/menu/menu.component';
 export class AppComponent {
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
-  public hasHeader = true;
-  public hasFooter = true;
-  public FooterComponent = FooterComponent;
-  public hasMenu = true;
-  public MenuComponent = MenuComponent;
+  public hasHeader: boolean = undefined;
+  public hasFooter: boolean = undefined;
+  public hasMenu: boolean = undefined;
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
