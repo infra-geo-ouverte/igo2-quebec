@@ -2,6 +2,6 @@
 
 <app-header *ngIf="hasHeader" #header></app-header>
 
-<app-portal [ngClass]=" hasHeader? (hasFooter? 'portal-with-header-footer' : 'portal-with-header') : (hasFooter? 'portal-with-footer' : 'portal') " igoStopDropPropagation></app-portal>
+<app-menu *ngIf="hasMenu"></app-menu>
 
-<app-footer *ngIf="hasFooter"></app-footer>
+<app-portal *ngIf="!hasMenu" [ngClass]="{'portal-hasheader': hasHeader}"></app-portal>

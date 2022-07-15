@@ -7,7 +7,7 @@
   igoLayerContext
   igoDropGeoFile
   [map]="map"
-  [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
+  [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
 
   <igo-zoom-button [map]="map" color="primary">
   </igo-zoom-button>
@@ -15,3 +15,4 @@
   <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
   <igo-baselayers-switcher [map]="map" [useStaticIcon]="true"></igo-baselayers-switcher>
 </igo-map-browser>
+<app-footer *ngIf="hasFooter" ></app-footer>

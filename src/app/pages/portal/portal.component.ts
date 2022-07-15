@@ -1,3 +1,4 @@
+import { FooterComponent } from '../footer/footer.component';
 import {
   Component,
   OnInit,
@@ -24,6 +25,8 @@ import {
 })
 export class PortalComponent implements OnInit {
   public showRotationButtonIfNoRotation = false;
+  public hasFooter = true;
+  public FooterComponent = FooterComponent;
   public hasGeolocateButton = true;
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
@@ -39,6 +42,8 @@ export class PortalComponent implements OnInit {
   ) {
     this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
       this.configService.getConfig('showRotationButtonIfNoRotation');
+    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
+      this.configService.getConfig('hasFooter');
   }
 
   ngOnInit() {

@@ -7,6 +7,7 @@
     "logo": "assets/images/signature-PIV.svg",
     "logoPrint": "assets/images/signature-PIV.svg"
   },
+  "hasMenu": true,
   "hasFooter": true,
   "hasGeolocateButton": true,
   "geolocate": {

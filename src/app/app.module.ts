@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
+import { MenuModule } from './pages/menu/menu.module';
 
 import {
   provideConfigOptions,
@@ -34,7 +35,8 @@ import { AppComponent } from './app.component';
     PortalModule,
     HammerModule,
     HeaderModule,
-    FooterModule
+    FooterModule,
+    MenuModule
   ],
   providers: [
     provideConfigOptions({
