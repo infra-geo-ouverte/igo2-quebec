@@ -177,6 +177,17 @@
         font-weight: 600!important;
     }
     
+    app-legend-button, ::ng-deep .mat-raised-button {
+        background-color: #fff!important;
+        color: #095797 !important;
+        border-color: #095797 !important;
+    }
+
+    .headline {
+        background-color: #223654!important;
+      }
+
+    //** TYPOGRAPHY **//
     
     span.surtitre {
         font-family: Open Sans;

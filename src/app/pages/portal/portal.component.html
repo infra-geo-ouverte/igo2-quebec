@@ -11,6 +11,7 @@
 
   <igo-zoom-button [map]="map" color="primary">
   </igo-zoom-button>
+  <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
   <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
   <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
   <igo-baselayers-switcher [map]="map" [useStaticIcon]="true"></igo-baselayers-switcher>

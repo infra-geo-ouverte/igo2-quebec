@@ -1,3 +1,4 @@
+import { LegendButtonModule } from './legend-button/legend-button.module';
 import { FooterModule } from './../footer/footer.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -39,7 +40,8 @@ import { PortalComponent } from './portal.component';
     IgoIntegrationModule,
     IgoContextManagerModule,
     IgoContextMapButtonModule,
-    FooterModule
+    FooterModule,
+    LegendButtonModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

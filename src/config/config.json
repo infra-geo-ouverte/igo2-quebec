@@ -9,6 +9,7 @@
   },
   "hasMenu": true,
   "hasFooter": true,
+  "hasLegendButton": true,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,

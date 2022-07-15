@@ -8,7 +8,7 @@ import { MapComponent } from '../../pages/map/map.component';
 import { HeaderModule } from '../header/header.module';
 import { FooterModule } from '../footer/footer.module';
 import { PortalModule } from '../portal';
-import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -22,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     PortalModule,
     HeaderModule,
     FooterModule,
-    MatIconModule
+    MatToolbarModule
   ],
   exports:[
     MenuComponent,
