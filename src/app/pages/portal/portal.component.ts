@@ -1,4 +1,5 @@
 import { FooterComponent } from '../footer/footer.component';
+import { LegendButtonDialogComponent } from './legend-button/legend-button.component';
 import {
   Component,
   OnInit,
@@ -27,6 +28,7 @@ export class PortalComponent implements OnInit {
   public showRotationButtonIfNoRotation = false;
   public hasFooter = true;
   public FooterComponent = FooterComponent;
+  public LegendButtonDialogComponent = LegendButtonDialogComponent;
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
