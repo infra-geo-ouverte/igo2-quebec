@@ -3,6 +3,7 @@ import { MapComponent } from './map.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IgoLanguageModule } from '@igo2/core';
+import { PortalModule } from '@angular/cdk/portal';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { IgoLanguageModule } from '@igo2/core';
   imports: [
     CommonModule,
     IgoLanguageModule,
-    HeaderComponent
+    HeaderComponent,
+    PortalModule
     ],
   exports: [
     MapComponent

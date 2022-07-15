@@ -1,6 +1,7 @@
 import { HeaderComponent } from '../header/header.component';
 import { Component } from '@angular/core';
 import { ConfigService } from '@igo2/core';
+import { PortalComponent } from '../portal/portal.component';
 
 @Component({
   selector: 'app-map',
@@ -10,6 +11,7 @@ import { ConfigService } from '@igo2/core';
 export class MapComponent {
   public HeaderComponent = HeaderComponent;
   public hasHeader = true;
+  public PortalComponent = PortalComponent;
 
   constructor(private configService: ConfigService) {
 
