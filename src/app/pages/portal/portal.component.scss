@@ -85,3 +85,14 @@ igo-zoom-button {
 ::ng-deep .map-hasfooter {
   height: calc( 100% - #{$footer-height} )!important;
 }
+
+igo-geolocate-button {
+  margin-bottom: 130px;
+
+  @include mobile {
+    margin-bottom: 0px;
+  }
+  @include tablet {
+    margin-bottom: 0px;
+  }
+}

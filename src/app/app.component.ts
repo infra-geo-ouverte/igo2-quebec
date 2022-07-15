@@ -2,7 +2,6 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
@@ -23,11 +22,11 @@ export class AppComponent {
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
   public hasHeader = true;
-  public HeaderComponent = HeaderComponent;
   public hasFooter = true;
   public FooterComponent = FooterComponent;
   public hasMenu = true;
   public MenuComponent = MenuComponent;
+  
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 

@@ -2,11 +2,13 @@
 
 .order2 {
     order: 2;
-    width: 100%;
-    justify-content: flex-end;
-    display: flex;
     margin-right: 0.5%;
     margin-left: 140px;
+    display: block;
+    right: 0;
+    margin-left: 140px;
+    text-align: right!important;
+    width: 100%;
 }
 
 .footer-right {
@@ -21,9 +23,8 @@
 }
 
 span.footer-text {
-    align-items: baseline;
     color: #095797;
-    align-items: center;
+    align-self: center;
     margin-left: 0.5rem;
 }
 
@@ -32,19 +33,25 @@ span.footer-text a{
     text-decoration: none;
 }
 
+
 //**Scale**//
 
-::ng-deep div.ol-scale-line.ol-unselectable {
-    display: flex;
+::ng-deep div.ol-scale-line {
     position: fixed!important;
+    display: flex;
     flex-direction: row;
+    margin-left: 0.5%;
     left: 70px!important;
-    bottom: 3px;
-    margin-left: .5%;
-    padding: 2px;
+    bottom: 3px!important;
 }
 
 ::ng-deep .map-hasfooter {
     height: calc( 100% - #{$footer-height} )!important;
   }
 
+::ng-deep .ol-scale-line-inner {
+    border: 1px solid black;
+    color: black;
+    border-top: none;
+    order: 1;
+}

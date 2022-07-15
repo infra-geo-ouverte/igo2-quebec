@@ -8,5 +8,11 @@
     "logoPrint": "assets/images/signature-PIV.svg"
   },
   "hasMenu": true,
-  "hasFooter": true
+  "hasFooter": true,
+  "hasGeolocateButton": true,
+  "geolocate": {
+    "basic": true,
+    "followPosition": false,
+    "activateDefault": false
+  }
 }

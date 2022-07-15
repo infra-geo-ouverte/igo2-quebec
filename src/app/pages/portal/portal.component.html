@@ -12,7 +12,7 @@
   <igo-zoom-button [map]="map" color="primary">
   </igo-zoom-button>
   <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-  <igo-geolocate-button [map]="map" color="primary"></igo-geolocate-button>
+  <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
   <igo-baselayers-switcher [map]="map" [useStaticIcon]="true"></igo-baselayers-switcher>
 </igo-map-browser>
 <app-footer *ngIf="hasFooter" ></app-footer>

@@ -19,7 +19,11 @@ igo-message-center ::ng-deep simple-notifications ::ng-deep div.simple-notificat
   right: 10px;
 }
 
-/*** header-footer-menu overlay adjustment ***/
+/*** header-menu overlay adjustment ***/
+
+$header-height: 72px;
+$header-height-mobile: 72px;
+$footer-height: 29px;
 
 ::ng-deep .portal-hasheader {
   height: $portal-height-hasheader-mobile!important;
