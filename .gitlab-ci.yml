@@ -1,0 +1,138 @@
+stages:
+  - daily_build
+  - find_replace_install
+  - lint_test
+  - unit_test
+#  - e2e_test
+  - build_copy
+  - synchro
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  untracked: true
+  paths:
+    - dist/igo2-quebec/
+    - node_modules/
+variables:
+  ARCHIVE_NAME: ${CI_COMMIT_REF_NAME}_${CI_PROJECT_ID}.${CI_PROJECT_NAME}
+daily_build:
+  stage: daily_build
+  script:
+    - rm -rf node_modules
+    - git merge dev
+  only:
+    - daily-build
+find_replace_install:
+  stage: find_replace_install
+  script:
+    - sed -i -e 's/dev-local/'${CI_COMMIT_REF_NAME}'/' ./src/environments/environment*
+    - sed -i -e 's/dev-version/'$CI_PIPELINE_ID'/' ./src/environments/environment*
+    - rm -rf ./dist/igo2-quebec
+    - npm install
+  artifacts:
+    paths:
+      - src/environments/
+    expire_in: 1 week
+lint_test:
+  stage: lint_test
+  script:
+    - npm run lint
+  artifacts:
+    paths:
+      - src/environments/
+    expire_in: 1 week
+unit_test:
+  stage: unit_test
+  script:
+    - npm run test
+  artifacts:
+    paths:
+      - src/environments/
+    expire_in: 1 week
+#e2e_test:
+#  stage: e2e_test
+#  script:
+#    - npm run e2e
+#  artifacts:
+#    paths:
+#      - src/environments/
+#    expire_in: 1 week
+build_test:
+  stage: build_copy
+  script:
+    - npm run build.prod 
+  except:
+    - dev
+    - preprod
+    - tags
+    - /dev-.+$/
+build_copy_prod:
+  stage: build_copy
+  script:
+    - npm run build.prod && cp -r src/config/ dist/igo2-quebec/ && cp -r src/contexts/ dist/igo2-quebec/
+    - cd ./dist/igo2-quebec && tar -czvf ../${ARCHIVE_NAME}.tar.gz . && cd .. && scp -v ${ARCHIVE_NAME}.tar.gz synchrogitlab@spssogl97d:/srv/majdata/synchrogitlab/ARCHIVES/
+  only:
+    - preprod
+    - tags
+  dependencies:
+    - find_replace_install
+build_copy_dev:
+  stage: build_copy
+  script:
+    - npm run build.prod && cp -r src/config/ dist/igo2-quebec/ && cp -r src/contexts/ dist/igo2-quebec/
+    - cd ./dist/igo2-quebec && tar -czvf ../${ARCHIVE_NAME}.tar.gz . && cd .. && scp -v ${ARCHIVE_NAME}.tar.gz synchrogitlab@spssogl97d:/srv/majdata/synchrogitlab/ARCHIVES/
+  only:
+    - dev
+  dependencies:
+    - find_replace_install
+build_copy_dev_dev:
+  stage: build_copy
+  script:
+    - npm run build.prod && cp -r src/config/ dist/igo2-quebec/ && cp -r src/contexts/ dist/igo2-quebec/
+    - sed -i -e "s/igo2-quebec/vigilance-${CI_COMMIT_REF_NAME}/" ./dist/igo2-quebec/index.html
+    - cd ./dist/igo2-quebec && tar -czvf ../${ARCHIVE_NAME}.tar.gz . && cd .. && scp -v ${ARCHIVE_NAME}.tar.gz synchrogitlab@spssogl97d:/srv/majdata/synchrogitlab/ARCHIVES/
+  only:
+    - /dev-.+$/
+  dependencies:
+    - find_replace_install
+synchro_dev:
+  stage: synchro
+  script:
+    - "ssh synchrogitlab@spssogl97d \"sh ~/bin/synchro_envgitlab.sh ${ARCHIVE_NAME} /srv/www/geomatique/apps/vigilance/ ${CI_COMMIT_REF_NAME} config\""
+  only:
+    - dev
+    - preprod
+  when: on_success
+  artifacts:
+    paths:
+        - ${ARCHIVE_NAME}.tar.gz
+    name: "${ARCHIVE_NAME}"
+    when: on_success
+    expire_in: 1 week
+  environment: ${CI_COMMIT_REF_NAME}
+synchro_dev_branche_test:
+  stage: synchro
+  script:
+    - "ssh synchrogitlab@spssogl97d \"sh ~/bin/synchro_envgitlab.sh ${ARCHIVE_NAME} /srv/www/geomatique/apps/vigilance-${CI_COMMIT_REF_NAME}/ dev config\""
+  only:
+    - /dev-.+$/
+  when: on_success
+  artifacts:
+    paths:
+        - ${ARCHIVE_NAME}.tar.gz
+    name: "${ARCHIVE_NAME}"
+    when: on_success
+    expire_in: 1 week
+  environment: dev
+synchro_prod:
+  stage: synchro
+  script:
+    - "ssh synchrogitlab@spssogl97d \"sh ~/bin/synchro_envgitlab.sh ${ARCHIVE_NAME} /srv/www/geomatique/apps/vigilance/ prod config\""
+  only:
+    - tags
+  when: on_success
+  artifacts:
+    paths:
+        - ${ARCHIVE_NAME}.tar.gz
+    name: "${ARCHIVE_NAME}"
+    when: on_success
+  environment: prod
