@@ -1,8 +1,7 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
@@ -18,7 +17,11 @@ import { AuthOptions } from '@igo2/auth';
 })
 export class AppComponent {
   public authConfig: AuthOptions;
-  private themeClass = 'blue-theme';
+  private themeClass = 'qcca-theme';
+  public hasHeader = true;
+  public hasFooter = true;
+  @ViewChild('searchBar', { read: ElementRef, static: true })
+  searchBar: ElementRef;
 
   constructor(
     protected languageService: LanguageService,
@@ -35,6 +38,12 @@ export class AppComponent {
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
+
+    this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
+    this.configService.getConfig('header.hasHeader');
+
+    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
+    this.configService.getConfig('hasFooter');
   }
 
   private readTitleConfig() {
