@@ -9,7 +9,6 @@ import {
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
-import { HeaderComponent } from './pages/header/header.component';
 import { FooterComponent } from './pages/footer/footer.component';
 import { MenuComponent } from './pages/menu/menu/menu.component';
 
@@ -26,7 +25,7 @@ export class AppComponent {
   public FooterComponent = FooterComponent;
   public hasMenu = true;
   public MenuComponent = MenuComponent;
-  
+
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 
