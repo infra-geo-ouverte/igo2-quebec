@@ -4,7 +4,7 @@ import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './menu-pages/home/home.component';
 import { MenuRoutingModule } from './menu-routing/menu-routing.module';
 import { AboutComponent } from './menu-pages/about/about.component';
-import { MapComponent } from '../../pages/map/map.component';
+import { MapComponent } from './menu-pages/map/map.component';
 import { HeaderModule } from '../header/header.module';
 import { FooterModule } from '../footer/footer.module';
 import { PortalModule } from '../portal';
