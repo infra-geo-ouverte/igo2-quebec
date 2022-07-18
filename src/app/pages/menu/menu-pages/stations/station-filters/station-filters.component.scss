@@ -1,0 +1,91 @@
+.header-filters {
+    background-color: #F1F1F2;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.header-label, .header-reset {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.header-label {
+    font-size: 20px;
+    margin-right: 50px;
+}
+
+.header-reset {
+    margin-left: 50px;
+    color: #095797;
+    cursor: pointer;
+}
+
+.filter-label {
+    margin: 0;
+}
+
+.filter {
+    margin-top: 20px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+::ng-deep .mat-select-arrow {
+    opacity: 0;
+}
+
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start, .mat-form-field-appearance-outline .mat-form-field-outline-end {
+    border-radius: 0 !important;
+}
+
+::ng-deep .options .mat-form-field-flex {
+    align-items: center;
+    border-radius: 0!important;
+    height: 40px;
+}
+
+::ng-deep .mat-select-panel, ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
+    border-radius: 0!important;
+}
+
+::ng-deep .mat-select-panel-wrap {
+    border-radius: 0!important;
+    //margin-top: 24px;
+}
+
+::ng-deep .mat-select, ::ng-deep .mat-option-text {
+    font-family: 'open sans', sans-serif!important;
+}
+
+::ng-deep .options .mat-form-field-infix {
+    padding: 0!important;
+    height: 40px!important;
+    margin: 0!important;
+}
+
+::ng-deep .qcca-theme .mat-primary .mat-option:focus, ::ng-deep .qcca-theme .mat-option:hover:not(.mat-option-disabled), ::ng-deep .qcca-theme .mat-option:focus:not(.mat-option-disabled) {
+    background: #DAE6F0!important;
+}
+
+::ng-deep .qcca-theme .mat-primary .mat-option.mat-selected, ::ng-deep .select div:hover {
+    color: #fff!important;
+    background: #1479CC!important;
+    font-weight: 500!important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-start, ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-end, ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-gap {
+    border-radius: 0!important;
+}
+
+::ng-deep .qcca-theme .mat-form-field-wrapper {
+    padding: 0!important;
+    background-color: #FFFFFF;
+}

@@ -13,6 +13,7 @@ export class StationsComponent implements AfterContentChecked {
   public currentNumberOfStationsPerPage: number; // current number of stations per page
   public currentTotalNumberOfStations: number; // current total number of stations
   public currentPageNumber: number; // current page number
+  public currentFiltersString: string; // current filters string
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -53,6 +54,15 @@ export class StationsComponent implements AfterContentChecked {
   setCurrentPageNumber(currentPageNumber: number): void {
     this.scrollToTopOfList();
     this.currentPageNumber = currentPageNumber;
+  }
+
+  /**
+   * @description set current filter string
+   * @param currentFiltersString current filter string
+   */
+  setCurrentFiltersString(currentFiltersString: string): void {
+    this.scrollToTopOfList();
+    this.currentFiltersString = currentFiltersString;
   }
 
   scrollToTopOfList(): void {
