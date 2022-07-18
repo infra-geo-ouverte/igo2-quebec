@@ -1,6 +1,7 @@
 <div class="header">
     <div class="stations">
-        <p class="totalNumberOfStations"><b>{{ currentTotalNumberOfStations }} stations</b></p>
+        <p *ngIf="currentTotalNumberOfStations > 1" class="totalNumberOfStations"><b>{{ currentTotalNumberOfStations }} stations</b></p>
+        <p *ngIf="currentTotalNumberOfStations === 1" class="totalNumberOfStations"><b>{{ currentTotalNumberOfStations }} station</b></p>
         <p class="stationsBounds"><b>Stations {{ lowerBound }} à {{ upperBound }}</b></p>
     </div>
     <mat-divider></mat-divider>

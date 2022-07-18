@@ -3,7 +3,7 @@ import { Component,
   Input,
   ChangeDetectorRef,
   AfterContentChecked } from '@angular/core';
-  import { Station } from '../../../../shared/stations/stations.interface';
+import { Station } from 'src/app/pages/shared/stations/stations.interface';
 
 @Component({
   selector: 'app-station-list-station',
@@ -29,7 +29,7 @@ export class StationListStationComponent implements OnInit, AfterContentChecked 
       },
       2: {
         state: "En surveillance",
-        legend: "assets/legends/legend-stations/en-surveillance.svg"
+        legend: "assets/legends/legend-stations/surveillance.svg"
       },
       3: {
         state: "Inondation mineure",

@@ -24,7 +24,6 @@ export class StationListHeaderComponent implements OnInit, AfterContentChecked, 
   @Input() currentPageNumber: number; // current page number
   @Output() currentOrderChange: EventEmitter<string> = new EventEmitter(); // emitted when a new order is selected (current order is changed)
   @Output() currentNumberOfStationsPerPageChange: EventEmitter<number> = new EventEmitter(); // emitted when a new number of stations per page is selected
-  @Output() selectorChange: EventEmitter<number> = new EventEmitter() // emitted when a value is change in a selector
 
   public lowerBound: number; // lower bound of current stations shown (displayed)
   public upperBound: number; // upper bound of current stations shown (displayed)
@@ -54,7 +53,6 @@ export class StationListHeaderComponent implements OnInit, AfterContentChecked, 
     // subscription to current order
     this.currentOrder$$ = this.currentOrder$.subscribe((currentOrder: string) => {
       this.currentOrderChange.emit(currentOrder);
-      this.selectorChange.emit(1);
     });
 
     // subscription to current number of stations per page
@@ -62,7 +60,6 @@ export class StationListHeaderComponent implements OnInit, AfterContentChecked, 
       this.lowerBound = this.getCurrentLowerBound(this.currentPageNumber); // calculate new lower bound
       this.upperBound = this.getCurrentUpperBound(this.currentPageNumber, this.currentTotalNumberOfStations); // calculate new upper bound
       this.currentNumberOfStationsPerPageChange.emit(currentNumberOfStationsPerPage);
-      this.selectorChange.emit(1);
     });
   }
 

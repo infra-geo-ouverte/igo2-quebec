@@ -1,10 +1,8 @@
 {
-    "stationList": {
+    "stationListStation": {
         "down": "Dropping", 
         "location": "Location",
-        "stable": "Stable",
         "state": "State",
-        "station": "Station",
         "trend": "Trend",
         "up": "Rising",
         "update": "Last updated"

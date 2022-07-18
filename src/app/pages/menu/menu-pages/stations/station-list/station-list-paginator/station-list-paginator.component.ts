@@ -38,8 +38,13 @@ export class StationListPaginatorComponent implements OnInit, AfterContentChecke
     this.currentPageNumber$$ = this.currentPageNumber$.subscribe((currentPageNumber: number) => {
       // set booleans accordingly
       if (currentPageNumber === 1) {
-        this.currentPageIsFirst = true;
-        this.currentPageIsLast = false;
+        if(this.currentNumberOfPages === 1) {
+          this.currentPageIsFirst = true;
+          this.currentPageIsLast = true;
+        } else {
+          this.currentPageIsFirst = true;
+          this.currentPageIsLast = false;
+        }
       } else if (currentPageNumber === this.currentNumberOfPages) {
         this.currentPageIsFirst = false;
         this.currentPageIsLast = true;
@@ -110,7 +115,7 @@ export class StationListPaginatorComponent implements OnInit, AfterContentChecke
   }
 
   /**
-   * @description calculate the current number of pages and constrcut the corresponding array
+   * @description calculate the current number of pages and construct the corresponding array
    * @param currentTotalNumberOfStations current total number of stations
    * @param currentNumberOfStationsPerPage current number of stations per page
    */
@@ -119,6 +124,7 @@ export class StationListPaginatorComponent implements OnInit, AfterContentChecke
 
     if (this.currentNumberOfPages) {
       this.pagesArray = Array(this.currentNumberOfPages).fill(1).map((x,i) => i);
+      this.currentPageNumber$.next(1);
     }
   }
 }

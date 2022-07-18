@@ -9,10 +9,10 @@ import {
   SimpleChanges,
   ChangeDetectorRef,
   AfterContentChecked } from '@angular/core';
-import { StationListService } from './../../../shared/stations/station-list.service';
+import { StationListService } from './../../../../shared/stations/station-list.service';
 import {
   HttpOptions,
-  Station } from '../../../shared/stations/stations.interface';
+  Station } from './../../../../shared/stations/stations.interface';
 import {
   BehaviorSubject,
   Subscription } from 'rxjs';
@@ -26,6 +26,7 @@ export class StationListComponent implements OnInit, AfterContentChecked, OnChan
   @Input() currentOrder: string; // current order
   @Input() currentPageNumber: number; // current page number
   @Input() currentNumberOfStationsPerPage: number; // current number of stations per page
+  @Input() currentFiltersString: string; // current filter string
   @Output() currentTotalNumberOfStationsChange: EventEmitter<number> = new EventEmitter(); // emitted when the current total number of stations has changed
   @Output() currentNumberOfStationsChange: EventEmitter<number> = new EventEmitter(); // emitted when the current number of stations has changed
 
@@ -36,7 +37,7 @@ export class StationListComponent implements OnInit, AfterContentChecked, OnChan
 
   constructor(private stationListService: StationListService, private changeDetector: ChangeDetectorRef) { }
 
-  ngOnInit(): void {;
+  ngOnInit(): void {
     // get the current total number of stations
     this.getCurrentTotalNumberOfStations();
 
@@ -51,14 +52,20 @@ export class StationListComponent implements OnInit, AfterContentChecked, OnChan
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // if the current order or the current number of stations per page or the current page number has changed...
+    // if the current order / the current number / stations per page / the current page number / the current filters string has changed...
     if (changes.currentOrder) {
       // ...update station list
-      this.getStationList(changes.currentOrder.currentValue, this.currentNumberOfStationsPerPage, this.currentPageNumber);
+      this.getStationList(changes.currentOrder.currentValue, this.currentNumberOfStationsPerPage,
+        this.currentPageNumber, this.currentFiltersString);
     } else if (changes.currentNumberOfStationsPerPage) {
-      this.getStationList(this.currentOrder, changes.currentNumberOfStationsPerPage.currentValue, this.currentPageNumber);
+      this.getStationList(this.currentOrder, changes.currentNumberOfStationsPerPage.currentValue,
+        this.currentPageNumber, this.currentFiltersString);
     } else if (changes.currentPageNumber) {
-      this.getStationList(this.currentOrder, this.currentNumberOfStationsPerPage, changes.currentPageNumber.currentValue);
+      this.getStationList(this.currentOrder, this.currentNumberOfStationsPerPage,
+        changes.currentPageNumber.currentValue, this.currentFiltersString);
+    } else if (changes.currentFiltersString) {
+      this.getStationList(this.currentOrder, this.currentNumberOfStationsPerPage,
+        this.currentPageNumber, changes.currentFiltersString.currentValue);
     }
   }
 
@@ -69,8 +76,16 @@ export class StationListComponent implements OnInit, AfterContentChecked, OnChan
   /**
    * @description get current total number of stations
    */
-  getCurrentTotalNumberOfStations(): void {
-    this.stationListService.getStationList().subscribe((stationList: Station[]) => {
+  getCurrentTotalNumberOfStations(currentFiltersString?: string): void {
+    const options: HttpOptions = {
+      params: {}
+    };
+
+    if (currentFiltersString !== "()" && currentFiltersString !== undefined) {
+      options.params["and"] = currentFiltersString;
+    }
+
+    this.stationListService.getStationList(options).subscribe((stationList: Station[]) => {
       this.currentTotalNumberOfStations$.next(stationList.length);
     });
   }
@@ -80,8 +95,10 @@ export class StationListComponent implements OnInit, AfterContentChecked, OnChan
    * @param currentOrder current order
    * @param currentNumberOfStationsPerPage current number of stations per page
    * @param currentPageNumber current page number
+   * @param currentFiltersString current filters string
    */
-  getStationList(currentOrder: string, currentNumberOfStationsPerPage: number, currentPageNumber: number): void {
+  getStationList(currentOrder: string, currentNumberOfStationsPerPage: number,
+    currentPageNumber: number, currentFiltersString: string): void {
     // set options
     const options: HttpOptions = {
       params: {
@@ -91,9 +108,16 @@ export class StationListComponent implements OnInit, AfterContentChecked, OnChan
       }
     };
 
+    // set filter string if there are any filters
+    if (currentFiltersString !== "()" && currentFiltersString !== undefined) {
+      options.params["and"] = currentFiltersString;
+    }
+
     // make call to API
     this.stationListService.getStationList(options).subscribe((stationList: Station[]) => {
       this.stationList = stationList;
+
+      this.getCurrentTotalNumberOfStations(currentFiltersString);
     });
   }
 }

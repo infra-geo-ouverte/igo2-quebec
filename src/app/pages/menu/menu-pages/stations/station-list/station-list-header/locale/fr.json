@@ -1,8 +1,6 @@
 {
     "stationListHeader": {
         "filterBy": "Trier par",
-        "numberOfStations": "Nombre de stations par page",
-        "stations": "stations",
-        "stationsUpper": "Stations"
+        "numberOfStations": "Nombre de stations par page"
     }
 }
