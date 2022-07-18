@@ -1,0 +1,9 @@
+<div>
+    <h6 class="body" *ngIf="currentStation.plan_deau">{{ currentStation.plan_deau }}</h6>
+    <h4 class="station-id" (click)="onStationSelect()">Station: {{ currentStation.label }}</h4>
+    <p class="attribute" *ngIf="currentStation.description">Emplacement : <span style="font-weight: bold">{{ currentStation.description }}</span></p>
+    <p class="attribute">État : <span style="font-weight: bold"> <img [src]="getStationStateLegend(currentStation.etat)" width="15" height="15"> {{ getStationState(currentStation.etat) }}</span></p>
+    <p class="attribute">Tendance : <span style="font-weight: bold">{{ getTrend(currentStation.avant_derniere_valeur, currentStation.valeur) }}</span></p>
+    <h6 class="update" *ngIf="currentStation.date_prise_valeur">Dernière mise à jour : {{ formatDateTime(currentStation.date_prise_valeur) }}</h6>
+</div>
+<mat-divider class="divider"></mat-divider>

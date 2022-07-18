@@ -1,4 +1,4 @@
-//import { StationsComponent } from './menu-pages/stations/stations.component';
+import { StationsComponent } from './menu-pages/stations/stations.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from './menu/menu.component';
@@ -15,7 +15,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MenuComponent,
     HomeComponent,
     AboutComponent,
-    MapComponent
+    MapComponent,
+    StationsComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,12 @@
+{
+    "stationList": {
+        "down": "Baisse",
+        "location": "Emplacement",
+        "stable": "stable",
+        "state": "État",
+        "station": "Station",
+        "trend": "Tendance",
+        "up": "Hausse",
+        "update": "Dernière mise à jour"
+    }
+}
