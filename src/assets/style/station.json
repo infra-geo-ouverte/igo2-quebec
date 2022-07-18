@@ -1,0 +1,364 @@
+{
+  "version": 8,
+  "name": "vigilance",
+  "metadata": {
+    "maputnik:license": "https://github.com/maputnik/osm-liberty/blob/gh-pages/LICENSE.md",
+    "maputnik:renderer": "mbgljs"
+  },
+  "sources": {
+    "vigilance2": {
+      "type": "vector",
+      "tiles": [
+        "/ws/vectortiles/maps/dev/station_v/{z}/{x}/{y}.pbf"
+      ],
+      "minZoom": 0,
+      "maxZoom": 21
+    }
+  },
+  "sprite": "../../mapboxStyleSprite",
+  "glyphs": "",
+  "layers": [
+    {
+      "id": "station_alerta_1",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "DESACTIVE"
+        ]
+      ],
+      "layout": {
+        "symbol-z-order": "auto",
+        "icon-text-fit": "width",
+        "icon-allow-overlap": true,
+        "icon-size": 2.3,
+        "icon-image": "alert",
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "stations_gris",
+      "type": "circle",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "GRIS"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#dedee1",
+        "circle-radius": 9,
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 3,
+        "circle-stroke-opacity": 0.8
+      }
+    },
+    {
+      "id": "station_prevision_VERT",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "ind_prev",
+          true
+        ],
+        [
+          "==",
+          "etat3",
+          "VERT"
+        ]
+      ],
+      "layout": {
+        "icon-size": 2.3,
+        "icon-image": "prev_vert",
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "stations_vert",
+      "type": "circle",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "VERT"
+        ],
+        [
+          "==",
+          "ind_prev",
+          false
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#55C67B",
+        "circle-radius": 9,
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 3,
+        "circle-stroke-opacity": 0.8
+      }
+    },
+    {
+      "id": "station_prevision_jaune",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "ind_prev",
+          true
+        ],
+        [
+          "==",
+          "etat3",
+          "JAUNE"
+        ]
+      ],
+      "layout": {
+        "icon-size": 2.3,
+        "icon-image": "prev_jaune",
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "stations_jaune",
+      "type": "circle",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "JAUNE"
+        ],
+        [
+          "==",
+          "ind_prev",
+          false
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#DAE821",
+        "circle-radius": 9,
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 3,
+        "circle-stroke-opacity": 0.8
+      }
+    },
+    {
+      "id": "station_prevision_orange",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "ind_prev",
+          true
+        ],
+        [
+          "==",
+          "etat3",
+          "JAUNEORANGE"
+        ]
+      ],
+      "layout": {
+        "icon-size": 2.3,
+        "icon-image": "prev_orange",
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "stations_orange",
+      "type": "circle",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "JAUNEORANGE"
+        ],
+        [
+          "==",
+          "ind_prev",
+          false
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#E8983C",
+        "circle-radius": 9,
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 3,
+        "circle-stroke-opacity": 0.8
+      }
+    },
+    {
+      "id": "station_prevision_rouge",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "ind_prev",
+          true
+        ],
+        [
+          "==",
+          "etat3",
+          "ORANGE"
+        ]
+      ],
+      "layout": {
+        "icon-size": 2.3,
+        "icon-image": "prev_rouge",
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "stations_rouge",
+      "type": "circle",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "ORANGE"
+        ],
+        [
+          "==",
+          "ind_prev",
+          false
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#D56050",
+        "circle-radius": 9,
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 3,
+        "circle-stroke-opacity": 0.8
+      }
+    },
+    {
+      "id": "station_prevision_brun",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "ind_prev",
+          true
+        ],
+        [
+          "==",
+          "etat3",
+          "ROUGE"
+        ]
+      ],
+      "layout": {
+        "icon-size": 2.3,
+        "icon-image": "prev_brun",
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "stations_brun",
+      "type": "circle",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "filter": [
+        "all",
+        [
+          "==",
+          "etat3",
+          "ROUGE"
+        ],
+        [
+          "==",
+          "ind_prev",
+          false
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#8D5150",
+        "circle-radius": 9,
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 3,
+        "circle-stroke-opacity": 0.8
+      }
+    },
+    {
+      "id": "stations-label",
+      "type": "symbol",
+      "source": "vigilance2",
+      "source-layer": "station_v",
+      "minzoom": 10,
+      "maxzoom": 21,
+      "layout": {
+        "text-field": {
+          "type": "identity",
+          "property": "alias_nom"
+        },
+        "text-size": 10,
+        "text-line-height": 1.8,
+        "text-variable-anchor": [
+          "bottom-right",
+          "top-left"
+        ],
+        "text-offset": [
+          0,
+          2
+        ]
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "rgba(2, 2, 2, 1)",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.25
+      }
+    }
+  ],
+  "id": "vigilance"
+}
