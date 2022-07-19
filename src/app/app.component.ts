@@ -2,7 +2,6 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { zip } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
@@ -10,9 +9,6 @@ import {
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
-import { HeaderComponent } from './pages/header/header.component';
-import { FooterComponent } from './pages/footer/footer.component';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,10 +17,10 @@ import { FooterComponent } from './pages/footer/footer.component';
 export class AppComponent {
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
-  public hasHeader = true;
-  public HeaderComponent = HeaderComponent;
-  public hasFooter = true;
-  public FooterComponent = FooterComponent;
+  public hasHeader: boolean = undefined;
+  public hasFooter: boolean = undefined;
+  public hasMenu: boolean = undefined;
+
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 
@@ -49,6 +45,9 @@ export class AppComponent {
 
     this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
     this.configService.getConfig('hasFooter');
+
+    this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
+    this.configService.getConfig('hasMenu');
   }
 
   private readTitleConfig() {

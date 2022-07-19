@@ -7,6 +7,15 @@
     "logo": "assets/images/signature-PIV.svg",
     "logoPrint": "assets/images/signature-PIV.svg"
   },
+  "hasMenu": true,
   "hasFooter": true,
-  "hasGeolocateButton": true
+  "hasLegendButton": true,
+  "hasGeolocateButton": true,
+  "geolocate": {
+    "basic": true,
+    "followPosition": false,
+    "activateDefault": false
+  },
+  "useStaticIcon": false,
+  "hasExpansionPanel": false
 }

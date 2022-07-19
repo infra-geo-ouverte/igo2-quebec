@@ -1,20 +1,18 @@
+import { MapComponent } from './map.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header.component';
 import { IgoLanguageModule } from '@igo2/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    MapComponent
   ],
   imports: [
     CommonModule,
-    IgoLanguageModule,
-    MatToolbarModule
+    IgoLanguageModule
     ],
   exports: [
-    HeaderComponent
+    MapComponent
   ]
 })
-export class HeaderModule { }
+export class MapModule { }
