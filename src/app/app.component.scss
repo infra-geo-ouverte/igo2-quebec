@@ -5,15 +5,6 @@
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-/*** Spinner ***/
-
-igo-spinner {
-  position: absolute;
-  top: $igo-margin;
-  right: $igo-margin;
-  z-index: 5;
-}
-
 /*** Message-center ***/
 igo-message-center ::ng-deep simple-notifications ::ng-deep div.simple-notification-wrapper {
   right: 10px;
@@ -41,4 +32,34 @@ $footer-height: 29px;
     display: block;
   }
 
+}
+
+//* Spinner *//
+
+igo-spinner {
+  position: absolute;
+  top: calc(#{$header-height-mobile} + 4px)!important;
+  right: 4px;
+  z-index: 100;
+}
+
+spinner-with-legend-dialog {
+  position: absolute;
+  top: calc(#{$header-height-mobile} + 4px)!important;
+  right: 345px;
+  z-index: 100;
+}
+
+@media (min-width: 768px){
+  igo-spinner {
+    top: calc(#{$header-height} + 4px)!important;
+    right: 4px;
+    z-index: 100;
+  }
+
+  spinner-with-legend-dialog {
+    top: calc(#{$header-height} + 4px)!important;
+    right: 345px!important;
+    z-index: 100;
+  }
 }
