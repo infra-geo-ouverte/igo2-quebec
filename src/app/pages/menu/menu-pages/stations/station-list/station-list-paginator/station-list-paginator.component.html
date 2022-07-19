@@ -1,0 +1,32 @@
+<div class="paginator">
+    <button *ngIf="!currentPageIsFirst"
+        class="navigationButton"
+        mat-icon-button
+        color="primary"
+        disableRipple="true"
+        matTooltip="Page précédente"
+        tooltip-position="below"
+        matTooltipShowDelay="500"
+        (click)="goToPreviousPage()">
+    <mat-icon svgIcon="chevron-left"></mat-icon>
+    </button>
+    <span *ngFor="let page of pagesArray; let i = index"
+        [ngClass]="i + 1 === currentPageNumber$.getValue() ? 'pageButtonBold' : 'pageButton'"
+        mat-button
+        color="primary"
+        (click)="goToPage($event)">
+        {{ i + 1 }}
+    </span>
+    <button *ngIf="!currentPageIsLast"
+        class="navigationButton"
+        mat-icon-button
+        color="primary"
+        disableRipple="true"
+        [disabled]="currentPageIsLast"
+        matTooltip="Page suivante"
+        tooltip-position="below"
+        matTooltipShowDelay="500"
+        (click)="goToNextPage()">
+      <mat-icon svgIcon="chevron-right"></mat-icon>
+    </button>
+</div>

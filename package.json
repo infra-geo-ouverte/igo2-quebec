@@ -8,7 +8,7 @@
   "license": "LiLiQ-R",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --port 4202 --proxy-config proxy.conf.json",
+    "start": "ng serve --host 0.0.0.0 --port 4201 --proxy-config proxy.conf.json",
     "build": "ng build",
     "lint": "ng lint",
     "lint.fix": "ng lint --fix",
@@ -21,7 +21,7 @@
     "serve.coverage": "http-server ./coverage/ --port=4210 --no-browser",
     "i18n": "ng2-translate-extract --dir ./src --output ./src/assets/locale/ --format=json --clean",
     "pretest": "ng lint",
-    "test": "ng test --watch=false --browsers=ChromeHeadless",
+    "test": "ng test --watch=false --browsers=ChromiumHeadless",
     "test.watch": "ng test",
     "test.all": "npm run test && npm run e2e",
     "clean": "rimraf ./dist && rimraf ./node_modules && npm cache clean --force && git checkout -- package.json && git checkout -- package-lock.json",

@@ -7,7 +7,6 @@
     display: flex;
     justify-content: flex-end;
     right: 0;
-    margin-left: 140px;
     text-align: right!important;
     width: 100%;
 }
@@ -40,8 +39,9 @@ span.footer-text a{
     position: fixed!important;
     display: flex;
     flex-direction: row;
-    left: 70px!important;
+    left: 2px!important;
     bottom: 3px!important;
+    background: unset;
 }
 
 ::ng-deep .map-hasfooter {

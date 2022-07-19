@@ -1,0 +1,18 @@
+{
+    "stationFilters": {
+        "body": "Body fo water",
+        "filtersLabel": "Filters",
+        "resetFilters": "Reset filters",
+        "showFilters": "Show filters",
+        "state": {
+            "disabled": "Disabled",
+            "state": "State",
+            "major": "Major flooding",
+            "minor": "Minor flooding",
+            "normal": "Normal state",
+            "surveillance": "Under surveillance",
+            "unknown": "Unknown state"
+        },
+        "stationNumber": "Station number"
+    }
+}

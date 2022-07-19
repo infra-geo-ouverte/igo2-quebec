@@ -19,6 +19,7 @@
           "defaultConfiguration": "developpement",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/vigilance/",
             "aot": true,
             "outputPath": "dist/igo2-quebec",
             "index": "src/index.html",

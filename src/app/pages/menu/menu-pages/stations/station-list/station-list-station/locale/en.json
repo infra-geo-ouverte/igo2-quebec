@@ -1,0 +1,10 @@
+{
+    "stationListStation": {
+        "down": "Dropping", 
+        "location": "Location",
+        "state": "State",
+        "trend": "Trend",
+        "up": "Rising",
+        "update": "Last updated"
+    }
+}
