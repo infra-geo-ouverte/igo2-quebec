@@ -5,12 +5,16 @@
   igoDropGeoFile
   [map]="map"
   [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+  <igo-baselayers-switcher
+    [map]="map"
+    [@controlsOffsetY]="getBaselayersSwitcherStatus()"
+    [useStaticIcon]="getBaseLayersUseStaticIcon()">
+  </igo-baselayers-switcher>
   <div id="map-buttons">
     <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
     <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
     <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
     <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
   </div>
-  <igo-baselayers-switcher [map]="map" [useStaticIcon]="true"></igo-baselayers-switcher>
 </igo-map-browser>
 <app-footer *ngIf="hasFooter" ></app-footer>
