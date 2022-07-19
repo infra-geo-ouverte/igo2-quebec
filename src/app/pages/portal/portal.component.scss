@@ -109,7 +109,21 @@ igo-zoom-button {
   }
 }
 
+//** ADJUSTMENTS TO FOOTER AND HEADER **//
+
 ::ng-deep .map-hasfooter {
   height: calc( 100% - #{$footer-height} )!important;
 }
 
+::ng-deep #legend-button-dialog-container {
+  top: calc( #{$header-height-mobile} + 4px); 
+  max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px);
+}
+
+@media (min-width: 768px){
+
+  ::ng-deep #legend-button-dialog-container {
+    top: calc( #{$header-height} + 4px); 
+    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px);
+  }
+}
