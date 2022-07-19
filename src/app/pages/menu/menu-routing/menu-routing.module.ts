@@ -1,7 +1,7 @@
 import { StationsComponent } from './../menu-pages/stations/stations.component';
 import { HomeComponent } from '../menu-pages/home/home.component';
 import { AboutComponent } from '../menu-pages/about/about.component';
-import { MapComponent } from '../../../pages/map/map.component';
+import { MapComponent } from '../menu-pages/map/map.component';
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
