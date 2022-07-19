@@ -11,11 +11,16 @@ import { IgoCoreModule } from '@igo2/core';
 import {
   IgoEntityModule,
   IgoFlexibleModule,
+  IgoWorkspaceModule
 } from '@igo2/common';
 
 import {
   IgoFeatureModule,
   IgoMapModule,
+  IgoLayerModule,
+  IgoGeoWorkspaceModule,
+  IgoSearchModule,
+  IgoQueryModule
 } from '@igo2/geo';
 import {
   IgoContextManagerModule,
@@ -41,7 +46,12 @@ import { PortalComponent } from './portal.component';
     IgoContextManagerModule,
     IgoContextMapButtonModule,
     FooterModule,
-    LegendButtonModule
+    LegendButtonModule,
+    IgoLayerModule,
+    IgoWorkspaceModule,
+    IgoGeoWorkspaceModule,
+    IgoQueryModule.forRoot(),
+    IgoSearchModule.forRoot()
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

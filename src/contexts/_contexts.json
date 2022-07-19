@@ -16,10 +16,6 @@
     "title": "Filtre temporel (Time filter)"
   },
   {
-    "uri": "ogcFilters",
-    "title": "Filtre attributaire (Attribute filter)"
-  },
-  {
     "uri": "layerSync",
     "title": "Synchronisation de layers"
   },
