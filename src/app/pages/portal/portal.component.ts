@@ -26,7 +26,6 @@ import {
 
 import {
   IgoMap,
-  Feature,
 } from '@igo2/geo';
 
 import {
