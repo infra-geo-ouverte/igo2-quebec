@@ -15,5 +15,6 @@
     "basic": true,
     "followPosition": false,
     "activateDefault": false
-  }
+  },
+  "postgrest": "/ws/postgrest/station_affichage"
 }

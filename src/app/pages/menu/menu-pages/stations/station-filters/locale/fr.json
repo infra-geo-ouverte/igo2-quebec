@@ -1,0 +1,18 @@
+{
+    "stationFilters": {
+        "body": "Plan d'eau",
+        "filtersLabel": "Filtres",
+        "resetFilters": "Effacer les filtres",
+        "showFilters": "Afficher les filtres",
+        "state": {
+            "disabled": "Désactivée",
+            "state": "État",
+            "major": "Inondation majeure",
+            "minor": "Inondation mineure",
+            "normal": "État normal",
+            "surveillance": "En surveillance",
+            "unknown": "État inconnu"
+        },
+        "stationNumber": "Numéro de la station"
+    }
+}

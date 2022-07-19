@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="etat-normal.svg"
+   inkscape:export-filename="C:\Users\BEAM48\OneDrive - Ministère de la Sécurité publique\Documents\Vigilance\vigilance-legende.png"
+   inkscape:export-xdpi="252.63158"
+   inkscape:export-ydpi="252.63158"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="1"
+     inkscape:pagecheckerboard="false"
+     inkscape:document-units="px"
+     showgrid="false"
+     showguides="true"
+     objecttolerance="10000"
+     units="px"
+     inkscape:zoom="1"
+     inkscape:cx="-15"
+     inkscape:cy="-18"
+     inkscape:window-width="1920"
+     inkscape:window-height="986"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     guidetolerance="10000"
+     inkscape:snap-path-clip="true"
+     inkscape:snap-path-mask="true"
+     inkscape:snap-perpendicular="false"
+     inkscape:snap-tangential="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid18429"
+       spacingx="0.52916667"
+       spacingy="0.52916667"
+       snapvisiblegridlinesonly="false"
+       dotted="false"
+       empspacing="2"
+       originx="-19.513021"
+       originy="-26.656773" />
+    <sodipodi:guide
+       position="-17.396355,14.485937"
+       orientation="0,7.9999995"
+       id="guide1943" />
+    <sodipodi:guide
+       position="-15.279688,14.485937"
+       orientation="7.9999995,0"
+       id="guide1945" />
+    <sodipodi:guide
+       position="-15.279688,12.36927"
+       orientation="0,-7.9999995"
+       id="guide1947" />
+    <sodipodi:guide
+       position="-17.396355,12.36927"
+       orientation="-7.9999995,0"
+       id="guide1949" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <rect
+       x="-88"
+       y="228"
+       width="95.559052"
+       height="46.58268"
+       id="rect55139" />
+    <rect
+       x="190.91447"
+       y="51.676098"
+       width="5.7417889"
+       height="48.805202"
+       id="rect8353" />
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-19.513022,-26.656771)">
+    <circle
+       style="font-variation-settings:'wdth' 75, 'wght' 600;fill:#55c67b;fill-opacity:1;stroke-width:0.793746"
+       id="path26319-8-4-1-4"
+       cx="25.863022"
+       cy="33.006771"
+       r="6.3499999" />
+  </g>
+</svg>
