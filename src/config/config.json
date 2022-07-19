@@ -15,5 +15,7 @@
     "basic": true,
     "followPosition": false,
     "activateDefault": false
-  }
+  },
+  "useStaticIcon": false,
+  "hasExpansionPanel": false
 }
