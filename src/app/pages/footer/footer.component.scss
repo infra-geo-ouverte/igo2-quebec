@@ -4,7 +4,8 @@
     order: 2;
     margin-right: 0.5%;
     margin-left: 140px;
-    display: block;
+    display: flex;
+    justify-content: flex-end;
     right: 0;
     margin-left: 140px;
     text-align: right!important;
@@ -15,7 +16,6 @@
     z-index: 666;
     background: #ffffffa3;
     font-size: 0.7rem;
-    display: flex;
     align-items: center;
     height: $footer-height;
     display: flex;
@@ -40,8 +40,7 @@ span.footer-text a{
     position: fixed!important;
     display: flex;
     flex-direction: row;
-    margin-left: 0.5%;
-    left: 2px!important;
+    left: 70px!important;
     bottom: 3px!important;
 }
 
