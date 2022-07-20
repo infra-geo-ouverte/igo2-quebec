@@ -1,5 +1,5 @@
 // https://design.quebec.ca/
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap');
 
 :root {
     --breakpoint-pgu-sm: 320px;
@@ -75,17 +75,23 @@
     word-break: break-word;
     overflow-wrap: break-word;
     cursor: pointer;
+    color: #095797;
+    text-decoration: underline;
+    background-color: transparent;
     }
     
     // Pour afficher le symbole de lien externe. Ex de HTML : 
     /*
-    <a href="https://www.quebec.ca/" target="_blank" rel="noreferrer">Lien qui ouvrira dans une nouvelle fenêtre.&nbsp;<img class="linkExtImg" src="/typo3conf/ext/gabarit_pgu/Resources/Public/Images/Templates/lien-externe.svg" alt="Cet hyperlien s'ouvrira dans une nouvelle fenêtre."></a>
+    <a href="https://www.quebec.ca/" target="_blank" rel="noreferrer">Lien&nbsp;<img class="linkExtImg" src="../../../../../assets/images/lien-externe.svg" alt="Cet hyperlien s'ouvrira dans une nouvelle fenêtre."></a>
     */
     
     .linkExtImg {
         max-height: 11px;
         max-width: 11px;
         margin-bottom: 0.16rem;
+        float: left;
+        display:inline;
+        text-align: left;
     }
     
     img {
@@ -161,7 +167,135 @@
     igo-baselayers-switcher, igo-geolocate-button {
     box-shadow: 0 1px 4px rgb(34 54 84 / 24%);
     }
+
+    //** TYPOGRAPHY **//
     
+    span.surtitre {
+        font-family: Open Sans;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: normal;
+        color: #647287;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    // FONTS
+    
+    p {
+        font-family: 'Open Sans',sans-serif;
+        color: #223654;
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 24px;
+    }
+  
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { // removed h3 for conflict with layer catalog
+      margin-bottom: 1.2rem;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      color: #223654;
+      display: block;
+      width: 100%;
+      }
+      
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 3rem;
+      margin-bottom: 2rem;
+      }
+      
+    h1:after {
+      content: "";
+      display: block;
+      margin: 0;
+      width: 4.8rem;
+      padding-top: 0.4rem;
+      border-bottom: 4px solid #f09686;
+      }
+    
+    @media (max-width: 1200px) {
+        h1 {
+            font-size: 36px;
+            line-height: 40px;
+            font-weight: bold;
+            margin-top: 48px;
+            margin-bottom: 16px;
+        }
+    }
+    
+    h2 {
+        font-size: 35px;
+        line-height: 40px;
+        font-weight: bold;
+        margin-top: 48px;
+        margin-bottom: 16px;
+    }
+    
+    @media (max-width: 1200px) {
+        h2 {
+            font-size: 29px;
+            line-height: 32px;
+            font-weight: bold;
+            margin-top: 48px;
+            margin-bottom: 16px;
+        }
+    }
+    
+    h3 {
+        font-size: 28px;
+        line-height: 32px;
+        font-weight: bold;
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+    
+    @media (max-width: 1200px) {
+        h3 {
+            font-size: 25px;
+            line-height: 32px;
+            font-weight: bold;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+    }
+    
+    h4 {
+        font-size: 21px;
+        line-height: 24px;
+        font-weight: bold;
+        margin-top: 24px;
+        margin-bottom: 8px;
+    }
+    
+    h5 {
+        font-size: 19px;
+        line-height: 24px;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 0px;
+    }
+    
+    h6 {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 0px;
+    }
+    
+    span.surtitre {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: normal;
+        color: #647287;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+        
     // ANGULAR MATERIAL
     
     ::ng-deep .mat-stroked-button {
@@ -186,144 +320,3 @@
     .headline {
         background-color: #223654!important;
       }
-
-    //** TYPOGRAPHY **//
-    
-    span.surtitre {
-        font-family: Open Sans;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: normal;
-        color: #647287;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
-    
-    // FONTS
-    
-    p {
-        font-family: "Open Sans",sans-serif;
-        color: #223654;
-        font-size: 16px;
-        line-height: 24px;
-        margin-bottom: 24px;
-    }
-  
-    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-      margin-bottom: 1.2rem;
-      font-family: 'Roboto', sans-serif;
-      font-weight: 500;
-      color: #223654;
-      }
-      
-    h1 {
-      font-size: 2rem;
-      font-weight: bold;
-      line-height: 3rem;
-      margin-bottom: 2rem;
-      }
-      
-    h1:after {
-      content: "";
-      display: block;
-      margin: 0;
-      width: 4.8rem;
-      padding-top: 0.4rem;
-      border-bottom: 4px solid #f09686;
-      }
-    
-    @media (max-width: 1200px) {
-        h1 {
-            font-family: Roboto;
-            font-size: 36px;
-            line-height: 40px;
-            font-weight: bold;
-            color: #223654;
-            margin-top: 48px;
-            margin-bottom: 16px;
-        }
-    }
-    
-    h2 {
-        font-family: Roboto;
-        font-size: 35px;
-        line-height: 40px;
-        font-weight: bold;
-        color: #223654;
-        margin-top: 48px;
-        margin-bottom: 16px;
-    }
-    
-    @media (max-width: 1200px) {
-        h2 {
-            font-family: Roboto;
-            font-size: 29px;
-            line-height: 32px;
-            font-weight: bold;
-            color: #223654;
-            margin-top: 48px;
-            margin-bottom: 16px;
-        }
-    }
-    
-    h3 {
-        font-family: Roboto;
-        font-size: 28px;
-        line-height: 32px;
-        font-weight: bold;
-        color: #223654;
-        margin-top: 24px;
-        margin-bottom: 16px;
-    }
-    
-    @media (max-width: 1200px) {
-        h3 {
-            font-family: Roboto;
-            font-size: 25px;
-            line-height: 32px;
-            font-weight: bold;
-            color: #223654;
-            margin-top: 24px;
-            margin-bottom: 16px;
-        }
-    }
-    
-    h4 {
-        font-family: Roboto;
-        font-size: 21px;
-        line-height: 24px;
-        font-weight: bold;
-        color: #223654;
-        margin-top: 24px;
-        margin-bottom: 8px;
-    }
-    
-    h5 {
-        font-family: Roboto;
-        font-size: 19px;
-        line-height: 24px;
-        font-weight: bold;
-        color: #223654;
-        margin-top: 16px;
-        margin-bottom: 0px;
-    }
-    
-    h6 {
-        font-family: Roboto;
-        font-size: 16px;
-        line-height: 24px;
-        font-weight: bold;
-        color: #223654;
-        margin-top: 16px;
-        margin-bottom: 0px;
-    }
-    
-    span.surtitre {
-        font-family: Open Sans;
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: normal;
-        color: #647287;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
