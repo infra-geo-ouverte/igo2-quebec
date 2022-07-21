@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from './menu/menu.component';
-import { HomeComponent } from '../../pages/home/home.component';
+import { HomeComponent } from './menu-pages/home/home.component';
 import { MenuRoutingModule } from './menu-routing/menu-routing.module';
-import { AboutComponent } from '../../pages/about/about.component';
-import { MapComponent } from '../../pages/map/map.component';
+import { AboutComponent } from './menu-pages/about/about.component';
+import { MapComponent } from './menu-pages/map/map.component';
 import { HeaderModule } from '../header/header.module';
 import { FooterModule } from '../footer/footer.module';
 import { PortalModule } from '../portal';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -21,7 +21,8 @@ import { PortalModule } from '../portal';
     MenuRoutingModule,
     PortalModule,
     HeaderModule,
-    FooterModule
+    FooterModule,
+    MatToolbarModule
   ],
   exports:[
     MenuComponent,

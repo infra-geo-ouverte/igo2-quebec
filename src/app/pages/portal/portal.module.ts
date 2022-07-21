@@ -1,4 +1,6 @@
 import { SideSearchModule} from '././side-search/side-search.module';
+import { LegendButtonModule } from './legend-button/legend-button.module';
+import { FooterModule } from './../footer/footer.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +11,16 @@ import { IgoCoreModule } from '@igo2/core';
 import {
   IgoEntityModule,
   IgoFlexibleModule,
+  IgoWorkspaceModule
 } from '@igo2/common';
 
 import {
   IgoFeatureModule,
   IgoMapModule,
+  IgoLayerModule,
+  IgoGeoWorkspaceModule,
+  IgoSearchModule,
+  IgoQueryModule
 } from '@igo2/geo';
 import {
   IgoContextManagerModule,
@@ -39,7 +46,14 @@ import { PortalComponent } from './portal.component';
     IgoContextManagerModule,
     IgoContextMapButtonModule,
     SideSearchModule,
-    MatSidenavModule
+    MatSidenavModule,
+    FooterModule,
+    LegendButtonModule,
+    IgoLayerModule,
+    IgoWorkspaceModule,
+    IgoGeoWorkspaceModule,
+    IgoQueryModule.forRoot(),
+    IgoSearchModule.forRoot()
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

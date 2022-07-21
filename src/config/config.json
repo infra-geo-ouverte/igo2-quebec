@@ -9,6 +9,15 @@
   },
   "hasMenu": true,
   "hasFooter": true,
+  "hasLegendButton": true,
+  "hasGeolocateButton": true,
+  "geolocate": {
+    "basic": true,
+    "followPosition": false,
+    "activateDefault": false
+  },
+  "useStaticIcon": false,
+  "hasExpansionPanel": false,
   "hasSideSearch": true,
   "showSearchBar": true,
   "showMenuButton": true
