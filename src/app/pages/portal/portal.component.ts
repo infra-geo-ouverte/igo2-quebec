@@ -19,6 +19,8 @@ import {
     Workspace
   } from '@igo2/common';
 
+  import { Subscription, BehaviorSubject } from 'rxjs';
+
   import {
     WfsWorkspace,
     FeatureWorkspace
@@ -42,8 +44,6 @@ import {
   mapSlideX,
   mapSlideY
 } from './portal.animation';
-
-import { Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-portal',
@@ -77,20 +77,11 @@ export class PortalComponent implements OnInit, OnDestroy {
   public showMenuButton = true;
   public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  get sidenavOpened(): boolean {
-    return this.sidenavOpened$.value;
-  }
-
-  set sidenavOpened(value: boolean) {
-    this.sidenavOpened$.next(value);
-  }
-
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
 
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
-  public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -143,40 +134,33 @@ export class PortalComponent implements OnInit, OnDestroy {
     private queryState: QueryState,
     private storageService: StorageService
   ) {
-    this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
-      this.configService.getConfig('showRotationButtonIfNoRotation');
-    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
-      this.configService.getConfig('hasFooter');
-    this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
-      this.configService.getConfig('hasLegendButton');
+      this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
+        this.configService.getConfig('showRotationButtonIfNoRotation');
+      this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
+        this.configService.getConfig('hasFooter');
+      this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
+        this.configService.getConfig('hasLegendButton');
       this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
-      this.configService.getConfig('hasSideSearch');
-      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
-      this.configService.getConfig('showSearchBar');
-    this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
-      this.configService.getConfig('showMenuButton');
-  }
-
-  private closeSidenav() {
-    this.sidenavOpened = false;
-    this.map.viewController.padding[3] = 0;
-  }
-
-  private openSidenav() {
-    this.sidenavOpened = true;
-    this.map.viewController.padding[3] = 400;
-  }
-
-  private toggleSidenav() {
-    this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
-  }
-=======
-    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
-      this.configService.getConfig('hasFooter');
-    this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
-      this.configService.getConfig('hasLegendButton');
+        this.configService.getConfig('hasSideSearch');
+        this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
+        this.configService.getConfig('showSearchBar');
+      this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
+        this.configService.getConfig('showMenuButton');
     }
->>>>>>> origin/master-vigilance
+
+    private closeSidenav() {
+      this.sidenavOpened = false;
+      this.map.viewController.padding[3] = 0;
+    }
+
+    private openSidenav() {
+      this.sidenavOpened = true;
+      this.map.viewController.padding[3] = 400;
+    }
+
+    private toggleSidenav() {
+      this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
+    }
 
   ngOnInit() {
     window['IGO'] = this;
