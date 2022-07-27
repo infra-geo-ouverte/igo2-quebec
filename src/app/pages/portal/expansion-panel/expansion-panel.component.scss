@@ -1,0 +1,65 @@
+@import '../portal.variables';
+
+
+:host {
+  @extend %box-shadowed;
+
+  display: block;
+  background-color: white;
+
+  height: $app-expansion-panel-collapsed-height;
+  width: $app-expansion-panel-collapsed-width;
+
+  transition:
+    height 200ms cubic-bezier(.4, 0, .2, 1),
+    width 200ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.app-expansion-panel-container {
+  height: 100%;
+  width: 100%;
+}
+
+:host.app-expansion-panel-expanded {
+  height: $app-expansion-panel-height;
+  width: 100%;
+  z-index: 6;
+
+  @include mobile {
+    &.footer {
+      margin-bottom: 48px;
+    }
+  }
+}
+
+:host.app-expansion-panel-expanded-maximized {
+  height: $app-expansion-panel-height-maximized;
+  width: 100%;
+  z-index: 6;
+
+  @include mobile {
+    &.footer {
+      margin-bottom: 48px;
+    }
+  }
+}
+
+:host > div {
+  height: 100%;
+  width: 100%;
+}
+
+.app-expansion-panel-content {
+  height: calc(100% - #{$app-expansion-panel-header-height});
+  overflow: auto;
+  padding: $igo-padding;
+}
+
+igo-backdrop ::ng-deep > div {
+  // 120 because material tables use z-index = 110 for sticky headers 
+  z-index: 120 !important;
+}
+
+.app-expansion-panel-content ::ng-deep .igo-entity-table-with-selection {
+  width: 100%;
+}

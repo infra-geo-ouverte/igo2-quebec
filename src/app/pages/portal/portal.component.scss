@@ -11,6 +11,45 @@ mat-icon.disabled {
   color: rgba(0, 0, 0, 0.38);
 }
 
+/*** Sidenav ***/
+mat-sidenav-container {
+  height: 100%;
+  width: 100%;
+  background-color: #efefef;
+  z-index: 5;
+  display: unset;
+}
+
+mat-sidenav-content {
+  @include mobile {
+    z-index: auto;
+  }
+}
+
+/*** Expansion Panel ***/
+.spacer {
+  flex: 1 1 auto;
+}
+
+/*** Search bar ***/
+igo-search-bar, app-sidesearch-bar {
+  background-color: $app-background-color;
+  font-size: 16px;
+  position: absolute;
+  left: $search-bar-left;
+  top: $igo-margin;
+  z-index: 4;
+  width: $search-bar-width;
+  height: $igo-icon-size;
+  margin: 0 $igo-margin;
+
+  @include mobile {
+    width: $search-bar-width-mobile;
+    max-width: 350px;
+  }
+}
+
+
 /*** Map browser ***/
 igo-map-browser {
   width: 100%;

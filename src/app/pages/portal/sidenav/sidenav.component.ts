@@ -16,15 +16,13 @@ import { ToolState, CatalogState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
-  selector: 'app-side-search',
-  templateUrl: './side-search.component.html',
-  styleUrls: ['./side-search.component.scss'],
+  selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrls: ['./sidenav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideSearchComponent implements OnInit, OnDestroy {
+export class SidenavComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-  public showSearchBar = true;
-  public showMenuButton = true;
 
   private activeTool$$: Subscription;
 
@@ -61,14 +59,7 @@ export class SideSearchComponent implements OnInit, OnDestroy {
   constructor(
     private toolState: ToolState,
     private configService: ConfigService,
-    private catalogState: CatalogState) {
-
-      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
-        this.configService.getConfig('showSearchBar');
-      this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
-        this.configService.getConfig('showMenuButton');
-
-    }
+    private catalogState: CatalogState) {}
 
   ngOnInit() {
     this.activeTool$$ = this.toolbox.activeTool$.subscribe((tool: Tool) => {

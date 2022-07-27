@@ -4,7 +4,9 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 import { LanguageOptions } from '@igo2/core';
 import {
-  Projection
+  Projection,
+  SearchSourceOptions,
+  CommonVectorStyleOptions
 } from '@igo2/geo';
 
 interface Environment {
@@ -15,6 +17,17 @@ interface Environment {
     };
     language?: LanguageOptions;
     projections?: Projection[];
+    searchSources?: { [key: string]: SearchSourceOptions };
+    queryOverlayStyle?: {
+      base?: CommonVectorStyleOptions,
+      selection?: CommonVectorStyleOptions,
+      focus?: CommonVectorStyleOptions
+    };
+    searchOverlayStyle?: {
+      base?: CommonVectorStyleOptions,
+      selection?: CommonVectorStyleOptions,
+      focus?: CommonVectorStyleOptions
+    };
   };
 }
 
@@ -44,6 +57,40 @@ export const environment: Environment = {
           +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
         extent: [31796.5834, 158846.2231, 1813323.4284, 2141241.0978]
       }
-    ]
+    ],
+    searchSources: {
+      nominatim: {
+        available: false
+      },
+      storedqueries: {
+        available: false
+      },
+      icherche: {
+        searchUrl: '/apis/icherche',
+        order: 2,
+        params: {
+          limit: '5'
+        }
+      },
+      coordinatesreverse: {
+        showInPointerSummary: true
+      },
+      icherchereverse: {
+        showInPointerSummary: true,
+        searchUrl: '/apis/terrapi',
+        order: 3,
+        enabled: true
+      },
+      ilayer: {
+        searchUrl: '/apis/icherche/layers',
+        order: 4,
+        params: {
+          limit: '5'
+        }
+      },
+      cadastre: {
+        enabled: false
+      }
+    }
   }
 };
