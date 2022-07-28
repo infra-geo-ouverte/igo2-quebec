@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { FEATURE, Feature, FeatureGeometry } from '../../../feature';
+import { FEATURE, Feature, FeatureGeometry } from '@igo2/geo'
 
 import { StorageService } from '@igo2/core';
 import { SearchResult } from '../search.interfaces';

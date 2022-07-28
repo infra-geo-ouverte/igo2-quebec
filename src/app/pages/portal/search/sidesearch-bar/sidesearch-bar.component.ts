@@ -1,3 +1,5 @@
+import { SearchResult } from '../shared/search.interfaces';
+import { SEARCH_TYPES } from '../shared/search.enums';
 import {
   Component,
   OnInit,
@@ -18,7 +20,8 @@ import { debounce, distinctUntilChanged } from 'rxjs/operators';
 
 import { LanguageService } from '@igo2/core';
 import { EntityStore } from '@igo2/common';
-import { SEARCH_TYPES, SearchResult, SearchService, SearchSourceService, Research, SearchBarComponent } from '@igo2/geo';
+
+import {SearchService, SearchSourceService, Research, SearchBarComponent } from '@igo2/geo';
 
 /**
  * Searchbar that triggers a research in all search sources enabled.

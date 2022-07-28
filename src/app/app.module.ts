@@ -14,8 +14,6 @@ import {
 } from '@igo2/core';
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import {
-  provideOptionsApi,
-  provideStyleListOptions,
   provideIChercheSearchSource,
   provideIChercheReverseSearchSource,
   provideNominatimSearchSource,
@@ -23,7 +21,9 @@ import {
   provideILayerSearchSource,
   provideStoredQueriesSearchSource,
   provideOsrmDirectionsSource,
-  provideCadastreSearchSource
+  provideOptionsApi,
+  provideCadastreSearchSource,
+  provideStyleListOptions
 } from '@igo2/geo';
 
 import { environment } from '../environments/environment';
@@ -52,7 +52,6 @@ import { AppComponent } from './app.component';
       path: './config/config.json'
     }),
     RouteService,
-    provideOptionsApi(),
     provideNominatimSearchSource(),
     provideIChercheSearchSource(),
     provideIChercheReverseSearchSource(),
