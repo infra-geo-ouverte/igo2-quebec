@@ -8,14 +8,14 @@ import {
 
 import { RouteService } from '@igo2/core';
 
-import { SearchBarComponent } from './search-bar.component';
+import { SideSearchBarComponent } from './sidesearch-bar.component';
 
 @Directive({
-  selector: '[igoSearchUrlParam]'
+  selector: '[appSideSearchUrlParam]'
 })
-export class SearchUrlParamDirective implements OnInit {
+export class SideSearchUrlParamDirective implements OnInit {
   constructor(
-    @Self() private component: SearchBarComponent,
+    @Self() private component: SideSearchBarComponent,
     private ref: ChangeDetectorRef,
     @Optional() private route: RouteService
   ) {}

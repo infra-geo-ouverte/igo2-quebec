@@ -20,6 +20,6 @@
   "hasExpansionPanel": false,
   "hasSideSearch": true,
   "showSearchBar": true,
-  "showMenuButton": true,
+  "showMenuButton": false,
   "hasToolbox": false
 }

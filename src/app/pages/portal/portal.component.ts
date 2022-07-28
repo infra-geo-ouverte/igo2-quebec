@@ -1,6 +1,6 @@
 import { SideSearchComponent } from './sidesearch/sidesearch.component';
-import { SideSearchBarComponent } from './search/search-bar/sidesearch-bar.component';
-
+import { SideSearchBarComponent } from './search/sidesearch-bar/sidesearch-bar.component';
+import { SearchBarComponent } from './search/search-bar/search-bar.component';
 import {
   Component,
   OnInit,
@@ -122,6 +122,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public hasExpansionPanel: boolean = undefined;
   public hasToolbox: boolean = undefined;
   public SideSearchComponent = SideSearchComponent;
+  public SearchBarComponent = SearchBarComponent;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private workspaceMaximize$$: Subscription[] = [];

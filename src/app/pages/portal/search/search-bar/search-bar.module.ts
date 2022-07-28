@@ -1,5 +1,3 @@
-import { SideSearchUrlParamDirective } from './search-url-param.directive';
-import { SideSearchBarComponent } from './sidesearch-bar.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,10 +11,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IgoLanguageModule } from '@igo2/core';
-import { 
-  IgoSearchSelectorModule, IgoSearchSettingsModule
-} from '@igo2/geo';
 
+import { IgoSearchSelectorModule } from '../search-selector/search-selector.module';
+import { IgoSearchSettingsModule } from '../search-settings/search-settings.module';
+import { SearchBarComponent } from './search-bar.component';
+import { SearchUrlParamDirective } from './search-url-param.directive';
 
 /**
  * @ignore
@@ -37,11 +36,11 @@ import {
     IgoSearchSettingsModule
   ],
   exports: [
-    SideSearchBarComponent
+    SearchBarComponent,
   ],
   declarations: [
-    SideSearchBarComponent,
-    SideSearchUrlParamDirective
+    SearchBarComponent,
+    SearchUrlParamDirective
   ]
 })
-export class SideSearchBarModule {}
+export class IgoSearchBarModule {}

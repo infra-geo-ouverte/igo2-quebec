@@ -1,3 +1,4 @@
+import { IgoSearchBarModule } from './search/search-bar/search-bar.module';
 import { AppSideSearchModule } from './sidesearch/sidesearch.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -82,7 +83,8 @@ import { FooterModule } from './../footer/footer.module';
     IgoContextMenuModule,
     IgoToolModule,
     IgoEntityTableModule,
-    IgoEntityTablePaginatorModule
+    IgoEntityTablePaginatorModule,
+    IgoSearchBarModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

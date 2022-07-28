@@ -9,7 +9,7 @@
 
         <igo-panel [title]="title$ | async | translate">
 
-          <igo-search-results
+          <app-search-results
             [store]="searchStore"
             [term]="term"
             [showIcons]="true"
@@ -25,7 +25,7 @@
                   [layer]="result">
                 </igo-search-add-button>
               </ng-template>
-          </igo-search-results>
+          </app-search-results>
 
         </igo-panel>
     </div>

@@ -1,5 +1,3 @@
-<!--app-side-search *ngIf="hasSideSearch"></app-side-search-->
-
 <mat-sidenav-container *ngIf="hasToolbox">
   <mat-sidenav-content position="end">
 
@@ -13,7 +11,7 @@
       (openSidenav)="onToggleSidenavClick()">
     </igo-menu-button>
 
-    <igo-search-bar *ngIf="showSearchBar"
+    <app-search-bar *ngIf="showSearchBar"
       #searchBar
       [term]="searchBarTerm"
       [termSplitter]="termSplitter"
@@ -29,7 +27,7 @@
       (search)="onSearch($event)"
       (clearFeature)="onClearSearch()"
       (searchSettingsChange)="onSearchSettingsChange()">
-    </igo-search-bar>
+    </app-search-bar>
 
     <app-sidenav
     [map]="map"
@@ -80,7 +78,7 @@
       (click)="onBackdropClick()">
     </igo-backdrop>
 
-    <app-sidesearch-bar *ngIf="showSearchBar"
+    <app-search-bar *ngIf="showSearchBar"
       #searchBar
       [appearance]="outline"
       [term]="searchBarTerm"
@@ -97,7 +95,7 @@
       (search)="onSearch($event)"
       (clearFeature)="onClearSearch()"
       (searchSettingsChange)="onSearchSettingsChange()">
-    </app-sidesearch-bar>
+    </app-search-bar>
 
     <app-sidesearch
       [map]="map"

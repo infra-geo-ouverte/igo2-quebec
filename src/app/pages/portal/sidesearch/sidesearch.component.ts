@@ -134,18 +134,6 @@ export class SideSearchComponent implements OnInit, OnDestroy {
     ) {
         // SEARCH
         this.mapService.setMap(this.map);
-
-    this.layerService
-      .createAsyncLayer({
-        title: 'OSM',
-        sourceOptions: {
-          type: 'osm'
-        }
-      })
-      .subscribe(layer => {
-        this.osmLayer = layer;
-        this.map.addLayer(layer);
-      });
   }
 
   // SEARCH

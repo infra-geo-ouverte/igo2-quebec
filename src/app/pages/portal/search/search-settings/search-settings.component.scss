@@ -1,0 +1,48 @@
+@import '~@igo2/core/style/partial/core.variables';
+
+.checkAllButton{
+  text-align: center;
+  padding: 0 5px;
+}
+
+.igo-search-settings-button ::ng-deep div.mat-button-ripple-round  {
+  border-radius: 0;
+}
+
+.igo-search-settings-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.igo-search-settings-radio-group mat-radio-button {
+  margin: $igo-margin;
+}
+
+.igo-search-settings-checkbox mat-radio-button {
+  display: flex;
+}
+
+.igo-search-settings-search-source {
+  display: flex;
+  width: 100%;
+}
+
+.igo-search-settings-search-source mat-checkbox{
+  display: flex;
+  margin-left: $igo-margin;
+  margin-right: $igo-margin;
+}
+
+.pointer-summary-option {
+  display: block;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+
+.pointer-summary-slide-toggle-container {
+  overflow-x: hidden;
+
+  mat-slide-toggle {
+    margin: 10px;
+  }
+}

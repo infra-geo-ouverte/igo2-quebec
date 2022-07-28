@@ -1,3 +1,4 @@
+import { IgoSearchResultsModule } from '../search/search-results/search-results.module';
 import { IgoSearchModule } from './../search/search.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,7 @@ import {
   IgoContextMenuModule
 } from '@igo2/common';
 import { 
-  IgoFeatureModule, IgoMapModule, IgoSearchResultsModule, 
+  IgoFeatureModule, IgoMapModule, 
   provideCadastreSearchSource, provideCoordinatesReverseSearchSource, 
   provideIChercheReverseSearchSource, provideIChercheSearchSource, provideILayerSearchSource, 
   provideNominatimSearchSource, provideStoredQueriesReverseSearchSource, provideStoredQueriesSearchSource 
