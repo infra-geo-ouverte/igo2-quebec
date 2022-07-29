@@ -1,6 +1,4 @@
-import { SideSearchComponent } from './sidesearch/sidesearch.component';
-import { SideSearchBarComponent } from './search/sidesearch-bar/sidesearch-bar.component';
-import { SearchBarComponent } from './search/search-bar/search-bar.component';
+import { SearchBarComponent } from '@igo2/geo';
 import {
   Component,
   OnInit,
@@ -121,7 +119,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   public hasGeolocateButton: boolean = undefined;
   public hasExpansionPanel: boolean = undefined;
   public hasToolbox: boolean = undefined;
-  public SideSearchComponent = SideSearchComponent;
   public SearchBarComponent = SearchBarComponent;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -134,7 +131,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   public showSearchBar = true;
   public showMenuButton = true;
   public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public SideSearchBarComponent = SideSearchBarComponent;
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
 

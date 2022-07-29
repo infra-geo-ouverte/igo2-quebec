@@ -1,5 +1,5 @@
-import { IgoSearchBarModule } from './search/search-bar/search-bar.module';
-import { AppSideSearchModule } from './sidesearch/sidesearch.module';
+import { IgoSearchBarModule } from '@igo2/geo';
+import { AppSideResultModule } from './sideresult/sideresult.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -69,7 +69,6 @@ import { FooterModule } from './../footer/footer.module';
     IgoQueryModule.forRoot(),
     IgoSearchModule.forRoot(),
     IgoContextMapButtonModule,
-    //SideSearchModule,
     MatSidenavModule,
     MatDialogModule,
     IgoActionModule,
@@ -77,7 +76,7 @@ import { FooterModule } from './../footer/footer.module';
     MapOverlayModule,
     AppExpansionPanelModule,
     AppSidenavModule,
-    AppSideSearchModule,
+    AppSideResultModule,
     IgoPanelModule,
     IgoBackdropModule,
     IgoContextMenuModule,

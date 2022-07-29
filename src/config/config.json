@@ -21,5 +21,10 @@
   "hasSideSearch": true,
   "showSearchBar": true,
   "showMenuButton": false,
-  "hasToolbox": false
+  "hasToolbox": false,
+  "searchSources": {
+    "cadastre": {
+      "available": false
+    }
+  }
 }

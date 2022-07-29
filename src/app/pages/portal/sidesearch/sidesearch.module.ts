@@ -1,12 +1,10 @@
-import { IgoSearchResultsModule } from '../search/search-results/search-results.module';
-import { IgoSearchModule } from './../search/search.module';
+import { IgoSearchModule, IgoSearchResultsModule } from '@igo2/geo';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
 import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
 import {
   IgoPanelModule,
@@ -39,26 +37,23 @@ import { IgoAppSearchModule } from '@igo2/integration';
     IgoFlexibleModule,
     IgoContextManagerModule,
     IgoToolModule,
-    IgoFeatureModule,
     IgoHomeButtonModule,
     IgoSearchModule,
     IgoSearchResultsModule,
-    IgoFeatureModule,
     IgoMapModule,
-    IgoSearchModule,
     CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
     IgoMessageModule.forRoot(),
-    IgoPanelModule,
-    IgoMapModule,
     IgoSearchModule.forRoot(),
     IgoAppSearchModule,
     IgoActionbarModule,
     IgoContextMenuModule,
-    IgoFeatureModule
+    IgoFeatureModule,
+    SideSearchComponent
+
   ],
   exports: [SideSearchComponent],
   providers: [

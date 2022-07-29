@@ -118,7 +118,7 @@ export class SideSearchComponent implements OnInit, OnDestroy {
   }
 
   public selectedFeature: Feature;
-  
+
   constructor(
     private toolState: ToolState,
     private configService: ConfigService,
@@ -138,7 +138,7 @@ export class SideSearchComponent implements OnInit, OnDestroy {
 
   // SEARCH
   @Input() showIcons: boolean;
-  
+
   onPointerSummaryStatusChange(value) {
     this.igoSearchPointerSummaryEnabled = value;
   }

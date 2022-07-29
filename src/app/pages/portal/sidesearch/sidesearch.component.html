@@ -7,14 +7,14 @@
 
       <div #content class="app-content" >
 
-        <igo-panel [title]="title$ | async | translate">
+        <igo-panel>
 
-          <app-search-results
+          <igo-search-results
             [store]="searchStore"
             [term]="term"
-            [showIcons]="true"
             [termSplitter]="termSplitter"
             placeholder="false"
+            [showIcons]="true"
             [settingsChange$]="settingsChange$"
             (resultFocus)="onResultFocus($event)"
             (resultSelect)="onResultFocus($event)"
@@ -25,7 +25,7 @@
                   [layer]="result">
                 </igo-search-add-button>
               </ng-template>
-          </app-search-results>
+        </igo-search-results>
 
         </igo-panel>
     </div>

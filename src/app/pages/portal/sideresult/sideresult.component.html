@@ -1,0 +1,52 @@
+<mat-sidenav
+  mode="side"
+  [autoFocus]="false"
+  [(opened)]="opened">
+
+  <div class="app-sidenav-content">
+
+      <div #content class="app-content" [ngClass]="{toolActivated: toolbox.activeTool$ | async}">
+
+        <igo-home-button *ngIf="showMenuButton">
+        </igo-home-button>
+
+        <igo-panel [title]="title$ | async | translate">
+          <button *ngIf="toolbox.activeTool$ | async"
+            mat-icon-button
+            panelLeftButton
+            tooltip-position="below"
+            matTooltipShowDelay="500"
+            [matTooltip]="'igo.context.sidenav.goBack' | translate"
+            (click)="onPreviousButtonClick()">
+            <mat-icon svgIcon="arrow-left"></mat-icon>
+          </button>
+
+          <igo-toolbox *ngIf="hasToolbox"
+            class="igo-toolbox"
+            color="primary"
+            [animate]="true"
+            [toolbox]="toolbox">
+          </igo-toolbox>
+
+          <igo-search-results *ngIf="!hasToolbox"
+          [store]="searchStore"
+          [term]="term"
+          [showIcons]="true"
+          [termSplitter]="termSplitter"
+          placeholder="false"
+          [settingsChange$]="settingsChange$"
+          (resultFocus)="onResultFocus($event)"
+          (resultSelect)="onResultFocus($event)"
+          (moreResults)="onSearch($event)">
+            <ng-template #igoSearchItemToolbar let-result="result">
+              <igo-search-add-button
+                [map]="map"
+                [layer]="result">
+              </igo-search-add-button>
+            </ng-template>
+      </igo-search-results>
+
+        </igo-panel>
+    </div>
+  </div>
+</mat-sidenav>
