@@ -20,11 +20,11 @@ import {
   IgoMapModule,
   IgoSearchModule,
   provideIChercheSearchSource,
-  provideILayerSearchSource,
+  //provideILayerSearchSource,
   provideNominatimSearchSource,
   provideIChercheReverseSearchSource,
   provideCoordinatesReverseSearchSource,
-  provideCadastreSearchSource,
+  //provideCadastreSearchSource,
   provideStoredQueriesSearchSource,
   provideStoredQueriesReverseSearchSource
 } from '@igo2/geo';
@@ -59,9 +59,9 @@ import { SideResultComponent } from './sideresult.component';
   //SEARCH
   providers: [
     provideCoordinatesReverseSearchSource(),
-    provideCadastreSearchSource(),
+    //provideCadastreSearchSource(),
     provideIChercheSearchSource(),
-    provideILayerSearchSource(),
+    //provideILayerSearchSource(),
     provideNominatimSearchSource(),
     provideIChercheReverseSearchSource(),
     provideStoredQueriesSearchSource(),

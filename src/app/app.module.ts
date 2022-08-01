@@ -18,11 +18,11 @@ import {
   provideIChercheReverseSearchSource,
   provideNominatimSearchSource,
   provideCoordinatesReverseSearchSource,
-  provideILayerSearchSource,
+  //provideILayerSearchSource,
   provideStoredQueriesSearchSource,
   provideOsrmDirectionsSource,
   provideOptionsApi,
-  provideCadastreSearchSource,
+  //provideCadastreSearchSource,
   provideStyleListOptions
 } from '@igo2/geo';
 
@@ -56,11 +56,11 @@ import { AppComponent } from './app.component';
     provideIChercheSearchSource(),
     provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),
-    provideILayerSearchSource(),
+    //provideILayerSearchSource(),
     provideStoredQueriesSearchSource(),
     provideOsrmDirectionsSource(),
     provideOptionsApi(),
-    provideCadastreSearchSource(),
+    //provideCadastreSearchSource(),
     provideStyleListOptions({
       path: './assets/list-style.json'
     })
