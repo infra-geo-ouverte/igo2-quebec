@@ -77,6 +77,11 @@
       (click)="onBackdropClick()">
     </igo-backdrop>
 
+    <igo-menu-button *ngIf="showMenuButton"
+      [sidenavOpened]="sidenavOpened"
+      (openSidenav)="onToggleSidenavClick()">
+    </igo-menu-button>
+
     <igo-search-bar *ngIf="showSearchBar"
       #searchbar
       (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"

@@ -71,7 +71,8 @@ $app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
 $app-sidenav-width: 400px;
 $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
 
-$search-bar-left: $igo-icon-size + $igo-margin;
+//$search-bar-left: $igo-icon-size + $igo-margin;
+$search-bar-left: 20px;
 $search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
 $search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
 

@@ -11,11 +11,11 @@ import {
   IgoPanelModule,
   IgoFlexibleModule,
   IgoToolModule,
-  IgoHomeButtonModule,
   IgoActionbarModule,
   IgoContextMenuModule
 } from '@igo2/common';
 import { 
+  MenuButtonComponent,
   IgoFeatureModule,
   IgoMapModule,
   IgoSearchModule,
@@ -45,7 +45,6 @@ import { SideResultComponent } from './sideresult.component';
     IgoContextManagerModule,
     IgoToolModule,
     IgoFeatureModule,
-    IgoHomeButtonModule,
     //SEARCH
     MatCardModule,
     IgoMessageModule,
@@ -55,7 +54,7 @@ import { SideResultComponent } from './sideresult.component';
     IgoContextMenuModule,
     IgoAppSearchModule
   ],
-  exports: [SideResultComponent],
+  exports: [SideResultComponent ],
   //SEARCH
   providers: [
     provideCoordinatesReverseSearchSource(),

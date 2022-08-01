@@ -7,9 +7,6 @@
 
       <div #content class="app-content" [ngClass]="{toolActivated: toolbox.activeTool$ | async}">
 
-        <igo-home-button *ngIf="showMenuButton">
-        </igo-home-button>
-
           <igo-search-results *ngIf="!hasToolbox"
           [store]="searchStore"
           [term]="term"

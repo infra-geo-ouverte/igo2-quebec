@@ -323,3 +323,11 @@
     .headline {
         background-color: #223654!important;
       }
+
+    ::ng-deep .mat-form-field-outline-start {
+    border-radius: 0 !important;
+    }
+    
+    ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 !important;
+    }

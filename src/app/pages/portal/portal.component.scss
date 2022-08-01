@@ -32,22 +32,55 @@ mat-sidenav-content {
 }
 
 /*** Search bar ***/
-app-search-bar, igo-search-bar {
+igo-search-bar {
   background-color: $app-background-color;
   font-size: 16px;
   position: absolute;
-  left: $search-bar-left;
   top: $igo-margin;
   z-index: 4;
-  width: $search-bar-width;
   height: $igo-icon-size;
   margin: 0 $igo-margin;
+}
+
+igo-search-bar, app-sideresult {
+  width: $search-bar-width;
+  left: $search-bar-left;
 
   @include mobile {
     width: $search-bar-width-mobile;
     max-width: 350px;
   }
 }
+
+::ng-deep igo-search-bar {
+  height: 100%;
+}
+
+::ng-deep igo-search-bar svg {
+  background-color: #242424;
+  color: white;
+  height: 40px;
+  width: 40px;
+}
+
+::ng-deep .search-bar-buttons { 
+  height: 100%; // anomaly fix
+  margin-top: 0.25em; // anomaly fix
+  background: #242424!important;
+}
+
+::ng-deep .igo-search-bar-container > mat-form-field {
+  padding-right: 0!important;
+}
+
+::ng-deep .mat-form-field-outline-start {
+  border-radius: 0 !important;
+}
+
+::ng-deep .mat-form-field-outline-end {
+  border-radius: 0 !important;
+}
+
 
 
 /*** Map browser ***/
