@@ -624,6 +624,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.sidenavMediaAndOrientation$$.unsubscribe();
   }
 
+  removeFeatureFromMap() {
+    this.map.searchResultsOverlay.clear();
+  }
+
   getBaselayersSwitcherStatus() {
     let status;
     if (this.isMobile()) {
