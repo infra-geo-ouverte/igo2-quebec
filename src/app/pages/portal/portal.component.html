@@ -11,14 +11,12 @@
         (openSidenav)="onToggleSidenavClick()">
       </igo-menu-button>
 
-      <app-search-bar *ngIf="showSearchBar"
+      <igo-search-bar *ngIf="showSearchBar"
         #searchBar
         [term]="searchBarTerm"
-        appearance="outline"
-        searchIcon ="magnify"
         [termSplitter]="termSplitter"
         [minLength]="minSearchTermLength"
-        [searchSettings]="false"
+        [searchSettings]="true"
         [forceNA]="forceCoordsNA"
         [store]="searchStore"
         (searchTermChange)="onSearchTermChange($event)"
@@ -29,7 +27,7 @@
         (search)="onSearch($event)"
         (clearFeature)="onClearSearch()"
         (searchSettingsChange)="onSearchSettingsChange()">
-      </app-search-bar>
+      </igo-search-bar>
 
       <app-sidenav
         [map]="map"

@@ -181,10 +181,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
      * @internal
      * @param result A search result that could be a feature
      */
-    onResultFocus(result: SearchResult) {
-      this.tryAddFeatureToMap(result);
-      this.selectedFeature = (result as SearchResult<Feature>).data;
-    }
   
     /**
      * Try to add a feature to the map overlay

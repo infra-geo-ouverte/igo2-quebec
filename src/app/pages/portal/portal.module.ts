@@ -1,5 +1,3 @@
-import { IgoSearchBarModule } from '@igo2/geo';
-import { AppSideResultModule } from './sideresult/sideresult.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -30,7 +28,8 @@ import {
   IgoMapModule,
   IgoQueryModule,
   IgoSearchModule,
-  IgoLayerModule
+  //IgoLayerModule,
+  //IgoSearchBarModule
 } from '@igo2/geo';
 import {
   IgoContextManagerModule,
@@ -46,6 +45,7 @@ import { PortalComponent } from './portal.component';
 
 import { LegendButtonModule } from './legend-button/legend-button.module';
 import { FooterModule } from './../footer/footer.module';
+import { AppSideResultModule } from './sideresult/sideresult.module';
 
 @NgModule({
   imports: [
@@ -63,7 +63,7 @@ import { FooterModule } from './../footer/footer.module';
     IgoContextMapButtonModule,
     FooterModule,
     LegendButtonModule,
-    IgoLayerModule,
+    //IgoLayerModule,
     IgoWorkspaceModule,
     IgoGeoWorkspaceModule,
     IgoQueryModule.forRoot(),
@@ -83,7 +83,7 @@ import { FooterModule } from './../footer/footer.module';
     IgoToolModule,
     IgoEntityTableModule,
     IgoEntityTablePaginatorModule,
-    IgoSearchBarModule
+    //IgoSearchBarModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

@@ -1,38 +1,51 @@
-import { SearchBarComponent } from '@igo2/geo';
 import {
   Component,
   OnInit,
   OnDestroy,
+  ChangeDetectorRef,
   ViewChild,
-  ElementRef,
-  ChangeDetectorRef
+  ElementRef
 } from '@angular/core';
-import { DetailedContext } from '@igo2/context';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
+import { debounceTime, take, pairwise, skipWhile, first } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import * as olProj from 'ol/proj';
+import olFeature from 'ol/Feature';
+import type { default as OlGeometry } from 'ol/geom/Geometry';
+import { MatPaginator } from '@angular/material/paginator';
+import { AuthOptions, AuthService } from '@igo2/auth';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+
+import { ObjectUtils } from '@igo2/utils';
+
 import {
-    ConfigService,
-    MediaService,
-    Media,
-    MediaOrientation,
-    StorageService,
-    LanguageService,
-    MessageService
+  MediaService,
+  Media,
+  MediaOrientation,
+  ConfigService,
+  LanguageService,
+  MessageService,
+  StorageService
   } from '@igo2/core';
 
   import {
-    WorkspaceStore,
-    Workspace,
-    EntityTablePaginatorOptions,
     ActionbarMode,
-    EntityStore,
-    Toolbox,
+    Workspace,
+    WorkspaceStore,
     ActionStore,
+    EntityStore,
+    // getEntityTitle,
+    Toolbox,
+    Tool,
     Widget,
-    EntityRecord,
-    Tool
+    EntityTablePaginatorOptions,
+    EntityRecord
   } from '@igo2/common';
 
-  import { Subscription, of, BehaviorSubject, combineLatest } from 'rxjs';
-  import { debounceTime, take, pairwise, skipWhile, first } from 'rxjs/operators';
+  import { DetailedContext } from '@igo2/context';
 
   import {
   FEATURE,
@@ -66,7 +79,8 @@ import {
   moveToOlFeatures,
   FeatureMotion,
   IgoMap,
-  DataSourceService
+  DataSourceService,
+  //SearchBarComponent
   } from '@igo2/geo';
 
 import {
@@ -87,17 +101,7 @@ import {
   mapSlideX,
   mapSlideY
 } from './portal.animation';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute, Params } from '@angular/router';
-import { AuthOptions, AuthService } from '@igo2/auth';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import olFeature from 'ol/Feature';
-import * as olProj from 'ol/proj';
-import type { default as OlGeometry } from 'ol/geom/Geometry';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
-import { ObjectUtils } from '@igo2/utils';
-import olFormatGeoJSON from 'ol/format/GeoJSON';
+
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -119,7 +123,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   public hasGeolocateButton: boolean = undefined;
   public hasExpansionPanel: boolean = undefined;
   public hasToolbox: boolean = undefined;
-  public SearchBarComponent = SearchBarComponent;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private workspaceMaximize$$: Subscription[] = [];
