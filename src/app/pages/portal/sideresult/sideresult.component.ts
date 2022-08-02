@@ -72,7 +72,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
     return this.toolState.toolbox;
   }
 
-  // SEARCH 
+  // SEARCH
   public showMenuButton: boolean = undefined;
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
@@ -153,7 +153,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
     onPointerSummaryStatusChange(value) {
       this.igoSearchPointerSummaryEnabled = value;
     }
-  
+
     onSearchTermChange(term = '') {
       this.term = term;
       const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
@@ -162,7 +162,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
         this.selectedFeature = undefined;
       }
     }
-  
+
     onSearch(event: { research: Research; results: SearchResult[] }) {
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
@@ -171,11 +171,11 @@ export class SideResultComponent implements OnInit, OnDestroy {
         .concat(results);
       this.searchStore.updateMany(newResults);
     }
-  
+
     onSearchSettingsChange() {
       this.settingsChange$.next(true);
     }
-  
+
     /**
      * Try to add a feature to the map when it's being focused
      * @internal
@@ -185,7 +185,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
       this.tryAddFeatureToMap(result);
       this.selectedFeature = (result as SearchResult<Feature>).data;
     }
-  
+
     /**
      * Try to add a feature to the map overlay
      * @param layer A search result that could be a feature
@@ -194,12 +194,12 @@ export class SideResultComponent implements OnInit, OnDestroy {
       if (layer.meta.dataType !== FEATURE) {
         return undefined;
       }
-  
+
       // Somethimes features have no geometry. It happens with some GetFeatureInfo
       if (layer.data.geometry === undefined) {
         return;
       }
-  
+
       this.map.searchResultsOverlay.setFeatures(
         [layer.data] as Feature[],
         FeatureMotion.Default

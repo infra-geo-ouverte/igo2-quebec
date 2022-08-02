@@ -14,7 +14,7 @@ import {
   IgoActionbarModule,
   IgoContextMenuModule
 } from '@igo2/common';
-import { 
+import {
   IgoFeatureModule,
   IgoMapModule,
   IgoSearchModule,
