@@ -1,6 +1,8 @@
 // https://design.quebec.ca/
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap');
 
+$igo-margin: 4px;
+
 :root {
     --breakpoint-pgu-sm: 320px;
     --breakpoint-md: 768px;
@@ -323,3 +325,29 @@
     .headline {
         background-color: #223654!important;
       }
+
+    ::ng-deep .mat-form-field-outline-start {
+    border-radius: 0 !important;
+    }
+    
+    ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 !important;
+    }
+
+    .qcca-theme igo-search-bar svg {
+        background-color: #095797;
+        color: white;
+      }
+      
+      .qcca-theme .search-bar-buttons { 
+        background: #095797!important;
+      }
+      
+      .qcca-theme .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+        border-color: #095797!important;
+      }
+
+      .qcca-theme input.mat-input-element {
+        color: #647287;
+        font-family: 'open sans';
+    }

@@ -161,114 +161,11 @@
     }
   ],
   "toolbar": [
-    "searchResults",
-    "contextManager",
-    "mapTools",
-    "spatialFilter",
-    "measurer",
-    "draw",
-    "directions",
-    "catalog",
-    "importExport",
-    "print",
-    "shareMap",
-    "about",
-    "advancedMap"
+    "searchResults"
   ],
   "tools": [    
     {
-      "name": "advancedMap"
-    },
-    {
       "name": "searchResults"
-    },
-    {
-      "name": "contextManager"
-    },
-    {
-      "name": "about"
-    },
-    {
-      "name": "mapTools",
-      "options": {
-        "selectedTabAtOpening": "",
-        "allowShowAllLegends": true,
-        "layerAdditionAllowed": true,
-        "toggleLegendOnVisibilityChange": false,
-        "updateLegendOnResolutionChange": false,
-        "layerListControls": {
-          "excludeBaseLayers": true
-        }
-      }
-    },
-    {
-      "name": "shareMap"
-    },
-    {
-      "name": "measurer"
-    },
-    {
-      "name": "draw"
-    },
-    {
-      "name": "directions"
-    },
-    {
-      "name": "catalog",
-      "options": {
-        "addCatalogAllowed": true,
-        "predefinedCatalogs": [
-          {
-            "externalProvider": false,
-            "url": "https://ws.mapserver.transports.gouv.qc.ca/swtq"
-          }
-        ]
-      }
-    },
-    {
-      "name": "catalogBrowser"
-    },
-    {
-      "name": "spatialFilter"
-    },
-    {
-      "name": "timeFilter"
-    },
-    {
-      "name": "ogcFilter"
-    },
-    {
-      "name": "activeTimeFilter"
-    },
-    {
-      "name": "activeOgcFilter"
-    },
-    {
-      "name": "importExport",
-      "options": {
-        "selectFirstProj": false,
-        "projectionsLimitations": {
-          "projFromConfig": true,
-          "nad83": true,
-          "wgs84": true,
-          "webMercator": true,
-          "utm": true,
-          "mtm": true,
-          "utmZone": {
-            "minZone": 17,
-            "maxZone": 21
-          },
-          "mtmZone": {
-            "minZone": 3,
-            "maxZone": 10
-          }
-        },
-        "importExportType": "layer",
-        "importExportShowBothType": true
-      }
-    },
-    {
-      "name": "print"
     }
   ]
 }

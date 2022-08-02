@@ -19,5 +19,8 @@
     "gov": "© Gouvernement du Québec, 2022",
     "url-gov": "http://www.droitauteur.gouv.qc.ca/copyright.php"
   },
-  "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre"
+  "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre",
+  "icherche": {
+    "name": "Résultats de recherche"
+  }
 }

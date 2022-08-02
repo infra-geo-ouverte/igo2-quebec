@@ -1,6 +1,11 @@
 @import '~@igo2/core/style/partial/media';
+@import '~@igo2/core/style/partial/core.variables';
 @import 'variables';
 
+$app-mobile-min-space-right: 40px;
+$app-expansion-panel-collapsed-width: 40px;
+$app-expansion-panel-collapsed-height: 40px;
+$app-background-color: rgb(255, 255, 255);
 
 $menu-height : 72px;
 $menu-height-mobile: 40px;
@@ -19,3 +24,59 @@ $portal-height-hasmenu: calc( 100% - #{$menu-height});
 $portal-height-hasmenu-hasheader: calc( 100% - #{$header-height} - #{$menu-height} );
 $portal-height-hasfooter-hasheader: calc( 100% - #{$footer-height} - #{$header-height} );
 $portal-height-hasfooter-hasheader-hasmenu: calc( 100% - #{$footer-height} - #{$header-height} - #{$menu-height} );
+
+$app-expansion-panel-header-height: calc(#{$app-expansion-panel-collapsed-height} + 10px);
+$app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
+$search-bar-left: $igo-icon-size + $igo-margin;
+$app-sidenav-width: 400px;
+$search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
+$search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
+$app-sidenav-margin-top: 50px;
+$app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
+
+$app-footer-height: 48px;
+$app-mobile-min-space-right: 40px;
+
+$app-expansion-panel-collapsed-height: 40px;
+$app-expansion-panel-collapsed-width: 40px;
+$app-expansion-panel-height: 281px;
+$app-expansion-panel-height-maximized: 496px;
+$app-expansion-panel-header-height: calc(#{$app-expansion-panel-collapsed-height} + 10px);
+
+$app-toast-panel-collapsed-height: 46px;
+$app-toast-panel-collapsed-height-mobile: 35px;
+// $app-toast-panel-max-height: 281px;
+// $app-full-toast-panel-max-height: 800px;
+// $app-full-toast-panel-max-width: 750px;
+// $app-toast-panel-width: 30%;
+$app-toast-panel-width-tablet: 500px;
+
+$app-toast-panel-width: 42vw;
+$app-toast-panel-max-width: 600px;
+$app-toast-panel-height: 30vh;
+$app-toast-panel-max-height: 30vh;
+$app-toast-panel-height-mobile: 34vh;
+
+$app-full-toast-panel-width: 45vw;
+$app-full-toast-panel-max-height: 65vh;
+$app-full-toast-panel-height-mobile: 55vh;
+
+$app-toast-panel-html-width: 60vw;
+$app-toast-panel-html-height: 32vh;
+
+$app-toast-panel-html-large-height: 55vh;
+
+$app-sidenav-margin-top: 50px;
+$app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
+$app-sidenav-width: 400px;
+$app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
+
+//$search-bar-left: $igo-icon-size + $igo-margin;
+$search-bar-left: 20px;
+$search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
+$search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
+
+$app-footer-height: 49px;
+$toast-panel-for-expansion-collapsed-height: 48px;
+$toast-panel-for-expansion-max-height: 329px;
+$toast-panel-for-expansion-width: 30%;
