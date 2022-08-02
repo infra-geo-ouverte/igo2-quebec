@@ -331,3 +331,21 @@
     ::ng-deep .mat-form-field-outline-end {
     border-radius: 0 !important;
     }
+
+    .qcca-theme igo-search-bar svg {
+        background-color: #095797;
+        color: white;
+      }
+      
+      .qcca-theme .search-bar-buttons { 
+        background: #095797!important;
+      }
+      
+      .qcca-theme .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+        border-color: #095797!important;
+      }
+
+      .qcca-theme input.mat-input-element {
+        color: #647287;
+        font-family: 'open sans';
+    }

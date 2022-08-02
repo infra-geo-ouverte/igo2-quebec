@@ -56,8 +56,8 @@ igo-search-bar, app-sideresult {
   height: 100%;
 }
 
-::ng-deep igo-search-bar svg {
-  background-color: #242424;
+igo-search-bar svg {
+  //background-color: #4E5662;
   color: white;
   height: 40px;
   width: 40px;
@@ -66,11 +66,53 @@ igo-search-bar, app-sideresult {
 ::ng-deep .search-bar-buttons { 
   height: 100%; // anomaly fix
   margin-top: 0.25em; // anomaly fix
-  background: #242424!important;
+  background: #4E5662;
 }
 
+::ng-deep igo-search-bar .mat-form-field-outline-end,  ::ng-deep igo-search-bar .mat-form-field-outline-start {
+  border-color: #4E5662;
+  height: $igo-icon-size!important;
+}
+
+::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-outline {
+  top: 0;
+}
+::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-wrapper, ::ng-deep .search-bar-buttons {
+  margin-top: 0;
+}
+
+::ng-deep .igo-search-bar-container {
+  height: $igo-icon-size!important; // anomaly
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix input {
+  line-height: $igo-icon-size;
+  vertical-align: middle;
+  border-top: 0;
+  padding: 0;
+  margin-top: 0;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0;
+  border-top: 0!important;
+}
+
+::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-wrapper, .search-bar-buttons, ::ng-deep igo-search-bar .mat-form-field-outline-end,  ::ng-deep igo-search-bar .mat-form-field-outline-start {
+  height: $igo-icon-size;
+  padding: 0;
+  margin-top:0;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 0 8px 0 8px;
+  margin-top: 0!important;
+  height: $igo-icon-size;
+}
+
+
 ::ng-deep .igo-search-bar-container > mat-form-field {
-  padding-right: 0!important;
+  padding: 0!important;
 }
 
 ::ng-deep .mat-form-field-outline-start {
@@ -81,6 +123,9 @@ igo-search-bar, app-sideresult {
   border-radius: 0 !important;
 }
 
+::ng-deep .search-bar-buttons > button:nth-child(2):before {
+  margin-right: 10px;
+}
 
 
 /*** Map browser ***/

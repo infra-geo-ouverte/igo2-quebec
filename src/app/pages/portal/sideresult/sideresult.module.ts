@@ -15,7 +15,6 @@ import {
   IgoContextMenuModule
 } from '@igo2/common';
 import { 
-  MenuButtonComponent,
   IgoFeatureModule,
   IgoMapModule,
   IgoSearchModule,
