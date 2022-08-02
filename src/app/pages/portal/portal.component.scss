@@ -193,6 +193,10 @@ igo-map-browser.toast-offset-attribution
   }
 }
 
+::ng-deep igo-baselayers-switcher {
+  left: 24px!important;
+}
+
 /*** Buttons ***/
 
 #map-buttons {
