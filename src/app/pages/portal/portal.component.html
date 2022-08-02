@@ -1,20 +1,135 @@
-<igo-map-browser
-  #mapBrowser
-  igoMapContext
-  igoLayerContext
-  igoDropGeoFile
-  [map]="map"
-  [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
-  <igo-baselayers-switcher
-    [map]="map"
-    [@controlsOffsetY]="getBaselayersSwitcherStatus()"
-    [useStaticIcon]="getBaseLayersUseStaticIcon()">
-  </igo-baselayers-switcher>
-  <div id="map-buttons">
-    <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
-    <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
-    <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-    <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
-  </div>
-</igo-map-browser>
-<app-footer *ngIf="hasFooter" ></app-footer>
+<mat-sidenav-container *ngIf="hasToolbox">
+  <mat-sidenav-content position="end">
+
+      <igo-backdrop
+        [shown]="backdropShown"
+        (click)="onBackdropClick()">
+      </igo-backdrop>
+
+      <igo-menu-button *ngIf="showMenuButton"
+        [sidenavOpened]="sidenavOpened"
+        (openSidenav)="onToggleSidenavClick()">
+      </igo-menu-button>
+
+      <igo-search-bar *ngIf="showSearchBar"
+        #searchBar
+        [term]="searchBarTerm"
+        [termSplitter]="termSplitter"
+        [minLength]="minSearchTermLength"
+        [searchSettings]="true"
+        [forceNA]="forceCoordsNA"
+        [store]="searchStore"
+        (searchTermChange)="onSearchTermChange($event)"
+        [pointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
+        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+        [searchResultsGeometryEnabled]="searchResultsGeometryEnabled"
+        (searchResultsGeometryStatus)="onSearchResultsGeometryStatusChange($event)"
+        (search)="onSearch($event)"
+        (clearFeature)="onClearSearch()"
+        (searchSettingsChange)="onSearchSettingsChange()">
+      </igo-search-bar>
+
+      <app-sidenav
+        [map]="map"
+        [(opened)]="sidenavOpened"
+        (toolChange)="toolChanged($event)">
+      </app-sidenav>
+
+      <igo-map-browser
+        #mapBrowser
+        igoMapContext
+        igoLayerContext
+        igoDropGeoFile
+        [map]="map"
+        [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+        <igo-baselayers-switcher
+          [map]="map"
+          [@controlsOffsetY]="getBaselayersSwitcherStatus()"
+          [useStaticIcon]="getBaseLayersUseStaticIcon()">
+        </igo-baselayers-switcher>
+        <div id="map-buttons">
+          <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
+          <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
+          <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+          <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
+        </div>
+      </igo-map-browser>
+      <app-footer *ngIf="hasFooter" ></app-footer>
+
+      <app-map-overlay
+      [@controlStateY]="getControlsOffsetY()"
+      [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
+                              sidenavOpened ? 'right' : 'left'">
+    </app-map-overlay>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+<mat-sidenav-container *ngIf="!hasToolbox">
+  <mat-sidenav-content position="end">
+
+    <igo-backdrop
+      [shown]="backdropShown"
+      (click)="onBackdropClick()">
+    </igo-backdrop>
+
+    <igo-menu-button *ngIf="showMenuButton"
+      [sidenavOpened]="sidenavOpened"
+      (openSidenav)="onToggleSidenavClick()">
+    </igo-menu-button>
+
+    <igo-search-bar *ngIf="showSearchBar"
+      #searchbar
+      (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+      appearance="outline"
+      searchIcon ="magnify"
+      [searchSettings]="false"
+      color="primary"
+      [store]="searchStore"
+      [termSplitter]="termSplitter"
+      (searchTermChange)="onSearchTermChange($event)"
+      (search)="onSearch($event)"
+      (clearFeature)="removeFeatureFromMap()"
+      (searchSettingsChange)="onSearchSettingsChange()">
+    </igo-search-bar>
+
+    <app-sideresult
+      [map]="map"
+      [(opened)]="sidenavOpened"
+      (toolChange)="toolChanged($event)">
+    </app-sideresult>
+
+    <igo-map-browser
+      #mapBrowser
+      igoMapContext
+      igoLayerContext
+      igoDropGeoFile
+      [map]="map"
+      [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+      <igo-baselayers-switcher
+        [map]="map"
+        [@controlsOffsetY]="getBaselayersSwitcherStatus()"
+        [useStaticIcon]="getBaseLayersUseStaticIcon()">
+      </igo-baselayers-switcher>
+      <div id="map-buttons">
+        <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
+        <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
+        <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+        <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
+      </div>
+    </igo-map-browser>
+    <app-footer *ngIf="hasFooter" ></app-footer>
+
+    <app-map-overlay
+    [@controlStateY]="getControlsOffsetY()"
+    [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
+                            sidenavOpened ? 'right' : 'left'">
+  </app-map-overlay>
+
+    </mat-sidenav-content>
+
+  
+</mat-sidenav-container>
+
+
