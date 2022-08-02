@@ -36,7 +36,7 @@ igo-search-bar {
   background-color: $app-background-color;
   font-size: 16px;
   position: absolute;
-  top: $igo-margin;
+  top: calc(4 * #{$igo-margin});
   z-index: 4;
   height: $igo-icon-size;
   margin: 0 $igo-margin;
