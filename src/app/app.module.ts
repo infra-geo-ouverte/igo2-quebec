@@ -15,7 +15,15 @@ import {
 } from '@igo2/core';
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import {
+  provideIChercheSearchSource,
+  provideIChercheReverseSearchSource,
+  provideNominatimSearchSource,
+  provideCoordinatesReverseSearchSource,
+  //provideILayerSearchSource,
+  provideStoredQueriesSearchSource,
+  provideOsrmDirectionsSource,
   provideOptionsApi,
+  //provideCadastreSearchSource,
   provideStyleListOptions
 } from '@igo2/geo';
 
@@ -46,7 +54,15 @@ import { AppComponent } from './app.component';
       path: './config/config.json'
     }),
     RouteService,
+    provideNominatimSearchSource(),
+    provideIChercheSearchSource(),
+    provideIChercheReverseSearchSource(),
+    provideCoordinatesReverseSearchSource(),
+    //provideILayerSearchSource(),
+    provideStoredQueriesSearchSource(),
+    provideOsrmDirectionsSource(),
     provideOptionsApi(),
+    //provideCadastreSearchSource(),
     provideStyleListOptions({
       path: './assets/list-style.json'
     })

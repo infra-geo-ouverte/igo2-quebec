@@ -1,0 +1,28 @@
+<mat-sidenav
+  mode="side"
+  [autoFocus]="false"
+  [(opened)]="opened">
+
+  <div class="app-sidenav-content">
+
+      <div #content class="app-content">
+
+          <igo-search-results *ngIf="!hasToolbox"
+          [store]="searchStore"
+          [term]="term"
+          [showIcons]="true"
+          [termSplitter]="termSplitter"
+          placeholder="false"
+          [settingsChange$]="settingsChange$"
+          (resultSelect)="onResultFocus($event)"
+          (moreResults)="onSearch($event)">
+            <ng-template #igoSearchItemToolbar let-result="result">
+              <igo-search-add-button
+                [map]="map"
+                [layer]="result">
+              </igo-search-add-button>
+            </ng-template>
+      </igo-search-results>
+    </div>
+  </div>
+</mat-sidenav>

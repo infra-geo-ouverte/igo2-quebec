@@ -19,5 +19,8 @@
     "gov": "© Gouvernement du Québec, 2022",
     "url-gov": "https://www.quebec.ca/en/"
   },
-  "externallinks": "This link will open in a new window"
+  "externallinks": "This link will open in a new window",
+  "icherche": {
+    "name": "Search result"
+  }
 }

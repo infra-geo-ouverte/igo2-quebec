@@ -18,5 +18,37 @@
   },
   "postgrest": "/ws/postgrest/station_affichage",
   "useStaticIcon": false,
-  "hasExpansionPanel": false
+  "hasExpansionPanel": false,
+  "showSearchBar": true,
+  "showMenuButton": false,
+  "hasToolbox": false,
+  "searchSources": {
+    "cadastre": {
+      "available": false
+    }
+  },
+  "icherche": {
+    "name": "Résultats",
+    "type": {
+      "address": "Adresse",
+      "oldAddress": "Ancienne adresse",
+      "district": "Arrondissement",
+      "postalCode": "Code Postal",
+      "city": "Municipalité",
+      "oldCity": "Ancienne municipalité",
+      "mrc": "MRC",
+      "regadmin": "Région administrative",
+      "road": "Route",
+      "intersection": "Intersection",
+      "place": "Lieu",
+      "exit": "Sortie d'autoroute",
+      "cn": "Borne du CN",
+      "gcc": "Repère de la garde cotière (GCC)",
+      "sumi": "Borne SUMI",
+      "km": "Repère kilométrique",
+      "hq": "Hydro-Québec",
+      "entreprise": "Entreprise",
+      "cadastre": "Cadastre"
+    }
+  }
 }
