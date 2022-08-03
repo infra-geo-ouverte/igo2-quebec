@@ -22,5 +22,8 @@
   "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre",
   "icherche": {
     "name": "Résultats de recherche"
+  },
+  "sidenav": {
+    "close": "Fermer"
   }
 }

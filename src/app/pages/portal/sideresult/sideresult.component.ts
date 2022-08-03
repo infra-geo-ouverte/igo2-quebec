@@ -73,6 +73,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   // SEARCH
+  events: string[] = [];
   public showMenuButton: boolean = undefined;
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
