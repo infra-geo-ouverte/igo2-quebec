@@ -44,12 +44,15 @@ igo-search-bar {
 
 igo-search-bar, app-sideresult {
   width: $search-bar-width;
-  left: $search-bar-left;
 
   @include mobile {
     width: $search-bar-width-mobile;
     max-width: 350px;
   }
+}
+
+igo-search-bar, igo-search-results igo-list, ::ng-deep igo-baselayers-switcher {
+  left: $portal-left!important;
 }
 
 ::ng-deep igo-search-bar {
@@ -110,7 +113,6 @@ igo-search-bar svg {
   height: $igo-icon-size;
 }
 
-
 ::ng-deep .igo-search-bar-container > mat-form-field {
   padding: 0!important;
 }
@@ -124,7 +126,7 @@ igo-search-bar svg {
 }
 
 ::ng-deep .search-bar-buttons > button:nth-child(2):before {
-  margin-right: 10px;
+  margin-right: 6px;
 }
 
 
@@ -191,10 +193,6 @@ igo-map-browser.toast-offset-attribution
   @include mobile {
     bottom: 50px;
   }
-}
-
-::ng-deep igo-baselayers-switcher {
-  left: 24px!important;
 }
 
 /*** Buttons ***/

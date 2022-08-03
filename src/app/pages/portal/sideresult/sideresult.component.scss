@@ -23,6 +23,7 @@ mat-sidenav {
     width: $app-sidenav-width-mobile;
     max-width: 400px;
   }
+  overflow: visible;
 }
 
 .app-content, igo-panel {
@@ -37,18 +38,35 @@ mat-sidenav {
   }
 }
 
-igo-panel ::ng-deep .igo-panel-content {
-  position: relative;
+::ng-deep igo-search-results {
+  position: fixed;
+  left: $portal-left!important;
+  width: calc(#{$app-sidenav-width} - 16px);
+  display: block;
 }
 
+#sidenav-button {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left:calc(#{$search-bar-width} + 24px);
+  z-index: 1;
+  padding: 0;
+  min-width: 12px!important;
+  visibility: visible;
+  opacity: 1;
+  opacity: 0;
 
-div.toolActivated > igo-panel ::ng-deep > div.igo-panel-header {
-  margin-left: 50px;
-  position: relative;
+  animation: fadeIn 0.2s;
+  animation-delay: 0.4s;
+  animation-fill-mode: forwards;
 }
 
-igo-toolbox {
-  @include mobile {
-    overflow: auto;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+mat-sidenav::backdrop {
+  z-index: 999;
 }

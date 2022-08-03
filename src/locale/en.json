@@ -22,5 +22,8 @@
   "externallinks": "This link will open in a new window",
   "icherche": {
     "name": "Search result"
+  },
+  "sidenav": {
+    "close": "Close"
   }
 }
