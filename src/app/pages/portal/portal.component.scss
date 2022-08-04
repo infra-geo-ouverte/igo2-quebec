@@ -51,8 +51,18 @@ igo-search-bar, app-sideresult {
   }
 }
 
-igo-search-bar, igo-search-results igo-list, ::ng-deep igo-baselayers-switcher {
+igo-search-bar, igo-search-results igo-list, .baselayers {
   left: $portal-left!important;
+}
+
+::ng-deep .baselayers-pushed {
+  left: calc(#{$app-sidenav-width} + 4px)!important;
+  visibility: visible;
+  opacity: 1;
+  opacity: 0;
+  animation: fadeIn 0.1ms;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
 }
 
 ::ng-deep igo-search-bar {

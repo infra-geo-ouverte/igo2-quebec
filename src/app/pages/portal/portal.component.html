@@ -46,6 +46,7 @@
         [map]="map"
         [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
         <igo-baselayers-switcher
+          [ngClass]="sidenavOpened? 'baselayers-pushed' : 'baselayers'"
           [map]="map"
           [@controlsOffsetY]="getBaselayersSwitcherStatus()"
           [useStaticIcon]="getBaseLayersUseStaticIcon()">
@@ -114,8 +115,8 @@
       [map]="map"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
       <igo-baselayers-switcher
+        [ngClass]="sidenavOpened? 'baselayers-pushed' : 'baselayers'"
         [map]="map"
-        [@controlsOffsetY]="getBaselayersSwitcherStatus()"
         [useStaticIcon]="getBaseLayersUseStaticIcon()">
       </igo-baselayers-switcher>
       <div id="map-buttons">
