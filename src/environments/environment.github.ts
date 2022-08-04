@@ -44,10 +44,10 @@ export const environment: Environment = {
         available: false
       },
       icherche: {
-        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
+        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/',
         order: 2,
         params: {
-          limit: '8'
+          limit: '7'
         }
       },
       coordinatesreverse: {
@@ -63,7 +63,7 @@ export const environment: Environment = {
         searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche/layers',
         order: 4,
         params: {
-          limit: '5'
+          limit: '3'
         }
       },
       cadastre: {

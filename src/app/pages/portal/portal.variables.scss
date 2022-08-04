@@ -68,7 +68,8 @@ $app-toast-panel-html-height: 32vh;
 $app-toast-panel-html-large-height: 55vh;
 
 $app-sidenav-margin-top: 60px;
-$app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
+$app-sidenav-height: calc(100% - #{$footer-height} - 1px);
+$app-sidenav-content-height: calc(100% - #{$app-sidenav-margin-top} - #{$footer-height});
 $app-sidenav-width: 400px;
 $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
 
