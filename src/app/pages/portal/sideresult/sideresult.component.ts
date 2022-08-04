@@ -39,7 +39,7 @@ import { ConfigService } from '@igo2/core';
 })
 export class SideResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-
+  @Input() hasSearchQuery: boolean = undefined;
   private activeTool$$: Subscription;
 
   @Input()
@@ -78,6 +78,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
 
+
   public igoSearchPointerSummaryEnabled: boolean = false;
 
   public termSplitter: string = '|';
@@ -103,9 +104,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public lonlat;
   public mapProjection: string;
   public term: string;
-
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
-
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
