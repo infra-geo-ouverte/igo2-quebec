@@ -27,9 +27,8 @@
     </div>
   </div>
 </mat-sidenav>
-<button  
-  *ngIf="sidenav.opened"
-  class='sideresult-opened'
+<button
+  [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' "
   #sidenavbutton
   mat-raised-button
   id= "sidenav-button"
@@ -40,20 +39,6 @@
   MatDrawerMode="push"
   [matTooltip]="'sidenav.close' | translate"
   (click)="sidenav.toggle()">
-  <mat-icon svgIcon="menu-left"></mat-icon>
-</button>
-<button  
-  *ngIf="!sidenav.opened"
-  class='sideresult-closed'
-  #sidenavbutton
-  mat-raised-button
-  id= "sidenav-button"
-  isRoundButton=false
-  tooltip-position="below"
-  matTooltipShowDelay="500"
-  isIconButton=true
-  MatDrawerMode="push"
-  [matTooltip]="'sidenav.close' | translate"
-  (click)="sidenav.toggle()">
-  <mat-icon svgIcon="menu-right"></mat-icon>
+  <mat-icon *ngIf="sidenav.opened" svgIcon="menu-left"></mat-icon>
+  <mat-icon *ngIf="!sidenav.opened" svgIcon="menu-right"></mat-icon>
 </button>

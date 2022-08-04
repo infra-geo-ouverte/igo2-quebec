@@ -69,11 +69,14 @@ export const environment: Environment = {
         searchUrl: '/apis/icherche/',
         order: 2,
         params: {
-          limit: '7'
+          limit: '8'
         }
       },
       coordinatesreverse: {
-        showInPointerSummary: true
+        order: 1,
+        showInPointerSummary: true,
+        enabled: false,
+        available: true
       },
       icherchereverse: {
         showInPointerSummary: true,
@@ -83,7 +86,7 @@ export const environment: Environment = {
       },
       ilayer: {
         searchUrl: '/apis/icherche/layers',
-        order: 3,
+        order: 4,
         params: {
           limit: '3'
         }
