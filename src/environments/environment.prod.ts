@@ -70,11 +70,14 @@ export const environment: Environment = {
         searchUrl: '/apis/icherche/',
         order: 2,
         params: {
-          limit: '7'
+          limit: '8'
         }
       },
       coordinatesreverse: {
-        showInPointerSummary: true
+        showInPointerSummary: true,
+        order: 1,
+        enabled: false,
+        available: true
       },
       icherchereverse: {
         showInPointerSummary: true,
