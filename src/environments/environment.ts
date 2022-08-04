@@ -66,10 +66,10 @@ export const environment: Environment = {
         available: false
       },
       icherche: {
-        searchUrl: '/apis/icherche',
+        searchUrl: '/apis/icherche/',
         order: 2,
         params: {
-          limit: '5'
+          limit: '7'
         }
       },
       coordinatesreverse: {
@@ -83,9 +83,9 @@ export const environment: Environment = {
       },
       ilayer: {
         searchUrl: '/apis/icherche/layers',
-        order: 4,
+        order: 3,
         params: {
-          limit: '5'
+          limit: '3'
         }
       },
       cadastre: {
