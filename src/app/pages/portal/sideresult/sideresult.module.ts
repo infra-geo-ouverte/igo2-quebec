@@ -51,7 +51,8 @@ import { SideResultComponent } from './sideresult.component';
     IgoSearchModule,
     IgoActionbarModule,
     IgoContextMenuModule,
-    IgoAppSearchModule
+    IgoAppSearchModule,
+    IgoSearchModule.forRoot()
   ],
   exports: [SideResultComponent ],
   //SEARCH

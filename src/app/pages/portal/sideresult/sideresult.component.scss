@@ -16,7 +16,7 @@
 mat-sidenav {
   @extend %box-shadowed-bottom-right;
 
-  height: 100%;
+  height: $app-sidenav-height;
   width: $app-sidenav-width;
 
   @include mobile {
@@ -32,7 +32,7 @@ mat-sidenav {
 
 .app-sidenav-content {
   margin-top: $app-sidenav-margin-top;
-  height: $app-sidenav-height;
+  height: $app-sidenav-content-height;
   @include mobile {
     height: calc(100% - #{$app-sidenav-margin-top});
   }
@@ -49,17 +49,27 @@ mat-sidenav {
   display: block;
   position: absolute;
   top: 50%;
-  left:calc(#{$search-bar-width} + 24px);
+  left:calc(#{$search-bar-width} + 24px + 1px);
   z-index: 1;
   padding: 0;
   min-width: 12px!important;
   visibility: visible;
   opacity: 1;
   opacity: 0;
-
   animation: fadeIn 0.2s;
   animation-delay: 0.4s;
   animation-fill-mode: forwards;
+  width: 24px;
+}
+
+.sideresult-opened {
+  content: 'menu-right';
+}
+
+.sideresult-closed {
+left: 0!important;
+position: absolute;
+content: 'menu-left';
 }
 
 @keyframes fadeIn {
