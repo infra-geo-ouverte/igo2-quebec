@@ -98,7 +98,7 @@ igo-search-bar svg {
   height: $igo-icon-size!important; // anomaly
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix input {
+::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-infix input {
   line-height: $igo-icon-size;
   vertical-align: middle;
   border-top: 0;
@@ -106,7 +106,7 @@ igo-search-bar svg {
   margin-top: 0;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-infix {
   padding: 0;
   border-top: 0!important;
 }
@@ -117,7 +117,7 @@ igo-search-bar svg {
   margin-top:0;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-flex {
   padding: 0 8px 0 8px;
   margin-top: 0!important;
   height: $igo-icon-size;
@@ -127,11 +127,11 @@ igo-search-bar svg {
   padding: 0!important;
 }
 
-::ng-deep .mat-form-field-outline-start {
+::ng-deep igo-search-bar .mat-form-field-outline-start {
   border-radius: 0 !important;
 }
 
-::ng-deep .mat-form-field-outline-end {
+::ng-deep igo-search-bar .mat-form-field-outline-end {
   border-radius: 0 !important;
 }
 
