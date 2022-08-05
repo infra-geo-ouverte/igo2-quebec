@@ -44,6 +44,12 @@ mat-sidenav {
   width: calc(#{$app-sidenav-width} - 16px);
   display: block;
 }
+igo-search-results-tool {
+    width: 90%;
+    display: block;
+    position: relative;
+    margin: auto;
+}
 
 #sidenav-button {
   display: block;
