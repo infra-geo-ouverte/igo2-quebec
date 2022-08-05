@@ -27,10 +27,10 @@ $portal-height-hasfooter-hasheader-hasmenu: calc( 100% - #{$footer-height} - #{$
 
 $app-expansion-panel-header-height: calc(#{$app-expansion-panel-collapsed-height} + 10px);
 $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
-$search-bar-left: $igo-icon-size + $igo-margin;
+$search-bar-left: $igo-icon-size;
 $portal-left: 16px;
-$app-sidenav-width: 400px;
-$search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
+$app-sidenav-width: calc(400px);
+$search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left});
 $search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
 $app-sidenav-margin-top: 50px;
 $app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
@@ -75,8 +75,6 @@ $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-m
 
 //$search-bar-left: $igo-icon-size + $igo-margin;
 $search-bar-left: 20px;
-$search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
-$search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
 
 $app-footer-height: 49px;
 $toast-panel-for-expansion-collapsed-height: 48px;
