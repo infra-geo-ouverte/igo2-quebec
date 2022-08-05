@@ -42,7 +42,7 @@ igo-search-bar {
   margin: 0 $igo-margin;
 }
 
-igo-search-bar, app-sideresult {
+igo-search-bar {
   width: $search-bar-width;
 
   @include mobile {
