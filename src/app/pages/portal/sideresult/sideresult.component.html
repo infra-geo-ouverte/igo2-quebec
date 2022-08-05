@@ -8,7 +8,13 @@
 
       <div #content class="app-content">
 
-          <igo-search-results
+          <div #emptysideresult
+            *ngIf="!onSearch">
+            <h3>Résultats</h3>
+            <p>Veuillez effectuer une recherche dans la barre de recherche ci-dessus.</p>
+          </div>
+          <igo-search-results-tool>        
+            #searchresults
             [store]="searchStore"
             [term]="term"
             [showIcons]="true"
@@ -23,9 +29,8 @@
                   [layer]="result">
                 </igo-search-add-button>
               </ng-template>
-          </igo-search-results>
+            </igo-search-results-tool>
 
- 
     </div>
   </div>
 </mat-sidenav>

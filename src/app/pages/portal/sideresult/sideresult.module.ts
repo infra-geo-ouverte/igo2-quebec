@@ -28,7 +28,7 @@ import {
   provideStoredQueriesReverseSearchSource
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
-import { IgoAppSearchModule } from '@igo2/integration';
+import { IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
 import { SideResultComponent } from './sideresult.component';
 
 @NgModule({
@@ -52,7 +52,8 @@ import { SideResultComponent } from './sideresult.component';
     IgoActionbarModule,
     IgoContextMenuModule,
     IgoAppSearchModule,
-    IgoSearchModule.forRoot()
+    IgoSearchModule.forRoot(),
+    IgoAppSearchResultsToolModule
   ],
   exports: [SideResultComponent ],
   //SEARCH
