@@ -1,5 +1,6 @@
 // https://design.quebec.ca/
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap');
+@import 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap';
+@import '.././app/pages/portal/portal.variables.scss';
 
 $igo-margin: 4px;
 
@@ -345,3 +346,58 @@ $igo-margin: 4px;
         color: #647287;
         font-family: 'open sans';
     }
+
+// input fields
+
+::ng-deep .mat-form-field-outline-end,  ::ng-deep .mat-form-field-outline-start {
+    border-color: #4E5662;
+    height: $igo-icon-size!important;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    top: 0!important;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper, ::ng-deep .search-bar-buttons {
+    margin-top: 0;
+  }
+  
+  ::ng-deep .igo-search-bar-container {
+    height: $igo-icon-size!important; // anomaly
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix input {
+    line-height: $igo-icon-size;
+    vertical-align: middle;
+    border-top: 0;
+    padding: 0;
+    margin-top: 0;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0;
+    border-top: 0!important;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper, .search-bar-buttons, ::ng-deep .mat-form-field-outline-end,  ::ng-deep .mat-form-field-outline-start {
+    height: $igo-icon-size;
+    padding: 0;
+    margin-top:0;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+    padding: 0 8px 0 8px;
+    margin-top: 0!important;
+    height: $igo-icon-size;
+  }
+  
+  ::ng-deep mat-form-field {
+    padding: 0!important;
+  }
+  
+  ::ng-deep .mat-form-field-outline-start {
+    border-radius: 0 !important;
+  }
+  
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 !important;
+  }
