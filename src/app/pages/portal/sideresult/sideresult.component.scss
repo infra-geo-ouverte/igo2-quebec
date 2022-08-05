@@ -31,51 +31,55 @@ mat-sidenav {
 }
 
 .app-sidenav-content {
-  margin-top: $app-sidenav-margin-top;
+  top: $app-sidenav-margin-top;
   height: $app-sidenav-content-height;
+  display: block;
+  position: relative;
   @include mobile {
     height: calc(100% - #{$app-sidenav-margin-top});
   }
 }
 
-::ng-deep igo-search-results {
-  position: fixed;
-  left: $portal-left!important;
-  width: calc(#{$app-sidenav-width} - 16px);
-  display: block;
+app-sideresult {
+  width: $app-sidenav-width;
 }
+
+::ng-deep igo-search-results {
+  position: relative;
+  left: $portal-left!important;
+  width: calc(#{$search-bar-width} - (2 * #{$igo-margin}));
+  display: contents;
+  height: calc(100% - #{$igo-icon-size} - #{$igo-margin});
+}
+
 igo-search-results-tool {
-    width: 90%;
     display: block;
     position: relative;
-    margin: auto;
+    margin: 0 calc(4 * #{$igo-margin});
+    top: calc(2 * #{$igo-margin});
+    height: 100%;
 }
 
 #sidenav-button {
   display: block;
   position: absolute;
   top: 50%;
-  left:calc(#{$search-bar-width} + 24px + 1px);
+  left:calc(#{$app-sidenav-width} + 1px);
   z-index: 1;
   padding: 0;
   min-width: 12px!important;
   visibility: visible;
   opacity: 1;
   opacity: 0;
-  animation: fadeIn 0.4s;
-  animation-delay: 0.4s;
+  animation: fadeIn 0.9s;
+  animation-delay: 0.5s;
   animation-fill-mode: forwards;
   width: 24px;
-}
-
-.sideresult-opened {
-  content: 'menu-right';
 }
 
 .sideresult-closed {
 left: 0!important;
 position: absolute;
-content: 'menu-left';
 }
 
 @keyframes fadeIn {

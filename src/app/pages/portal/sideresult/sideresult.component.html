@@ -4,16 +4,9 @@
   [autoFocus]="false"
   [(opened)]="opened">
 
-  <div class="app-sidenav-content">
+  <div #content class="app-sidenav-content">
 
-      <div #content class="app-content">
-
-          <div #emptysideresult
-            *ngIf="!onSearch">
-            <h3>Résultats</h3>
-            <p>Veuillez effectuer une recherche dans la barre de recherche ci-dessus.</p>
-          </div>
-          <igo-search-results-tool>        
+          <igo-search-results-tool>  
             #searchresults
             [store]="searchStore"
             [term]="term"
@@ -31,7 +24,6 @@
               </ng-template>
             </igo-search-results-tool>
 
-    </div>
   </div>
 </mat-sidenav>
 <button
