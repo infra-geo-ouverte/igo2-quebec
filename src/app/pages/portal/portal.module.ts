@@ -1,3 +1,5 @@
+
+import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule, SearchBarBindingDirective } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -27,7 +29,7 @@ import {
   IgoImportExportModule,
   IgoMapModule,
   IgoQueryModule,
-  IgoSearchModule,
+  IgoSearchModule
   //IgoLayerModule,
   //IgoSearchBarModule
 } from '@igo2/geo';
@@ -83,7 +85,10 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoToolModule,
     IgoEntityTableModule,
     IgoEntityTablePaginatorModule,
-    //IgoSearchBarModule
+    //IgoSearchBarModule,
+    IgoAppSearchBarModule,
+    IgoAppSearchModule,
+    IgoAppSearchResultsToolModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

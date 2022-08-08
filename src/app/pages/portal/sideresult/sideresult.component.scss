@@ -60,7 +60,7 @@ igo-search-results-tool {
     height: 100%;
 }
 
-#sidenav-button {
+#sideresult-button {
   display: block;
   position: absolute;
   top: 50%;
@@ -68,6 +68,7 @@ igo-search-results-tool {
   z-index: 1;
   padding: 0;
   min-width: 12px!important;
+  animation-duration: 3s;
   visibility: visible;
   opacity: 1;
   opacity: 0;

@@ -1,3 +1,4 @@
+import { CoordinatesSearchResultFormatter } from '@igo2/geo';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -45,7 +46,7 @@ import { AppComponent } from './app.component';
     HeaderModule,
     FooterModule,
     MenuModule
-  ],
+    ],
   providers: [
     provideConfigOptions({
       default: environment.igo,
@@ -61,6 +62,7 @@ import { AppComponent } from './app.component';
     provideOsrmDirectionsSource(),
     provideOptionsApi(),
     //provideCadastreSearchSource(),
+    CoordinatesSearchResultFormatter,
     provideStyleListOptions({
       path: './assets/list-style.json'
     })
