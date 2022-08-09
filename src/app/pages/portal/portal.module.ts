@@ -1,5 +1,5 @@
 
-import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule, SearchBarBindingDirective } from '@igo2/integration';
+import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 

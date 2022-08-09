@@ -1,4 +1,10 @@
-import { CoordinatesSearchResultFormatter, provideDefaultIChercheSearchResultFormatter, provideSearchSourceService, provideStoredQueriesReverseSearchSource, SearchService, StoredQueriesSearchSource } from '@igo2/geo';
+import { 
+  CoordinatesSearchResultFormatter,
+  provideDefaultIChercheSearchResultFormatter,
+  provideSearchSourceService,
+  provideStoredQueriesReverseSearchSource,
+  SearchService, StoredQueriesSearchSource
+} from '@igo2/geo';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
