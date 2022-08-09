@@ -1,4 +1,4 @@
-import { 
+import {
   CoordinatesSearchResultFormatter,
   provideDefaultIChercheSearchResultFormatter,
   provideSearchSourceService,
