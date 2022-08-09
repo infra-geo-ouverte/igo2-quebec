@@ -70,13 +70,12 @@ export const environment: Environment = {
         order: 2,
         params: {
           limit: '8'
-        }
+        },
+        settings:[],
+        showInPointerSummary: true
       },
       coordinatesreverse: {
-        order: 1,
-        showInPointerSummary: true,
-        enabled: false,
-        available: true
+        showInPointerSummary: true
       },
       icherchereverse: {
         showInPointerSummary: true,

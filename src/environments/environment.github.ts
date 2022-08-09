@@ -51,10 +51,7 @@ export const environment: Environment = {
         }
       },
       coordinatesreverse: {
-        showInPointerSummary: true,
-        order: 1,
-        enabled: false,
-        available: true
+        showInPointerSummary: true
       },
       icherchereverse: {
         showInPointerSummary: true,

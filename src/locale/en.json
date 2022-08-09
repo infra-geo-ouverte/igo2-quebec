@@ -23,7 +23,9 @@
   "icherche": {
     "name": "Search result"
   },
-  "sidenav": {
-    "close": "Close"
-  }
+  "sideresult": {
+    "close": "Close",
+    "open": "Open"
+  },
+  "search-bar": "Search"
 }

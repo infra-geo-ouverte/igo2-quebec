@@ -347,6 +347,15 @@ $igo-margin: 4px;
         font-family: 'open sans';
     }
 
+    
+    ::ng-deep .igo-panel-header, ::ng-deep .igo-panel-title {
+        color: white!important;
+    }
+
+    ::ng-deep igo-search-results-item small {
+        color: white!important;
+    }
+
 // input fields
 
 ::ng-deep .mat-form-field-outline-end,  ::ng-deep .mat-form-field-outline-start {

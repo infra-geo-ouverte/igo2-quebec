@@ -28,15 +28,10 @@
     }
   },
   "icherche": {
-    "name": "Résultats",
-    "type": {
-      "address": "Adresse",
-      "district": "Arrondissement",
-      "postalCode": "Code Postal",
-      "city": "Municipalité",
-      "mrc": "MRC",
-      "regadmin": "Région administrative",
-      "road": "Route"
-    }
+    "types": {
+      "mrc": true,
+      "entreprises": false,
+      "lieux": false
+      }
   }
 }
