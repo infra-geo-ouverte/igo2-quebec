@@ -1,3 +1,5 @@
+import { IgoAppSearchModule } from '@igo2/integration';
+import { IgoAppSearchResultsToolModule } from './search-results-tool/search-results-tool.module';
 import { MatCardModule } from '@angular/material/card';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,18 +19,9 @@ import {
 import {
   IgoFeatureModule,
   IgoMapModule,
-  IgoSearchModule,
-  provideIChercheSearchSource,
-  //provideILayerSearchSource,
-  provideNominatimSearchSource,
-  provideIChercheReverseSearchSource,
-  provideCoordinatesReverseSearchSource,
-  //provideCadastreSearchSource,
-  provideStoredQueriesSearchSource,
-  provideStoredQueriesReverseSearchSource
+  IgoSearchModule
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
-import { IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
 import { SideResultComponent } from './sideresult.component';
 
 @NgModule({

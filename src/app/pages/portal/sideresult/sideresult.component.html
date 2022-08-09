@@ -6,7 +6,7 @@
 
   <div #content class="app-sidenav-content">
 
-          <igo-search-results-tool>  
+          <app-search-results-tool>  
             #searchresults
             [store]="searchStore"
             [term]="term"
@@ -18,7 +18,7 @@
             (resultSelect)="onResultFocus($event)"
             (moreResults)="onSearch($event)">
 
-            </igo-search-results-tool>
+            </app-search-results-tool>
 
   </div>
 </mat-sidenav>
