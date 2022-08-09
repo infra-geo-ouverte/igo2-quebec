@@ -57,16 +57,6 @@ import { SideResultComponent } from './sideresult.component';
   ],
   exports: [SideResultComponent ],
   //SEARCH
-  providers: [
-    provideCoordinatesReverseSearchSource(),
-    //provideCadastreSearchSource(),
-    provideIChercheSearchSource(),
-    //provideILayerSearchSource(),
-    provideNominatimSearchSource(),
-    provideIChercheReverseSearchSource(),
-    provideStoredQueriesSearchSource(),
-    provideStoredQueriesReverseSearchSource()
-  ],
   declarations: [SideResultComponent]
 })
 export class AppSideResultModule {}

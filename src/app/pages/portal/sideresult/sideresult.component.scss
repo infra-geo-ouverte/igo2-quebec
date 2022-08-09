@@ -91,3 +91,7 @@ position: absolute;
 mat-sidenav::backdrop {
   z-index: 999;
 }
+
+::ng-deep .igo-flexible-fill {
+  display: none;
+}

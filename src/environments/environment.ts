@@ -75,10 +75,7 @@ export const environment: Environment = {
         showInPointerSummary: true
       },
       coordinatesreverse: {
-        order: 1,
-        showInPointerSummary: true,
-        enabled: false,
-        available: true
+        showInPointerSummary: true
       },
       icherchereverse: {
         showInPointerSummary: true,

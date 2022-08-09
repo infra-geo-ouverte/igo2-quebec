@@ -1,4 +1,4 @@
-import { CoordinatesSearchResultFormatter } from '@igo2/geo';
+import { CoordinatesSearchResultFormatter, provideDefaultIChercheSearchResultFormatter, provideSearchSourceService, provideStoredQueriesReverseSearchSource, SearchService, StoredQueriesSearchSource } from '@igo2/geo';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -24,7 +24,8 @@ import {
   provideOsrmDirectionsSource,
   provideOptionsApi,
   //provideCadastreSearchSource,
-  provideStyleListOptions
+  provideStyleListOptions,
+  provideDefaultCoordinatesSearchResultFormatter
 } from '@igo2/geo';
 
 import { environment } from '../environments/environment';
@@ -53,16 +54,26 @@ import { AppComponent } from './app.component';
       path: './config/config.json'
     }),
     RouteService,
+    provideCoordinatesReverseSearchSource(),
+    provideIChercheSearchSource(),
+    provideNominatimSearchSource(),
+    provideIChercheReverseSearchSource(),
+    provideStoredQueriesSearchSource(),
+    StoredQueriesSearchSource,
+    provideStoredQueriesReverseSearchSource(),
     provideNominatimSearchSource(),
     provideIChercheSearchSource(),
     provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),
     //provideILayerSearchSource(),
-    provideStoredQueriesSearchSource(),
     provideOsrmDirectionsSource(),
     provideOptionsApi(),
     //provideCadastreSearchSource(),
     CoordinatesSearchResultFormatter,
+    provideDefaultCoordinatesSearchResultFormatter(),
+    provideDefaultIChercheSearchResultFormatter(),
+    provideSearchSourceService(),
+    SearchService,
     provideStyleListOptions({
       path: './assets/list-style.json'
     })

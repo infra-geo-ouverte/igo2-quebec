@@ -348,8 +348,12 @@ $igo-margin: 4px;
     }
 
     
-    .igo-panel-header {
-        color: white;
+    ::ng-deep .igo-panel-header, ::ng-deep .igo-panel-title {
+        color: white!important;
+    }
+
+    ::ng-deep igo-search-results-item small {
+        color: white!important;
     }
 
 // input fields
