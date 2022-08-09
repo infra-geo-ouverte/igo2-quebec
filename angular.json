@@ -32,6 +32,7 @@
               "src/config",
               "src/contexts",
               "src/locale",
+              "src/particular/locale",
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/core/assets/",

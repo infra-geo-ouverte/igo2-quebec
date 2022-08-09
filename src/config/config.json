@@ -33,5 +33,8 @@
       "entreprises": false,
       "lieux": false
       }
-  }
+  },
+  "language": {
+    "prefix": ["./locale/", "./particular/locale/"]
+    }
 }
