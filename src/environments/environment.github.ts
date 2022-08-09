@@ -34,7 +34,7 @@ export const environment: Environment = {
       forceCoordsNA: false
     },
     language: {
-      prefix: './locale/'
+      prefix: ['./locale/', './particular/locale/']
     },
     searchSources: {
       nominatim: {

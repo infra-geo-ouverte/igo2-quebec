@@ -38,7 +38,7 @@ export const environment: Environment = {
       forceCoordsNA: true
     },
     language: {
-      prefix: './locale/'
+      prefix: ['./locale/', './particular/locale/']
     },
     projections: [
       {
