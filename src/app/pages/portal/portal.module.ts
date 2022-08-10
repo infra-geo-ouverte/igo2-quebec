@@ -1,4 +1,5 @@
 
+import { provideIChercheSearchSource, provideDefaultIChercheSearchResultFormatter,} from './icherche/icherche.providers';
 import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -29,9 +30,24 @@ import {
   IgoImportExportModule,
   IgoMapModule,
   IgoQueryModule,
-  IgoSearchModule
+  IgoSearchModule,
   //IgoLayerModule,
   //IgoSearchBarModule
+  provideIChercheReverseSearchSource,
+  provideNominatimSearchSource,
+  provideCoordinatesReverseSearchSource,
+  //provideILayerSearchSource,
+  provideStoredQueriesSearchSource,
+  provideOsrmDirectionsSource,
+  provideOptionsApi,
+  //provideCadastreSearchSource,
+  provideStyleListOptions,
+  provideDefaultCoordinatesSearchResultFormatter,
+  StoredQueriesSearchSource,
+  provideStoredQueriesReverseSearchSource,
+  CoordinatesSearchResultFormatter,
+  provideSearchSourceService,
+  SearchService
 } from '@igo2/geo';
 import {
   IgoContextManagerModule,
@@ -89,6 +105,30 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoAppSearchBarModule,
     IgoAppSearchModule,
     IgoAppSearchResultsToolModule
+  ],
+  providers: [
+    provideCoordinatesReverseSearchSource(),
+    provideIChercheSearchSource(),
+    provideNominatimSearchSource(),
+    provideIChercheReverseSearchSource(),
+    provideStoredQueriesSearchSource(),
+    StoredQueriesSearchSource,
+    provideStoredQueriesReverseSearchSource(),
+    provideNominatimSearchSource(),
+    provideIChercheReverseSearchSource(),
+    provideCoordinatesReverseSearchSource(),
+    //provideILayerSearchSource(),
+    provideOsrmDirectionsSource(),
+    provideOptionsApi(),
+    //provideCadastreSearchSource(),
+    CoordinatesSearchResultFormatter,
+    provideDefaultCoordinatesSearchResultFormatter(),
+    provideDefaultIChercheSearchResultFormatter(),
+    provideSearchSourceService(),
+    SearchService,
+    provideStyleListOptions({
+      path: './assets/list-style.json'
+    })
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]
