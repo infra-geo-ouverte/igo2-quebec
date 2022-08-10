@@ -189,6 +189,10 @@ $igo-margin: 4px;
         line-height: 24px;
         margin-bottom: 24px;
     }
+
+    strong {
+        font-weight: 600;
+    }
   
     h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { // removed h3 for conflict with layer catalog
       margin-bottom: 1.2rem;
@@ -262,7 +266,7 @@ $igo-margin: 4px;
     }
     
     h4 {
-        font-size: 21px;
+        font-size: 21px!important;
         line-height: 24px;
         font-weight: bold;
         margin-top: 24px;
