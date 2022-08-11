@@ -14,9 +14,7 @@ import {
 } from '@igo2/core';
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import {
-  //provideILayerSearchSource,
-  //provideCadastreSearchSource,
-  provideStyleListOptions,
+  provideStyleListOptions
 } from '@igo2/geo';
 
 import { environment } from '../environments/environment';

@@ -1,6 +1,7 @@
 
-import { provideIChercheSearchSource, provideDefaultIChercheSearchResultFormatter,} from './icherche/icherche.providers';
-import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
+import { provideIChercheSearchSource, provideDefaultIChercheSearchResultFormatter } from './icherche/icherche.providers';
+import { IChercheSearchSource } from './icherche/icherche';
+import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule, IgoAppToolModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -31,20 +32,17 @@ import {
   IgoMapModule,
   IgoQueryModule,
   IgoSearchModule,
-  //IgoLayerModule,
+  IgoLayerModule,
   //IgoSearchBarModule
   provideIChercheReverseSearchSource,
   provideNominatimSearchSource,
   provideCoordinatesReverseSearchSource,
-  //provideILayerSearchSource,
-  provideStoredQueriesSearchSource,
+  provideILayerSearchSource,
   provideOsrmDirectionsSource,
   provideOptionsApi,
   //provideCadastreSearchSource,
   provideStyleListOptions,
   provideDefaultCoordinatesSearchResultFormatter,
-  StoredQueriesSearchSource,
-  provideStoredQueriesReverseSearchSource,
   CoordinatesSearchResultFormatter,
   provideSearchSourceService,
   SearchService
@@ -81,7 +79,7 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoContextMapButtonModule,
     FooterModule,
     LegendButtonModule,
-    //IgoLayerModule,
+    IgoLayerModule,
     IgoWorkspaceModule,
     IgoGeoWorkspaceModule,
     IgoQueryModule.forRoot(),
@@ -104,20 +102,18 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     //IgoSearchBarModule,
     IgoAppSearchBarModule,
     IgoAppSearchModule,
-    IgoAppSearchResultsToolModule
+    IgoAppSearchResultsToolModule,
+    IgoAppToolModule
   ],
   providers: [
     provideCoordinatesReverseSearchSource(),
     provideIChercheSearchSource(),
     provideNominatimSearchSource(),
     provideIChercheReverseSearchSource(),
-    provideStoredQueriesSearchSource(),
-    StoredQueriesSearchSource,
-    provideStoredQueriesReverseSearchSource(),
     provideNominatimSearchSource(),
     provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),
-    //provideILayerSearchSource(),
+    provideILayerSearchSource(),
     provideOsrmDirectionsSource(),
     provideOptionsApi(),
     //provideCadastreSearchSource(),
@@ -126,6 +122,7 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     provideDefaultIChercheSearchResultFormatter(),
     provideSearchSourceService(),
     SearchService,
+    IChercheSearchSource,
     provideStyleListOptions({
       path: './assets/list-style.json'
     })

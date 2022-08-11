@@ -79,8 +79,7 @@ import {
   moveToOlFeatures,
   FeatureMotion,
   IgoMap,
-  DataSourceService,
-  //SearchBarComponent
+  DataSourceService
   } from '@igo2/geo';
 
 import {
@@ -171,7 +170,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   private contextMenuCoord: [number, number];
 
   private contextLoaded = false;
-
   private context$$: Subscription;
   private openSidenav$$: Subscription;
   private sidenavMediaAndOrientation$$: Subscription;
@@ -366,7 +364,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (this.igoSearchPointerSummaryEnabled === undefined) {
         this.igoSearchPointerSummaryEnabled = this.storageService.get('searchPointerSummaryEnabled') as boolean || false;
       }
-    }
+  }
 
   ngOnInit() {
     window['IGO'] = this;

@@ -98,3 +98,7 @@ app-search-results-tool {
   display: flex;
   margin: auto;
 }
+
+::ng-deep app-search-results-tool > div > section > h4 > strong {
+  font-size: 21px!important;
+}
