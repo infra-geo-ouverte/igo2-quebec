@@ -63,6 +63,7 @@ export const environment: Environment = {
         available: false
       },
       storedqueries: {
+        enabled: false,
         available: false
       },
       icherche: {
