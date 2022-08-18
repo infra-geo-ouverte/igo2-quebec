@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head>
   <meta charset="utf-8">
   <title>IGO2 - Québec.ca</title>
-  <base href="/">
+ <script type="text/javascript">document.write("<base href='" + window.location.href + "' />");</script><script type="text/javascript">function loadJSON(callback) {var xobj = new XMLHttpRequest();xobj.overrideMimeType('application/json');xobj.open('GET', 'config/config.json', true);xobj.onreadystatechange = function () {if (xobj.readyState == 4 && xobj.status == '200') {callback(xobj.responseText);}};xobj.send(null);}loadJSON(function(response) {var config = JSON.parse(response);if (config.title) {document.title = config.title;var metaTitle = document.createElement('meta');metaTitle.name = 'title';metaTitle.content = config.title;document.getElementsByTagName('head')[0].appendChild(metaTitle);}if (config.description) {var metaDesc = document.createElement('meta');metaDesc.name = 'description';metaDesc.content = config.description;document.getElementsByTagName('head')[0].appendChild(metaDesc);}});</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1.0, user-scalable=0">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
