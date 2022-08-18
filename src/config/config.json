@@ -1,0 +1,39 @@
+{
+  "theme": "qcca-theme",
+  "showRotationButtonIfNoRotation": false,
+  "title": "IGO",
+  "header": {
+    "hasHeader": true,
+    "logo": "assets/images/signature-PIV.svg",
+    "logoPrint": "assets/images/signature-PIV.svg"
+  },
+  "hasMenu": false,
+  "hasFooter": true,
+  "hasLegendButton": true,
+  "hasGeolocateButton": true,
+  "geolocate": {
+    "basic": true,
+    "followPosition": false,
+    "activateDefault": false
+  },
+  "useStaticIcon": false,
+  "hasExpansionPanel": false,
+  "showSearchBar": true,
+  "showMenuButton": false,
+  "hasToolbox": false,
+  "searchSources": {
+    "cadastre": {
+      "available": false
+    }
+  },
+  "icherche": {
+    "types": {
+      "mrc": true,
+      "entreprises": false,
+      "lieux": false
+      }
+  },
+  "language": {
+    "prefix": ["./locale/", "./particular/locale/"]
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "/ws/": {
+    "target": "https://geoegl.msp.gouv.qc.ca",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/carto/": {
+    "target": "https://geoegl.msp.gouv.qc.ca",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/apis/": {
+    "target": "https://geoegl.msp.gouv.qc.ca",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/swtq": {
+    "target": "https://ws.mapserver.transports.gouv.qc.ca",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

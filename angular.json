@@ -1,0 +1,208 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "igo2-quebec": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineTemplate": false,
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "defaultConfiguration": "developpement",
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "aot": true,
+            "outputPath": "dist/igo2-quebec",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/config",
+              "src/contexts",
+              "src/locale",
+              "src/particular/locale",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/core/assets/",
+                "output": "./assets/igo2/core/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@igo2/geo/assets/",
+                "output": "./assets/igo2/geo/"
+              }
+            ],
+            "styles": ["src/styles.scss"],
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/style/partial",
+                "src/app/pages/portal",
+                "node_modules"
+              ]
+            },
+            "allowedCommonJsDependencies": [
+              "hammerjs",
+              "typy",
+              "jwt-decode",
+              "pbf",
+              "geojson-rbush",
+              "raf",
+              "striptags",
+              "core-js/modules/es.promise.js",
+              "core-js/modules/es.regexp.to-string.js",
+              "core-js/modules/es.array.reverse.js",
+              "core-js/modules/es.array.index-of.js",
+              "core-js/modules/es.array.reduce.js",
+              "core-js/modules/web.dom-collections.iterator.js",
+              "core-js/modules/es.array.iterator.js",
+              "nosleep.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "12kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false
+            },
+            "developpement": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "github": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "12kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.github.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false
+            }
+          }
+        },
+        "serve": {
+          "defaultConfiguration": "developpement",
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "igo2-quebec:build"
+          },
+          "configurations": {
+            "developpement": {
+              "browserTarget": "igo2-quebec:build:developpement"
+            },
+            "production": {
+              "browserTarget": "igo2-quebec:build:production"
+            },
+            "github": {
+              "browserTarget": "igo2-quebec:build:github"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "igo2-quebec:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "styles": ["src/styles.scss"],
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/style/partial",
+                "src/app/pages/portal",
+                "node_modules"
+              ]
+            },
+            "assets": ["src/favicon.ico", "src/assets"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "igo2-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "igo2-quebec:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "e2e/**/*.ts"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "igo2-quebec",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
+}

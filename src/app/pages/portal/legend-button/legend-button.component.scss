@@ -1,0 +1,90 @@
+@import '../portal.variables.scss';
+
+ // button
+
+app-legend-button, ::ng-deep .mat-raised-button {
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    margin: 0;
+    min-width: 8px;
+    border: 0px;
+    border-radius: 0 !important;
+}
+
+::ng-deep .qcca-theme app-legend-button button, ::ng-deep .qcca-theme .mat-raised-button {
+  color: #095797 !important;
+  border-color: #095797 !important;
+}
+
+// DIALOG
+
+// FLEX
+
+::ng-deep #legend-button-dialog-container {
+  top: calc( #{$header-height} + 4px); // TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
+  width: fit-content !important;
+  height: fit-content !important;
+  z-index: 10;
+  position: fixed;
+  right: 0.5%;
+  max-width: 99% !important;
+  padding: 8px !important;
+  max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px) !important;
+
+  igo-layer-legend-item {
+    flex-wrap: wrap;
+    width: min-content;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .igo-layer-legend-container {
+    padding-left: 0 !important;
+    width: max-content !important;
+  }
+
+  @media (min-width: 768px){
+    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px) !important;
+  }
+
+} 
+
+// TITLES
+::ng-deep app-legend-button-dialog {
+
+  .mat-list-base .mat-list-item .mat-list-item-content {
+    padding: 0 !important;
+  }
+  
+  .mat-dialog-title {
+    margin: 0;
+    display: block;
+  }
+
+  .igo-layer-list-item {
+    height: fit-content !important;
+  }
+}
+
+// CLOSE BUTTON
+
+::ng-deep app-legend-button-dialog {
+  .mat-icon, mat-button-wrapper, .mat-icon-button .mat-icon, .mat-icon-button {
+    line-height: 26px;
+    height: 24px;
+    width: 24px;
+  }
+  .mat-icon svg {
+    height: 20px;
+    width: 20px;
+  }
+  div.mat-dialog-content.legend > img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+  div.mat-dialog-actions {
+    float: right;
+    padding: 0;
+    min-height: auto;
+  }
+}

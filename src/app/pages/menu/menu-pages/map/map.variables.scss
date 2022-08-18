@@ -1,0 +1,52 @@
+@import '~@igo2/core/style/partial/media';
+
+$igo-margin: 4px;
+
+$app-map-footer-height: 48px;
+$app-map-mobile-min-space-right: 40px;
+
+$app-map-expansion-panel-collapsed-height: 40px;
+$app-map-expansion-panel-collapsed-width: 40px;
+$app-map-expansion-panel-height: 281px;
+$app-map-expansion-panel-height-maximized: 496px;
+$app-map-expansion-panel-header-height: calc(#{$app-map-expansion-panel-collapsed-height} + 10px);
+
+$app-map-toast-panel-collapsed-height: 46px;
+$app-map-toast-panel-collapsed-height-mobile: 35px;
+// $app-map-toast-panel-max-height: 281px;
+// $app-map-full-toast-panel-max-height: 800px;
+// $app-map-full-toast-panel-max-width: 750px;
+// $app-map-toast-panel-width: 30%;
+$app-map-toast-panel-width-tablet: 500px;
+
+$app-map-toast-panel-width: 42vw;
+$app-map-toast-panel-max-width: 600px;
+$app-map-toast-panel-height: 30vh;
+$app-map-toast-panel-max-height: 30vh;
+$app-map-toast-panel-height-mobile: 34vh;
+
+$app-map-full-toast-panel-width: 45vw;
+$app-map-full-toast-panel-max-height: 65vh;
+$app-map-full-toast-panel-height-mobile: 55vh;
+
+$app-map-toast-panel-html-width: 60vw;
+$app-map-toast-panel-html-height: 32vh;
+
+$app-map-toast-panel-html-large-height: 55vh;
+
+$app-map-sidenav-margin-top: 50px;
+$app-map-sidenav-height: calc(100% - #{$app-map-sidenav-margin-top});
+$app-map-sidenav-width: 400px;
+$app-map-sidenav-width-mobile: calc(100% - #{$app-map-mobile-min-space-right} - #{$igo-margin});
+
+//$search-bar-left: $igo-icon-size + $igo-margin;
+$search-bar-left: $igo-margin;
+$search-bar-width: calc(#{$app-map-sidenav-width} - #{$search-bar-left} - (2 * #{$igo-margin}));
+$search-bar-width-mobile: calc(100% - #{$app-map-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
+
+$app-map-footer-height: 49px;
+$toast-panel-for-expansion-collapsed-height: 48px;
+$toast-panel-for-expansion-max-height: 329px;
+$toast-panel-for-expansion-width: 30%;
+
+$igo-icon-size: 40px;
