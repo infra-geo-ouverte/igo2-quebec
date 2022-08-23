@@ -17,9 +17,9 @@ import { AuthOptions } from '@igo2/auth';
 export class AppComponent {
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
-  public hasHeader: boolean = undefined;
-  public hasFooter: boolean = undefined;
-  public hasMenu: boolean = undefined;
+  public hasHeader: boolean = true;
+  public hasFooter: boolean = true;
+  public hasMenu: boolean = false;
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
@@ -41,13 +41,13 @@ export class AppComponent {
     this.detectOldBrowser();
 
     this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
-    this.configService.getConfig('header.hasHeader');
+      this.configService.getConfig('header.hasHeader');
 
     this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
-    this.configService.getConfig('hasFooter');
+      this.configService.getConfig('hasFooter');
 
     this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
-    this.configService.getConfig('hasMenu');
+      this.configService.getConfig('hasMenu');
   }
 
   private readTitleConfig() {

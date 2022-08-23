@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from './menu/menu.component';
+import { MenuComponent } from './menu.component';
 import { HomeComponent } from './menu-pages/home/home.component';
 import { MenuRoutingModule } from './menu-routing/menu-routing.module';
 import { AboutComponent } from './menu-pages/about/about.component';
@@ -22,7 +22,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     PortalModule,
     HeaderModule,
     FooterModule,
-    MatToolbarModule,
+    MatToolbarModule
   ],
   exports:[
     MenuComponent,

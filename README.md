@@ -53,7 +53,7 @@ IGO2 is having multiple features, such as Web GIS viewer adapted to Desktop and 
 
 ## Téléchargement
 
-- [Version 1.11.1](https://github.com/infra-geo-ouverte/igo2/releases/download/1.12.1/igo2.zip)
+- [Version 1.12.1](https://github.com/infra-geo-ouverte/igo2/releases/download/1.12.1/igo2.zip)
 - [Version 1.11.1](https://github.com/infra-geo-ouverte/igo2/releases/download/1.11.1/igo2.zip)
 - [Version 1.11.0](https://github.com/infra-geo-ouverte/igo2/releases/download/1.11.0/igo2.zip)
 - [Version 1.10.0](https://github.com/infra-geo-ouverte/igo2/releases/download/1.10.0/igo2.zip)
@@ -218,6 +218,3 @@ $ npm run e2e
 ## Contribution
 
 Before contributing, please read the [guidelines](.github/CONTRIBUTING.md), the [LICENCE](LICENSE_ENGLISH.txt) and the [WIKI](https://github.com/infra-geo-ouverte/igo2/wiki). If you have any question and want to contribute, contact the main email of IGO info(a)igouverte.org or on [Gitter](https://gitter.im/igo2/)
-
-
-test !! 

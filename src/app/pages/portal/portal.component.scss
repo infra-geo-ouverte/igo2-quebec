@@ -220,10 +220,10 @@ igo-map-browser.toast-offset-attribution
   max-height: 50%;
 }
 
-.igo-zoom-button-container, button, app-legend-button, igo-zoom-button, igo-offline-button, igo-geolocate-button, igo-home-extent-button {
-  margin-top: 4px!important;
-  position: unset!important;
-  bottom: unset!important;
+.igo-zoom-button-container, button, app-legend-button, igo-zoom-button, igo-offline-button, igo-geolocate-button, igo-home-extent-button, #app-legend-button-dialog, mat-dialog-container app-legend-button-dialog, app-legend-button-dialog {
+  margin-top: 4px !important;
+  position: unset !important;
+  bottom: unset !important;
   margin-left: auto;
   align-self: flex-end;
   margin-top: auto;

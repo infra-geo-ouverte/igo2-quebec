@@ -7,7 +7,8 @@
     display: flex;
     justify-content: flex-end;
     right: 0;
-    text-align: right!important;
+    margin-left: 140px;
+    text-align: right !important;
     width: 100%;
 }
 
@@ -36,17 +37,16 @@ span.footer-text a{
 //**Scale**//
 
 ::ng-deep div.ol-scale-line {
-    position: fixed!important;
+    position: fixed !important;
     display: flex;
     flex-direction: row;
-    left: 2px!important;
-    bottom: 3px!important;
-    background: unset;
+    left: 70px !important;
+    bottom: 3px !important;
 }
 
-::ng-deep .map-hasfooter {
-    height: calc( 100% - #{$footer-height} )!important;
-  }
+::ng-deep .map-hasFooter {
+    height: calc( 100% - #{$footer-height} ) !important;
+}
 
 ::ng-deep .ol-scale-line-inner {
     border: 1px solid black;

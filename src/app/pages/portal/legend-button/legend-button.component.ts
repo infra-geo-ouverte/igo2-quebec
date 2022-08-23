@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog, MatDialogState } from '@angular/material/dialog';
 import { IgoMap } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
@@ -11,26 +11,22 @@ import { MapState } from '@igo2/integration';
 
 export class LegendButtonComponent {
 
-  @Input() isDialogOpened: boolean;
+  public dialogRef = null;
 
-  constructor(
-    public dialog: MatDialog
-    ) { }
+  constructor(public dialog: MatDialog) {}
 
-    dialogRef = null;
-
-    toggleDialog() {
-      const dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
-        if(!dialogOpened) {
-            this.dialogRef = this.dialog.open(LegendButtonDialogComponent, {
-                id: 'legend-button-dialog-container',
-                hasBackdrop: false,
-                closeOnNavigation: true
-            });
-        } else {
-            this.dialogRef.close();
-        }
-    }
+  toggleDialog() {
+    const dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
+      if (!dialogOpened) {
+        this.dialogRef = this.dialog.open(LegendButtonDialogComponent, {
+          id: 'legend-button-dialog-container',
+          hasBackdrop: false,
+          closeOnNavigation: true
+        });
+      } else {
+        this.dialogRef.close();
+      }
+  }
 }
 
 @Component({

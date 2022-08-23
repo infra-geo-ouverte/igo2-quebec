@@ -1,10 +1,50 @@
 [
   {
     "uri": "_default",
-    "title": "Vigilance"
+    "title": "Simple"
   },
   {
-    "uri": "geolocation",
-    "title": "Geolocation"
+    "uri": "simple2",
+    "title": "Simple 2"
+  },
+  {
+    "uri": "messages",
+    "title": "Messages"
+  },
+  {
+    "uri": "timeFilter",
+    "title": "Filtre temporel (Time filter)"
+  },
+  {
+    "uri": "layerSync",
+    "title": "Synchronisation de layers"
+  },
+  {
+    "uri": "workspace",
+    "title": "Workspace (vue tabulaire)"
+  },
+  {
+    "uri": "mapOverlay",
+    "title": "Superposition de carte (Map overlay)"
+  },
+  {
+    "uri": "testExport",
+    "title": "Test export"
+  },
+  {
+    "uri": "variousFormats",
+    "title": "Divers format à titre d'exemple"
+  },
+  {
+    "uri": "variousStyles",
+    "title": "Divers styles à titre d'exemple"
+  },
+  {
+    "uri": "legends",
+    "title": "Exemples de légendes"
+  },
+  {
+    "uri": "homeExtent",
+    "title": "Étendue de la carte(Home Extent)"
   }
 ]

@@ -5,19 +5,19 @@
     "message": "IGO2 ne supporte pas pleinement votre navigateur. Veuillez le mettre à jour ou utilisez un navigateur différent."
   },
   "header": {
-    "title": "Vigilance ― Surveillance de la crue des eaux",
+    "title": "IGO",
     "language": "English",
-    "contactUsUrl" : "https://www.quebec.ca/nous-joindre/renseignements-generaux",
+    "contactUsUrl" : "https://www.igouverte.org/#footer",
     "contactUs" : "Nous joindre",
     "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre"
   },
   "footer":{
     "conditions": "Conditions d'utilisation",
-    "url-conditions": "http://www.droitauteur.gouv.qc.ca/copyright.php",
-    "ministry": "Ministère de la Sécurité publique",
-    "url-ministry": "https://www.quebec.ca/gouvernement/ministere/securite-publique",
+    "url-conditions": "https://raw.githubusercontent.com/infra-geo-ouverte/igo2/master/LICENCE.txt",
+    "ministry": "Nom du ministère",
+    "url-ministry": "https://www.quebec.ca/gouvernement/ministère/",
     "gov": "© Gouvernement du Québec, 2022",
-    "url-gov": "https://www.quebec.ca/"
+    "url-gov": "http://www.droitauteur.gouv.qc.ca/copyright.php"
   },
   "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre",
   "icherche": {

@@ -54,7 +54,6 @@ import {
 
 import { IgoIntegrationModule } from '@igo2/integration';
 import { MapOverlayModule } from './map-overlay/map-overlay.module';
-import { AppExpansionPanelModule } from './expansion-panel/expansion-panel.module';
 import { AppSidenavModule } from './sidenav/sidenav.module';
 
 import { PortalComponent } from './portal.component';
@@ -90,7 +89,6 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoActionModule,
     IgoImportExportModule,
     MapOverlayModule,
-    AppExpansionPanelModule,
     AppSidenavModule,
     AppSideResultModule,
     IgoPanelModule,

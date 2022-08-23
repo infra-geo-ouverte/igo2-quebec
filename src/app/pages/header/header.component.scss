@@ -1,15 +1,14 @@
+@import '../portal/portal.variables.scss';
+
 // Adjust portal height
 
-$header-height: 72px;
-$header-height-mobile: 72px;
-
 ::ng-deep .portal-with-header {
-height: calc(100% - #{$header-height-mobile})!important;
+height: calc(100% - $header-height-mobile)!important;
 }
 
-@media screen and (min-width: 824px) {
+@media screen and (min-width: 768px) {
     ::ng-deep .portal-with-header {
-        height: calc(100% - #{$header-height})!important;
+        height: calc(100% - $header-height)!important;
         }
 }
 
@@ -68,7 +67,7 @@ display: flex;
 -ms-flex-wrap: wrap;
 flex-wrap: wrap;
 height: 100%;
-width: 96%;
+width: 98%;
 align-content: center;
 margin: auto;
 }
@@ -219,10 +218,6 @@ ul li:last-child {
     color: #fff;
     margin: auto 0;
     padding: 0;
-}
-
-igo-map-browser {
-    height: calc(100% - $app-header-height);
 }
 
 @media screen and (min-width: 576px) {

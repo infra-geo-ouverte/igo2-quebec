@@ -5,19 +5,19 @@
     "message": "IGO2 does not fully support your browser. Please update it or use a different one."
   },
   "header": {
-    "title": "Vigilance ― Flood monitoring",
+    "title": "IGO",
     "language": "Français",
-    "contactUsUrl" : "https://www.quebec.ca/en/how-to-reach-us/general-information",
+    "contactUsUrl" : "https://www.igouverte.org/#footer",
     "contactUs" : "Contact us",
     "externallinks": "This link will open in a new window"
   },
   "footer":{
     "conditions": "Terms of use",
-    "url-conditions": "http://www.droitauteur.gouv.qc.ca/en/copyright.php",
-    "ministry": "Ministère de la Sécurité publique",
-    "url-ministry": "https://www.quebec.ca/en/government/ministere/public-security",
+    "url-conditions": "https://raw.githubusercontent.com/infra-geo-ouverte/igo2/master/LICENCE.txt",
+    "ministry": "Ministry name",
+    "url-ministry": "https://www.quebec.ca/government/ministry/",
     "gov": "© Gouvernement du Québec, 2022",
-    "url-gov": "https://www.quebec.ca/en/"
+    "url-gov": "http://www.droitauteur.gouv.qc.ca/en/index.php"
   },
   "externallinks": "This link will open in a new window",
   "icherche": {

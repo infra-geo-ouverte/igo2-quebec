@@ -7,7 +7,7 @@ import { ConfigService } from '@igo2/core';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent {
-  public hasHeader: boolean = undefined;
+  public hasHeader = true;
 
   constructor(private configService: ConfigService) {
 

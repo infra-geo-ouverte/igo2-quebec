@@ -36,7 +36,7 @@ import { AppComponent } from './app.component';
     HeaderModule,
     FooterModule,
     MenuModule
-  ],
+    ],
   providers: [
     provideConfigOptions({
       default: environment.igo,

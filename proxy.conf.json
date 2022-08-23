@@ -1,6 +1,6 @@
 {
   "/ws/": {
-    "target": "https://testgeoegl.msp.gouv.qc.ca",
+    "target": "https://geoegl.msp.gouv.qc.ca",
     "secure": false,
     "changeOrigin": true
   },
@@ -16,11 +16,6 @@
   },
   "/swtq": {
     "target": "https://ws.mapserver.transports.gouv.qc.ca",
-    "secure": false,
-    "changeOrigin": true
-  },
-  "/ws/vectortiles/": {
-    "target": "http://geodev1.sso.msp.gouv.qc.ca",
     "secure": false,
     "changeOrigin": true
   }
