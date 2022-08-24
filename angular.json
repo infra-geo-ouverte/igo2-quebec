@@ -19,6 +19,7 @@
           "defaultConfiguration": "developpement",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/vigilance/",
             "aot": true,
             "outputPath": "dist/igo2-quebec",
             "index": "src/index.html",
@@ -66,8 +67,7 @@
               "core-js/modules/es.array.index-of.js",
               "core-js/modules/es.array.reduce.js",
               "core-js/modules/web.dom-collections.iterator.js",
-              "core-js/modules/es.array.iterator.js",
-              "nosleep.js"
+              "core-js/modules/es.array.iterator.js"
             ]
           },
           "configurations": {
@@ -203,6 +203,8 @@
   },
   "defaultProject": "igo2-quebec",
   "cli": {
+    "analytics": "f6ef9470-ccc6-4403-b78f-305402b47e71",
     "defaultCollection": "@angular-eslint/schematics"
   }
 }
+
