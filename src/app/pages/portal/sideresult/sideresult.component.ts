@@ -66,23 +66,16 @@ export class SideResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
-  @Output() toolChange = new EventEmitter<Tool>();
-
-  get toolbox(): Toolbox {
-    return this.toolState.toolbox;
-  }
 
   // SEARCH
   events: string[] = [];
   public showMenuButton: boolean = undefined;
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
-
-
   public igoSearchPointerSummaryEnabled: boolean = false;
 
   public termSplitter: string = '|';
-/*
+  /*
   public map = new IgoMap({
     overlay: true,
     controls: {
@@ -135,13 +128,13 @@ export class SideResultComponent implements OnInit, OnDestroy {
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
 
-    this.layerService
-      .createAsyncLayer({
-        title: 'OSM',
-        sourceOptions: {
-          type: 'osm'
-        }
-      })
+      this.layerService
+        .createAsyncLayer({
+          title: 'OSM',
+          sourceOptions: {
+            type: 'osm'
+          }
+        })
       .subscribe(layer => {
         this.osmLayer = layer;
         //this.map.addLayer(layer);
@@ -207,29 +200,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    this.activeTool$$ = this.toolbox.activeTool$.subscribe((tool: Tool) => {
-      const sidenavTitle = this.configService.getConfig('sidenavTitle') || 'IGO';
-      if (tool) {
-        if (tool.name === 'catalogBrowser') {
-          for (const catalog of this.catalogState.catalogStore.all()) {
-            if (this.catalogState.catalogStore.state.get(catalog).selected === true) {
-              this.title$.next(catalog.title);
-            }
-          }
-        } else if (tool.name === 'activeTimeFilter' || tool.name === 'activeOgcFilter') {
-          for (const layer of this.map.layers) {
-            if (layer.options.active === true) {
-              this.title$.next(layer.title);
-            }
-          }
-        } else {
-          this.title$.next(tool.title);
-        }
-      } else {
-        this.title$.next(sidenavTitle);
-      }
-      this.toolChange.emit(tool);
-    });
     //SEARCH
     this.store.load([
       {
@@ -255,14 +225,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     this.activeTool$$.unsubscribe();
     // SEARCH
     this.store.destroy();
-  }
-
-  onPreviousButtonClick() {
-    this.toolbox.activatePreviousTool();
-  }
-
-  onUnselectButtonClick() {
-    this.toolbox.deactivateTool();
   }
 
   //SEARCH

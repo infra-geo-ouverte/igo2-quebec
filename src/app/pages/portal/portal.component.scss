@@ -143,9 +143,10 @@ igo-search-bar svg {
 
 /** search bar mobile **/
 app-bottomresult {
-  position: relative;
+  position: fixed;
   display: block;
   bottom: 0;
+  z-index: 100;
 }
 
 
