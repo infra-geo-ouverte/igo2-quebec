@@ -21,7 +21,6 @@ app-legend-button, ::ng-deep .mat-raised-button {
 // FLEX
 
 ::ng-deep #legend-button-dialog-container {
-  top: calc( #{$header-height} + 4px); // TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
   width: fit-content !important;
   height: fit-content !important;
   z-index: 10;
@@ -44,7 +43,7 @@ app-legend-button, ::ng-deep .mat-raised-button {
   }
 
   @media (min-width: 768px){
-    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px) !important;
+    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px) !important; //TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
   }
 
 } 
