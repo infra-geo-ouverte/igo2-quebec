@@ -141,6 +141,13 @@ igo-search-bar svg {
   display: inline-block!important;
 }
 
+/** search bar mobile **/
+app-bottomresult {
+  position: relative;
+  display: block;
+  bottom: 0;
+}
+
 
 /*** Map browser ***/
 igo-map-browser {
