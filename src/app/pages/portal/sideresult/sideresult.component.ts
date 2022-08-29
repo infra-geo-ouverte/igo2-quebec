@@ -16,7 +16,6 @@ import { EntityStore, ActionStore } from '@igo2/common';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { Tool, Toolbox } from '@igo2/common';
 import { IgoMap, FEATURE,
   Feature,
   FeatureMotion,

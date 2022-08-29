@@ -16,7 +16,6 @@ import { EntityStore, ActionStore } from '@igo2/common';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { Tool, Toolbox } from '@igo2/common';
 import { IgoMap, FEATURE,
   Feature,
   FeatureMotion,
@@ -28,7 +27,7 @@ import { IgoMap, FEATURE,
   Research,
   SearchResult,
   SearchService } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState } from '@igo2/integration';
+import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
