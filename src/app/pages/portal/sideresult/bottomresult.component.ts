@@ -66,11 +66,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
-  @Output() toolChange = new EventEmitter<Tool>();
-
-  get toolbox(): Toolbox {
-    return this.toolState.toolbox;
-  }
 
   // SEARCH
   events: string[] = [];
@@ -117,7 +112,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
 
   constructor(
-    private toolState: ToolState,
     private configService: ConfigService,
     private catalogState: CatalogState,
     //SEARCH
@@ -131,10 +125,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     ) {
       // SEARCH
       this.mapService.setMap(this.map);
-      this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? false :
-        this.configService.getConfig('showMenuButton');
-      this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
-        this.configService.getConfig('hasToolbox');
       this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
         this.configService.getConfig('showSearchBar');
 
@@ -210,30 +200,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    this.activeTool$$ = this.toolbox.activeTool$.subscribe((tool: Tool) => {
-      const sidenavTitle = this.configService.getConfig('sidenavTitle') || 'IGO';
-      if (tool) {
-        if (tool.name === 'catalogBrowser') {
-          for (const catalog of this.catalogState.catalogStore.all()) {
-            if (this.catalogState.catalogStore.state.get(catalog).selected === true) {
-              this.title$.next(catalog.title);
-            }
-          }
-        } else if (tool.name === 'activeTimeFilter' || tool.name === 'activeOgcFilter') {
-          for (const layer of this.map.layers) {
-            if (layer.options.active === true) {
-              this.title$.next(layer.title);
-            }
-          }
-        } else {
-          this.title$.next(tool.title);
-        }
-      } else {
-        this.title$.next(sidenavTitle);
-      }
-      this.toolChange.emit(tool);
-    });
-    //SEARCH
     this.store.load([
       {
         id: 'coordinates',
@@ -255,17 +221,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activeTool$$.unsubscribe();
-    // SEARCH
     this.store.destroy();
-  }
-
-  onPreviousButtonClick() {
-    this.toolbox.activatePreviousTool();
-  }
-
-  onUnselectButtonClick() {
-    this.toolbox.deactivateTool();
   }
 
   //SEARCH

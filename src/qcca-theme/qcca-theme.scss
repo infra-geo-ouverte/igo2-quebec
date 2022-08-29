@@ -198,6 +198,10 @@ box-shadow: 0 1px 4px rgb(34 54 84 / 24%);
 
 // ANGULAR MATERIAL
 
+app-search-results-tool ul{
+    margin-left: 1rem;
+  }
+
 ::ng-deep .mat-stroked-button {
     border: 2px solid currentColor;
 }

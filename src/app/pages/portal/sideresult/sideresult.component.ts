@@ -43,6 +43,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
   private activeTool$$: Subscription;
 
   @Input()
+  public hasBackdrop: boolean;
+
+  @Input()
   get map(): IgoMap {
     return this._map;
   }
