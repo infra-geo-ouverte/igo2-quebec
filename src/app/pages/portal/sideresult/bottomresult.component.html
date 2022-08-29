@@ -1,0 +1,36 @@
+<div id="bottomResultMobile">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <igo-search-bar *ngIf="showSearchBar"
+        #searchbar
+        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+        appearance="outline"
+        searchIcon ="magnify"
+        [matTooltip]="'search-bar' | translate"
+        matTooltipShowDelay="500"
+        tooltip-position="after"
+        [searchSettings]="false"
+        color="primary"
+        [store]="searchStore"
+        [termSplitter]="termSplitter"
+        (searchTermChange)="onSearchTermChange($event)"
+        (search)="onSearch($event)"
+        (clearFeature)="removeFeatureFromMap()"
+        (searchSettingsChange)="onSearchSettingsChange()">
+      </igo-search-bar>
+    </mat-expansion-panel-header>
+
+    <app-search-results-tool>  
+      #searchresults
+      [store]="searchStore"
+      [term]="term"
+      [showIcons]="true"
+      [termSplitter]="termSplitter"
+      placeholder="false"
+      [settingsChange$]="settingsChange$"
+      (resultSelect)="onResultFocus($event)"
+      (moreResults)="onSearch($event)">
+    </app-search-results-tool>
+
+  </mat-expansion-panel>
+</div>

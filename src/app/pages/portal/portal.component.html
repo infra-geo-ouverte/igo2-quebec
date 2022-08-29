@@ -2,10 +2,11 @@
   <mat-sidenav-content position="end">
 
     <igo-backdrop
-      [shown]="backdropShown"
+      [shown]="false"
       (click)="onBackdropClick()">
     </igo-backdrop>
 
+  <div id="searchDesktop" *ngIf=!mobile>
     <igo-menu-button *ngIf="showMenuButton"
       [sidenavOpened]="sidenavOpened"
       (openSidenav)="onToggleSidenavClick()">
@@ -34,6 +35,7 @@
       [(opened)]="sidenavOpened"
       (toolChange)="toolChanged($event)">
     </app-sideresult>
+  </div>
 
     <igo-map-browser
       igoHoverFeature
@@ -45,19 +47,24 @@
       igoDropGeoFile
       [map]="map"
       [ngClass]="{'map-hasfooter': hasFooter}">
-      <igo-baselayers-switcher
-        [ngClass]="sidenavOpened? 'baselayers-pushed' : 'baselayers'"
-        [map]="map"
-        [useStaticIcon]="getBaseLayersUseStaticIcon()">
-      </igo-baselayers-switcher>
-      <div id="map-buttons">
-        <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
-        <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
-        <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-        <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
-      </div>
+        <igo-baselayers-switcher
+          [ngClass]="sidenavOpened? ['baselayers-pushed'] : ['baselayers']"
+          [map]="map"
+          [useStaticIcon]="getBaseLayersUseStaticIcon()">
+        </igo-baselayers-switcher>
+        <div id="map-buttons">
+          <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
+          <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
+          <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+          <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
+        </div>
+        <app-bottomresult
+          *ngIf="mobile"
+          [map]="map">
+        </app-bottomresult>
     </igo-map-browser>
-    <app-footer *ngIf="hasFooter" ></app-footer>
+
+    <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
 
     <app-map-overlay
     [@controlStateY]="getControlsOffsetY()"

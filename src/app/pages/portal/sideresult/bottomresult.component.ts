@@ -27,22 +27,19 @@ import { IgoMap, FEATURE,
   Research,
   SearchResult,
   SearchService } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState } from '@igo2/integration';
+import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
-  selector: 'app-sideresult',
-  templateUrl: './sideresult.component.html',
-  styleUrls: ['./sideresult.component.scss'],
+  selector: 'app-bottomresult',
+  templateUrl: './bottomresult.component.html',
+  styleUrls: ['./bottomresult.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideResultComponent implements OnInit, OnDestroy {
+export class BottomResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-  @Input() hasSearchQuery: boolean = undefined;
+  @Input() hasSearchQuery: boolean;
   private activeTool$$: Subscription;
-
-  @Input()
-  public hasBackdrop: boolean;
 
   @Input()
   get map(): IgoMap {
@@ -71,13 +68,16 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   // SEARCH
   events: string[] = [];
-  public showMenuButton: boolean = undefined;
-  public hasToolbox: boolean = undefined;
+  public showMenuButton: boolean;
+  public hasToolbox: boolean;
   public store = new ActionStore([]);
+  public showSearchBar: boolean;
+
+
   public igoSearchPointerSummaryEnabled: boolean = false;
 
   public termSplitter: string = '|';
-  /*
+/*
   public map = new IgoMap({
     overlay: true,
     controls: {
@@ -111,7 +111,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
 
   constructor(
-    private toolState: ToolState,
     private configService: ConfigService,
     private catalogState: CatalogState,
     //SEARCH
@@ -125,18 +124,16 @@ export class SideResultComponent implements OnInit, OnDestroy {
     ) {
       // SEARCH
       this.mapService.setMap(this.map);
-      this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? false :
-        this.configService.getConfig('showMenuButton');
-      this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
-        this.configService.getConfig('hasToolbox');
+      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
+        this.configService.getConfig('showSearchBar');
 
-      this.layerService
-        .createAsyncLayer({
-          title: 'OSM',
-          sourceOptions: {
-            type: 'osm'
-          }
-        })
+    this.layerService
+      .createAsyncLayer({
+        title: 'OSM',
+        sourceOptions: {
+          type: 'osm'
+        }
+      })
       .subscribe(layer => {
         this.osmLayer = layer;
         //this.map.addLayer(layer);
@@ -202,7 +199,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    //SEARCH
     this.store.load([
       {
         id: 'coordinates',
@@ -224,8 +220,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activeTool$$.unsubscribe();
-    // SEARCH
     this.store.destroy();
   }
 
