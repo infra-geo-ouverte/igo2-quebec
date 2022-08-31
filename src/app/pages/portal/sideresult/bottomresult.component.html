@@ -1,9 +1,12 @@
 <div id="bottomResultMobile">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
+  <mat-expansion-panel
+  (opened)="panelOpenState = true"
+  (closed)="panelOpenState = false"
+  >
+    <mat-expansion-panel-header _expanded = true>
       <igo-search-bar *ngIf="showSearchBar"
         #searchbar
-        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+        (keydown.Space)="$event.stopPropagation()"
         appearance="outline"
         searchIcon ="magnify"
         [matTooltip]="'search-bar' | translate"
@@ -11,25 +14,29 @@
         tooltip-position="after"
         [searchSettings]="false"
         color="primary"
-        [store]="searchStore"
         [termSplitter]="termSplitter"
+        [forceNA]="forceCoordsNA"
+        [store]="searchStore"
         (searchTermChange)="onSearchTermChange($event)"
+        [pointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
+        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+        [searchResultsGeometryEnabled]="searchResultsGeometryEnabled"
+        (searchResultsGeometryStatus)="onSearchResultsGeometryStatusChange($event)"
         (search)="onSearch($event)"
         (clearFeature)="removeFeatureFromMap()"
-        (searchSettingsChange)="onSearchSettingsChange()">
+        (searchSettingsChange)="onSearchSettingsChange()"
+        >
       </igo-search-bar>
     </mat-expansion-panel-header>
 
-    <app-search-results-tool>  
+    <app-search-results-tool  
       #searchresults
-      [store]="searchStore"
-      [term]="term"
       [showIcons]="true"
-      [termSplitter]="termSplitter"
       placeholder="false"
-      [settingsChange$]="settingsChange$"
+      _expanded = true
       (resultSelect)="onResultFocus($event)"
-      (moreResults)="onSearch($event)">
+      (moreResults)="onSearch($event)"
+      >
     </app-search-results-tool>
 
   </mat-expansion-panel>

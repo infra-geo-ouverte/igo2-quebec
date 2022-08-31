@@ -19,6 +19,7 @@ igo-search-results-tool {
     margin: 0 calc(4 * #{$igo-margin});
     top: calc(2 * #{$igo-margin});
     height: 100%;
+    width: 100%;
 }
 
 ::ng-deep app-search-results-tool > div > section > h4 > strong {
@@ -35,7 +36,8 @@ igo-search-bar {
 
 ::ng-deep app-bottomresult .mat-expansion-panel-content {
   overflow-y: scroll!important;
-  max-height: 250px;
+  height: 250px;
+  width: 100%;
 }
 
 #bottomResultMobile {

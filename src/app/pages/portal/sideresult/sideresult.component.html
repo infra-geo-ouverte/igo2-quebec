@@ -7,14 +7,10 @@
 
     <div #content class="app-sidenav-content">
 
-            <app-search-results-tool>  
+            <app-search-results-tool  
               #searchresults
-              [store]="searchStore"
-              [term]="term"
               [showIcons]="true"
-              [termSplitter]="termSplitter"
               placeholder="false"
-              [settingsChange$]="settingsChange$"
               (resultFocus)="onResultFocus($event)"
               (resultSelect)="onResultFocus($event)"
               (moreResults)="onSearch($event)">

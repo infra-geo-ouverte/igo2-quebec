@@ -10,7 +10,8 @@ import {
   ViewChild
 } from '@angular/core';
 import * as proj from 'ol/proj';
-
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { SearchResultsToolComponent } from './search-results-tool/search-results-tool.component';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
@@ -72,10 +73,9 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public hasToolbox: boolean;
   public store = new ActionStore([]);
   public showSearchBar: boolean;
-
-
   public igoSearchPointerSummaryEnabled: boolean = false;
-
+  public panelOpenState: boolean;
+  _expanded: boolean;
   public termSplitter: string = '|';
 /*
   public map = new IgoMap({
@@ -91,6 +91,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     center: [-73, 47.2],
     zoom: 7
   };
+  panel: MatExpansionPanel;
 
   public osmLayer: Layer;
 
@@ -100,6 +101,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public mapProjection: string;
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
+  
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
@@ -146,13 +148,21 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       this.igoSearchPointerSummaryEnabled = value;
     }
 
+    public onBeforeSearch() {
+      setTimeout(this.onSearch, 100000);
+      this.panelOpenState = true;
+    }
+
     onSearchTermChange(term = '') {
       this.term = term;
       const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
       if (termWithoutHashtag.length < 2) {
-        this.searchStore.clear();
+        //this.searchStore.clear();
         this.selectedFeature = undefined;
+        this.panelOpenState = true;
+        this._expanded = true;
       }
+      this.onBeforeSearch();
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
@@ -279,4 +289,10 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
     );
   }
+/* (closed)="beforePanelClosed()"
+  beforePanelClosed(){
+    setTimeout(close, 1000);
+    console.log("Panel closed");
+  }*/
+
 }
