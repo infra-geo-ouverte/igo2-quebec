@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import * as proj from 'ol/proj';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { SearchResultsToolComponent } from './search-results-tool/search-results-tool.component';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
@@ -27,7 +26,10 @@ import { IgoMap, FEATURE,
   ProjectionService,
   Research,
   SearchResult,
-  SearchService } from '@igo2/geo';
+  SearchService, 
+  sourceCanSearch,
+  sourceCanReverseSearch,
+  SearchSourceService} from '@igo2/geo';
 import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
@@ -75,7 +77,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public showSearchBar: boolean;
   public igoSearchPointerSummaryEnabled: boolean = false;
   public panelOpenState: boolean;
-  _expanded: boolean;
   public termSplitter: string = '|';
 /*
   public map = new IgoMap({
@@ -91,7 +92,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     center: [-73, 47.2],
     zoom: 7
   };
-  panel: MatExpansionPanel;
 
   public osmLayer: Layer;
 
@@ -101,7 +101,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public mapProjection: string;
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
-  
+
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
@@ -122,7 +122,9 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
-    private mediaService: MediaService
+    private mediaService: MediaService,
+    private searchSourceService: SearchSourceService,
+    private elRef: ElementRef
     ) {
       // SEARCH
       this.mapService.setMap(this.map);
@@ -148,24 +150,26 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       this.igoSearchPointerSummaryEnabled = value;
     }
 
-    public onBeforeSearch() {
-      setTimeout(this.onSearch, 100000);
-      this.panelOpenState = true;
-    }
-
     onSearchTermChange(term = '') {
       this.term = term;
       const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
       if (termWithoutHashtag.length < 2) {
-        //this.searchStore.clear();
+        this.searchStore.clear();
         this.selectedFeature = undefined;
         this.panelOpenState = true;
-        this._expanded = true;
       }
-      this.onBeforeSearch();
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
+      const results = event.results;
+      this.searchStore.state.updateAll({ focused: false, selected: false });
+      const newResults = this.searchStore.entities$.value
+        .filter((result: SearchResult) => result.source !== event.research.source)
+        .concat(results);
+      this.searchStore.updateMany(newResults);
+    }
+
+    onSearchResult(event: { research: Research; results: SearchResult[] }) {
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value

@@ -1,8 +1,5 @@
 <div id="bottomResultMobile">
-  <mat-expansion-panel
-  (opened)="panelOpenState = true"
-  (closed)="panelOpenState = false"
-  >
+  <mat-expansion-panel>
     <mat-expansion-panel-header _expanded = true>
       <igo-search-bar *ngIf="showSearchBar"
         #searchbar
@@ -33,9 +30,8 @@
       #searchresults
       [showIcons]="true"
       placeholder="false"
-      _expanded = true
       (resultSelect)="onResultFocus($event)"
-      (moreResults)="onSearch($event)"
+      (moreResults)="onSearchResult($event)"
       >
     </app-search-results-tool>
 
