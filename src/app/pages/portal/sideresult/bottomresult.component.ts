@@ -10,11 +10,10 @@ import {
   ViewChild
 } from '@angular/core';
 import * as proj from 'ol/proj';
-import { MatExpansionPanel } from '@angular/material/expansion';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { IgoMap, FEATURE,
   Feature,
@@ -26,9 +25,7 @@ import { IgoMap, FEATURE,
   ProjectionService,
   Research,
   SearchResult,
-  SearchService, 
-  sourceCanSearch,
-  sourceCanReverseSearch,
+  SearchService,
   SearchSourceService} from '@igo2/geo';
 import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
@@ -42,7 +39,6 @@ import { ConfigService } from '@igo2/core';
 export class BottomResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
   @Input() hasSearchQuery: boolean;
-  private activeTool$$: Subscription;
 
   @Input()
   get map(): IgoMap {
@@ -293,10 +289,5 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
     );
   }
-/* (closed)="beforePanelClosed()"
-  beforePanelClosed(){
-    setTimeout(close, 1000);
-    console.log("Panel closed");
-  }*/
 
 }
