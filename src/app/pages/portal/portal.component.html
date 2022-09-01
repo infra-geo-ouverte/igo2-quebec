@@ -38,21 +38,20 @@
   </div>
 
     <igo-map-browser
-      igoHoverFeature
-      [igoHoverFeatureDelay]="250"
-      [igoHoverFeatureEnabled]="true"
       #mapBrowser
       igoMapContext
       igoLayerContext
       igoDropGeoFile
       [map]="map"
-      [ngClass]="{'map-hasfooter': hasFooter}">
+      [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
         <igo-baselayers-switcher
-          [ngClass]="sidenavOpened? ['baselayers-pushed'] : ['baselayers']"
+          [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
           [map]="map"
           [useStaticIcon]="getBaseLayersUseStaticIcon()">
         </igo-baselayers-switcher>
-        <div id="map-buttons">
+        <div id="map-buttons"
+        [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']"
+        >
           <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
           <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
           <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
