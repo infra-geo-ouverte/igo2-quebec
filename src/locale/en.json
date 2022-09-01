@@ -1,31 +1,31 @@
 {
   "IGO": "IGO",
   "oldBrowser": {
-    "title": "Too old browser",
-    "message": "IGO2 does not fully support your browser. Please update it or use a different one."
+    "title": "Navigateur obsolète",
+    "message": "IGO2 ne supporte pas pleinement votre navigateur. Veuillez le mettre à jour ou utilisez un navigateur différent."
   },
   "header": {
-    "title": "IGO",
-    "language": "Français",
-    "contactUsUrl" : "https://www.igouverte.org/#footer",
-    "contactUs" : "Contact us",
-    "externallinks": "This link will open in a new window"
+    "title": "Vigilance ― Surveillance de la crue des eaux",
+    "language": "English",
+    "contactUsUrl" : "https://www.quebec.ca/nous-joindre/renseignements-generaux",
+    "contactUs" : "Nous joindre",
+    "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre"
   },
   "footer":{
-    "conditions": "Terms of use",
-    "url-conditions": "https://raw.githubusercontent.com/infra-geo-ouverte/igo2/master/LICENCE.txt",
-    "ministry": "Ministry name",
-    "url-ministry": "https://www.quebec.ca/government/ministry/",
+    "conditions": "Conditions d'utilisation",
+    "url-conditions": "https://www.quebec.ca/conditions-utilisation",
+    "ministry": "Ministère de la Sécurité publique",
+    "url-ministry": "https://www.quebec.ca/gouvernement/ministere/securite-publique",
     "gov": "© Gouvernement du Québec, 2022",
-    "url-gov": "http://www.droitauteur.gouv.qc.ca/en/index.php"
+    "url-gov": "https://www.quebec.ca/"
   },
-  "externallinks": "This link will open in a new window",
+  "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre",
   "icherche": {
-    "name": "Search result"
+    "name": "Résultats de recherche"
   },
   "sideresult": {
-    "close": "Close",
-    "open": "Open"
+    "close": "Fermer",
+    "open": "Ouvrir"
   },
-  "search-bar": "Search"
+  "search-bar": "Faire une recherche"
 }
