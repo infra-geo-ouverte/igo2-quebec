@@ -66,6 +66,15 @@ igo-search-bar, igo-search-results igo-list, .baselayers {
   animation-fill-mode: forwards;
 }
 
+.igo-baselayers-switcher-mobile {
+  bottom: 48px!important;
+  left: 4px;
+}
+
+.igo-baselayers-switcher-mobile {
+  bottom: 48px!important;
+}
+
 ::ng-deep igo-search-bar {
   height: 100%;
 }
@@ -217,15 +226,26 @@ igo-map-browser.toast-offset-attribution
 
 /*** Buttons ***/
 
-#map-buttons {
+.map-buttons {
   display: flex;
   flex-direction: column;
   margin-bottom: 5px;
   z-index: 10;
   position: absolute;
-  right: 5px;
   bottom: 0;
   max-height: 50%;
+  right: 4px;
+}
+
+.map-buttons-mobile {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+  z-index: 10;
+  position: absolute;
+  bottom: 48px!important;
+  max-height: 50%;
+  right: 4px;
 }
 
 .igo-zoom-button-container, button, app-legend-button, igo-zoom-button, igo-offline-button, igo-geolocate-button, igo-home-extent-button, #app-legend-button-dialog, mat-dialog-container app-legend-button-dialog, app-legend-button-dialog {
