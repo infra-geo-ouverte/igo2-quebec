@@ -10,11 +10,10 @@ import {
   ViewChild
 } from '@angular/core';
 import * as proj from 'ol/proj';
-
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { IgoMap, FEATURE,
   Feature,
@@ -26,7 +25,8 @@ import { IgoMap, FEATURE,
   ProjectionService,
   Research,
   SearchResult,
-  SearchService } from '@igo2/geo';
+  SearchService,
+  SearchSourceService} from '@igo2/geo';
 import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
@@ -39,7 +39,6 @@ import { ConfigService } from '@igo2/core';
 export class BottomResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
   @Input() hasSearchQuery: boolean;
-  private activeTool$$: Subscription;
 
   @Input()
   get map(): IgoMap {
@@ -72,10 +71,8 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public hasToolbox: boolean;
   public store = new ActionStore([]);
   public showSearchBar: boolean;
-
-
   public igoSearchPointerSummaryEnabled: boolean = false;
-
+  public panelOpenState: boolean;
   public termSplitter: string = '|';
 /*
   public map = new IgoMap({
@@ -100,6 +97,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   public mapProjection: string;
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
+
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
@@ -120,7 +118,9 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
-    private mediaService: MediaService
+    private mediaService: MediaService,
+    private searchSourceService: SearchSourceService,
+    private elRef: ElementRef
     ) {
       // SEARCH
       this.mapService.setMap(this.map);
@@ -152,10 +152,20 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       if (termWithoutHashtag.length < 2) {
         this.searchStore.clear();
         this.selectedFeature = undefined;
+        this.panelOpenState = true;
       }
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
+      const results = event.results;
+      this.searchStore.state.updateAll({ focused: false, selected: false });
+      const newResults = this.searchStore.entities$.value
+        .filter((result: SearchResult) => result.source !== event.research.source)
+        .concat(results);
+      this.searchStore.updateMany(newResults);
+    }
+
+    onSearchResult(event: { research: Research; results: SearchResult[] }) {
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value
@@ -279,4 +289,5 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
     );
   }
+
 }
