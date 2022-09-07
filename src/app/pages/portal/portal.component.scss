@@ -224,6 +224,39 @@ igo-map-browser.toast-offset-attribution
   }
 }
 
+::ng-deep div.ol-scale-line {
+  display: block!important;
+  position: absolute!important;
+  top: 2px!important;
+  left: 10px!important;
+  bottom: unset!important;
+  background: unset!important;
+  color: black;
+  z-index: 9999!important;
+}
+
+::ng-deep .olControlScaleLine {
+  background: white;
+  padding: 5px;
+
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+
+  /* Netscape */
+  -moz-opacity: 0.85;
+
+  /* Good browsers */
+  opacity: 0.85;
+}
+/* ::ng-deep div.ol-scale-line {
+  position: relative !important;
+  background: unset;
+  display: block;
+  left: 2px !important;
+  top: 3px !important;
+  bottom: unset!important;
+} */
+
 /*** Buttons ***/
 
 .map-buttons {

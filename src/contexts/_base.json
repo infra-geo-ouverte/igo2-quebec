@@ -12,7 +12,7 @@
     },
     "controls" :{
       "scaleLine": {
-        "target": "footer-id"
+        "target": "scaleLine"
       }
     }
   },

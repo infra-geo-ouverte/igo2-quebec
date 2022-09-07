@@ -5,7 +5,7 @@
       [shown]="false"
       (click)="onBackdropClick()">
     </igo-backdrop>
-
+    <div id="scaleLine" *ngIf="mobile"></div>
   <div id="searchDesktop" *ngIf=!mobile>
     <igo-menu-button *ngIf="showMenuButton"
       [sidenavOpened]="sidenavOpened"
@@ -29,7 +29,7 @@
       (clearFeature)="removeFeatureFromMap()"
       (searchSettingsChange)="onSearchSettingsChange()">
     </igo-search-bar>
-
+    <div *ngIf="mobile" id="scaleLine"></div>
     <app-sideresult
       [map]="map"
       [(opened)]="sidenavOpened"
@@ -44,6 +44,7 @@
       igoDropGeoFile
       [map]="map"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+        
         <igo-baselayers-switcher
           [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
           [map]="map"
