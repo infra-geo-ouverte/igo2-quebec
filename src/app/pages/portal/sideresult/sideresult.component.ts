@@ -14,7 +14,7 @@ import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { IgoMap, FEATURE,
   Feature,
