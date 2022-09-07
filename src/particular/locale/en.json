@@ -4,7 +4,7 @@
       "searchResultsTool": {
         "noResults": "Aucun résultat",
         "doSearch": "Veuillez effectuer une recherche dans la barre de recherche ci-dessus.",
-        "examples": "<p>Permet de rechercher des adresses, des lieux, des stations ou des coordonnées.</p><div>Exemple de coordonnées :<ul><li>Degré décimal: -68.165547, 48.644546</li><li>Degré minute seconde: -68 9 56, 48 38 40</li></ul></div>"
+        "examples": "<p>Permet de rechercher des adresses, des lieux, des entreprises ou des coordonnées.</p><div>Exemple de coordonnées :<ul><li>Degré décimal:<br>-68.165547, 48.644546</li><li>Degré minute seconde:<br>-68 9 56, 48 38 40</li></ul></div>"
       }
     },
     "geo": {

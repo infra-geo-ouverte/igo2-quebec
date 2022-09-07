@@ -1,7 +1,7 @@
 {
   "theme": "qcca-theme",
   "showRotationButtonIfNoRotation": false,
-  "title": "Vigilance",
+  "title": "IGO",
   "header": {
     "hasHeader": true,
     "logo": "assets/images/signature-PIV.svg",
@@ -16,11 +16,6 @@
     "followPosition": false,
     "activateDefault": false
   },
-  "postgrest": {
-    "stationAffichage": "/ws/postgrest/station_liste_api",
-    "stationDetails": "/ws/postgrest/station_details_api",
-    "stationCount": "/ws/postgrest/station_count_active"
-  },
   "useStaticIcon": false,
   "hasExpansionPanel": false,
   "showSearchBar": true,
@@ -34,11 +29,12 @@
   "icherche": {
     "types": {
       "mrc": true,
-      "entreprises": false,
-      "lieux": false
+      "entreprises": true,
+      "lieux": true
       }
   },
   "language": {
     "prefix": ["./locale/", "./particular/locale/"]
-    }
+    },
+  "setTarget": "app-footer"
 }

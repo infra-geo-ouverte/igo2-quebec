@@ -39,7 +39,6 @@ import { ConfigService } from '@igo2/core';
 export class SideResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
   @Input() hasSearchQuery: boolean = undefined;
-  private activeTool$$: Subscription;
 
   @Input()
   public hasBackdrop: boolean;
@@ -224,7 +223,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activeTool$$.unsubscribe();
     // SEARCH
     this.store.destroy();
   }
