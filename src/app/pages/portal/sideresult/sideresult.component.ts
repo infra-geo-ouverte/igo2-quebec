@@ -14,9 +14,8 @@ import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-import { Tool, Toolbox } from '@igo2/common';
 import { IgoMap, FEATURE,
   Feature,
   FeatureMotion,
@@ -28,7 +27,7 @@ import { IgoMap, FEATURE,
   Research,
   SearchResult,
   SearchService } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState } from '@igo2/integration';
+import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -40,7 +39,6 @@ import { ConfigService } from '@igo2/core';
 export class SideResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
   @Input() hasSearchQuery: boolean = undefined;
-  private activeTool$$: Subscription;
 
   @Input()
   get map(): IgoMap {
@@ -66,11 +64,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
-  @Output() toolChange = new EventEmitter<Tool>();
-
-  get toolbox(): Toolbox {
-    return this.toolState.toolbox;
-  }
 
   // SEARCH
   events: string[] = [];
@@ -116,7 +109,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
 
   constructor(
-    private toolState: ToolState,
     private configService: ConfigService,
     private catalogState: CatalogState,
     //SEARCH
@@ -206,30 +198,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
       );
     }
 
-  ngOnInit() {
-    this.activeTool$$ = this.toolbox.activeTool$.subscribe((tool: Tool) => {
-      const sidenavTitle = this.configService.getConfig('sidenavTitle') || 'IGO';
-      if (tool) {
-        if (tool.name === 'catalogBrowser') {
-          for (const catalog of this.catalogState.catalogStore.all()) {
-            if (this.catalogState.catalogStore.state.get(catalog).selected === true) {
-              this.title$.next(catalog.title);
-            }
-          }
-        } else if (tool.name === 'activeTimeFilter' || tool.name === 'activeOgcFilter') {
-          for (const layer of this.map.layers) {
-            if (layer.options.active === true) {
-              this.title$.next(layer.title);
-            }
-          }
-        } else {
-          this.title$.next(tool.title);
-        }
-      } else {
-        this.title$.next(sidenavTitle);
-      }
-      this.toolChange.emit(tool);
-    });
+  ngOnInit() {;
     //SEARCH
     this.store.load([
       {
@@ -252,17 +221,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activeTool$$.unsubscribe();
     // SEARCH
     this.store.destroy();
-  }
-
-  onPreviousButtonClick() {
-    this.toolbox.activatePreviousTool();
-  }
-
-  onUnselectButtonClick() {
-    this.toolbox.deactivateTool();
   }
 
   //SEARCH
