@@ -19,7 +19,7 @@
         (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
         [searchResultsGeometryEnabled]="searchResultsGeometryEnabled"
         (searchResultsGeometryStatus)="onSearchResultsGeometryStatusChange($event)"
-        (search)="onSearch($event)"
+        
         (clearFeature)="removeFeatureFromMap()"
         (searchSettingsChange)="onSearchSettingsChange()"
         >
@@ -31,7 +31,7 @@
       [showIcons]="true"
       placeholder="false"
       (resultSelect)="onResultFocus($event)"
-      (moreResults)="onSearchResult($event)"
+      (moreResults)="onSearch($event)"
       >
     </app-search-results-tool>
 

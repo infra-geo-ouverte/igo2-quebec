@@ -26,7 +26,9 @@ import { IgoMap, FEATURE,
   Research,
   SearchResult,
   SearchService,
-  SearchSourceService} from '@igo2/geo';
+  SearchSourceService,
+  sourceCanSearch,
+  sourceCanReverseSearch} from '@igo2/geo';
 import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
@@ -157,15 +159,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
-      const results = event.results;
-      this.searchStore.state.updateAll({ focused: false, selected: false });
-      const newResults = this.searchStore.entities$.value
-        .filter((result: SearchResult) => result.source !== event.research.source)
-        .concat(results);
-      this.searchStore.updateMany(newResults);
-    }
-
-    onSearchResult(event: { research: Research; results: SearchResult[] }) {
+      console.log('onSearch');
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value
