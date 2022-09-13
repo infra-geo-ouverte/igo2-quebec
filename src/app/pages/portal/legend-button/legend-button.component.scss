@@ -22,19 +22,31 @@ app-legend-button, ::ng-deep .mat-raised-button {
 
 ::ng-deep #legend-button-dialog-container {
   width: fit-content !important;
-  height: fit-content !important;
   z-index: 10;
   position: fixed;
   right: 0.5%;
   max-width: 99% !important;
-  padding: 8px !important;
+  padding: 16px !important;
   max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px) !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  igo-layer-legend-list {
+    max-height: inherit;
+    .layer-legend-list-container {
+      overflow-y: auto;
+      height: inherit;
+      max-height: inherit;
+  }
+  }
 
   igo-layer-legend-item {
     flex-wrap: wrap;
     width: min-content;
     display: flex;
     flex-direction: column;
+    margin-bottom: 16px;
   }
 
   .igo-layer-legend-container {
@@ -51,6 +63,9 @@ app-legend-button, ::ng-deep .mat-raised-button {
 // TITLES
 ::ng-deep app-legend-button-dialog {
 
+  max-height: calc(100% - 24px) !important;
+  height: inherit;
+
   .mat-list-base .mat-list-item .mat-list-item-content {
     padding: 0 !important;
   }
@@ -59,6 +74,14 @@ app-legend-button, ::ng-deep .mat-raised-button {
     margin: 0;
     display: block;
   }
+
+  .mat-dialog-title:after {
+    content: "";
+    display: block;
+    width: 2.8rem;
+    border-bottom: 4px solid #f09686;
+    margin-bottom: 0.8rem;
+}
 
   .igo-layer-list-item {
     height: fit-content !important;
