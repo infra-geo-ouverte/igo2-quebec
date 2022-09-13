@@ -14,7 +14,7 @@ import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { IgoMap, FEATURE,
   Feature,
@@ -27,7 +27,7 @@ import { IgoMap, FEATURE,
   Research,
   SearchResult,
   SearchService } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState } from '@igo2/integration';
+import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -39,7 +39,6 @@ import { ConfigService } from '@igo2/core';
 export class SideResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
   @Input() hasSearchQuery: boolean = undefined;
-  private activeTool$$: Subscription;
 
   @Input()
   public hasBackdrop: boolean;
@@ -111,7 +110,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
 
   constructor(
-    private toolState: ToolState,
     private configService: ConfigService,
     private catalogState: CatalogState,
     //SEARCH
@@ -201,7 +199,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
       );
     }
 
-  ngOnInit() {
+  ngOnInit() {;
     //SEARCH
     this.store.load([
       {
@@ -224,7 +222,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activeTool$$.unsubscribe();
     // SEARCH
     this.store.destroy();
   }
