@@ -60,7 +60,6 @@ app-legend-button, ::ng-deep .mat-raised-button {
 
 } 
 
-// TITLES
 ::ng-deep app-legend-button-dialog {
 
   max-height: calc(100% - 24px) !important;
@@ -69,6 +68,8 @@ app-legend-button, ::ng-deep .mat-raised-button {
   .mat-list-base .mat-list-item .mat-list-item-content {
     padding: 0 !important;
   }
+
+  // TITLES
   
   .mat-dialog-title {
     margin: 0;
@@ -81,7 +82,16 @@ app-legend-button, ::ng-deep .mat-raised-button {
     width: 2.8rem;
     border-bottom: 4px solid #f09686;
     margin-bottom: 0.8rem;
-}
+  }
+
+  .mat-list-text h4:after {
+    content: "";
+    display: block;
+    width: 1.8rem;
+    border-bottom: 3px solid #DAE6F0;
+    margin-bottom: 0.8rem;
+    padding-top: 2px;
+  }
 
   .igo-layer-list-item {
     height: fit-content !important;
