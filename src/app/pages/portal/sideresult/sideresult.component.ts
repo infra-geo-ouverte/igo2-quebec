@@ -70,7 +70,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   // SEARCH
   events: string[] = [];
-  public showMenuButton: boolean = undefined;
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
   public igoSearchPointerSummaryEnabled: boolean = false;
@@ -124,8 +123,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     ) {
       // SEARCH
       this.mapService.setMap(this.map);
-      this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? false :
-        this.configService.getConfig('showMenuButton');
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
 
@@ -138,7 +135,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
         })
       .subscribe(layer => {
         this.osmLayer = layer;
-        //this.map.addLayer(layer);
       });
     }
 

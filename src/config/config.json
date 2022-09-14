@@ -26,13 +26,6 @@
       "available": false
     }
   },
-  "icherche": {
-    "types": {
-      "mrc": true,
-      "entreprises": true,
-      "lieux": true
-      }
-  },
   "language": {
     "prefix": ["./locale/", "./particular/locale/"]
     },

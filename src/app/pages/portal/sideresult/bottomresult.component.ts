@@ -70,21 +70,11 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   // SEARCH
   events: string[] = [];
   public showMenuButton: boolean;
-  public hasToolbox: boolean;
   public store = new ActionStore([]);
   public showSearchBar: boolean;
   public igoSearchPointerSummaryEnabled: boolean = false;
   public panelOpenState: boolean;
   public termSplitter: string = '|';
-/*
-  public map = new IgoMap({
-    overlay: true,
-    controls: {
-      attribution: {
-        collapsed: true
-      }
-    }
-  });*/
 
   public view = {
     center: [-73, 47.2],

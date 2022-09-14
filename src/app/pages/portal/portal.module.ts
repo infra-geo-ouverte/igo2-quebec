@@ -1,6 +1,4 @@
 
-import { provideIChercheSearchSource, provideDefaultIChercheSearchResultFormatter } from './icherche/icherche.providers';
-import { IChercheSearchSource } from './icherche/icherche';
 import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule, IgoAppToolModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -33,14 +31,15 @@ import {
   IgoQueryModule,
   IgoSearchModule,
   IgoLayerModule,
-  //IgoSearchBarModule
   provideIChercheReverseSearchSource,
   provideNominatimSearchSource,
   provideCoordinatesReverseSearchSource,
   provideILayerSearchSource,
   provideOsrmDirectionsSource,
   provideOptionsApi,
-  //provideCadastreSearchSource,
+  IChercheSearchSource,
+  provideIChercheSearchSource,
+  provideDefaultIChercheSearchResultFormatter,
   provideStyleListOptions,
   provideDefaultCoordinatesSearchResultFormatter,
   CoordinatesSearchResultFormatter,
