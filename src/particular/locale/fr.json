@@ -4,7 +4,7 @@
       "searchResultsTool": {
         "noResults": "Aucun résultat",
         "doSearch": "Veuillez effectuer une recherche dans la barre de recherche ci-dessus.",
-        "examples": "<b>Permet de rechercher des adresses, des lieux ou des coordonnées</b>.<br><br>Les recherches d'<u>adresses</u> peuvent être effectuées selon une combinaison: <ul><li>du no. immeuble</li><li>du nom de la rue</li><li>de la ville</li><li>du code postal</li></ul> "
+        "examples": "<p>Permet de rechercher des adresses, des lieux, des entreprises ou des coordonnées.</p><p>Les recherches d'adresses peuvent être effectuées selon une combinaison: <ul><li>du no. immeuble</li><li>du nom de la rue</li><li>de la ville</li><li>du code postal</li></ul></p><p>Exemple de coordonnées :<ul><li>Degré décimal:<br>-68.165547, 48.644546</li><li>Degré minute seconde:<br>-68 9 56, 48 38 40</li></ul></p>"
       }
     },
     "geo": {
