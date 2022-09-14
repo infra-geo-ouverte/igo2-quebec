@@ -4,15 +4,6 @@
   background-color: rgb(255, 255, 255);
 }
 
-// This is needed because whe using the
-// sidenav "side" mode, the z-index is 1
-// and the sidenav appears below our backdrop.
-// The "side" mode is required to prevent
-// the sidenav from focusing a random button on open.
-:host ::ng-deep mat-sidenav {
-  z-index: 3 !important;
-}
-
 mat-sidenav {
   @extend %box-shadowed-bottom-right;
 
@@ -31,15 +22,10 @@ mat-sidenav {
 }
 
 .app-sideresult-content {
-  //top: $app-sidenav-margin-top;
-  //height: $app-sidenav-content-height;
   height: 100%;
   display: block;
   position: relative;
   overflow: hidden;
-  //@include mobile {
-  //  height: calc(100% - #{$app-sidenav-margin-top});
-  //}
 }
 
 app-sideresult {
@@ -49,10 +35,8 @@ app-sideresult {
 ::ng-deep igo-search-results {
   position: relative;
   left: $portal-left!important;
-  //width: calc(#{$search-bar-width} - (2 * #{$igo-margin}))
   width: 100%;
   display: contents;
-  //height: calc(100% - #{$igo-icon-size} - #{$igo-margin});
   height: 100%;
 }
 
@@ -92,9 +76,9 @@ position: absolute;
   to { opacity: 1; }
 }
 
-mat-sidenav::backdrop {
+/*mat-sidenav::backdrop {
   z-index: 999;
-}
+}*/
 
 app-search-results-tool {
   width: 100%;
