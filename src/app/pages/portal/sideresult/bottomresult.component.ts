@@ -9,13 +9,15 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
+
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
-
 import { BehaviorSubject } from 'rxjs';
 
-import { IgoMap, FEATURE,
+import {
+  IgoMap,
+  FEATURE,
   Feature,
   FeatureMotion,
   GoogleLinks,
@@ -25,10 +27,8 @@ import { IgoMap, FEATURE,
   ProjectionService,
   Research,
   SearchResult,
-  SearchService,
-  SearchSourceService,
-  sourceCanSearch,
-  sourceCanReverseSearch} from '@igo2/geo';
+  SearchService
+} from '@igo2/geo';
 import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
@@ -111,7 +111,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     private searchState: SearchState,
     private searchService: SearchService,
     private mediaService: MediaService,
-    private searchSourceService: SearchSourceService,
     private elRef: ElementRef
     ) {
       // SEARCH

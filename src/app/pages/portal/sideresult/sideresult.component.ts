@@ -9,14 +9,15 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
-import * as proj from 'ol/proj';
 
+import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
-
 import { BehaviorSubject } from 'rxjs';
 
-import { IgoMap, FEATURE,
+import {
+  IgoMap,
+  FEATURE,
   Feature,
   FeatureMotion,
   GoogleLinks,
@@ -26,7 +27,8 @@ import { IgoMap, FEATURE,
   ProjectionService,
   Research,
   SearchResult,
-  SearchService } from '@igo2/geo';
+  SearchService
+} from '@igo2/geo';
 import { ToolState, CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
@@ -75,15 +77,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public igoSearchPointerSummaryEnabled: boolean = false;
 
   public termSplitter: string = '|';
-  /*
-  public map = new IgoMap({
-    overlay: true,
-    controls: {
-      attribution: {
-        collapsed: true
-      }
-    }
-  });*/
 
   public view = {
     center: [-73, 47.2],
