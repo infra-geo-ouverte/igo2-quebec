@@ -30,14 +30,16 @@ mat-sidenav {
     height: 100%;
 }
 
-.app-sidenav-content {
-  top: $app-sidenav-margin-top;
-  height: $app-sidenav-content-height;
+.app-sideresult-content {
+  //top: $app-sidenav-margin-top;
+  //height: $app-sidenav-content-height;
+  height: 100%;
   display: block;
   position: relative;
-  @include mobile {
-    height: calc(100% - #{$app-sidenav-margin-top});
-  }
+  overflow: hidden;
+  //@include mobile {
+  //  height: calc(100% - #{$app-sidenav-margin-top});
+  //}
 }
 
 app-sideresult {
@@ -47,9 +49,11 @@ app-sideresult {
 ::ng-deep igo-search-results {
   position: relative;
   left: $portal-left!important;
-  width: calc(#{$search-bar-width} - (2 * #{$igo-margin}));
+  //width: calc(#{$search-bar-width} - (2 * #{$igo-margin}))
+  width: 100%;
   display: contents;
-  height: calc(100% - #{$igo-icon-size} - #{$igo-margin});
+  //height: calc(100% - #{$igo-icon-size} - #{$igo-margin});
+  height: 100%;
 }
 
 igo-search-results-tool {
@@ -94,9 +98,10 @@ mat-sidenav::backdrop {
 
 app-search-results-tool {
   width: 100%;
+  height: 100%;
   padding: 0 16px;
   display: flex;
-  margin: auto;
+  padding-top: 60px;
 }
 
 ::ng-deep app-search-results-tool > div > section > h4 > strong {
