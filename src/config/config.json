@@ -28,5 +28,6 @@
   },
   "language": {
     "prefix": ["./locale/", "./particular/locale/"]
-    }
+    },
+  "setTarget": "app-footer"
 }

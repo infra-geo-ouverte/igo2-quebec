@@ -66,6 +66,15 @@ igo-search-bar, igo-search-results igo-list, .baselayers {
   animation-fill-mode: forwards;
 }
 
+.igo-baselayers-switcher-mobile {
+  bottom: 48px!important;
+  left: 4px;
+}
+
+.igo-baselayers-switcher-mobile {
+  bottom: 48px!important;
+}
+
 ::ng-deep igo-search-bar {
   height: 100%;
 }
@@ -141,6 +150,14 @@ igo-search-bar svg {
   display: inline-block!important;
 }
 
+/** search bar mobile **/
+app-bottomresult {
+  position: fixed;
+  display: block;
+  bottom: 0;
+  z-index: 100;
+}
+
 
 /*** Map browser ***/
 igo-map-browser {
@@ -207,17 +224,61 @@ igo-map-browser.toast-offset-attribution
   }
 }
 
+::ng-deep div.ol-scale-line {
+  display: block!important;
+  position: absolute!important;
+  top: 2px!important;
+  left: 10px!important;
+  bottom: unset!important;
+  background: unset!important;
+  color: black;
+  z-index: 9999!important;
+}
+
+::ng-deep .olControlScaleLine {
+  background: white;
+  padding: 5px;
+
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+
+  /* Netscape */
+  -moz-opacity: 0.85;
+
+  /* Good browsers */
+  opacity: 0.85;
+}
+/* ::ng-deep div.ol-scale-line {
+  position: relative !important;
+  background: unset;
+  display: block;
+  left: 2px !important;
+  top: 3px !important;
+  bottom: unset!important;
+} */
+
 /*** Buttons ***/
 
-#map-buttons {
+.map-buttons {
   display: flex;
   flex-direction: column;
   margin-bottom: 5px;
   z-index: 10;
   position: absolute;
-  right: 5px;
   bottom: 0;
   max-height: 50%;
+  right: 4px;
+}
+
+.map-buttons-mobile {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+  z-index: 10;
+  position: absolute;
+  bottom: 48px!important;
+  max-height: 50%;
+  right: 4px;
 }
 
 .igo-zoom-button-container, button, app-legend-button, igo-zoom-button, igo-offline-button, igo-geolocate-button, igo-home-extent-button, #app-legend-button-dialog, mat-dialog-container app-legend-button-dialog, app-legend-button-dialog {

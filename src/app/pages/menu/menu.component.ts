@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-menu',
@@ -8,6 +9,13 @@ import { Component } from '@angular/core';
 export class MenuComponent {
   public color = 'accent';
 
-  constructor() { }
+  constructor(
+    private matDialog: MatDialog
+  ) { }
+
+  closeLegend(){
+  this.matDialog.closeAll;
+}
+
 
 }

@@ -11,7 +11,6 @@ const routes: Routes = [
     { path: 'en-savoir-plus', component: AboutComponent }
   ];
 
-
 @NgModule({
     imports: [RouterModule.forRoot(routes, {
       onSameUrlNavigation: 'reload',

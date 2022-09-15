@@ -113,7 +113,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   public showSearchBar = true;
   public showMenuButton = true;
   public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
 
@@ -162,7 +161,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public showToastPanelForExpansionToggle = false;
   private routeParams: Params;
   public toastPanelHtmlDisplay = false;
-
+  public mobile: boolean;
   public homeExtent: MapExtent;
   public homeCenter: [number, number];
   public homeZoom: number;
@@ -427,6 +426,10 @@ export class PortalComponent implements OnInit, OnDestroy {
       ).subscribe(() => {
         this.computeToastPanelOffsetX();
       });
+    // SEARCH MOBILE
+    if (window.screen.availWidth <= 768) { // 768px portrait
+      this.mobile = true;
+    }
   }
 
   computeToastPanelOffsetX() {

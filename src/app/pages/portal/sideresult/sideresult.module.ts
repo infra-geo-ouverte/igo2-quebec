@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatExpansionModule} from '@angular/material/expansion'; // mobile
 
 import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
 import {
@@ -23,6 +24,7 @@ import {
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
 import { SideResultComponent } from './sideresult.component';
+import { BottomResultComponent } from './bottomresult.component';
 
 @NgModule({
   imports: [
@@ -46,10 +48,11 @@ import { SideResultComponent } from './sideresult.component';
     IgoContextMenuModule,
     IgoAppSearchModule,
     IgoSearchModule.forRoot(),
-    IgoAppSearchResultsToolModule
+    IgoAppSearchResultsToolModule,
+    MatExpansionModule
   ],
-  exports: [SideResultComponent ],
+  exports: [SideResultComponent, BottomResultComponent ],
   //SEARCH
-  declarations: [SideResultComponent]
+  declarations: [SideResultComponent, BottomResultComponent]
 })
 export class AppSideResultModule {}

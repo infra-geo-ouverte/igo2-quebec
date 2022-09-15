@@ -5,7 +5,15 @@
       "center": [-71.938087, 48.446975],
       "zoom": 6,
       "maxZoom": 19,
-      "maxZoomOnExtent": 17
+      "maxZoomOnExtent": 17,
+      "geolocate": false,
+      "alwaysTracking": false,
+      "enableHighAccuracy": false
+    },
+    "controls" :{
+      "scaleLine": {
+        "target": "scaleLine"
+      }
     }
   },
   "layers": [

@@ -9,6 +9,7 @@ import { HeaderModule } from '../header/header.module';
 import { FooterModule } from '../footer/footer.module';
 import { PortalModule } from '../portal';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -22,7 +23,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     PortalModule,
     HeaderModule,
     FooterModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatDialogModule
   ],
   exports:[
     MenuComponent,
