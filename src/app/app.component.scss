@@ -36,29 +36,29 @@ $footer-height: 29px;
 
 //* Spinner *//
 
-::ng-deep igo-spinner {
+igo-spinner {
   position: absolute;
-  top: calc(#{$header-height-mobile} + #{$menu-height-mobile} + 4px) !important;
+  top: calc(#{$header-height-mobile} + 4px) !important;
   right: 4px;
   z-index: 100;
 }
 
-::ng-deep spinner-with-legend-dialog {
+spinner-with-legend-dialog {
   position: absolute;
-  top: calc(#{$header-height-mobile} + #{$menu-height-mobile} + 4px) !important;
+  top: calc(#{$header-height-mobile} + 4px) !important;
   right: 345px;
   z-index: 100;
 }
 
 @media (min-width: 768px){
   igo-spinner {
-    top: calc(#{$header-height} + #{$menu-height} + 4px)!important;
+    top: calc(#{$header-height} + 4px)!important;
     right: 4px;
     z-index: 100;
   }
 
   spinner-with-legend-dialog {
-    top: calc(#{$header-height} + #{$menu-height} + 4px)!important;
+    top: calc(#{$header-height} + 4px)!important;
     right: 345px!important;
     z-index: 100;
   }
