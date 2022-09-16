@@ -1,0 +1,16 @@
+@import './portal.variables';
+
+.layer-toggle {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+    right: 2px;
+    top: calc(4 * #{$igo-margin});
+    background-color: #f1f1f2f0;
+    padding: 8px;
+}
+
+.layer-toggle-title {
+    margin-top: 0;
+} 

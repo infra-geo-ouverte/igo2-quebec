@@ -61,12 +61,14 @@ import { PortalComponent } from './portal.component';
 import { LegendButtonModule } from './legend-button/legend-button.module';
 import { FooterModule } from './../footer/footer.module';
 import { AppSideResultModule } from './sideresult/sideresult.module';
+import { LayerToggleModule } from './layer-toggle/layer-toggle.module';
 
 @NgModule({
   imports: [
     CommonModule,
     MatTooltipModule,
     MatButtonModule,
+    LayerToggleModule,
     MatIconModule,
     IgoCoreModule,
     IgoFeatureModule,
