@@ -7,7 +7,7 @@
     "logo": "assets/images/signature-PIV.svg",
     "logoPrint": "assets/images/signature-PIV.svg"
   },
-  "hasMenu": true,
+  "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
   "hasGeolocateButton": true,
@@ -28,6 +28,5 @@
   },
   "language": {
     "prefix": ["./locale/", "./particular/locale/"]
-    },
-  "setTarget": "app-footer"
+    }
 }
