@@ -42,6 +42,7 @@ span.footer-text a{
     display: flex;
     flex-direction: row;
     left: 2px !important;
+    top: unset!important;
 }
 
 ::ng-deep .map-hasFooter {
