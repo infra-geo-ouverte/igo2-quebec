@@ -22,12 +22,11 @@ IGO2 is having multiple features, such as Web GIS viewer adapted to Desktop and 
 ---
 ### Qu'est-ce qu'IGO2-Québec?
 
-IGO2-Québec est un assemblage basé sur IGO2 qui respecte le système de design du gouvernement du Québec (pour plus d'information, consulter le <a href="https://design.quebec.ca/apercu/systeme" target="_blank">Système de design</a>). Les outils, configurations et interface correspondent au modèle de cartographie publique du gouvernement du Québec.
-
+IGO2-Québec est un assemblage basé sur IGO2 qui respecte le système de design du gouvernement du Québec (pour plus d'information, consulter le <a href="https://design.quebec.ca/apercu/systeme" target="_blank">Système de design</a>).
 ---
 ### What is IGO2-Québec?
 
-IGO2-Québec is an assembly based on IGO2 which respects the design system of the Gouvernement du Québec (for more information, check the <a href="https://design.quebec.ca/apercu/systeme" target="_blank">Système de design</a>). The tools, settings and interface correspond to the public mapping model of the Gouvernment du Quebec.
+IGO2-Québec is an assembly based on IGO2 which respects the design system of the Gouvernement du Québec (for more information, check the <a href="https://design.quebec.ca/apercu/systeme" target="_blank">Système de design</a>).
 
 ---
 
