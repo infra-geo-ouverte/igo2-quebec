@@ -5,8 +5,15 @@
       "center": [-71.938087, 48.446975],
       "zoom": 6,
       "maxZoom": 19,
-      "maxZoomOnExtent": 17
-    }
+      "maxZoomOnExtent": 17,
+      "geolocate": false,
+      "alwaysTracking": false,
+      "enableHighAccuracy": false
+    },
+    "controls" :{
+      "scaleLine": {
+        "target": "scaleLine"
+      }
   },
   "layers": [
     {
@@ -18,7 +25,7 @@
         "url": "https://geoegl.msp.gouv.qc.ca/apis/carto/tms/1.0.0/carte_gouv_qc_ro@EPSG_3857/{z}/{x}/{-y}.png",
         "attributions": "© <a href='http://www.droitauteur.gouv.qc.ca/copyright.php' target='_blank'><img src='https://geoegl.msp.gouv.qc.ca/gouvouvert/public/images/quebec/gouv_qc_logo.png' width='64' height='14'>Gouvernement du Québec</a> / <a href='https://www.igouverte.org/' target='_blank'>IGO2</a>",
         "type": "xyz",
-        "maxZoom": 17,
+        "maxZoom": 19,
         "crossOrigin": "anonymous"
       }
     },
