@@ -70,10 +70,6 @@ export class LayerToggleComponent { // implements OnInit
       const layerOptions = (layer.options as MetadataLayerOptions) || {};
       const dataSourceOptions = layer.dataSource.options || {};
       const metadata = layerOptions.metadata || ({} as MetadataOptions);
-      const keywords = metadata.keywordList || [];
-      const layerKeywords = keywords.map((kw: string) => {
-        return kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      });
 
       //if (layer.title === 'Régions administratives') { //if (value="median")*/
         layer.visible === false;
