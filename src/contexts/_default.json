@@ -4,6 +4,7 @@
   "layers": [
     {
       "title": "Régions administratives",
+      "visible": false,
       "sourceOptions": {
         "type": "wms",
         "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/amenagement.fcgi",
@@ -18,6 +19,7 @@
     },
     {
       "title": "Aires fauniques communautaires (AFC)",
+      "visible": false,
       "sourceOptions": {
         "type": "wms",
         "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/environnement.fcgi",
@@ -32,6 +34,7 @@
     },
     {
       "title": "Établissements MTQ",
+      "visible": false,
       "sourceOptions": {
         "type": "wms",
         "url": "https://ws.mapserver.transports.gouv.qc.ca/swtq",

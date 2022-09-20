@@ -1125,4 +1125,5 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
     return visible;
   }
+
 }
