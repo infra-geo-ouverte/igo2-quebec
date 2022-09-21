@@ -21,7 +21,6 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
   }
   private _map: IgoMap;
 
-  //private addedLayers$$: Subscription[] = [];
   //private layers$$: Subscription;
 
   @Input()

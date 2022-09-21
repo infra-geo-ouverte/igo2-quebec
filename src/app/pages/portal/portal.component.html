@@ -6,7 +6,10 @@
       (click)="onBackdropClick()">
     </igo-backdrop>
 
-    <app-layer-toggle></app-layer-toggle>
+    <app-layer-toggle
+    [map]="map"
+    [layers]="layer"
+    ></app-layer-toggle>
 
     <igo-menu-button *ngIf="showMenuButton"
       [sidenavOpened]="sidenavOpened"
