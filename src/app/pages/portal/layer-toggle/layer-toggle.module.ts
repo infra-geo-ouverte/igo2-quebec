@@ -1,4 +1,4 @@
-import { LayerToggleComponent } from '../layer-toggle/layer-toggle.component';
+import { LayerToggleComponent } from './layer-toggle.component';
 import { NgModule } from '@angular/core';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {

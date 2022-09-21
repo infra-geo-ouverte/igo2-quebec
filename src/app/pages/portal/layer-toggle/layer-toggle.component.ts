@@ -1,9 +1,8 @@
 // C:\PROJETS\igo2-lib\packages\geo\src\lib\layer\layer-list\layer-list.component.ts
-
 import { Component, Input, OnInit } from '@angular/core';
 import { Params } from '@angular/router';
 import { LanguageService } from '@igo2/core';
-import { DataSourceService, IgoMap, Layer, LayerService, MetadataLayerOptions, MetadataOptions, OgcFilterableDataSourceOptions, WFSDataSourceOptions } from '@igo2/geo';
+import { DataSourceService, IgoMap, Layer, LayerService, MetadataLayerOptions, MetadataOptions } from '@igo2/geo';
 import { Subscription } from 'rxjs';
 
 
@@ -13,17 +12,17 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./layer-toggle.component.scss']
 })
 export class LayerToggleComponent { // implements OnInit
-
+/*
   public map = new IgoMap({
     controls: {
       attribution: {
         collapsed: true
       }
     }
-  });
+  });*/
 
-  private addedLayers$$: Subscription[] = [];
-  private layers$$: Subscription;
+  //private addedLayers$$: Subscription[] = [];
+  //private layers$$: Subscription;
 
   @Input()
   set layers(value: Layer[]) {
@@ -45,40 +44,19 @@ export class LayerToggleComponent { // implements OnInit
     private languageService: LanguageService,
     private layerService: LayerService
   ) {
-    this.layerService
-    .createAsyncLayer({
-      title: 'Régions administratives',
-      visible: true,
-      sourceOptions: {
-        type: 'wms',
-        url: 'https://geoegl.msp.gouv.qc.ca/apis/wss/amenagement.fcgi',
-        optionsFromCapabilities: true,
-        params: {
-          LAYERS: 'wms_mern_reg_admin',
-          VERSION: '1.3.0'
-        }
-      }
-    })
-    .subscribe(l => this.map.addLayer(l));
   }
 
-  public visibilityFromLayerToggleButton(layers: Layer[]): Layer[] {
-
-    const keepLayerIds = layers.map((layer: Layer) => layer.id);
+  public visibilityFromLayerToggleButton(layers: Layer[]) {
+    //const keepLayerIds = layers.map((layer: Layer) => layer.id);
 
     layers.forEach((layer: Layer) => {
-      const layerOptions = (layer.options as MetadataLayerOptions) || {};
-      const dataSourceOptions = layer.dataSource.options || {};
-      const metadata = layerOptions.metadata || ({} as MetadataOptions);
-
-      //if (layer.title === 'Régions administratives') { //if (value="median")*/
-        layer.visible === false;
-      //}
+      //const layerOptions = (layer.options as MetadataLayerOptions) || {};
+      //const dataSourceOptions = layer.dataSource.options || {};
+      //const metadata = layerOptions.metadata || ({} as MetadataOptions);
+        if (layer.title === 'Régions administratives') { //if (value="median")*/
+          return layer.visible === true;
+      }
     });
-
-    return layers.filter(
-      (layer: Layer) => keepLayerIds.indexOf(layer.id) !== -1
-    );
   }
 
 }
