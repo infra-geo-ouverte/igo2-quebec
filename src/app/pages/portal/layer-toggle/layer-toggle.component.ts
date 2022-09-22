@@ -15,11 +15,11 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
   @Input() map: IgoMap;
 
   @Input()
-   get toggleLayer(): Layer {
-    return this._toggleLayer;
+   get toggleLayer(): Layer[] {
+    return this._toggleLayers;
   }
 
-  public _toggleLayer: Layer;
+  public _toggleLayers: Layer[] = [];
 
   private layers$$: Subscription;
 
@@ -32,7 +32,7 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
 
   ngAfterViewInit() {
     this.layers$$ = this.map.layers$.subscribe(arrayLayers => {
-      this._toggleLayer = arrayLayers.filter(l => !l.baseLayer);
+      this._toggleLayers = arrayLayers.filter(l => !l.baseLayer);
     });
   }
 
@@ -41,7 +41,7 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
   }
 
   visibilityFromLayerToggleButton(toggleLayer:Layer) {
-    for (toggleLayer of this._toggleLayer) {
+    for (toggleLayer of this._toggleLayers) {
       if (toggleLayer.title === ('Régions administratives')) {
         return toggleLayer.visible === true;
       }
