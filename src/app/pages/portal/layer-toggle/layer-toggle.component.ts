@@ -27,9 +27,7 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
   private layers$$: Subscription;
 
   constructor(
-    private languageService: LanguageService,
-    //private layerService: LayerService,
-    //private dataSourceService: DataSourceService
+    private languageService: LanguageService
   ) {
   }
 
