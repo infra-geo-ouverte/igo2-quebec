@@ -12,24 +12,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./layer-toggle.component.scss']
 })
 export class LayerToggleComponent implements AfterViewInit, OnDestroy { // implements OnInit
-  @Input()
-  get map(): IgoMap {
-    return this._map;
-  }
-  set map(value: IgoMap) {
-    this._map = value;
-  }
-  private _map: IgoMap;
-
-  //private layers$$: Subscription;
+  @Input() map: IgoMap;
 
   @Input()
-  set layers(value: Layer[]) {
+  get toggleLayer(): Layer {
+    return this._toggleLayer;
   }
-  get layers(): Layer[] {
-    return this._layers;
-  }
-  private _layers: Layer[];
+
+  private _toggleLayer: Layer;
 
   private layers$$: Subscription;
 
@@ -37,13 +27,14 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
 
   constructor(
     private languageService: LanguageService,
-    private layerService: LayerService
+    //private layerService: LayerService,
+    //private dataSourceService: DataSourceService
   ) {
   }
 
   ngAfterViewInit() {
     this.layers$$ = this.map.layers$.subscribe(arrayLayers => {
-      this._toggleLayers = arrayLayers;
+      this._toggleLayers = arrayLayers.filter(l => !l.baseLayer);
     });
   }
 
@@ -51,6 +42,16 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
     this.layers$$.unsubscribe();
   }
 
+  visibilityFromLayerToggleButton(toggleLayer:Layer) {
+    for (toggleLayer of this._toggleLayers) {
+      if (toggleLayer.title === ('Régions administratives')) {
+        return toggleLayer.visible === true;
+      }
+    }
+  }
+
+  //DRAFTS
+  
   /*public visibilityFromLayerToggleButton(layers: Layer[]) {
     //const keepLayerIds = layers.map((layer: Layer) => layer.id);
 
@@ -64,14 +65,4 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
     });
 
   }*/
-
-  public visibilityFromLayerToggleButton(_toggleLayers: Layer[]){
-    for (const layer of this.map.layers) {
-      if (
-        layer.title === 'Régions administratives'
-      ) {
-        return layer.visible === true;
-      }
-    }
-  }
 }

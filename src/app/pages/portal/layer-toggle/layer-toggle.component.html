@@ -1,9 +1,9 @@
 <div class=layer-toggle>
     <h6 class="layer-toggle-title">Scénario de débit</h6>
     <mat-button-toggle-group #group="matButtonToggleGroup" name="scenario" aria-label="Scénario de débit">
-        <mat-button-toggle value="median" visibility=true color="primary" (click)="visibilityFromLayerToggleButton(layers)" >Médian</mat-button-toggle>
-        <mat-button-toggle value="fort" visibility=true color="primary" (click)="visibilityFromLayerToggleButton(layers)">
+        <mat-button-toggle value="median" visibility=true color="primary" (click)="visibilityFromLayerToggleButton" >Médian</mat-button-toggle>
+        <mat-button-toggle value="fort" visibility=true color="primary" (click)="visibilityFromLayerToggleButton">
             Fort</mat-button-toggle>
     </mat-button-toggle-group>
-    <p>Layer: {{group.value}}</p>
+    <!--p>Layer: {{group.value}}</p!-->
 </div>
