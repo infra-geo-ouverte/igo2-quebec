@@ -18,6 +18,9 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
    get toggleLayer(): Layer[] {
     return this._toggleLayers;
   }
+  set toggleLayer(value: Layer[]) {
+    this.toggleLayer = value;
+  }
 
   public _toggleLayers: Layer[] = [];
 
