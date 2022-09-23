@@ -5,8 +5,13 @@
       [shown]="false"
       (click)="onBackdropClick()">
     </igo-backdrop>
+    <app-layer-toggle
+    [map]="map"
+    [toggleLayer]="toggleLayer"
+    ></app-layer-toggle>
+    
+    <div id="searchDesktop" *ngIf=!mobile>
 
-  <div id="searchDesktop" *ngIf=!mobile>
     <igo-menu-button *ngIf="showMenuButton"
       [sidenavOpened]="sidenavOpened"
       (openSidenav)="onToggleSidenavClick()">

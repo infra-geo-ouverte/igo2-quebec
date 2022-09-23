@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
 import { MenuModule } from './pages/menu/menu.module';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 import {
   provideConfigOptions,
@@ -35,7 +36,8 @@ import { AppComponent } from './app.component';
     HammerModule,
     HeaderModule,
     FooterModule,
-    MenuModule
+    MenuModule,
+    MatButtonToggleModule
     ],
   providers: [
     provideConfigOptions({
