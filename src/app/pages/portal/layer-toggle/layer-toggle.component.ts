@@ -53,15 +53,15 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // OnIni
     let tLayer: Layer;
       for (tLayer of this._toggleLayers){
         switch (value){
-          case 'afc':
+          case ('afc' && 'mtq'):
             tLayer.title === 'Aires fauniques communautaires (AFC)'? tLayer.visible = true : tLayer.visible = false;
             break;
           case 'adm':
             tLayer.title === 'Régions administratives'? tLayer.visible = true : tLayer.visible = false;
             break;
           case 'mtq':
-            tLayer.title === 'Établissements MTQ'? tLayer.visible = true : tLayer.visible = false;
-            break;
+          tLayer.title === 'Établissements MTQ'? tLayer.visible = true : tLayer.visible = false;
+          break;
         }
     }
   }
