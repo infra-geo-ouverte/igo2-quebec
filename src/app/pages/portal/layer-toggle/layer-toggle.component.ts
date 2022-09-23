@@ -11,43 +11,80 @@ import { Subscription } from 'rxjs';
   templateUrl: './layer-toggle.component.html',
   styleUrls: ['./layer-toggle.component.scss']
 })
-export class LayerToggleComponent implements AfterViewInit, OnDestroy { // implements OnInit
+export class LayerToggleComponent implements AfterViewInit, OnDestroy { // OnInit
   @Input() map: IgoMap;
 
-  @Input()
+ /* @Input()
    get toggleLayer(): Layer[] {
     return this._toggleLayers;
   }
   set toggleLayer(value: Layer[]) {
     this.toggleLayer = value;
-  }
+  }*/
 
   public _toggleLayers: Layer[] = [];
 
   private layers$$: Subscription;
+  public area: string;
 
   constructor(
-    private languageService: LanguageService
+    private languageService: LanguageService,
+
   ) {
   }
 
   ngAfterViewInit() {
-    this.layers$$ = this.map.layers$.subscribe(arrayLayers => {
-      this._toggleLayers = arrayLayers.filter(l => !l.baseLayer);
+    let activeLayer: Layer;
+    this.layers$$ = this.map.layers$.subscribe(activeLayers => {
+      //console.log('activeLayers:' + activeLayers);
+      for (activeLayer of activeLayers) {
+        if (
+            activeLayer.title === ('Régions administratives') ||
+            activeLayer.title === ('Aires fauniques communautaires (AFC)') ||
+            activeLayer.title === ('Établissements MTQ')
+        ){
+          this._toggleLayers.push(activeLayer);
+        }
+      }
     });
   }
+
+  toggleLayer(value : string) {
+    let tLayer: Layer;
+      for (tLayer of this._toggleLayers){
+        switch (value){
+          case 'afc':
+            tLayer.title === 'Aires fauniques communautaires (AFC)'? tLayer.visible = true : tLayer.visible = false;
+            break;
+          case 'adm':
+            tLayer.title === 'Régions administratives'? tLayer.visible = true : tLayer.visible = false;
+            break;
+          case 'mtq':
+            tLayer.title === 'Établissements MTQ'? tLayer.visible = true : tLayer.visible = false;
+            break;
+        }
+    }
+  }
+
+/*
+  print() {
+    console.log('_toggleLayersLayer:' + this._toggleLayers);
+    for (toggleLayer of this._toggleLayers) {
+
+    }
+  }*/
 
   ngOnDestroy() {
     this.layers$$.unsubscribe();
   }
-
+/*
   visibilityFromLayerToggleButton(toggleLayer:Layer) {
     for (toggleLayer of this._toggleLayers) {
       if (toggleLayer.title === ('Régions administratives')) {
         return toggleLayer.visible === true;
       }
     }
-  }
+  }*/
 
   //DRAFTS
 
@@ -64,4 +101,6 @@ export class LayerToggleComponent implements AfterViewInit, OnDestroy { // imple
     });
 
   }*/
+
+  //this._toggleLayers = activeLayers.filter(l => !l.baseLayer);
 }

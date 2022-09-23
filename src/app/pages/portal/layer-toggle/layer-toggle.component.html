@@ -1,9 +1,15 @@
-<div class=layer-toggle>
-    <h6 class="layer-toggle-title">Scénario de débit</h6>
-    <mat-button-toggle-group #group="matButtonToggleGroup" name="scenario" aria-label="Scénario de débit">
-        <mat-button-toggle value="median" visibility=true color="primary" (click)="visibilityFromLayerToggleButton" >Médian</mat-button-toggle>
-        <mat-button-toggle value="fort" visibility=true color="primary" (click)="visibilityFromLayerToggleButton">
-            Fort</mat-button-toggle>
-    </mat-button-toggle-group>
-    <!--p>Layer: {{group.value}}</p!-->
+<div class=layer-toggles>
+    <div class=layer-toggle>
+        <h6 class="layer-toggle-title">Couches 1</h6>
+        <mat-button-toggle-group #group="matButtonToggleGroup" name="couches1" aria-label="Couches 1">
+            <mat-button-toggle color="primary" (click)="toggleLayer('adm')">Régions</mat-button-toggle>
+            <mat-button-toggle color="primary" (click)="toggleLayer('afc')">AFC</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <div class=layer-toggle>
+        <h6 class="layer-toggle-title">Couches 2</h6>
+        <mat-button-toggle-group #group="matButtonToggleGroup" name="couches2" aria-label="Couches 2">
+            <mat-button-toggle color="primary" (click)="toggleLayer('mtq')">Établissements</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
 </div>

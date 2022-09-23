@@ -1,9 +1,20 @@
 @import './portal.variables';
 
+.layer-toggles {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    z-index: 1;
+    right: 2px;
+    top: calc(4 * #{$igo-margin});
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 8px;
+}
+
 .layer-toggle {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    //position: absolute;
     z-index: 1;
     right: 2px;
     top: calc(4 * #{$igo-margin});
