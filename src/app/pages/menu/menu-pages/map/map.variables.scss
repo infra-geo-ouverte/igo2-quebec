@@ -45,8 +45,5 @@ $search-bar-width: calc(#{$app-map-sidenav-width} - #{$search-bar-left} - (2 * #
 $search-bar-width-mobile: calc(100% - #{$app-map-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
 
 $app-map-footer-height: 49px;
-$toast-panel-for-expansion-collapsed-height: 48px;
-$toast-panel-for-expansion-max-height: 329px;
-$toast-panel-for-expansion-width: 30%;
 
 $igo-icon-size: 40px;
