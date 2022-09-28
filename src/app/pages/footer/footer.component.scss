@@ -38,10 +38,11 @@ span.footer-text a{
 
 ::ng-deep div.ol-scale-line {
     position: fixed !important;
+    background: unset;
     display: flex;
     flex-direction: row;
-    left: 70px !important;
-    bottom: 3px !important;
+    left: 2px !important;
+    top: unset!important;
 }
 
 ::ng-deep .map-hasFooter {

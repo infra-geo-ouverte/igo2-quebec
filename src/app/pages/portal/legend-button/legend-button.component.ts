@@ -35,7 +35,7 @@ export class LegendButtonComponent {
 })
 export class LegendButtonDialogComponent {
 
-  public getState: MatDialogState
+  public getState: MatDialogState;
 
   get map(): IgoMap {
     return this.mapState.map;

@@ -315,6 +315,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.configService.getConfig('hasGeolocateButton');
 
     this.map.ol.once('rendercomplete', () => {
+      this.readQueryParams();
       if (this.configService.getConfig('geolocate.activateDefault') !== undefined) {
         this.map.geolocationController.tracking = this.configService.getConfig('geolocate.activateDefault');
       }
@@ -348,10 +349,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     }];
 
     this.contextMenuStore.load(contextActions);
-
-    this.map.ol.once('rendercomplete', () => {
-      this.readQueryParams();
-    });
 
     this.onSettingsChange$.subscribe(() => {
       this.searchState.setSearchSettingsChange();
