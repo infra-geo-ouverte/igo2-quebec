@@ -11,23 +11,24 @@ import {
 } from '@angular/core';
 import * as proj from 'ol/proj';
 
-import { LanguageService, MediaService } from '@igo2/core';
+import { MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { IgoMap, FEATURE,
+import {
+  IgoMap,
+  FEATURE,
   Feature,
   FeatureMotion,
   GoogleLinks,
   LayerService,
   MapService,
   Layer,
-  ProjectionService,
   Research,
   SearchResult,
   SearchService } from '@igo2/geo';
-import { CatalogState, SearchState } from '@igo2/integration';
+import { SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -65,7 +66,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
 
-  // SEARCH
   events: string[] = [];
   public showMenuButton: boolean = undefined;
   public hasToolbox: boolean = undefined;
@@ -75,15 +75,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public igoSearchPointerSummaryEnabled: boolean = false;
 
   public termSplitter: string = '|';
-/*
-  public map = new IgoMap({
-    overlay: true,
-    controls: {
-      attribution: {
-        collapsed: true
-      }
-    }
-  });*/
 
   public view = {
     center: [-73, 47.2],
@@ -110,17 +101,12 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   constructor(
     private configService: ConfigService,
-    private catalogState: CatalogState,
-    //SEARCH
-    private languageService: LanguageService,
-    private projectionService: ProjectionService,
     private mapService: MapService,
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
     private mediaService: MediaService
     ) {
-      // SEARCH
       this.mapService.setMap(this.map);
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? false :
         this.configService.getConfig('showMenuButton');
@@ -136,11 +122,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
       })
       .subscribe(layer => {
         this.osmLayer = layer;
-        //this.map.addLayer(layer);
       });
     }
-
-    //SEARCH
 
     onPointerSummaryStatusChange(value) {
       this.igoSearchPointerSummaryEnabled = value;
@@ -198,8 +181,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
       );
     }
 
-  ngOnInit() {;
-    //SEARCH
+  ngOnInit() {
     this.store.load([
       {
         id: 'coordinates',
@@ -221,11 +203,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // SEARCH
     this.store.destroy();
   }
 
-  //SEARCH
   /*
    * Remove a feature to the map overlay
    */
