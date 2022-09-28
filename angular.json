@@ -74,7 +74,9 @@
               "moment",
               "html2canvas",
               "rgbcolor",
-              "jszip"
+              "jszip",
+              "file-saver",
+              "rbush"
             ]
           },
           "configurations": {
