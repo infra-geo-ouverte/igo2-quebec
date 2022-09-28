@@ -10,10 +10,11 @@
       "alwaysTracking": false,
       "enableHighAccuracy": false
     },
-    "controls" :{
+    "controls" : {
       "scaleLine": {
         "target": "scaleLine"
       }
+    }
   },
   "layers": [
     {
