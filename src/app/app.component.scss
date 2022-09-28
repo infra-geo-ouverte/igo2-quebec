@@ -1,4 +1,4 @@
-@import '~@igo2/core/style/partial/core.variables';
+@import '../../node_modules/@igo2/core/style/partial/core.variables';
 @import './pages/portal/portal.variables.scss';
 
 :host {
@@ -42,6 +42,8 @@ igo-spinner {
   right: 4px;
   z-index: 100;
 }
+
+::ng-deep .mat-tooltip-hide { display: none!important; } // temporary fix (https://github.com/angular/components/issues/24614)
 
 spinner-with-legend-dialog {
   position: absolute;
