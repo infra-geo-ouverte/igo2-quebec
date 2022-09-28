@@ -6,7 +6,7 @@
       "title": "Régions administratives",
       "sourceOptions": {
         "type": "wms",
-        "url": "https://geoegl.msp.gouv.qc.ca/apis/ws/amenagement.fcgi",
+        "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/amenagement.fcgi",
         "params": {
           "layers": "wms_mern_reg_admin",
           "version": "1.3.0"
@@ -20,7 +20,7 @@
       "title": "Aires fauniques communautaires (AFC)",
       "sourceOptions": {
         "type": "wms",
-        "url": "https://geoegl.msp.gouv.qc.ca/apis/ws/environnement.fcgi",
+        "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/environnement.fcgi",
         "params": {
           "layers": "WMS_MERN_AFC",
           "version": "1.3.0"

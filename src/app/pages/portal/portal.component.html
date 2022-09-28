@@ -6,36 +6,36 @@
       (click)="onBackdropClick()">
     </igo-backdrop>
     <div id="scaleLine" *ngIf="mobile"></div>
-  <div id="searchDesktop" *ngIf=!mobile>
-    <igo-menu-button *ngIf="showMenuButton"
-      [sidenavOpened]="sidenavOpened"
-      (openSidenav)="onToggleSidenavClick()">
-    </igo-menu-button>
+    <div id="searchDesktop" *ngIf=!mobile>
+      <igo-menu-button *ngIf="showMenuButton"
+        [sidenavOpened]="sidenavOpened"
+        (openSidenav)="onToggleSidenavClick()">
+      </igo-menu-button>
 
-    <igo-search-bar *ngIf="showSearchBar"
-      #searchbar
-      (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
-      appearance="outline"
-      searchIcon ="magnify"
-      [matTooltip]="'search-bar' | translate"
-      matTooltipShowDelay="500"
-      tooltip-position="after"
-      [searchSettings]="false"
-      color="primary"
-      [store]="searchStore"
-      [termSplitter]="termSplitter"
-      (searchTermChange)="onSearchTermChange($event)"
-      (search)="onSearch($event)"
-      (clearFeature)="removeFeatureFromMap()"
-      (searchSettingsChange)="onSearchSettingsChange()">
-    </igo-search-bar>
-    <div *ngIf="mobile" id="scaleLine"></div>
-    <app-sideresult
-      [map]="map"
-      [(opened)]="sidenavOpened"
-      (toolChange)="toolChanged($event)">
-    </app-sideresult>
-  </div>
+      <igo-search-bar *ngIf="showSearchBar"
+        #searchbar
+        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+        appearance="outline"
+        searchIcon ="magnify"
+        [matTooltip]="'search-bar' | translate"
+        matTooltipShowDelay="500"
+        tooltip-position="after"
+        [searchSettings]="false"
+        color="primary"
+        [store]="searchStore"
+        [termSplitter]="termSplitter"
+        (searchTermChange)="onSearchTermChange($event)"
+        (search)="onSearch($event)"
+        (clearFeature)="removeFeatureFromMap()"
+        (searchSettingsChange)="onSearchSettingsChange()">
+      </igo-search-bar>
+      <div *ngIf="mobile" id="scaleLine"></div>
+      <app-sideresult
+        [map]="map"
+        [(opened)]="sidenavOpened"
+        (toolChange)="toolChanged($event)">
+      </app-sideresult>
+    </div>
 
     <igo-map-browser
       #mapBrowser
