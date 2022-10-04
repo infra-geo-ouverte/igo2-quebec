@@ -21,6 +21,7 @@
   "showSearchBar": true,
   "showMenuButton": false,
   "hasToolbox": false,
+  "mobileBreakPoint": "'(min-width: 768px)'",
   "searchSources": {
     "cadastre": {
       "available": false

@@ -7,14 +7,14 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, take, skipWhile, first } from 'rxjs/operators';
+import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
 import { MatPaginator } from '@angular/material/paginator';
 import { AuthOptions, AuthService } from '@igo2/auth';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ObjectUtils } from '@igo2/utils';
 
 import {
@@ -185,6 +185,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   get auth(): AuthOptions {
     return this.configService.getConfig('auth') || [];
   }
+  // Responsiveness
 
   isMobile(): boolean {
     return this.mediaService.getMedia() === Media.Mobile;
@@ -202,11 +203,22 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.mediaService.getOrientation() === MediaOrientation.Portrait;
   }
 
+  public mobileBreakPoint: string;
+  public Breakpoints = Breakpoints;
+  public currentBreakpoint: string = '';
+
+  readonly breakpoint$ = this.breakpointObserver
+  .observe(['(min-width: 768px)'])
+  .pipe(
+    tap(value => console.log(value)),
+    distinctUntilChanged()
+  );
+
   get backdropShown(): boolean {
     return (
-      (this.isMobile() || (this.isTablet() && this.isPortrait())) &&
+      ('(min-width: 768px)' &&
       this.sidenavOpened
-    );
+    ));
   }
 
   get expansionPanelExpanded(): boolean {
@@ -279,7 +291,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     public dialogWindow: MatDialog,
     private storageService: StorageService,
     private directionState: DirectionState,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
   ) {
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
@@ -306,6 +319,8 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (this.igoSearchPointerSummaryEnabled === undefined) {
         this.igoSearchPointerSummaryEnabled = this.storageService.get('searchPointerSummaryEnabled') as boolean || false;
       }
+      this.mobileBreakPoint = this.configService.getConfig('mobileBreakpoint') === undefined ? false :
+      this.configService.getConfig('mobileBreakpoint');
   }
 
   ngOnInit() {
@@ -426,8 +441,19 @@ export class PortalComponent implements OnInit, OnDestroy {
       ).subscribe(() => {
         this.computeToastPanelOffsetX();
       });
-    // SEARCH MOBILE
-    if (window.screen.availWidth <= 768) { // 768px portrait
+
+      // RESPONSIVE BREAKPOINTS
+
+    this.breakpoint$.subscribe(() =>
+    this.breakpointChanged()
+  );
+  }
+
+  private breakpointChanged() {
+    if(this.breakpointObserver.isMatched('(min-width: 768px)')) {
+      this.currentBreakpoint = this.mobileBreakPoint;
+      this.mobile = false;
+    } else {
       this.mobile = true;
     }
   }
