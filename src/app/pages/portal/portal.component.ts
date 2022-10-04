@@ -442,14 +442,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   );
   }
 
-  readonly breakpoint$ = this.breakpointObserver
-  .observe(this.mobileBreakPoint)
-  .pipe(
-    tap(value => console.log(value)),
-    distinctUntilChanged()
-  );
-
-  private breakpointChanged() {
+  public breakpointChanged() {
     if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
@@ -457,6 +450,13 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.mobile = true;
     }
   }
+
+  readonly breakpoint$ = this.breakpointObserver
+  .observe(this.mobileBreakPoint)
+  .pipe(
+    tap(value => console.log(value)),
+    distinctUntilChanged()
+  );
 
   computeToastPanelOffsetX() {
     if (this.isMobile() || !this.isLandscape()) {

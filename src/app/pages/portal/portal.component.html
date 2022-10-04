@@ -5,7 +5,9 @@
       [shown]="false"
       (click)="onBackdropClick()">
     </igo-backdrop>
-    <div id="scaleLine" *ngIf="mobile"></div>
+  
+    <div id="scaleLine"></div>
+  
     <div id="searchDesktop" *ngIf=!mobile>
       <igo-menu-button *ngIf="showMenuButton"
         [sidenavOpened]="sidenavOpened"
@@ -29,7 +31,8 @@
         (clearFeature)="removeFeatureFromMap()"
         (searchSettingsChange)="onSearchSettingsChange()">
       </igo-search-bar>
-      <div *ngIf="mobile" id="scaleLine"></div>
+
+      <div *ngIf="!mobile" id="scaleLine"></div>
 
       <app-sideresult
         [map]="map"
