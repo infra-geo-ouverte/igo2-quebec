@@ -29,7 +29,7 @@ import {
   SearchResult,
   SearchService
 } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState } from '@igo2/integration';
+import { ToolState, CatalogState, SearchState, queryState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -69,6 +69,11 @@ export class SideResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
+
+  //GETINFO
+  get queryStore(): EntityStore<SearchResult> {
+    return this.queryState.store;
+  }
 
   // SEARCH
   events: string[] = [];
@@ -112,7 +117,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
-    private mediaService: MediaService
+    private mediaService: MediaService,
+    private queryState: QueryState
     ) {
       // SEARCH
       this.mapService.setMap(this.map);

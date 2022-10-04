@@ -16,6 +16,19 @@
               (moreResults)="onSearch($event)">
             </app-search-results-tool>
 
+            <app-toast-panel *ngIf="(queryStore.empty$ | async)!==true"
+  [map]="map"
+  [store]="queryStore"
+  [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
+  [@toastPanelOffsetX]="toastPanelOffsetX$ | async"
+  [@toastPanelOffsetY]="getToastPanelOffsetY()"
+  [@toastPanelMobileSidenav]="(isMobile() && sidenavOpened) || (isTablet() && isPortrait() && sidenavOpened)"
+  [opened]="toastPanelOpened"
+  (openedChange)="toastOpenedChange($event)"
+  (fullExtentEvent)="fullExtent = $event"
+  (windowHtmlDisplayEvent)="setToastPanelHtmlDisplay($event)">
+</app-toast-panel>
+
     </div>
   </mat-sidenav>
   <button

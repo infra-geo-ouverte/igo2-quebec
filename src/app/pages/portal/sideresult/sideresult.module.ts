@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion'; // mobile
+import { AppToastPanelModule } from './toast-panel/toast-panel.module';
 
 import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
 import {
@@ -49,7 +50,8 @@ import { BottomResultComponent } from './bottomresult.component';
     IgoAppSearchModule,
     IgoSearchModule.forRoot(),
     IgoAppSearchResultsToolModule,
-    MatExpansionModule
+    MatExpansionModule,
+    AppToastPanelModule
   ],
   exports: [SideResultComponent, BottomResultComponent ],
   //SEARCH
