@@ -185,6 +185,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   get auth(): AuthOptions {
     return this.configService.getConfig('auth') || [];
   }
+
   // Responsiveness
 
   isMobile(): boolean {
@@ -203,16 +204,9 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.mediaService.getOrientation() === MediaOrientation.Portrait;
   }
 
-  public mobileBreakPoint: string;
+  public mobileBreakPoint: string = '(min-width: 768px)';
   public Breakpoints = Breakpoints;
   public currentBreakpoint: string = '';
-
-  readonly breakpoint$ = this.breakpointObserver
-  .observe(['(min-width: 768px)'])
-  .pipe(
-    tap(value => console.log(value)),
-    distinctUntilChanged()
-  );
 
   get backdropShown(): boolean {
     return (
@@ -319,8 +313,8 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (this.igoSearchPointerSummaryEnabled === undefined) {
         this.igoSearchPointerSummaryEnabled = this.storageService.get('searchPointerSummaryEnabled') as boolean || false;
       }
-      this.mobileBreakPoint = this.configService.getConfig('mobileBreakpoint') === undefined ? false :
-      this.configService.getConfig('mobileBreakpoint');
+      this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
+        this.configService.getConfig('mobileBreakPoint');
   }
 
   ngOnInit() {
@@ -442,15 +436,21 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.computeToastPanelOffsetX();
       });
 
-      // RESPONSIVE BREAKPOINTS
-
+    // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
     this.breakpointChanged()
   );
   }
 
+  readonly breakpoint$ = this.breakpointObserver
+  .observe(this.mobileBreakPoint)
+  .pipe(
+    tap(value => console.log(value)),
+    distinctUntilChanged()
+  );
+
   private breakpointChanged() {
-    if(this.breakpointObserver.isMatched('(min-width: 768px)')) {
+    if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
     } else {
