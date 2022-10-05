@@ -16,18 +16,17 @@
               (moreResults)="onSearch($event)">
             </app-search-results-tool>
 
-            <app-toast-panel *ngIf="(queryStore.empty$ | async)!==true"
-  [map]="map"
-  [store]="queryStore"
-  [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
-  [@toastPanelOffsetX]="toastPanelOffsetX$ | async"
-  [@toastPanelOffsetY]="getToastPanelOffsetY()"
-  [@toastPanelMobileSidenav]="(isMobile() && sidenavOpened) || (isTablet() && isPortrait() && sidenavOpened)"
-  [opened]="toastPanelOpened"
-  (openedChange)="toastOpenedChange($event)"
-  (fullExtentEvent)="fullExtent = $event"
-  (windowHtmlDisplayEvent)="setToastPanelHtmlDisplay($event)">
-</app-toast-panel>
+            <app-feature-info *ngIf="(queryStore.empty$ | async)!==true"
+              [map]="map"
+              [store]="queryStore"
+              [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
+            </app-feature-info>
+
+            <igo-feature-details
+              *ngIf="resultSelected$.value"
+              [feature]="resultSelected$.value.data"
+              (htmlDisplayEvent)=setHtmlDisplay($event)>
+            </igo-feature-details>
 
     </div>
   </mat-sidenav>

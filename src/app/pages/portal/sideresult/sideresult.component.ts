@@ -12,7 +12,8 @@ import {
 
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
-import { EntityStore, ActionStore } from '@igo2/common';
+import { EntityStore, ActionStore,   Workspace,
+  WorkspaceStore } from '@igo2/common';
 import { BehaviorSubject } from 'rxjs';
 
 import {
@@ -27,9 +28,11 @@ import {
   ProjectionService,
   Research,
   SearchResult,
-  SearchService
+  SearchService,
+  WfsWorkspace,
+  FeatureWorkspace
 } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState, queryState } from '@igo2/integration';
+import { ToolState, CatalogState, SearchState, QueryState, WorkspaceState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -71,8 +74,32 @@ export class SideResultComponent implements OnInit, OnDestroy {
   @Output() openedChange = new EventEmitter<boolean>();
 
   //GETINFO
+
+  private isResultSelected$ = new BehaviorSubject(false);
+  resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
+
   get queryStore(): EntityStore<SearchResult> {
     return this.queryState.store;
+  }
+
+  public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(
+    undefined
+  );
+
+  get workspaceStore(): WorkspaceStore {
+    return this.workspaceState.store;
+  }
+
+  get workspace(): Workspace {
+    return this.workspaceState.workspace$.value;
+  }
+
+  get toastPanelContent(): string {
+    let content;
+    if (this.workspace !== undefined && this.workspace.hasWidget) {
+      content = 'workspace';
+    }
+    return content;
   }
 
   // SEARCH
@@ -118,7 +145,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
     private searchState: SearchState,
     private searchService: SearchService,
     private mediaService: MediaService,
-    private queryState: QueryState
+    private queryState: QueryState,
+    public workspaceState: WorkspaceState
     ) {
       // SEARCH
       this.mapService.setMap(this.map);

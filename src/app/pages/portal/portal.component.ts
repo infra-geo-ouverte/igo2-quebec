@@ -6,8 +6,8 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
+import { Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap, pairwise } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
 import { MatPaginator } from '@angular/material/paginator';
@@ -67,7 +67,10 @@ import {
   VectorLayer,
   MapExtent,
   IgoMap,
-  DataSourceService
+  DataSourceService,
+  SearchSource,
+  QuerySearchSource,
+  featureToSearchResult
   } from '@igo2/geo';
 
 import {
@@ -83,6 +86,7 @@ import {
 import {
   controlsAnimations, controlSlideX, controlSlideY
 } from './portal.animation';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 @Component({
   selector: 'app-portal',
@@ -213,6 +217,10 @@ export class PortalComponent implements OnInit, OnDestroy {
       ('(min-width: 768px)' &&
       this.sidenavOpened
     ));
+  }
+  
+  get queryStore(): EntityStore<SearchResult> { //FeatureInfo
+    return this.queryState.store;
   }
 
   get expansionPanelExpanded(): boolean {
@@ -439,7 +447,18 @@ export class PortalComponent implements OnInit, OnDestroy {
     // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
     this.breakpointChanged()
-  );
+    );
+
+    //FeatureInfo
+    this.queryStore.count$
+      .pipe(pairwise())
+      .subscribe(([prevCnt, currentCnt]) => {
+        this.map.viewController.padding[2] = currentCnt ? 280 : 0;
+      });
+    this.map.ol.once('rendercomplete', () => {
+      this.readQueryParams();
+    });
+
   }
 
   public breakpointChanged() {
@@ -490,6 +509,69 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   removeFeatureFromMap() {
     this.map.searchResultsOverlay.clear();
+  }
+
+  private getQuerySearchSource(): SearchSource {
+    return this.searchSourceService
+      .getSources()
+      .find(
+        (searchSource: SearchSource) =>
+          searchSource instanceof QuerySearchSource
+      );
+  }
+
+  private getFeatureIsSameActiveWks(feature: Feature): boolean {
+    if (this.workspace) {
+      const featureTitle = feature.meta.sourceTitle;
+      const wksTitle = this.workspace.title;
+      if (wksTitle === featureTitle) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  private getWksActiveOpenInResolution(): boolean {
+    if(this.workspace) {
+      const activeWks = this.workspace as WfsWorkspace;
+      if(activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
+        return true;
+      }
+    }
+    return false;
+   }
+
+  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    const baseQuerySearchSource = this.getQuerySearchSource();
+    const querySearchSourceArray: QuerySearchSource[] = [];
+    const results = event.features.map((feature: Feature) => {
+      let querySearchSource = querySearchSourceArray.find(
+        (s) => s.title === feature.meta.sourceTitle
+      );
+      if (this.getFeatureIsSameActiveWks(feature)) {
+        if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+          return;
+        }
+      }
+      if (!querySearchSource) {
+        querySearchSource = new QuerySearchSource({
+          title: feature.meta.sourceTitle
+        });
+        querySearchSourceArray.push(querySearchSource);
+      }
+      return featureToSearchResult(feature, querySearchSource);
+    });
+    const filteredResults = results.filter(x => x !== undefined);
+    const research = {
+      request: of(filteredResults),
+      reverse: false,
+      source: baseQuerySearchSource
+    };
+    research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+      this.queryStore.load(queryResults);
+    });
   }
 
   /**

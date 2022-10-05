@@ -44,15 +44,15 @@ import {
   StorageScope,
   StorageServiceEvent
 } from '@igo2/core';
-import { QueryState, StorageState } from '@igo2/integration';
+import { QueryState, StorageState, FeatureActionsService } from '@igo2/integration';
 
 @Component({
-  selector: 'app-toast-panel',
-  templateUrl: './toast-panel.component.html',
-  styleUrls: ['./toast-panel.component.scss'],
+  selector: 'app-feature-info',
+  templateUrl: './feature-info.component.html',
+  styleUrls: ['./feature-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToastPanelComponent implements OnInit, OnDestroy {
+export class FeatureInfoComponent implements OnInit, OnDestroy {
   static SWIPE_ACTION = {
     RIGHT: 'swiperight',
     LEFT: 'swipeleft',
@@ -312,12 +312,12 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
         this.store.entities$
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
     }
-
+/*
     this.storageChange$$ = this.storageService.storageChange$
       .pipe(skipWhile((storageChange: StorageServiceEvent) => storageChange.key !== 'zoomAuto'))
       .subscribe((change) => {
         this.zoomAuto = change.currentValue;
-      });
+      });*/
 
     this.actionStore.load([
       {
@@ -639,13 +639,13 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
   }
 
   swipe(action: string) {
-    if (action === ToastPanelComponent.SWIPE_ACTION.RIGHT) {
+    if (action === FeatureInfoComponent.SWIPE_ACTION.RIGHT) {
       this.previousResult();
-    } else if (action === ToastPanelComponent.SWIPE_ACTION.LEFT) {
+    } else if (action === FeatureInfoComponent.SWIPE_ACTION.LEFT) {
       this.nextResult();
-    } else if (action === ToastPanelComponent.SWIPE_ACTION.UP) {
+    } else if (action === FeatureInfoComponent.SWIPE_ACTION.UP) {
       this.opened = true;
-    } else if (action === ToastPanelComponent.SWIPE_ACTION.DOWN) {
+    } else if (action === FeatureInfoComponent.SWIPE_ACTION.DOWN) {
       this.opened = false;
     }
   }

@@ -47,6 +47,9 @@
       igoLayerContext
       igoDropGeoFile
       [map]="map"
+      igoQuery
+      [queryFeatures]="true"
+      (query)="onMapQuery($event)"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
         
         <igo-baselayers-switcher
