@@ -7,67 +7,6 @@
     tabindex="0"
     (keydown)="handleKeyboardEvent($event)">
 
-    <igo-actionbar
-      id="igo-actionbar"
-      panelLeftButton
-      [store]="actionStore"
-      [withIcon]="true"
-      [icon]="icon"
-      [withTitle]="actionbarMode === 'overlay'"
-      [horizontal]="true"
-      [mode]="actionbarMode">
-    </igo-actionbar>
-
-    <button
-      *ngIf="resultSelected$.value"
-      mat-icon-button
-      igoStopPropagation
-      panelLeftButton
-      [matTooltip]="((isSelectedResultOutOfView$ | async) ? 'toastPanel.zoomOnFeatureTooltipOutOfView' : 'toastPanel.zoomOnFeatureTooltip') | translate"
-      matTooltipShowDelay="500"
-      (click)="zoomTo()">
-      <mat-icon
-      [matBadge]="(isSelectedResultOutOfView$ | async) ? '!' : ''"
-      matBadgeColor="accent"
-      matBadgeSize="small"
-      [matBadgeHidden]="(isSelectedResultOutOfView$ | async)!==true"     
-      svgIcon="magnify-plus-outline"></mat-icon>
-    </button>
-
-    <button
-      *ngIf="resultSelected$.value"
-      [disabled]="results[0].meta.id === resultSelected$.value.meta.id"
-      mat-icon-button
-      igoStopPropagation
-      panelLeftButton
-      [matTooltip]="'toastPanel.previousFeatureTooltip' | translate"
-      matTooltipShowDelay="500"
-      (click)="previousResult()">
-      <mat-icon svgIcon="chevron-left"></mat-icon>
-    </button>
-
-    <button
-      *ngIf="resultSelected$.value"
-      [disabled]="results[results.length-1].meta.id === resultSelected$.value.meta.id"
-      mat-icon-button
-      igoStopPropagation
-      panelRightButton
-      [matTooltip]="'toastPanel.nextFeatureTooltip' | translate"
-      matTooltipShowDelay="500"
-      (click)="nextResult()">
-      <mat-icon svgIcon="chevron-right"></mat-icon>
-    </button>
-
-    <button
-     *ngIf = "isDesktop()"
-      mat-icon-button
-      igoStopPropagation
-      panelRightButton
-      (click)="resizeWindows()"
-      [matTooltip]="((this.fullExtent$ | async) ? 'toastPanel.standardExtentTooltip' : 'toastPanel.fullExtentTooltip') | translate"
-      matTooltipShowDelay="500">
-      <mat-icon svgIcon={{iconResizeWindows}}></mat-icon>
-    </button>
     <button
       mat-icon-button
       igoStopPropagation
@@ -83,27 +22,10 @@
         [feature]="resultSelected$.value.data"
         (htmlDisplayEvent)=setHtmlDisplay($event)>
       </igo-feature-details>
-
-      <igo-search-results
-        *ngIf="!resultSelected$.value"
-        [map]="map"
-        [store]="store"
-        [showIcons]="true"
-        [withZoomButton]="withZoomButton"
-        (resultFocus)="focusResult($event)"
-        (resultUnfocus)="unfocusResult($event, true)"
-        (resultSelect)="selectResult($event)">
-      </igo-search-results>
     </div>
   </igo-panel>
 </ng-template>
 
-<div *ngIf="isMobile(); else toast"
-class="swipe-fix"
-(swipeleft)="swipe($event.type)"
-(swiperight)="swipe($event.type)"
-(swipeup)="swipe($event.type)"
-(swipedown)="swipe($event.type)">
-
-<ng-template [ngTemplateOutlet]="toast"></ng-template>
+<div *ngIf="isMobile(); else toast">
+  <ng-template [ngTemplateOutlet]="toast"></ng-template>
 </div>
