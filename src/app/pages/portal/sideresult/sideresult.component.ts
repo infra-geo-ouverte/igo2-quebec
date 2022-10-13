@@ -11,8 +11,9 @@ import {
 } from '@angular/core';
 
 import * as proj from 'ol/proj';
-import { LanguageService, MediaService } from '@igo2/core';
+import { MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
+
 import { BehaviorSubject } from 'rxjs';
 
 import {
@@ -24,12 +25,11 @@ import {
   LayerService,
   MapService,
   Layer,
-  ProjectionService,
   Research,
   SearchResult,
   SearchService
 } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState } from '@igo2/integration';
+import { SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -70,7 +70,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
 
-  // SEARCH
   events: string[] = [];
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
@@ -102,19 +101,13 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
 
   constructor(
-    private toolState: ToolState,
     private configService: ConfigService,
-    private catalogState: CatalogState,
-    //SEARCH
-    private languageService: LanguageService,
-    private projectionService: ProjectionService,
     private mapService: MapService,
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
     private mediaService: MediaService
     ) {
-      // SEARCH
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
@@ -130,8 +123,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
         this.osmLayer = layer;
       });
     }
-
-    //SEARCH
 
     onPointerSummaryStatusChange(value) {
       this.igoSearchPointerSummaryEnabled = value;
@@ -190,7 +181,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    //SEARCH
     this.store.load([
       {
         id: 'coordinates',
@@ -212,11 +202,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // SEARCH
     this.store.destroy();
   }
 
-  //SEARCH
   /*
    * Remove a feature to the map overlay
    */
