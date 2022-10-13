@@ -13,7 +13,7 @@ $footer-height: 29px;
 $portal-height-hasHeader-mobile: calc( 100% - #{$header-height-mobile});
 $portal-height-hasFooter-hasHeader-mobile: calc( 100% - #{$footer-height} - #{$header-height-mobile} );
 $portal-height-hasMenu-hasHeader-mobile: calc( 100% - #{$header-height-mobile} - #{$menu-height-mobile} );
-$portal-height-hasMenu-hasHeader-hasMenu-mobile: 300px;//calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} );
+$portal-height-hasMenu-hasHeader-hasFooter-mobile: 300px;//calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} );
 $portal-height-hasMenu-mobile: calc( 100% - #{$menu-height-mobile});
 $portal-height-hasFooter: calc( 100% - #{$footer-height} );
 $portal-height-hasHeader: calc( 100% - #{$header-height});

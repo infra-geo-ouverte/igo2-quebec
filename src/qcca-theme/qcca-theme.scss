@@ -164,6 +164,10 @@ display: none;
 align-self: flex-end !important;
 }
 
+ul, ol {
+    padding: 2px 1rem;
+}
+
 .piv {
 color: #fff;
 font: normal 1rem/1rem "Roboto", sans-serif;

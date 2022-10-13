@@ -48,7 +48,7 @@ export const environment: Environment = {
         searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/',
         order: 2,
         params: {
-          limit: '8'
+          limit: '5'
         }
       },
       coordinatesreverse: {

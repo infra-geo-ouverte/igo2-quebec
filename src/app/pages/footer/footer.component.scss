@@ -33,25 +33,28 @@ span.footer-text a{
     text-decoration: none;
 }
 
-
-//**Scale**//
-
-::ng-deep div.ol-scale-line {
-    position: fixed !important;
-    background: unset;
-    display: flex;
-    flex-direction: row;
-    left: 2px !important;
-    top: unset!important;
-}
-
 ::ng-deep .map-hasFooter {
     height: calc( 100% - #{$footer-height} ) !important;
 }
+
+// scale
 
 ::ng-deep .ol-scale-line-inner {
     border: 1px solid black;
     color: black;
     border-top: none;
     order: 1;
-}
+  }
+  
+  ::ng-deep div.ol-scale-line {
+    position: fixed!important;
+    display: flex;
+    flex-direction: row;
+    top: unset!important;
+    left: 10px!important;
+    bottom: 3px!important;
+    background: unset!important;
+    color: black;
+    z-index: 5!important;
+    transform: unset!important;
+  }

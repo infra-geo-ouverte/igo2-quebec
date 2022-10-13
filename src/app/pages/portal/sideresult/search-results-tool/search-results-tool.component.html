@@ -1,7 +1,7 @@
 <div *ngIf="(!store || store.stateView.empty) && (debouncedEmpty$ | async) " style="margin: 10px;">
   <section class="mat-typography">
-    <h4><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h4>
-    <p><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></p>
+    <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
+    <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
     <div [innerHTML]="'igo.integration.searchResultsTool.examples' | translate | sanitizeHtml"></div>
 </section>
 </div>

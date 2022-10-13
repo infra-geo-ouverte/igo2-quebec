@@ -144,6 +144,10 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   private format = new olFormatGeoJSON();
 
+  get searchStore(): EntityStore<SearchResult> {
+    return this.searchState.store;
+  }
+
   constructor(
     private mapState: MapState,
     private searchState: SearchState,
