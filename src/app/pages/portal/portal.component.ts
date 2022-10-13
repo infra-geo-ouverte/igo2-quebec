@@ -451,7 +451,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   readonly breakpoint$ = this.breakpointObserver
   .observe(this.mobileBreakPoint)
   .pipe(
-    tap(value => console.log(value)),
+    tap(() => {}),
     distinctUntilChanged()
   );
 
