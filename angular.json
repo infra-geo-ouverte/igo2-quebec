@@ -67,7 +67,16 @@
               "core-js/modules/es.array.reduce.js",
               "core-js/modules/web.dom-collections.iterator.js",
               "core-js/modules/es.array.iterator.js",
-              "nosleep.js"
+              "nosleep.js",
+              "regenerator-runtime",
+              "bowser",
+              "ts-md5",
+              "moment",
+              "html2canvas",
+              "rgbcolor",
+              "jszip",
+              "file-saver",
+              "rbush"
             ]
           },
           "configurations": {
@@ -201,8 +210,13 @@
       }
     }
   },
-  "defaultProject": "igo2-quebec",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "cache": {
+      "enabled": false,
+      "environment": "all"
+    }
   }
 }

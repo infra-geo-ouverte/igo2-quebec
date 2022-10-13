@@ -1,5 +1,4 @@
-@import '~@igo2/core/style/partial/media';
-@import '~@igo2/core/style/partial/core.variables';
+@import '../node_modules/@igo2/core/style/partial/media';
 @import 'variables';
 
 $app-mobile-min-space-right: 40px;
@@ -14,7 +13,7 @@ $footer-height: 29px;
 $portal-height-hasHeader-mobile: calc( 100% - #{$header-height-mobile});
 $portal-height-hasFooter-hasHeader-mobile: calc( 100% - #{$footer-height} - #{$header-height-mobile} );
 $portal-height-hasMenu-hasHeader-mobile: calc( 100% - #{$header-height-mobile} - #{$menu-height-mobile} );
-$portal-height-hasMenu-hasHeader-hasMenu-mobile: 300px;//calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} );
+$portal-height-hasMenu-hasHeader-hasFooter-mobile: 300px;//calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} );
 $portal-height-hasMenu-mobile: calc( 100% - #{$menu-height-mobile});
 $portal-height-hasFooter: calc( 100% - #{$footer-height} );
 $portal-height-hasHeader: calc( 100% - #{$header-height});
@@ -35,29 +34,6 @@ $app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
 $app-footer-height: 48px;
 $app-mobile-min-space-right: 40px;
 
-$app-toast-panel-collapsed-height: 46px;
-$app-toast-panel-collapsed-height-mobile: 35px;
-// $app-toast-panel-max-height: 281px;
-// $app-full-toast-panel-max-height: 800px;
-// $app-full-toast-panel-max-width: 750px;
-// $app-toast-panel-width: 30%;
-$app-toast-panel-width-tablet: 500px;
-
-$app-toast-panel-width: 42vw;
-$app-toast-panel-max-width: 600px;
-$app-toast-panel-height: 30vh;
-$app-toast-panel-max-height: 30vh;
-$app-toast-panel-height-mobile: 34vh;
-
-$app-full-toast-panel-width: 45vw;
-$app-full-toast-panel-max-height: 65vh;
-$app-full-toast-panel-height-mobile: 55vh;
-
-$app-toast-panel-html-width: 60vw;
-$app-toast-panel-html-height: 32vh;
-
-$app-toast-panel-html-large-height: 55vh;
-
 $app-sidenav-margin-top: 60px;
 $app-sidenav-height: calc(100% - #{$footer-height} - 4px);
 $app-sidenav-content-height: calc(100% - #{$app-sidenav-margin-top} - #{$footer-height});
@@ -68,6 +44,3 @@ $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-m
 $search-bar-left: 20px;
 
 $app-footer-height: 49px;
-$toast-panel-for-expansion-collapsed-height: 48px;
-$toast-panel-for-expansion-max-height: 329px;
-$toast-panel-for-expansion-width: 30%;

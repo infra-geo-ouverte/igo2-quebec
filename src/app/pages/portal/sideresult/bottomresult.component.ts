@@ -11,9 +11,8 @@ import {
 } from '@angular/core';
 
 import * as proj from 'ol/proj';
-import { MediaService } from '@igo2/core';
+import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
-
 import { BehaviorSubject } from 'rxjs';
 
 import {
@@ -25,25 +24,23 @@ import {
   LayerService,
   MapService,
   Layer,
+  ProjectionService,
   Research,
   SearchResult,
   SearchService
 } from '@igo2/geo';
-import { SearchState } from '@igo2/integration';
+import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
-  selector: 'app-sideresult',
-  templateUrl: './sideresult.component.html',
-  styleUrls: ['./sideresult.component.scss'],
+  selector: 'app-bottomresult',
+  templateUrl: './bottomresult.component.html',
+  styleUrls: ['./bottomresult.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideResultComponent implements OnInit, OnDestroy {
+export class BottomResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-  @Input() hasSearchQuery: boolean = undefined;
-
-  @Input()
-  public hasBackdrop: boolean;
+  @Input() hasSearchQuery: boolean;
 
   @Input()
   get map(): IgoMap {
@@ -70,11 +67,13 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
 
+  // SEARCH
   events: string[] = [];
-  public hasToolbox: boolean = undefined;
+  public showMenuButton: boolean;
   public store = new ActionStore([]);
+  public showSearchBar: boolean;
   public igoSearchPointerSummaryEnabled: boolean = false;
-
+  public panelOpenState: boolean;
   public termSplitter: string = '|';
 
   public view = {
@@ -90,6 +89,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public mapProjection: string;
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
+
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
@@ -102,27 +102,36 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   constructor(
     private configService: ConfigService,
+    private catalogState: CatalogState,
+    //SEARCH
+    private languageService: LanguageService,
+    private projectionService: ProjectionService,
     private mapService: MapService,
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
-    private mediaService: MediaService
+    private mediaService: MediaService,
+    private elRef: ElementRef
     ) {
+      // SEARCH
       this.mapService.setMap(this.map);
-      this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
-        this.configService.getConfig('hasToolbox');
+      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
+        this.configService.getConfig('showSearchBar');
 
-      this.layerService
-        .createAsyncLayer({
-          title: 'OSM',
-          sourceOptions: {
-            type: 'osm'
-          }
-        })
+    this.layerService
+      .createAsyncLayer({
+        title: 'OSM',
+        sourceOptions: {
+          type: 'osm'
+        }
+      })
       .subscribe(layer => {
         this.osmLayer = layer;
+        //this.map.addLayer(layer);
       });
     }
+
+    //SEARCH
 
     onPointerSummaryStatusChange(value) {
       this.igoSearchPointerSummaryEnabled = value;
@@ -134,10 +143,12 @@ export class SideResultComponent implements OnInit, OnDestroy {
       if (termWithoutHashtag.length < 2) {
         this.searchStore.clear();
         this.selectedFeature = undefined;
+        this.panelOpenState = true;
       }
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
+      console.log('onSearch');
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value
@@ -205,6 +216,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
     this.store.destroy();
   }
 
+  //SEARCH
   /*
    * Remove a feature to the map overlay
    */
@@ -260,4 +272,5 @@ export class SideResultComponent implements OnInit, OnDestroy {
       GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
     );
   }
+
 }

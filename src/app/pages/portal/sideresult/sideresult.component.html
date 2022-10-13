@@ -1,35 +1,33 @@
-<mat-sidenav
-  #sidenav
-  mode="side"
-  [autoFocus]="false"
-  [(opened)]="opened">
+<div id="sideresultsDesktop">
+  <mat-sidenav 
+    #sidenav
+    mode="side"
+    [autoFocus]="false"
+    [(opened)]="opened">
 
   <div #content class="app-sideresult-content">
 
-          <app-search-results-tool>  
-            #searchresults
-            [store]="searchStore"
-            [term]="term"
-            [showIcons]="true"
-            [termSplitter]="termSplitter"
-            placeholder="false"
-            [settingsChange$]="settingsChange$"
-            (resultFocus)="onResultFocus($event)"
-            (resultSelect)="onResultFocus($event)"
-            (moreResults)="onSearch($event)">
-          </app-search-results-tool>
+            <app-search-results-tool  
+              #searchresults
+              [showIcons]="true"
+              placeholder="false"
+              (resultFocus)="onResultFocus($event)"
+              (resultSelect)="onResultFocus($event)"
+              (moreResults)="onSearch($event)">
+            </app-search-results-tool>
 
-  </div>
-</mat-sidenav>
-<button
-  [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' "
-  #sidenavbutton
-  mat-raised-button
-  id="sideresult-button"
-  isRoundButton=false
-  isIconButton=true
-  MatDrawerMode="push"
-  (click)="sidenav.toggle()">
-  <mat-icon *ngIf="sidenav.opened" [matTooltip]="'sideresult.close' | translate" matTooltipShowDelay="500" tooltip-position="after"svgIcon="menu-left"></mat-icon>
-  <mat-icon *ngIf="!sidenav.opened" [matTooltip]="'sideresult.open' | translate" matTooltipShowDelay="500" tooltip-position="after" svgIcon="menu-right"></mat-icon>
-</button>
+    </div>
+  </mat-sidenav>
+  <button
+    [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' "
+    #sidenavbutton
+    mat-raised-button
+    id="sideresult-button"
+    isRoundButton=false
+    isIconButton=true
+    MatDrawerMode="push"
+    (click)="sidenav.toggle()">
+    <mat-icon *ngIf="sidenav.opened" [matTooltip]="'sideresult.close' | translate" matTooltipShowDelay="500" tooltip-position="after"svgIcon="menu-left"></mat-icon>
+    <mat-icon *ngIf="!sidenav.opened" [matTooltip]="'sideresult.open' | translate" matTooltipShowDelay="500" tooltip-position="after" svgIcon="menu-right"></mat-icon>
+  </button>
+</div>
