@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion'; // mobile
-import { FeatureInfoModule } from './feature-info/feature-info.module';
+import { FeatureInfoModule } from './toast-panel/feature-info.module';
 
 import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
 import {

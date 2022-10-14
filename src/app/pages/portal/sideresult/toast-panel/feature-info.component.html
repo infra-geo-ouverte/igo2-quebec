@@ -1,7 +1,7 @@
-<ng-template #toast>
-  <igo-panel
+<ng-template #featureInfo>
+  <igo-panel 
+    #featureInfoSelected
     *ngIf="store.entities$ | async"
-    [ngClass] = "getClassPanel()"
     [title]="resultSelected$.value ? getTitle(resultSelected$.value) : ('toastPanel.title' | translate )"
     (click)="onToggleClick($event)"
     tabindex="0"
@@ -26,6 +26,6 @@
   </igo-panel>
 </ng-template>
 
-<div *ngIf="isMobile(); else toast">
-  <ng-template [ngTemplateOutlet]="toast"></ng-template>
+<div *ngIf="isMobile(); else featureInfo">
+  <ng-template [ngTemplateOutlet]="featureInfo"></ng-template>
 </div>

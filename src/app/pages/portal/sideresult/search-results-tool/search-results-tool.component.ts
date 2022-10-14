@@ -4,7 +4,9 @@ import {
   Input,
   OnInit,
   ElementRef,
-  OnDestroy
+  OnDestroy,
+  HostListener,
+  Output, EventEmitter
 } from '@angular/core';
 import { Observable, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -16,6 +18,7 @@ import type { default as OlGeometry } from 'ol/geom/Geometry';
 import pointOnFeature from '@turf/point-on-feature';
 import * as olProj from 'ol/proj';
 import { ConfigService } from '@igo2/core';
+import { FeatureInfoComponent } from '../toast-panel/feature-info.component';
 
 import {
   EntityStore,
@@ -86,6 +89,8 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   public debouncedEmpty$ :BehaviorSubject<boolean> = new BehaviorSubject(true);
   private debouncedEmpty$$: Subscription;
+  public componentName = this.constructor.name;
+  public FeatureInfoComponent = FeatureInfoComponent;
 
   /**
    * Store holding the search results
@@ -148,6 +153,10 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
+  public initialized: boolean = undefined;
+
+  @Output() searchEvent = new EventEmitter();
+
   constructor(
     private mapState: MapState,
     private searchState: SearchState,
@@ -162,6 +171,10 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.initialized = true;
+    if (this.initialized = true) {
+      console.log ('search initialized');
+    }
     this.searchTerm$$ = this.searchState.searchTerm$.subscribe(
       (searchTerm: string) => {
         if (searchTerm !== undefined && searchTerm !== null) {
@@ -367,6 +380,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('change')
   ngOnDestroy() {
     this.topPanelState$$.unsubscribe();
     this.searchTerm$$.unsubscribe();

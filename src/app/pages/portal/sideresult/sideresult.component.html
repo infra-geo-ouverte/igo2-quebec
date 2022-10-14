@@ -1,34 +1,39 @@
-<div id="sideresultsDesktop">
+<div id="sideresultsDesktop" >
   <mat-sidenav 
     #sidenav
     mode="side"
     [autoFocus]="false"
-    [(opened)]="opened">
+    [(opened)]="opened"
+    >
 
     <div #content class="app-sidenav-content">
-
-            <app-search-results-tool  
-              #searchresults
-              [showIcons]="true"
-              placeholder="false"
-              (resultFocus)="onResultFocus($event)"
-              (resultSelect)="onResultFocus($event)"
-              (moreResults)="onSearch($event)">
-            </app-search-results-tool>
-
-            <app-feature-info *ngIf="(queryStore.empty$ | async)!==true"
+    <div>
+      <div #getInfo *ngIf="displayQuery" (searchEvent)="toggleQueryContent()">
+            <app-feature-info
+              #featureInfo
+              (content)="content($event)"
               [map]="map"
-              [store]="queryStore"
-              [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
+              [store]="queryStore">
             </app-feature-info>
 
             <igo-feature-details
-              *ngIf="resultSelected$.value"
+              *ngIf="(resultSelected$.value)"
               [feature]="resultSelected$.value.data"
               (htmlDisplayEvent)=setHtmlDisplay($event)>
             </igo-feature-details>
-
-    </div>
+          </div>
+      </div>
+      <div #search>
+          <app-search-results-tool *ngIf="displaySearch"
+            #searchresults
+            (searchEvent)="toggleSearchContent()"
+            [showIcons]="true"
+            placeholder="false"
+            (resultFocus)="onResultFocus($event)"
+            (resultSelect)="onResultFocus($event)"
+            (moreResults)="onSearch($event)">
+          </app-search-results-tool>
+    </div></div>
   </mat-sidenav>
   <button
     [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' "

@@ -1,3 +1,4 @@
+import { FeatureInfoComponent } from './toast-panel/feature-info.component';
 import {
   Component,
   Input,
@@ -7,7 +8,8 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ElementRef,
-  ViewChild
+  ViewChild,
+  HostListener
 } from '@angular/core';
 
 import * as proj from 'ol/proj';
@@ -32,7 +34,7 @@ import {
   WfsWorkspace,
   FeatureWorkspace
 } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState, QueryState, WorkspaceState } from '@igo2/integration';
+import { ToolState, CatalogState, SearchState, QueryState, WorkspaceState, SearchResultsToolComponent } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -73,7 +75,10 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
 
-  //GETINFO
+    //GETINFO
+
+  public isHtmlDisplay = false;
+  @Output() windowHtmlDisplayEvent = new EventEmitter<boolean>();
 
   private isResultSelected$ = new BehaviorSubject(false);
   resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
@@ -132,6 +137,25 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   public selectedFeature: Feature;
+  //public featureInfoComponent = FeatureInfoComponent;
+  //public initialized = FeatureInfoComponent.initialized;
+
+  //toogle
+/*
+  @ViewChild(FeatureInfoComponent) child: FeatureInfoComponent;
+  @Input()
+  ngSwitch: any;
+
+  public ToggleContent :string;*/
+
+  //public content = "getInfo";
+
+  //public ComponentName = this.componentName;
+
+  //public Content = FeatureInfoComponent.content;
+
+  public displaySearch = true;
+  public displayQuery = false;
 
   constructor(
     private toolState: ToolState,
@@ -181,6 +205,13 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
+      this.displaySearch = true;
+      this.displayQuery = false;
+      this.resultSelected$.next(undefined);
+      this.isResultSelected$.next(false);
+      this.map.queryResultsOverlay.clear();
+      this.store.clear();
+      this.store.entities$.unsubscribe();
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value
@@ -224,7 +255,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    //SEARCH
+    console.log('value ' + this.resultSelected$.value);
     this.store.load([
       {
         id: 'coordinates',
@@ -245,10 +276,26 @@ export class SideResultComponent implements OnInit, OnDestroy {
     ]);
   }
 
+  @HostListener('change')
   ngOnDestroy() {
     // SEARCH
     this.store.destroy();
+    this.store.entities$.unsubscribe();
+    console.log('value ' + this.resultSelected$.value + 'this.store.entities$.unsubscribe(); = ' + (this.store.entities$.unsubscribe()));
   }
+
+    // GETINFO
+    setHtmlDisplay(value: boolean) {
+      if (value === true) {
+        this.isHtmlDisplay = true;
+        this.windowHtmlDisplayEvent.emit(true);
+        this.displaySearch = false;
+        this.displayQuery = true;
+      } else {
+        this.isHtmlDisplay = false;
+        this.windowHtmlDisplayEvent.emit(false);
+      }
+    }
 
   //SEARCH
   /*
@@ -306,4 +353,37 @@ export class SideResultComponent implements OnInit, OnDestroy {
       GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
     );
   }
+/*
+  contentValue(toast: string) {
+    this.toggleContent.(toast);
+  }*/
+/*
+  ToggleContent() {
+    console.log('ToggleContent was init');
+    if (this.hasSearchQuery=true) {
+      console.log('if (this.hasSearchQuery=true)');
+      this.toggleContent = 'search';
+      //this.store.stateView.clear;
+      //this.map.queryResultsOverlay.clear();
+      //this.store.clear();
+    }
+    else if (this.queryState.store) {
+      console.log('this.queryState.store GetInfo');
+      //this.toggleContent = 'getInfo';
+      //this.store.stateView.clear;
+    }
+  }*/
+
+  toggleSearchContent(){
+    this.displaySearch = true;
+    this.displayQuery = false;
+    console.log ('toggleSearchContent ran');
+  }
+
+  toggleQueryContent(){
+    this.displaySearch = false;
+    this.displayQuery = true;
+    console.log ('toggleQueryContent ran');
+  }
+
 }
