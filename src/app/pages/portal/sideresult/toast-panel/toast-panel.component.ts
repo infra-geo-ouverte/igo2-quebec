@@ -1,4 +1,3 @@
-import {SearchResultsToolComponent} from '../search-results-tool/search-results-tool.component';
 import {
   Component,
   Input,
@@ -11,7 +10,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest, Subscription } from 'rxjs';
-import { debounceTime, map, tap } from 'rxjs/operators';
+import { debounceTime, map, skipWhile, tap } from 'rxjs/operators';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olFeature from 'ol/Feature';
 import olPoint from 'ol/geom/Point';
@@ -45,19 +44,21 @@ import {
   StorageScope,
   StorageServiceEvent
 } from '@igo2/core';
-import { QueryState, StorageState, FeatureActionsService, SearchState } from '@igo2/integration';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { QueryState, StorageState } from '@igo2/integration';
 
 @Component({
-  selector: 'app-feature-info',
-  templateUrl: './feature-info.component.html',
-  styleUrls: ['./feature-info.component.scss'],
+  selector: 'app-toast-panel',
+  templateUrl: './toast-panel.component.html',
+  styleUrls: ['./toast-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FeatureInfoComponent implements OnInit, OnDestroy {
-
-  @Input()
-  id: 'featureInfoSelected';
+export class ToastPanelComponent implements OnInit, OnDestroy {
+  static SWIPE_ACTION = {
+    RIGHT: 'swiperight',
+    LEFT: 'swipeleft',
+    UP: 'swipeup',
+    DOWN: 'swipedown'
+  };
 
   get storageService(): StorageService {
     return this.storageState.storageService;
@@ -112,8 +113,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.storageService.set('zoomAuto', value);
   }
   private _zoomAuto = false;
-  private topPanelState$$: Subscription;
-  private searchTerm$$: Subscription;
 
   // To allow the toast to use much larger extent on the map
   get fullExtent(): boolean {
@@ -134,6 +133,9 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.fullExtent
   );
   public isHtmlDisplay = false;
+  public iconResizeWindows = '';
+
+  public icon = 'menu';
 
   public actionStore = new ActionStore([]);
   public actionbarMode = ActionbarMode.Overlay;
@@ -143,10 +145,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   public isSelectedResultOutOfView$ = new BehaviorSubject(false);
   private isSelectedResultOutOfView$$: Subscription;
   private storageChange$$: Subscription;
-
-  //@Output() toggleContent = new EventEmitter<String>();
-  public initialized: boolean;
-  public componentName = this.constructor.name;
+  private initialized = true;
 
   private format = new olFormatGeoJSON();
 
@@ -163,10 +162,18 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   @Output() fullExtentEvent = new EventEmitter<boolean>();
   @Output() windowHtmlDisplayEvent = new EventEmitter<boolean>();
-  @Output() queryEvent = new EventEmitter();
 
   resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
 
+  // @HostBinding('class.app-toast-panel-opened')
+  // get hasOpenedClass() {
+  //   return this.opened;
+  // }
+
+  // @HostBinding('class.app-full-toast-panel-collapsed')
+  // get hasFullCollapsedClass() {
+  //   return !this.opened && this.fullExtent;
+  // }
   getClassPanel() {
     return {
       'app-toast-panel-opened' : this.opened && !this.fullExtent && !this.isHtmlDisplay,
@@ -192,6 +199,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     };
   }
 
+
   @HostBinding('style.visibility')
   get displayStyle() {
     if (this.results.length) {
@@ -202,6 +210,11 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     }
     return 'hidden';
   }
+
+  // @HostBinding('class.app-full-toast-panel-opened')
+  // get hasFullOpenedClass() {
+  //   return this.opened && this.fullExtent;
+  // }
 
   @HostListener('document:keydown.escape', ['$event']) onEscapeHandler(
     event: KeyboardEvent
@@ -242,18 +255,16 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     return this.multiple$;
   }
 
-  public featureInfoSelected = this.resultSelected$.value;
-
   constructor(
     public mediaService: MediaService,
     public languageService: LanguageService,
     private storageState: StorageState,
-    private queryState: QueryState,
-    private searchState: SearchState,
+    private queryState: QueryState
   ) {
     this.opened = this.storageService.get('toastOpened') as boolean;
     this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
     this.fullExtent = this.storageService.get('fullExtent') as boolean;
+    this.setResizeWindowIcon();
   }
 
   private monitorResultOutOfView() {
@@ -264,7 +275,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(100))
       .subscribe((bunch) => {
         const selectedResult = bunch[1];
-        console.log('this.resultSelected$' + this.resultSelected$.value)
         if (!selectedResult) {
           this.isSelectedResultOutOfView$.next(false);
           return;
@@ -275,18 +285,16 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       });
   }
 
+
   ngOnInit() {
     this.store.entities$.subscribe(() => {
       this.initialized = true;
     });
     this.monitorResultOutOfView();
 
-    console.log('value ' + this.resultSelected$.value);
-
     let latestResult;
     let trigger;
     if (this.hasFeatureEmphasisOnSelection) {
-      console.log('this' + this.resultSelected$.value);
       this.resultOrResolution$$ = combineLatest([
         this.focusedResult$.pipe(
           tap((res) => {
@@ -304,12 +312,12 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         this.store.entities$
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
     }
-/*
+
     this.storageChange$$ = this.storageService.storageChange$
       .pipe(skipWhile((storageChange: StorageServiceEvent) => storageChange.key !== 'zoomAuto'))
       .subscribe((change) => {
         this.zoomAuto = change.currentValue;
-      });*/
+      });
 
     this.actionStore.load([
       {
@@ -421,9 +429,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  @HostListener('change')
-  ngOnDestroy() {
-    this.initialized = false;
+  ngOnDestroy(): void {
     if (this.resultOrResolution$$) {
       this.resultOrResolution$$.unsubscribe();
     }
@@ -432,18 +438,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     }
     if (this.storageChange$$) {
       this.storageChange$$.unsubscribe();
-    }
-    /*if (this.searchState) {
-      this.resultOrResolution$$.unsubscribe();
-      this.isSelectedResultOutOfView$$.unsubscribe();
-      this.storageChange$$.unsubscribe();
-    }*/
-  }
-
-  toggleContent(){
-    if (this.isResultSelected$.getValue() === true) {
-      this.store.clear();
-      console.log ('toggleContent ran');
     }
   }
 
@@ -534,7 +528,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.resultSelected$.next(result);
     if (result.data.properties && result.data.properties.target === 'iframe') {
       this.setHtmlDisplay(true);
-      this.toggleContent();
     } else {
       this.setHtmlDisplay(false);
     }
@@ -575,6 +568,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   unselectResult() {
     this.resultSelected$.next(undefined);
     this.isResultSelected$.next(false);
+    this.setHtmlDisplay(false);
     this.store.state.clear();
 
     const features = [];
@@ -593,6 +587,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.map.queryResultsOverlay.clear();
     this.store.clear();
     this.unselectResult();
+    this.setHtmlDisplay(false);
   }
 
   isMobile(): boolean {
@@ -643,6 +638,18 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     moveToOlFeatures(this.map, [localOlFeature], FeatureMotion.Zoom);
   }
 
+  swipe(action: string) {
+    if (action === ToastPanelComponent.SWIPE_ACTION.RIGHT) {
+      this.previousResult();
+    } else if (action === ToastPanelComponent.SWIPE_ACTION.LEFT) {
+      this.nextResult();
+    } else if (action === ToastPanelComponent.SWIPE_ACTION.UP) {
+      this.opened = true;
+    } else if (action === ToastPanelComponent.SWIPE_ACTION.DOWN) {
+      this.opened = false;
+    }
+  }
+
   onToggleClick(e: MouseEvent) {
     if ((e.target as any).className !== 'igo-panel-title') {
       return;
@@ -668,4 +675,42 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       this.windowHtmlDisplayEvent.emit(false);
     }
   }
+
+  isHtmlAndDesktop(): boolean {
+    if (this.isHtmlDisplay && this.isDesktop()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setResizeWindowIcon() {
+    if (this.fullExtent) {
+      this.iconResizeWindows = 'arrow-collapse';
+      // this.iconResizeWindows = 'vector-arrange-below';
+    } else {
+      this.iconResizeWindows = 'arrow-expand';
+      // this.iconResizeWindows = 'crop-square';
+    }
+  }
+
+  resizeWindows() {
+    this.storageService.set('fullExtent', !this.fullExtent);
+    if (this.fullExtent) {
+        this.reduceWindow();
+    } else {
+        this.enlargeWindows();
+      }
+  }
+
+  reduceWindow() {
+    this.fullExtent = false;
+    this.setResizeWindowIcon();
+  }
+
+  enlargeWindows() {
+    this.fullExtent = true;
+    this.setResizeWindowIcon();
+  }
+
 }

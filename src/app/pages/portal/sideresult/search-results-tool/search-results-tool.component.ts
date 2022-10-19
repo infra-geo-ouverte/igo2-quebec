@@ -18,7 +18,6 @@ import type { default as OlGeometry } from 'ol/geom/Geometry';
 import pointOnFeature from '@turf/point-on-feature';
 import * as olProj from 'ol/proj';
 import { ConfigService } from '@igo2/core';
-import { FeatureInfoComponent } from '../toast-panel/feature-info.component';
 
 import {
   EntityStore,
@@ -90,7 +89,8 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   public debouncedEmpty$ :BehaviorSubject<boolean> = new BehaviorSubject(true);
   private debouncedEmpty$$: Subscription;
   public componentName = this.constructor.name;
-  public FeatureInfoComponent = FeatureInfoComponent;
+  public displaySearch = true;
+  public displayQuery = false;
 
   /**
    * Store holding the search results
@@ -470,6 +470,8 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    this.displaySearch = true;
+    this.displayQuery = false;
     const results = event.results;
     const newResults = this.store.entities$.value
       .filter((result: SearchResult) => result.source !== event.research.source)

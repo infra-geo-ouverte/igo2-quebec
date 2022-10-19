@@ -1,0 +1,23 @@
+@import '@igo2/core/style/partial/core.variables';
+
+table {
+  width: 100%;
+}
+
+table td {
+  padding: $igo-padding;
+}
+
+#keyValue{
+   width: 30%;
+ }
+
+table ::ng-deep .routing {
+  cursor: pointer;
+}
+
+iframe {
+  height: calc(100% - 4px);
+  width: 100%;
+  border: 0;
+}

@@ -1,4 +1,3 @@
-import { FeatureInfoComponent } from './toast-panel/feature-info.component';
 import {
   Component,
   Input,
@@ -9,12 +8,13 @@ import {
   ChangeDetectionStrategy,
   ElementRef,
   ViewChild,
-  HostListener
+  HostListener,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
-import { EntityStore, ActionStore,   Workspace,
+import { EntityStore, ActionStore, Workspace,
   WorkspaceStore } from '@igo2/common';
 import { BehaviorSubject } from 'rxjs';
 
@@ -30,11 +30,9 @@ import {
   ProjectionService,
   Research,
   SearchResult,
-  SearchService,
-  WfsWorkspace,
-  FeatureWorkspace
+  SearchService
 } from '@igo2/geo';
-import { ToolState, CatalogState, SearchState, QueryState, WorkspaceState, SearchResultsToolComponent } from '@igo2/integration';
+import { ToolState, CatalogState, SearchState, QueryState, WorkspaceState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -77,7 +75,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
     //GETINFO
 
-  public isHtmlDisplay = false;
   @Output() windowHtmlDisplayEvent = new EventEmitter<boolean>();
 
   private isResultSelected$ = new BehaviorSubject(false);
@@ -107,6 +104,21 @@ export class SideResultComponent implements OnInit, OnDestroy {
     return content;
   }
 
+  // Feature details
+  @Output() selectFeature = new EventEmitter<boolean>();
+
+  @Input()
+  get feature(): Feature {
+    return this._feature;
+  }
+  set feature(value: Feature) {
+    this._feature = value;
+    this.cdRef.detectChanges();
+    this.selectFeature.emit();
+  }
+
+  private _feature: Feature;
+
   // SEARCH
   events: string[] = [];
   public hasToolbox: boolean = undefined;
@@ -128,12 +140,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public mapProjection: string;
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
+
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
-  }
-
-  get isTouchScreen(): boolean {
-    return this.mediaService.isTouchScreen();
   }
 
   public selectedFeature: Feature;
@@ -154,8 +163,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   //public Content = FeatureInfoComponent.content;
 
-  public displaySearch = true;
-  public displayQuery = false;
+  public displaySearch : boolean;
+  public displayQuery : boolean;
 
   constructor(
     private toolState: ToolState,
@@ -170,8 +179,11 @@ export class SideResultComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private mediaService: MediaService,
     private queryState: QueryState,
-    public workspaceState: WorkspaceState
+    public workspaceState: WorkspaceState,
+    private cdRef: ChangeDetectorRef
     ) {
+
+    
       // SEARCH
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
@@ -188,8 +200,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
         this.osmLayer = layer;
       });
     }
-
-    //SEARCH
 
     onPointerSummaryStatusChange(value) {
       this.igoSearchPointerSummaryEnabled = value;
@@ -283,19 +293,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     this.store.entities$.unsubscribe();
     console.log('value ' + this.resultSelected$.value + 'this.store.entities$.unsubscribe(); = ' + (this.store.entities$.unsubscribe()));
   }
-
-    // GETINFO
-    setHtmlDisplay(value: boolean) {
-      if (value === true) {
-        this.isHtmlDisplay = true;
-        this.windowHtmlDisplayEvent.emit(true);
-        this.displaySearch = false;
-        this.displayQuery = true;
-      } else {
-        this.isHtmlDisplay = false;
-        this.windowHtmlDisplayEvent.emit(false);
-      }
-    }
 
   //SEARCH
   /*

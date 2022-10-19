@@ -9,11 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoFlexibleModule, IgoCustomHtmlModule, IgoPanelModule } from '@igo2/common';
 import {
-  IgoFeatureModule,
-  IgoSearchModule,
-  IgoFeatureDetailsModule
+  IgoSearchModule
 } from '@igo2/geo';
-
+import { IgoFeatureModule } from '../feature/feature.module';
+import { IgoFeatureDetailsModule } from '../feature/feature-details/feature-details.module';
 import { SearchResultsToolComponent } from './search-results-tool.component';
 
 /**

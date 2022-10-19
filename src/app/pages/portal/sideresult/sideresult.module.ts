@@ -8,9 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion'; // mobile
-import { FeatureInfoModule } from './toast-panel/feature-info.module';
-
 import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
+import { AppToastPanelModule} from './toast-panel/toast-panel.module';
+import { IgoFeatureModule } from './feature/feature.module';
+import { IgoFeatureDetailsModule} from './feature/feature-details/feature-details.module';
+
 import {
   IgoPanelModule,
   IgoFlexibleModule,
@@ -19,9 +21,8 @@ import {
   IgoContextMenuModule
 } from '@igo2/common';
 import {
-  IgoFeatureModule,
   IgoMapModule,
-  IgoSearchModule
+  IgoSearchModule,
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
 import { SideResultComponent } from './sideresult.component';
@@ -39,7 +40,6 @@ import { BottomResultComponent } from './bottomresult.component';
     IgoFlexibleModule,
     IgoContextManagerModule,
     IgoToolModule,
-    IgoFeatureModule,
     //SEARCH
     MatCardModule,
     IgoMessageModule,
@@ -51,7 +51,9 @@ import { BottomResultComponent } from './bottomresult.component';
     IgoSearchModule.forRoot(),
     IgoAppSearchResultsToolModule,
     MatExpansionModule,
-    FeatureInfoModule
+    AppToastPanelModule,
+    IgoFeatureModule,
+    IgoFeatureDetailsModule
   ],
   exports: [SideResultComponent, BottomResultComponent ],
   //SEARCH

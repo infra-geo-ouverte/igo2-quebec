@@ -7,26 +7,17 @@
     >
 
     <div #content class="app-sidenav-content">
-    <div>
-      <div #getInfo *ngIf="displayQuery" (searchEvent)="toggleQueryContent()">
-            <app-feature-info
-              #featureInfo
-              (content)="content($event)"
-              [map]="map"
-              [store]="queryStore">
-            </app-feature-info>
-
-            <igo-feature-details
-              *ngIf="(resultSelected$.value)"
-              [feature]="resultSelected$.value.data"
-              (htmlDisplayEvent)=setHtmlDisplay($event)>
-            </igo-feature-details>
-          </div>
+      <div #getInfo *ngIf="(queryStore.empty$ | async)!==true">
+      <app-toast-panel 
+        [map]="map"
+        [store]="queryStore"
+        [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
+        > toast-panel
+      </app-toast-panel>
       </div>
-      <div #search>
-          <app-search-results-tool *ngIf="displaySearch"
+      <div #search *ngIf="(queryStore.empty$ | async)===true">
+          <app-search-results-tool 
             #searchresults
-            (searchEvent)="toggleSearchContent()"
             [showIcons]="true"
             placeholder="false"
             (resultFocus)="onResultFocus($event)"

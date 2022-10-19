@@ -2,7 +2,7 @@
 import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule, IgoAppToolModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { IgoFeatureModule} from './sideresult/feature/feature.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -25,7 +25,6 @@ import {
 
 import {
   IgoGeoWorkspaceModule,
-  IgoFeatureModule,
   IgoImportExportModule,
   IgoMapModule,
   IgoQueryModule,
