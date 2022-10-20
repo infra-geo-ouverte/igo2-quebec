@@ -183,7 +183,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     private cdRef: ChangeDetectorRef
     ) {
 
-    
       // SEARCH
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
@@ -215,13 +214,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
-      this.displaySearch = true;
-      this.displayQuery = false;
-      this.resultSelected$.next(undefined);
-      this.isResultSelected$.next(false);
       this.map.queryResultsOverlay.clear();
       this.store.clear();
-      this.store.entities$.unsubscribe();
+      // search
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value

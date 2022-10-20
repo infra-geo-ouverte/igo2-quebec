@@ -313,7 +313,7 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
     }
 
-    this.storageChange$$ = this.storageService.storageChange$
+    this.storageChange$$ = this.storageService.storageChange$ // Cannot read properties of undefined (reading 'key')
       .pipe(skipWhile((storageChange: StorageServiceEvent) => storageChange.key !== 'zoomAuto'))
       .subscribe((change) => {
         this.zoomAuto = change.currentValue;
@@ -582,7 +582,7 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
     this.map.queryResultsOverlay.setFeatures(features, FeatureMotion.None, 'map');
   }
 
-  clear() {
+  public clear() {
     this.clearFeatureEmphasis();
     this.map.queryResultsOverlay.clear();
     this.store.clear();
