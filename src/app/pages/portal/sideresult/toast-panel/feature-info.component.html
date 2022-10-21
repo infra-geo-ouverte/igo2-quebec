@@ -1,0 +1,26 @@
+<igo-panel
+*ngIf="store.entities$ | async"
+class = "featureInfo"
+[title]="resultSelected$.value ? getTitle(resultSelected$.value) : ('toastPanel.title' | translate )"
+(click)="onToggleClick($event)"
+tabindex="0"
+(keydown)="handleKeyboardEvent($event)">
+
+<button
+  mat-icon-button
+  igoStopPropagation
+  panelRightButton
+  (click)="clear()">
+  <mat-icon svgIcon="close"></mat-icon>
+</button>
+
+<div #content class="toast-content">
+
+  <app-feature-details
+    *ngIf="resultSelected$.value"
+    [feature]="resultSelected$.value.data"
+    (htmlDisplayEvent)=setHtmlDisplay($event)>
+  </app-feature-details>
+
+</div>
+</igo-panel>

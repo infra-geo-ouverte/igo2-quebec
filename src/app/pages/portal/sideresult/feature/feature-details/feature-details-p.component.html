@@ -1,0 +1,35 @@
+<div class="igo-striped mat-typography" *ngIf="ready && feature && isObject(feature.properties)">
+  <div *ngFor="let property of filterFeatureProperties(feature) | keyvalue">
+
+      <p *ngIf="feature.properties.target === '_blank' && property.key === 'url'">
+        <mat-icon mat-list-avatar svgIcon="{{icon}}"></mat-icon>
+        <a href="{{property.value}}" target='_blank' rel="noopener noreferrer"> {{ 'igo.geo.targetHtmlUrl' | translate }} {{title}}</a>
+        {{keyValue}} {{property }}
+      </p>
+
+      <p id="keyValue" *ngIf="feature.properties.target === undefined">
+        {{property.key}}
+      </p>
+
+      <p *ngIf="feature.properties.target === undefined && !isObject(property.value) && !isUrl(property.value) && !isEmbeddedLink(property.value)" [innerHTML]="property.value">
+      </p>
+
+      <p *ngIf="feature.properties.target === undefined && isEmbeddedLink(property.value)">
+        <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ getEmbeddedLinkText(property.value) }}</u>
+    </p>
+
+      <p *ngIf="feature.properties.target === undefined && !isObject(property.value) && (isDoc(property.value) || isUrl(property.value)) && !isImg(property.value)">
+        <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ 'igo.geo.targetHtmlUrl' | translate }}</u>
+      </p>
+
+      <p *ngIf="feature.properties.target === undefined && !isObject(property.value) && isUrl(property.value) && isImg(property.value)">
+        <a href="{{property.value}}" target='_blank' (click)="openSecureUrl(property.value)" rel="noopener noreferrer">
+          <img src="{{(property.value | secureImage) | async}}" width="225" height="auto">
+        </a>
+      </p>
+
+      <p *ngIf="feature.properties.target === undefined && isObject(property.value)" [innerHTML]="property.value | json">
+      </p>
+
+    </div>
+</div>

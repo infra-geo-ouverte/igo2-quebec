@@ -1,0 +1,117 @@
+@import '../../portal.variables';
+
+:host {
+  @extend %box-shadowed;
+
+  background-color: white;
+
+  // height: $app-toast-panel-collapsed-height;
+  // max-height: $app-toast-panel-max-height;
+
+  transition: height 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: $igo-padding;
+
+  @include mobile {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+  ::ng-deep div.igo-panel-header {
+    background-color: #fff!important;
+    color: #095797!important;
+}
+
+
+.app-toast-panel-html-large {
+
+  .toast-content {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+
+.app-toast-panel-opened {
+  height: auto;
+  .toast-content {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.app-full-toast-panel-opened {
+  height: auto;
+
+}
+
+
+.app-toast-panel-collapsed {
+  height: 100%;
+  width: 100%;
+}
+
+.app-full-toast-panel-collapsed {
+  height: 100%;
+  width: 100%;
+}
+
+.app-toast-panel-html-collapsed {
+  height: 100%;
+  width: 100%;
+}
+
+igo-panel ::ng-deep .igo-panel-header:hover {
+  cursor: pointer;
+}
+
+igo-panel {
+  height: 100%;
+  outline: none;
+}
+
+igo-panel ::ng-deep h3 {
+  display: flex;
+}
+
+igo-panel ::ng-deep .igo-panel-title {
+  flex-grow: 2;
+  margin: 0;
+}
+
+igo-panel ::ng-deep .igo-panel-header ::ng-deep [panelleftbutton],
+igo-panel ::ng-deep .igo-panel-header ::ng-deep [panelrightbutton] {
+  margin: 0;
+}
+
+igo-panel ::ng-deep .igo-panel-content {
+  -webkit-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  user-select: auto !important;
+}
+
+
+igo-feature-details ::ng-deep iframe {
+  // min-height: 226px;
+  min-height: 24vh;
+
+  @include mobile {
+    min-height: 30vh;
+  }
+}
+
+host.app-full-toast-panel-opened igo-feature-details[_ngcontent-fiq-c23] iframe {
+  min-height: 450px;
+
+  @include mobile {
+    min-height: 350px;
+  }
+}
+
+.swipe-fix {
+  touch-action: pinch-zoom !important;
+}
+
+igo-actionbar {
+  overflow: hidden;
+}

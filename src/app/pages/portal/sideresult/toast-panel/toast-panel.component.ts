@@ -48,8 +48,8 @@ import { QueryState, StorageState } from '@igo2/integration';
 
 @Component({
   selector: 'app-toast-panel',
-  templateUrl: './toast-panel.component.html',
-  styleUrls: ['./toast-panel.component.scss'],
+  templateUrl: './feature-info.component.html',
+  styleUrls: ['./feature-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToastPanelComponent implements OnInit, OnDestroy {
@@ -526,7 +526,8 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
       true
     );
     this.resultSelected$.next(result);
-    if (result.data.properties && result.data.properties.target === 'iframe') {
+    if (result.data.properties) {
+    //if (result.data.properties && result.data.properties.target === 'iframe') {
       this.setHtmlDisplay(true);
     } else {
       this.setHtmlDisplay(false);
@@ -596,7 +597,7 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
   isDesktop(): boolean {
     return this.mediaService.isDesktop();
   }
-
+/*
   handleKeyboardEvent(event) {
     if (event.keyCode === 37) {
       this.previousResult();
@@ -626,6 +627,7 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
       this.selectResult(nextResult);
     }
   }
+*/
 
   zoomTo() {
     const localOlFeature = this.format.readFeature(
@@ -637,7 +639,7 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
     );
     moveToOlFeatures(this.map, [localOlFeature], FeatureMotion.Zoom);
   }
-
+/*
   swipe(action: string) {
     if (action === ToastPanelComponent.SWIPE_ACTION.RIGHT) {
       this.previousResult();
@@ -648,7 +650,7 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
     } else if (action === ToastPanelComponent.SWIPE_ACTION.DOWN) {
       this.opened = false;
     }
-  }
+  }*/
 
   onToggleClick(e: MouseEvent) {
     if ((e.target as any).className !== 'igo-panel-title') {

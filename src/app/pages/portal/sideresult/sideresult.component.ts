@@ -119,6 +119,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   private _feature: Feature;
 
+  public hasFeatureEmphasisOnSelection: Boolean = false;
+
+
   // SEARCH
   events: string[] = [];
   public hasToolbox: boolean = undefined;
@@ -182,7 +185,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     public workspaceState: WorkspaceState,
     private cdRef: ChangeDetectorRef
     ) {
-
       // SEARCH
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
@@ -257,6 +259,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
         [layer.data] as Feature[],
         FeatureMotion.Default
       );
+
+      this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
     }
 
   ngOnInit() {

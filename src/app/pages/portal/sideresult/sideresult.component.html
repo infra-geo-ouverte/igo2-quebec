@@ -11,8 +11,7 @@
       <app-toast-panel 
         [map]="map"
         [store]="queryStore"
-        [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
-        > toast-panel
+        [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
       </app-toast-panel>
       </div>
       <div #search *ngIf="(queryStore.empty$ | async)===true">

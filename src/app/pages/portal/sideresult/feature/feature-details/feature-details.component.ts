@@ -24,8 +24,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-feature-details',
-  templateUrl: './feature-details.component.html',
-  styleUrls: ['./feature-details.component.scss'],
+  templateUrl: './feature-details-p.component.html',
+  styleUrls: ['./feature-details-p.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
