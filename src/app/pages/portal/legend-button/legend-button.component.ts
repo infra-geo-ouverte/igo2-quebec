@@ -46,7 +46,7 @@ export class LegendButtonDialogComponent implements OnInit {
     return this.map.layers$;
   }
 
-  public mapLayersShown:Layer[];
+  public mapLayersShownInLegend:Layer[];
 
   constructor(
     private mapState: MapState
@@ -55,7 +55,7 @@ export class LegendButtonDialogComponent implements OnInit {
   ngOnInit() {
 
     // filters no-legend layers such as the hoverFeature
-    this.mapLayersShown = this.map.layers.filter(layer => (
+    this.mapLayersShownInLegend = this.map.layers.filter(layer => (
       layer.showInLayerList !== false
       ));
 
