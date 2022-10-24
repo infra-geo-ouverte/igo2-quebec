@@ -1,9 +1,10 @@
 <div mat-dialog-actions><button mat-button mat-icon-button mat-dialog-close class="close"><mat-icon svgIcon = "close"></mat-icon></button></div>
 <h4 mat-dialog-title>Légende</h4>
+
 <igo-layer-legend-list
-  [layers]="map.layers"
+  [layers]="mapLayersShown"
   [excludeBaseLayers]="true"
   [allowShowAllLegends]="false"
-  [updateLegendOnResolutionChange]="false"
+  [updateLegendOnResolutionChange]="true"
   [showAllLegendsValue]="false">
 </igo-layer-legend-list>
