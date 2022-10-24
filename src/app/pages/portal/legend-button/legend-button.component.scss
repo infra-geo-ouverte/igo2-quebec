@@ -31,6 +31,7 @@ app-legend-button, ::ng-deep .mat-raised-button {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   igo-layer-legend-list {
     max-height: inherit;
@@ -47,6 +48,10 @@ app-legend-button, ::ng-deep .mat-raised-button {
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
+  }
+
+  igo-layer-legend-item:last-child {
+    margin-bottom: 0;
   }
 
   .igo-layer-legend-container {
@@ -84,12 +89,12 @@ app-legend-button, ::ng-deep .mat-raised-button {
     margin-bottom: 0.8rem;
   }
 
-  .mat-list-text h4:after {
+  .mat-list-item:after {
     content: "";
     display: block;
     width: 1.8rem;
     border-bottom: 3px solid #DAE6F0;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
     padding-top: 2px;
   }
 

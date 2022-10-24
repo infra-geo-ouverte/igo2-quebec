@@ -157,6 +157,10 @@ display: none;
 align-self: flex-end !important;
 }
 
+ul, ol {
+    padding: 2px 1rem;
+}
+
 .piv {
 color: #fff;
 font: normal 1rem/1rem "Roboto", sans-serif;
@@ -345,11 +349,20 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { // removed h3 for conflic
     }
 
 h1 {
-    font-size: 36px;
+    font-size: 48px;
     line-height: 40px;
     font-weight: bold;
     margin-top: 48px;
     margin-bottom: 16px;
+}
+
+@media (max-width: 1200px) {
+    h1 {
+        font-size: 36px;
+        line-height: 40px;
+        margin-top: 48px;
+        margin-bottom: 16px;
+    }
 }
 
 h1:after {
@@ -362,7 +375,7 @@ h1:after {
 }
 
 h2 {
-    font-size: 35px;
+    font-size: 36px;
     line-height: 40px;
     font-weight: bold;
     margin-top: 48px;

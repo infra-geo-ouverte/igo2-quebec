@@ -47,7 +47,7 @@ igo-search-bar {
 
   @include mobile {
     width: $search-bar-width-mobile;
-    max-width: 350px;
+    max-width: 360px;
   }
 }
 
@@ -223,6 +223,49 @@ igo-map-browser.toast-offset-attribution
     bottom: 50px;
   }
 }
+
+/*SCALE*/ 
+
+::ng-deep .ol-scale-line-inner {
+  border: 1px solid black;
+  color: black;
+  border-top: none;
+  order: 1;
+}
+
+::ng-deep div.ol-scale-line {
+  position: absolute!important;
+  display: block;
+  top: 20px!important;
+  bottom: unset;
+  left: 10px!important;
+  background: unset!important;
+  color: black;
+  z-index: 5!important;
+  transform: unset!important;
+}
+
+::ng-deep .olControlScaleLine {
+  background: white;
+  padding: 5px;
+
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+
+  /* Netscape */
+  -moz-opacity: 0.85;
+
+  /* Good browsers */
+  opacity: 0.85;
+}
+/* ::ng-deep div.ol-scale-line {
+  position: relative !important;
+  background: unset;
+  display: block;
+  left: 2px !important;
+  top: 3px !important;
+  bottom: unset!important;
+} */
 
 /*** Buttons ***/
 

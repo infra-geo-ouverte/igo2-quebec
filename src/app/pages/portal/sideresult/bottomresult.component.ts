@@ -9,13 +9,15 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
+
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
-
 import { BehaviorSubject } from 'rxjs';
 
-import { IgoMap, FEATURE,
+import {
+  IgoMap,
+  FEATURE,
   Feature,
   FeatureMotion,
   GoogleLinks,
@@ -25,8 +27,8 @@ import { IgoMap, FEATURE,
   ProjectionService,
   Research,
   SearchResult,
-  SearchService,
-  SearchSourceService} from '@igo2/geo';
+  SearchService
+} from '@igo2/geo';
 import { CatalogState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
@@ -68,21 +70,11 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   // SEARCH
   events: string[] = [];
   public showMenuButton: boolean;
-  public hasToolbox: boolean;
   public store = new ActionStore([]);
   public showSearchBar: boolean;
   public igoSearchPointerSummaryEnabled: boolean = false;
   public panelOpenState: boolean;
   public termSplitter: string = '|';
-/*
-  public map = new IgoMap({
-    overlay: true,
-    controls: {
-      attribution: {
-        collapsed: true
-      }
-    }
-  });*/
 
   public view = {
     center: [-73, 47.2],
@@ -119,7 +111,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     private searchState: SearchState,
     private searchService: SearchService,
     private mediaService: MediaService,
-    private searchSourceService: SearchSourceService,
     private elRef: ElementRef
     ) {
       // SEARCH
@@ -157,15 +148,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
-      const results = event.results;
-      this.searchStore.state.updateAll({ focused: false, selected: false });
-      const newResults = this.searchStore.entities$.value
-        .filter((result: SearchResult) => result.source !== event.research.source)
-        .concat(results);
-      this.searchStore.updateMany(newResults);
-    }
-
-    onSearchResult(event: { research: Research; results: SearchResult[] }) {
+      console.log('onSearch');
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value
