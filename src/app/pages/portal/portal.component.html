@@ -28,7 +28,10 @@
         [termSplitter]="termSplitter"
         (searchTermChange)="onSearchTermChange($event)"
         (search)="onSearch($event)"
-        (clearFeature)="removeFeatureFromMap()"
+        [pointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
+        [searchResultsGeometryEnabled]="searchResultsGeometryEnabled"
+        (searchResultsGeometryStatus)="onSearchResultsGeometryStatusChange($event)"
+        (clearFeature)="onClearSearch()"
         (searchSettingsChange)="onSearchSettingsChange()">
       </igo-search-bar>
 
