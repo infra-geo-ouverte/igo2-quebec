@@ -24,7 +24,7 @@ import { Feature, FeatureMeta } from '../shared/feature.interfaces';
  * as well as disabling the selection of another feature.
  */
 @Component({
-  selector: 'igo-feature-form',
+  selector: 'app-feature-form',
   templateUrl: './feature-form.component.html',
   styleUrls: ['./feature-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

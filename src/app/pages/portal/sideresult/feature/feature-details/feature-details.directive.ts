@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Directive({
   // This directive allow to view the route between the user coordinates and the feature
-  selector: '[igoFeatureDetailsDirective]'
+  selector: '[appFeatureDetailsDirective]'
 })
 
 export class FeatureDetailsDirective implements OnInit {

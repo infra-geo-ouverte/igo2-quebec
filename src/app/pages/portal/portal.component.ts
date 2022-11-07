@@ -218,7 +218,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.sidenavOpened
     ));
   }
-  
+
   get queryStore(): EntityStore<SearchResult> { //FeatureInfo
     return this.queryState.store;
   }
