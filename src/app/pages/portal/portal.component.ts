@@ -614,6 +614,11 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+
+    if (!this.queryState.store.empty) {
+      this.queryState.store.softClear();
+    }
+
     const results = event.results;
 
     const isReverseSearch = !sourceCanSearch(event.research.source);
