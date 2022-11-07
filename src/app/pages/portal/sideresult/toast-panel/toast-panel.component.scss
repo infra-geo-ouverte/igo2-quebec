@@ -5,9 +5,6 @@
 
   background-color: white;
 
-  // height: $app-toast-panel-collapsed-height;
-  // max-height: $app-toast-panel-max-height;
-
   transition: height 280ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: $igo-padding;
 
@@ -15,47 +12,6 @@
     width: 100%;
     min-width: 100%;
   }
-}
-
-
-
-
-.app-toast-panel-html-large {
-
-  .toast-content {
-    height: 100%;
-    width: 100%;
-  }
-}
-
-
-.app-toast-panel-opened {
-  height: auto;
-  .toast-content {
-    height: 100%;
-    width: 100%;
-  }
-}
-
-.app-full-toast-panel-opened {
-  height: auto;
-
-}
-
-
-.app-toast-panel-collapsed {
-  height: 100%;
-  width: 100%;
-}
-
-.app-full-toast-panel-collapsed {
-  height: 100%;
-  width: 100%;
-}
-
-.app-toast-panel-html-collapsed {
-  height: 100%;
-  width: 100%;
 }
 
 igo-panel ::ng-deep .igo-panel-header:hover {

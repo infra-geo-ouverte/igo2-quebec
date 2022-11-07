@@ -47,7 +47,7 @@ import {
 import { QueryState, StorageState } from '@igo2/integration';
 
 @Component({
-  selector: 'app-toast-panel',
+  selector: 'app-feature-info',
   templateUrl: './feature-info.component.html',
   styleUrls: ['./feature-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -164,41 +164,6 @@ export class ToastPanelComponent implements OnInit, OnDestroy {
   @Output() windowHtmlDisplayEvent = new EventEmitter<boolean>();
 
   resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
-
-  // @HostBinding('class.app-toast-panel-opened')
-  // get hasOpenedClass() {
-  //   return this.opened;
-  // }
-
-  // @HostBinding('class.app-full-toast-panel-collapsed')
-  // get hasFullCollapsedClass() {
-  //   return !this.opened && this.fullExtent;
-  // }
-  getClassPanel() {
-    return {
-      'app-toast-panel-opened' : this.opened && !this.fullExtent && !this.isHtmlDisplay,
-      'app-full-toast-panel-opened' :
-        this.opened && this.fullExtent &&
-        !this.isHtmlDisplay,
-
-      'app-toast-panel-html' :
-        this.opened &&
-        !this.fullExtent &&
-        this.resultSelected$.value &&
-        this.isHtmlDisplay,
-
-      'app-toast-panel-html-large' :
-        this.opened &&
-        this.fullExtent &&
-        this.resultSelected$.value &&
-        this.isHtmlDisplay,
-
-      'app-toast-panel-collapsed': !this.opened && !this.fullExtent && !this.isHtmlDisplay,
-      'app-full-toast-panel-collapsed' : !this.opened && this.fullExtent && !this.isHtmlDisplay,
-      'app-toast-panel-html-collapsed' : !this.opened && this.isHtmlDisplay
-    };
-  }
-
 
   @HostBinding('style.visibility')
   get displayStyle() {

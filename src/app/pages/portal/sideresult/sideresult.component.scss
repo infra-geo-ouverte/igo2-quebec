@@ -102,3 +102,12 @@ app-search-results-tool {
 ::ng-deep app-search-results-tool > div > section > h4 > strong {
   font-size: 21px!important;
 }
+
+app-feature-info {
+  position: relative;
+}
+
+::ng-deep .mat-drawer-inner-container {
+  top: 60px;
+  position: relative;
+}

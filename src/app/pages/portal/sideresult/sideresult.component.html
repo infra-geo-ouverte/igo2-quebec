@@ -7,11 +7,11 @@
 
     <div #content class="app-sideresult-content">
       <div #getInfo *ngIf="(queryStore.empty$ | async)!==true">
-      <app-toast-panel 
+      <app-feature-info
         [map]="map"
         [store]="queryStore"
         [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
-      </app-toast-panel>
+      </app-feature-info>
       </div>
       <div #search *ngIf="(queryStore.empty$ | async)===true">
           <app-search-results-tool 
