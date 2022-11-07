@@ -1,12 +1,11 @@
-<div id="sideresultsDesktop" >
+<div id="sideresultsDesktop">
   <mat-sidenav 
     #sidenav
     mode="side"
     [autoFocus]="false"
-    [(opened)]="opened"
-    >
+    [(opened)]="opened">
 
-    <div #content class="app-sidenav-content">
+    <div #content class="app-sideresult-content">
       <div #getInfo *ngIf="(queryStore.empty$ | async)!==true">
       <app-toast-panel 
         [map]="map"
@@ -17,6 +16,8 @@
       <div #search *ngIf="(queryStore.empty$ | async)===true">
           <app-search-results-tool 
             #searchresults
+            [store]="searchStore"
+            [term]="term"
             [showIcons]="true"
             placeholder="false"
             (resultFocus)="onResultFocus($event)"

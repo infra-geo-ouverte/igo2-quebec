@@ -149,23 +149,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   public selectedFeature: Feature;
-  //public featureInfoComponent = FeatureInfoComponent;
-  //public initialized = FeatureInfoComponent.initialized;
-
-  //toogle
-/*
-  @ViewChild(FeatureInfoComponent) child: FeatureInfoComponent;
-  @Input()
-  ngSwitch: any;
-
-  public ToggleContent :string;*/
-
-  //public content = "getInfo";
-
-  //public ComponentName = this.componentName;
-
-  //public Content = FeatureInfoComponent.content;
-
   public displaySearch : boolean;
   public displayQuery : boolean;
 
@@ -264,7 +247,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    console.log('value ' + this.resultSelected$.value);
     this.store.load([
       {
         id: 'coordinates',
@@ -350,26 +332,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     );
   }
 /*
-  contentValue(toast: string) {
-    this.toggleContent.(toast);
-  }*/
-/*
-  ToggleContent() {
-    console.log('ToggleContent was init');
-    if (this.hasSearchQuery=true) {
-      console.log('if (this.hasSearchQuery=true)');
-      this.toggleContent = 'search';
-      //this.store.stateView.clear;
-      //this.map.queryResultsOverlay.clear();
-      //this.store.clear();
-    }
-    else if (this.queryState.store) {
-      console.log('this.queryState.store GetInfo');
-      //this.toggleContent = 'getInfo';
-      //this.store.stateView.clear;
-    }
-  }*/
-
   toggleSearchContent(){
     this.displaySearch = true;
     this.displayQuery = false;
@@ -380,6 +342,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     this.displaySearch = false;
     this.displayQuery = true;
     console.log ('toggleQueryContent ran');
-  }
+  }*/
 
 }
