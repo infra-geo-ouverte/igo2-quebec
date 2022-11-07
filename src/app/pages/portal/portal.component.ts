@@ -544,6 +544,7 @@ export class PortalComponent implements OnInit, OnDestroy {
    }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    this.sidenavOpened = true;
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
     const results = event.features.map((feature: Feature) => {
