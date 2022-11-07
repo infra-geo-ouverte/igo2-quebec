@@ -52,7 +52,7 @@ import { QueryState, StorageState } from '@igo2/integration';
   styleUrls: ['./feature-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToastPanelComponent implements OnInit, OnDestroy {
+export class FeatureInfoComponent implements OnInit, OnDestroy {
   static SWIPE_ACTION = {
     RIGHT: 'swiperight',
     LEFT: 'swipeleft',

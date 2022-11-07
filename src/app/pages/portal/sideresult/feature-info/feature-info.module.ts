@@ -10,7 +10,7 @@ import { IgoLanguageModule } from '@igo2/core';
 import { IgoSearchResultsModule } from '@igo2/geo';
 import { IgoFeatureModule } from '../feature/feature.module';
 
-import { ToastPanelComponent } from './toast-panel.component';
+import { FeatureInfoComponent } from './feature-info.component';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
@@ -28,7 +28,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     IgoFeatureModule,
     IgoSearchResultsModule
   ],
-  exports: [ToastPanelComponent],
-  declarations: [ToastPanelComponent]
+  exports: [FeatureInfoComponent],
+  declarations: [FeatureInfoComponent]
 })
-export class AppToastPanelModule {}
+export class AppFeatureInfoModule {}

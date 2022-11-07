@@ -28,6 +28,7 @@ $portal-left: 16px;
 $app-sidenav-width: calc(400px);
 $search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left});
 $search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
+$search-bar-height: 60px;
 $app-sidenav-margin-top: 50px;
 $app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
 

@@ -108,6 +108,7 @@ app-feature-info {
 }
 
 ::ng-deep .mat-drawer-inner-container {
-  top: 60px;
+  top: $search-bar-height;
   position: relative;
+  height: calc(100% - #{$search-bar-height});
 }

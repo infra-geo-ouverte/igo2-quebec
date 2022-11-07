@@ -9,7 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion'; // mobile
 import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
-import { AppToastPanelModule} from './toast-panel/toast-panel.module';
+import { AppFeatureInfoModule} from './feature-info/feature-info.module';
 import { IgoFeatureModule } from './feature/feature.module';
 import { IgoFeatureDetailsModule} from './feature/feature-details/feature-details.module';
 
@@ -51,7 +51,7 @@ import { BottomResultComponent } from './bottomresult.component';
     IgoSearchModule.forRoot(),
     IgoAppSearchResultsToolModule,
     MatExpansionModule,
-    AppToastPanelModule,
+    AppFeatureInfoModule,
     IgoFeatureModule,
     IgoFeatureDetailsModule
   ],
