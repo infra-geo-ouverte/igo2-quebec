@@ -88,10 +88,17 @@ margin-left: auto;
 display: flex;
 -ms-flex-wrap: wrap;
 flex-wrap: wrap;
+align-content: flex-start;
 height: 100%;
 width: 98%;
-align-content: center;
 margin: auto;
+}
+
+.page {
+    overflow-y: auto!important;
+    overflow-x: auto;
+    height: calc($portal-height-hasMenu-hasHeader - (4 * $igo-margin)); //if no header: $portal-height-hasMenu
+    width: 100%;
 }
 
 .col-6 {
@@ -311,13 +318,6 @@ box-shadow: 0 1px 4px rgb(34 54 84 / 24%);
 }
 
 //** TYPOGRAPHY **//
-
-.page {
-    overflow-y: auto!important;
-    overflow-x: hidden;
-    height: $portal-height-hasMenu-hasHeader; //if no header: $portal-height-hasMenu
-    width: 100%;
-}
 
 a {
 word-break: break-word;
