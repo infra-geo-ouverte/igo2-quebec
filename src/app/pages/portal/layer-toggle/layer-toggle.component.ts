@@ -1,8 +1,7 @@
 // C:\PROJETS\igo2-lib\packages\geo\src\lib\layer\layer-list\layer-list.component.ts
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Params } from '@angular/router';
+import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
 import { LanguageService } from '@igo2/core';
-import { DataSourceService, IgoMap, Layer, LayerService, MetadataLayerOptions, MetadataOptions } from '@igo2/geo';
+import { IgoMap, Layer } from '@igo2/geo';
 import { Subscription } from 'rxjs';
 
 
