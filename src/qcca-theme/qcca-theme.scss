@@ -84,9 +84,13 @@ margin-left: auto;
 }
 
 .row {
+-ms-display: flex;
+display: flex;
+-ms-flex-wrap: wrap;
+flex-wrap: wrap;
+align-content: flex-start;
 height: 100%;
 width: 98%;
-align-content: top;
 margin: auto;
 }
 
