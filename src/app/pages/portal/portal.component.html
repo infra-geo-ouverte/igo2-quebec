@@ -49,6 +49,9 @@
       [map]="map"
       igoHoverFeature
       [igoHoverFeatureEnabled]="true"
+      igoQuery
+      [queryFeatures]="true"
+      (query)="onMapQuery($event)"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
         
       <igo-baselayers-switcher
@@ -67,7 +70,8 @@
 
         <app-bottomresult
           *ngIf="mobile"
-          [map]="map">
+          [map]="map"
+          [mapQueryClick]="mapQueryClick">
         </app-bottomresult>
     </igo-map-browser>
 

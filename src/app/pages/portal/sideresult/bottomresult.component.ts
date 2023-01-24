@@ -29,7 +29,7 @@ import {
   SearchResult,
   SearchService
 } from '@igo2/geo';
-import { CatalogState, SearchState } from '@igo2/integration';
+import { CatalogState, QueryState, SearchState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
 
 @Component({
@@ -66,6 +66,24 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
+  
+  // MapQuery
+
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
+
+  resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
+
+  get queryStore(): EntityStore<SearchResult> {
+    return this.queryState.store;
+  }
+
 
   // SEARCH
   events: string[] = [];
@@ -111,7 +129,8 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     private searchState: SearchState,
     private searchService: SearchService,
     private mediaService: MediaService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private queryState: QueryState
     ) {
       // SEARCH
       this.mapService.setMap(this.map);

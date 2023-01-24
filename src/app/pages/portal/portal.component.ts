@@ -6,7 +6,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
+import { Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
@@ -67,7 +67,10 @@ import {
   VectorLayer,
   MapExtent,
   IgoMap,
-  DataSourceService
+  DataSourceService,
+  SearchSource,
+  QuerySearchSource,
+  featureToSearchResult
   } from '@igo2/geo';
 
 import {
@@ -83,6 +86,7 @@ import {
 import {
   controlsAnimations, controlSlideX, controlSlideY
 } from './portal.animation';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 @Component({
   selector: 'app-portal',
@@ -262,6 +266,13 @@ export class PortalComponent implements OnInit, OnDestroy {
   get workspaceStore(): WorkspaceStore {
     return this.workspaceState.store;
   }
+
+   // GetInfo
+   get queryStore(): EntityStore<SearchResult> { //FeatureInfo
+    return this.queryState.store;
+  }
+
+  public mapQueryClick = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -485,6 +496,102 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.sidenavMediaAndOrientation$$.unsubscribe();
   }
 
+
+  // MapQuery
+  private getQuerySearchSource(): SearchSource {
+    return this.searchSourceService
+      .getSources()
+      .find(
+        (searchSource: SearchSource) =>
+          searchSource instanceof QuerySearchSource
+      );
+  }
+
+  private getFeatureIsSameActiveWks(feature: Feature): boolean {
+    if (this.workspace) {
+      const featureTitle = feature.meta.sourceTitle;
+      const wksTitle = this.workspace.title;
+      if (wksTitle === featureTitle) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  private getWksActiveOpenInResolution(): boolean {
+    if(this.workspace) {
+      const activeWks = this.workspace as WfsWorkspace;
+      if(activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
+        return true;
+      }
+    }
+    return false;
+   }
+
+  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    if (!this.queryState.store.empty) {
+      this.queryState.store.clear(); // clears the info panel
+      this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+      this.mapQueryClick = false;
+    }
+    //this.searchBarTerm = ''; // to clear the searchbar term but it doesn't work
+    //this.term = '';
+    //this.searchState.setSearchTerm('');
+    if(this.configService.getConfig('queryOnlyOne')){
+      event.features = [event.features[0]];
+      this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+    }
+    const baseQuerySearchSource = this.getQuerySearchSource();
+    const querySearchSourceArray: QuerySearchSource[] = [];
+    if (event.features.map) {
+      const results = event.features.map((feature: Feature) => {
+        if (feature) {
+          let querySearchSource = querySearchSourceArray.find(
+            (s) => s.title === feature.meta.sourceTitle
+          );
+          if (this.getFeatureIsSameActiveWks(feature)) {
+            if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+              return;
+            }
+          }
+          if (querySearchSource) {
+            this.queryState.store.softClear(); // clears the info panel
+            this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+            this.mapQueryClick = false;
+          }
+          if (!querySearchSource) {
+            querySearchSource = new QuerySearchSource({
+              title: feature.meta.sourceTitle
+            });
+            querySearchSourceArray.push(querySearchSource);
+            this.sidenavOpened = true;
+            this.mapQueryClick = true;
+          }
+            return featureToSearchResult(feature, querySearchSource);
+        } else {
+          this.closeSidenav();
+          this.mapQueryClick = false;
+        }
+      });
+
+      const filteredResults = results.filter(x => x !== undefined);
+      const research = {
+        request: of(filteredResults),
+        reverse: false,
+        source: baseQuerySearchSource
+      };
+      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+        this.queryStore.load(queryResults);
+      });
+    } else {
+      this.mapQueryClick = false;
+    }
+  }
+
+  // End MapQuery
+
   removeFeatureFromMap() {
     this.map.searchResultsOverlay.clear();
   }
@@ -528,6 +635,11 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    if (!this.queryState.store.empty) {
+      this.queryState.store.softClear();
+      this.mapQueryClick = false;
+    }
+    
     const results = event.results;
 
     const isReverseSearch = !sourceCanSearch(event.research.source);

@@ -25,15 +25,28 @@
         >
       </igo-search-bar>
     </mat-expansion-panel-header>
+    
+        <div #content class="app-sidenav-content">
+    
+          <div #getInfo *ngIf="(queryStore.empty$ | async)!==true">
+    
+            <app-feature-info
+              [map]="map"
+              [store]="queryStore"
+              [mapQueryClick]="mapQueryClick"
+              [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
+            </app-feature-info>
+          </div>
 
-    <app-search-results-tool  
-      #searchresults
-      [showIcons]="true"
-      placeholder="false"
-      (resultSelect)="onResultFocus($event)"
-      (moreResults)="onSearch($event)"
-      >
-    </app-search-results-tool>
-
-  </mat-expansion-panel>
+          <div #search *ngIf="(queryStore.empty$ | async)===true">
+              <app-search-results-tool
+                #searchresults
+                [showIcons]="true"
+                placeholder="false"
+                (resultFocus)="onResultFocus($event)"
+                (resultSelect)="onResultFocus($event)"
+                (moreResults)="onSearch($event)"
+                >
+              </app-search-results-tool>
+        </div>
 </div>
