@@ -1,27 +1,25 @@
-feature-info
-<igo-panel
-*ngIf="store.entities$ | async"
-class = "featureInfo"
-[title]="resultSelected$.value ? getTitle(resultSelected$.value) : ('toastPanel.title' | translate )"
-(click)="onToggleClick($event)"
-tabindex="0"
-(keydown)="handleKeyboardEvent($event)">
+<ng-container
+  *ngIf="(store.entities$ | async)"
+  class = "featureInfo"
+  (keydown)="handleKeyboardEvent($event)">
 
-<button
-  mat-icon-button
-  igoStopPropagation
-  panelRightButton
-  (click)="clear()">
-  <mat-icon svgIcon="close"></mat-icon>
-</button>
+  <button
+    class="clear-button sideresult-closed"
+    mat-icon-button
+    igoStopPropagation
+    (click)="clearButton()"
+    [(mapQueryClick)]="mapQueryClick"
+    (clearFeature)="removeFeatureFromMap()">
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
 
-<div #content class="toast-content">
+  <div #content>
 
-  <app-feature-details
-    *ngIf="resultSelected$.value"
-    [mapQueryClick]="mapQueryClick"
-    [feature]="resultSelected$.value.data">
-  </app-feature-details>
+    <app-feature-details
+      *ngIf="resultSelected$.value"
+      [mapQueryClick]="mapQueryClick"
+      [feature]="resultSelected$.value.data">
+    </app-feature-details>
 
-</div>
-</igo-panel>
+  </div>
+</ng-container>

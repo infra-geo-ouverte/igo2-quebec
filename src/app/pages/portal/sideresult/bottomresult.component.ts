@@ -91,6 +91,9 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   }
   private _searchInit: boolean;
 
+  private isResultSelected$ = new BehaviorSubject(false);
+  resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
+
   // SEARCH
   events: string[] = [];
   public showMenuButton: boolean;
