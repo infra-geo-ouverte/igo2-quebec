@@ -17,15 +17,13 @@ import { NetworkService, ConnectionState, MessageService, LanguageService } from
 import { ConfigService } from '@igo2/core';
 import { getEntityTitle, getEntityIcon } from '@igo2/common';
 import type { Toolbox } from '@igo2/common';
-
-import { Feature } from '../shared';
-import { SearchSource, IgoMap } from '@igo2/geo';
+import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-feature-details',
-  templateUrl: './feature-details-p.component.html',
-  styleUrls: ['./feature-details-p.component.scss'],
+  templateUrl: './app-feature-details.component.html',
+  styleUrls: ['./app-feature-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 

@@ -20,6 +20,15 @@ IGO2 (for Open GIS Infrastructure - version 2.0) is a free open source Web Geosp
 IGO2 is having multiple features, such as Web GIS viewer adapted to Desktop and Mobile and many more available at [https://igo2.readthedocs.io/fr/latest/english.html](https://igo2.readthedocs.io/fr/latest/english.html). Since this project is open source, anyone can contribute as long as they share their work on the same open source [LICENCE LGPL-Style](LICENSE_ENGLISH.txt). All contributors in IGO keep their property rights.
 
 ---
+### Qu'est-ce qu'IGO2-Québec?
+
+IGO2-Québec est un assemblage basé sur IGO2 qui respecte le système de design du gouvernement du Québec (pour plus d'information, consulter le <a href="https://design.quebec.ca/apercu/systeme" target="_blank">Système de design</a>).
+---
+### What is IGO2-Québec?
+
+IGO2-Québec is an assembly based on IGO2 which respects the design system of the Gouvernement du Québec (for more information, check the <a href="https://design.quebec.ca/apercu/systeme" target="_blank">Système de design</a>).
+
+---
 
 ---
 
@@ -28,6 +37,7 @@ IGO2 is having multiple features, such as Web GIS viewer adapted to Desktop and 
 - [Téléchargement](#téléchargement)
 - [Installation pour déploiement serveur](#installation-pour-déploiement-serveur)
 - [Installation pour développeurs](#installation-et-démarrage-pour-développeurs)
+- [Intégration à un autre projet](#intégration-à-un-autre-projet)
 - [Démo on GitHub](https://infra-geo-ouverte.github.io/igo2-quebec/)
 - [Documentation](https://igo2.readthedocs.io/fr/latest/)
 - [Tests](#tests)
@@ -42,9 +52,10 @@ IGO2 is having multiple features, such as Web GIS viewer adapted to Desktop and 
 - [Download](#download)
 - [Installation (for server deployment)](#installation-for-server-deployment)
 - [Installation for developpers](#installation-for-developpers)
+- [Integration into another project](#integration-into-another-project)
 - [Demo on GitHub](https://infra-geo-ouverte.github.io/igo2-quebec/)
 - [Documentation (translation is not yet done)](https://igo2.readthedocs.io/fr/latest/)
-- [Tests](#tests-en)
+- [Tests](#to-run-tests)
 - [Contribute](#contribution)
 
 ---
@@ -107,6 +118,17 @@ $ npm run coverage
 $ npm start
 $ npm run e2e
 ```
+## Intégration à un autre projet
+
+Il facile possible d'importer ce projet dans un autre projet hébergé sur une plateforme supportant Git. Voici la procédure :
+```
+git remote add igo2qc https://github.com/infra-geo-ouverte/igo2-quebec.git
+```
+Ensuite, pour importer le code, faire un pull depuis cette origine additionnelle, en spécifiant la branche :
+```
+git pull igo2qc master
+```
+Pour plus de détails sur la procédure, consultez <a href="https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories" target="_blank">Managing remote repositories</a>.
 
 ---
 
@@ -162,7 +184,7 @@ $ npm run doc
 
 ```
 
-## Tests-en
+## To run tests
 
 ```bash
 $ npm test
@@ -178,7 +200,19 @@ $ npm run coverage
 $ npm start
 $ npm run e2e
 ```
+## Integration into another project
 
+It is easy to import this project into another one hosted in any platform supporting Git. Here is the procedure:
+```
+git remote add igo2qc https://github.com/infra-geo-ouverte/igo2-quebec.git
+```
+Then, to import the code, pull from that additionnal origin and specify the branch:
+```
+git pull igo2qc master
+```
+For more details on this procedure, check <a href="https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories" target="_blank">Managing remote repositories</a>.
+
+---
 ## Contribution
 
 Before contributing, please read the [guidelines](.github/CONTRIBUTING.md), the [LICENCE](LICENSE_ENGLISH.txt) and the [WIKI](https://github.com/infra-geo-ouverte/igo2/wiki). If you have any question and want to contribute, contact the main email of IGO info(a)igouverte.org or on [Gitter](https://gitter.im/igo2/)

@@ -271,6 +271,9 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.workspaceState.store;
   }
 
+  public mapQueryClick = false;
+  public searchInit = false;
+
   constructor(
     private route: ActivatedRoute,
     public workspaceState: WorkspaceState,
@@ -537,38 +540,72 @@ export class PortalComponent implements OnInit, OnDestroy {
     return false;
    }
 
-  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    this.sidenavOpened = true;
+   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    if (this.mapQueryClick === true) {
+      this.onClearQuery();
+    }
+    if (this.searchInit === true){
+      this.onClearSearch();
+    }
+    if(this.configService.getConfig('queryOnlyOne')){
+      event.features = [event.features[0]];
+      this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+    }
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
-    const results = event.features.map((feature: Feature) => {
-      let querySearchSource = querySearchSourceArray.find(
-        (s) => s.title === feature.meta.sourceTitle
-      );
-      if (this.getFeatureIsSameActiveWks(feature)) {
-        if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
-          return;
+    if (event.features.map) {
+      const results = event.features.map((feature: Feature) => {
+        if (feature) {
+          let querySearchSource = querySearchSourceArray.find(
+            (s) => s.title === feature.meta.sourceTitle
+          );
+          if (this.getFeatureIsSameActiveWks(feature)) {
+            if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+              return;
+            }
+          }
+          if (querySearchSource) {
+            this.queryState.store.softClear(); // clears the info panel
+            this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+            this.mapQueryClick = false;
+          }
+          if (!querySearchSource) {
+            querySearchSource = new QuerySearchSource({
+              title: feature.meta.sourceTitle
+            });
+            querySearchSourceArray.push(querySearchSource);
+            this.sidenavOpened = true;
+            this.mapQueryClick = true;
+          }
+            return featureToSearchResult(feature, querySearchSource);
+        } else {
+          this.closeSidenav();
+          this.mapQueryClick = false;
         }
-      }
-      if (!querySearchSource) {
-        querySearchSource = new QuerySearchSource({
-          title: feature.meta.sourceTitle
-        });
-        querySearchSourceArray.push(querySearchSource);
-      }
-      return featureToSearchResult(feature, querySearchSource);
-    });
-    const filteredResults = results.filter(x => x !== undefined);
-    const research = {
-      request: of(filteredResults),
-      reverse: false,
-      source: baseQuerySearchSource
-    };
-    research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
-      this.queryStore.load(queryResults);
-    });
+      });
+
+      const filteredResults = results.filter(x => x !== undefined);
+      const research = {
+        request: of(filteredResults),
+        reverse: false,
+        source: baseQuerySearchSource
+      };
+      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+        this.queryStore.load(queryResults);
+      });
+    } else {
+      this.mapQueryClick = false;
+    }
   }
 
+  onClearQuery(){
+    this.queryState.store.clear(); // clears the info panel
+    this.mapQueryClick = false;
+    this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+    this.sidenavOpened = false;
+    this.map.viewController.padding[3] = 0;
+  }
+  
   /**
    * Cancel ongoing add layer, if any
    */

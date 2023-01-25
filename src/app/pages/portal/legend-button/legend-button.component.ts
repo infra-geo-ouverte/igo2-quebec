@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogState } from '@angular/material/dialog';
-import { IgoMap } from '@igo2/geo';
+import { IgoMap, Layer } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-legend-button',
@@ -33,7 +34,7 @@ export class LegendButtonComponent {
   selector: 'app-legend-button-dialog',
   templateUrl: 'legend-button-dialog.component.html'
 })
-export class LegendButtonDialogComponent {
+export class LegendButtonDialogComponent implements OnInit {
 
   public getState: MatDialogState;
 
@@ -41,9 +42,19 @@ export class LegendButtonDialogComponent {
     return this.mapState.map;
   }
 
-  constructor(
-    private mapState: MapState,
-    public dialog: MatDialog
-    ) { }
+  get layers$(): Observable<Layer[]> {
+    return this.map.layers$;
+  }
 
+  public mapLayersShownInLegend: Layer[];
+
+  constructor(
+    private mapState: MapState
+  ) {}
+
+  ngOnInit() {
+    this.mapLayersShownInLegend = this.map.layers.filter(layer => (
+      layer.showInLayerList !== false
+    ));
+  }
 }

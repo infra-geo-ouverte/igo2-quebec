@@ -1,3 +1,4 @@
+feature-info
 <igo-panel
 *ngIf="store.entities$ | async"
 class = "featureInfo"
@@ -18,8 +19,8 @@ tabindex="0"
 
   <app-feature-details
     *ngIf="resultSelected$.value"
-    [feature]="resultSelected$.value.data"
-    (htmlDisplayEvent)=setHtmlDisplay($event)>
+    [mapQueryClick]="mapQueryClick"
+    [feature]="resultSelected$.value.data">
   </app-feature-details>
 
 </div>

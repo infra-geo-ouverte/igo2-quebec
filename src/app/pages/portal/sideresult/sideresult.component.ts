@@ -14,10 +14,8 @@ import {
 
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService } from '@igo2/core';
-import { EntityStore, ActionStore, Workspace,
-  WorkspaceStore } from '@igo2/common';
+import { EntityStore, ActionStore, Workspace, WorkspaceStore } from '@igo2/common';
 import { BehaviorSubject } from 'rxjs';
-
 import {
   IgoMap,
   FEATURE,
@@ -27,7 +25,6 @@ import {
   LayerService,
   MapService,
   Layer,
-  ProjectionService,
   Research,
   SearchResult,
   SearchService
@@ -72,6 +69,24 @@ export class SideResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
+
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
+
+  @Input()
+  get searchInit(): boolean {
+    return this._searchInit;
+  }
+  set searchInit(value: boolean) {
+    this._searchInit = value;
+  }
+  private _searchInit: boolean;
 
     //GETINFO
 
@@ -149,16 +164,9 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
 
   public selectedFeature: Feature;
-  public displaySearch : boolean;
-  public displayQuery : boolean;
 
   constructor(
-    private toolState: ToolState,
     private configService: ConfigService,
-    private catalogState: CatalogState,
-    //SEARCH
-    private languageService: LanguageService,
-    private projectionService: ProjectionService,
     private mapService: MapService,
     private layerService: LayerService,
     private searchState: SearchState,
@@ -168,7 +176,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     public workspaceState: WorkspaceState,
     private cdRef: ChangeDetectorRef
     ) {
-      // SEARCH
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
@@ -331,17 +338,5 @@ export class SideResultComponent implements OnInit, OnDestroy {
       GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
     );
   }
-/*
-  toggleSearchContent(){
-    this.displaySearch = true;
-    this.displayQuery = false;
-    console.log ('toggleSearchContent ran');
-  }
-
-  toggleQueryContent(){
-    this.displaySearch = false;
-    this.displayQuery = true;
-    console.log ('toggleQueryContent ran');
-  }*/
 
 }

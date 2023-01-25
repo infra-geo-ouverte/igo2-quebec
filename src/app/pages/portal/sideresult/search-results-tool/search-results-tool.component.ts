@@ -91,6 +91,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   public componentName = this.constructor.name;
   public displaySearch = true;
   public displayQuery = false;
+  public initialized: boolean = undefined;
 
   /**
    * Store holding the search results
@@ -152,10 +153,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
-
-  public initialized: boolean = undefined;
-
-  @Output() searchEvent = new EventEmitter();
 
   constructor(
     private mapState: MapState,

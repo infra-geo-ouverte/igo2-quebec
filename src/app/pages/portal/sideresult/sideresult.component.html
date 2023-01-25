@@ -5,26 +5,44 @@
     [autoFocus]="false"
     [(opened)]="opened">
 
-    <div #content class="app-sideresult-content">
-      <div #getInfo *ngIf="(queryStore.empty$ | async)!==true">
-      <app-feature-info
-        [map]="map"
-        [store]="queryStore"
-        [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
-      </app-feature-info>
+    <div #content class="app-sidenav-content">
+
+      <div style="margin: 20px;" *ngIf="(!store || store.stateView.empty || (queryStore.empty$ | async)===true)">
+        <section class="mat-typography">
+          <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
+          <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
+          <p [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"></p>
+      </section>
       </div>
-      <div #search *ngIf="(queryStore.empty$ | async)===true">
+
+      <div #getInfo *ngIf="mapQueryClick === true"
+        [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' ">
+
+        <app-feature-info
+          [map]="map"
+          [store]="queryStore"
+          [(mapQueryClick)]="mapQueryClick"
+          [searchInit]="searchInit"
+          (sidenavClosed)="$event"
+          [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
+        </app-feature-info>
+
+      </div>
+
+      <div #search *ngIf="searchInit === true">
           <app-search-results-tool 
             #searchresults
-            [store]="searchStore"
-            [term]="term"
             [showIcons]="true"
             placeholder="false"
+            [mapQueryClick]="mapQueryClick"
+            (sidenavClosed)="$event"
+            [searchInit]="searchInit"
             (resultFocus)="onResultFocus($event)"
             (resultSelect)="onResultFocus($event)"
             (moreResults)="onSearch($event)">
           </app-search-results-tool>
-    </div></div>
+      </div>
+    </div>
   </mat-sidenav>
   <button
     [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' "

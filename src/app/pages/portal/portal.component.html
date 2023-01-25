@@ -40,6 +40,8 @@
       <app-sideresult
         [map]="map"
         [(opened)]="sidenavOpened"
+        [searchInit]="searchInit"
+        [mapQueryClick]="mapQueryClick"
         (toolChange)="toolChanged($event)">
       </app-sideresult>
     </div>
@@ -71,7 +73,9 @@
 
         <app-bottomresult
           *ngIf="mobile"
-          [map]="map">
+          [map]="map"
+          [searchInit]="searchInit"
+          [mapQueryClick]="mapQueryClick">
         </app-bottomresult>
     </igo-map-browser>
 
