@@ -18,15 +18,16 @@
   },
   "useStaticIcon": false,
   "hasExpansionPanel": false,
-  "showSearchBar": true,
+  "searchBar": {
+    "showSearchBar": true,
+    "showSearchButton": true
+  },
+  "importExport": {
+    "url": "/apis/ogre"
+  },
   "showMenuButton": false,
   "hasToolbox": false,
   "mobileBreakPoint": "'(min-width: 768px)'",
-  "searchSources": {
-    "cadastre": {
-      "available": false
-    }
-  },
   "language": {
     "prefix": ["./locale/", "./particular/locale/"]
     }

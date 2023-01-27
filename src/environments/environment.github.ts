@@ -10,6 +10,10 @@ interface Environment {
   igo: {
     app: {
       forceCoordsNA: boolean;
+      pwa?: {
+        enabled?: boolean;
+        promote?: boolean;
+      }
     };
     language?: LanguageOptions;
     projections?: Projection[];
@@ -31,7 +35,11 @@ export const environment: Environment = {
   production: true,
   igo: {
     app: {
-      forceCoordsNA: false
+      forceCoordsNA: false,
+      pwa: {
+        enabled: false,
+        promote: false
+      }
     },
     language: {
       prefix: ['./locale/', './particular/locale/']
@@ -66,9 +74,6 @@ export const environment: Environment = {
         params: {
           limit: '3'
         }
-      },
-      cadastre: {
-        enabled: false
       }
     },
     projections: [
