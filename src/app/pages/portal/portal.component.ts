@@ -6,8 +6,8 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
+import { Subscription, BehaviorSubject, combineLatest, zip } from 'rxjs';
+import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap, concatMap, delay } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
 import { MatPaginator } from '@angular/material/paginator';
@@ -79,6 +79,8 @@ import {
   ToolState,
   DirectionState
 } from '@igo2/integration';
+
+import { PwaService } from '../../services/pwa.service';
 
 import {
   controlsAnimations, controlSlideX, controlSlideY
@@ -286,7 +288,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private directionState: DirectionState,
     public dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private pwaService: PwaService
   ) {
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
@@ -294,8 +297,8 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.configService.getConfig('hasLegendButton');
       this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
         this.configService.getConfig('hasSideSearch');
-      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
-        this.configService.getConfig('showSearchBar');
+        this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') === undefined ? true :
+        this.configService.getConfig('searchBar.showSearchBar');
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? true :
         this.configService.getConfig('hasToolbox');
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
@@ -334,6 +337,10 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.authService.authenticate$.subscribe((authenticated) => {
       this.contextLoaded = false;
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      this.readLanguageParam(params);
     });
 
     this.context$$ = this.contextState.context$.subscribe(
@@ -435,8 +442,64 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
-    this.breakpointChanged()
-  );
+      this.breakpointChanged()
+    );
+  }
+
+  private initSW() {
+    const dataDownload = this.configService.getConfig('pwa.dataDownload');
+    if ('serviceWorker' in navigator && dataDownload) {
+      let downloadMessage;
+      let currentVersion;
+      const dataLoadSource = this.storageService.get('dataLoadSource');
+      navigator.serviceWorker.ready.then((registration) => {
+        console.log('Service Worker Ready');
+        this.http.get('ngsw.json').pipe(
+          concatMap((ngsw: any) => {
+            const datas$ = [];
+            let hasDataInDataDir: boolean = false;
+            if (ngsw) {
+              // IF FILE NOT IN THIS LIST... DELETE?
+              currentVersion = ngsw.appData.version;
+              const cachedDataVersion = this.storageService.get('cachedDataVersion');
+              if (currentVersion !== cachedDataVersion && dataLoadSource === 'pending') {
+                this.pwaService.updates.checkForUpdate();
+              }
+              if (dataLoadSource === 'newVersion' || !dataLoadSource) {
+                ((ngsw as any).assetGroups as any).map((assetGroup) => {
+                  if (assetGroup.name === 'contexts') {
+                    const elemToDownload = assetGroup.urls.concat(assetGroup.files).filter(f => f);
+                    elemToDownload.map((url, i) => datas$.push(this.http.get(url).pipe(delay(750))));
+                  }
+                });
+                if (hasDataInDataDir) {
+                  const message = this.languageService.translate.instant('pwa.data-download-start');
+                  downloadMessage = this.messageService
+                    .info(message, undefined, { disableTimeOut: true, progressBar: false, closeButton: true, tapToDismiss: false });
+                  this.storageService.set('cachedDataVersion', currentVersion);
+                }
+                return zip(...datas$);
+              }
+
+            }
+            return zip(...datas$);
+          })
+        )
+          .pipe(delay(1000))
+          .subscribe(() => {
+            if (downloadMessage) {
+              this.messageService.remove((downloadMessage as any).toastId);
+              const message = this.languageService.translate.instant('pwa.data-download-completed');
+              this.messageService.success(message, undefined, { timeOut: 40000 });
+              if (currentVersion) {
+                this.storageService.set('dataLoadSource', 'pending');
+                this.storageService.set('cachedDataVersion', currentVersion);
+              }
+            }
+          });
+
+      });
+    }
   }
 
   public breakpointChanged() {
@@ -781,6 +844,13 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
   }
 
+  private readLanguageParam(params) {
+    if (params['lang']) {
+      this.authService.languageForce = true;
+      this.languageService.setLanguage(params['lang']);
+    }
+  }
+
   private computeZoomToExtent() {
     if (this.routeParams['zoomExtent']) {
       const extentParams = this.routeParams['zoomExtent'].split(',');
@@ -809,7 +879,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       const entities$$ = this.searchStore.stateView.all$()
         .pipe(
           skipWhile((entities) => entities.length === 0),
-          debounceTime(500),
+          debounceTime(1000),
           take(1)
         )
         .subscribe((entities) => {

@@ -6,11 +6,15 @@ import {
   CommonVectorStyleOptions
 } from '@igo2/geo';
 
-interface Environment {
+export interface Environment {
   production: boolean;
   igo: {
     app: {
       forceCoordsNA: boolean;
+      pwa?: {
+        enabled?: boolean;
+        promote?: boolean;
+      }
     };
     language?: LanguageOptions;
     optionsApi?: OptionsApiOptions;
@@ -33,7 +37,11 @@ export const environment: Environment = {
   production: true,
   igo: {
     app: {
-      forceCoordsNA: true
+      forceCoordsNA: true,
+      pwa: {
+        enabled: false,
+        promote: false
+      }
     },
     language: {
       prefix: ['./locale/', './particular/locale/']
@@ -89,9 +97,6 @@ export const environment: Environment = {
         params: {
           limit: '3'
         }
-      },
-      cadastre: {
-        available: false
       }
     },
     searchOverlayStyle: {

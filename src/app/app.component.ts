@@ -9,6 +9,7 @@ import {
   MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
+import { PwaService } from './services/pwa.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -30,9 +31,11 @@ export class AppComponent {
     private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private pwaService: PwaService
   ) {
-   this.languageService.translate.getTranslation(this.languageService.getLanguage()).subscribe();
+    this.pwaService.checkForUpdates();
+    this.languageService.translate.getTranslation(this.languageService.getLanguage()).subscribe();
 
     this.readTitleConfig();
     this.readThemeConfig();
