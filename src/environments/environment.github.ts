@@ -53,7 +53,7 @@ export const environment: Environment = {
         available: false
       },
       icherche: {
-        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/',
+        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
         order: 2,
         params: {
           limit: '5'
