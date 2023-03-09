@@ -4,6 +4,8 @@
   "layers": [
     {
       "title": "Zones d'alertes MRC (MSP)",
+      "visible": true,
+      "baseLayer": false,
       "sourceOptions": {
         "type": "wms",
         "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/securite.fcgi",
@@ -16,6 +18,9 @@
     },
     {
       "title": "Habitats floristiques",
+      "showInLayerList": true,
+      "visible": true,
+      "baseLayer": false,
       "sourceOptions": {
         "type": "wms",
         "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/environnement.fcgi",
@@ -28,6 +33,9 @@
     },
     {
       "title": "Établissements MTQ",
+      "showInLayerList": true,
+      "visible": true,
+      "baseLayer": false,
       "sourceOptions": {
         "type": "wms",
         "url": "https://ws.mapserver.transports.gouv.qc.ca/swtq",

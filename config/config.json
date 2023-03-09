@@ -18,21 +18,16 @@
   },
   "useStaticIcon": false,
   "hasExpansionPanel": false,
-  "showSearchBar": true,
+  "searchBar": {
+    "showSearchBar": true,
+    "showSearchButton": true
+  },
+  "importExport": {
+    "url": "/apis/ogre"
+  },
   "showMenuButton": false,
   "hasToolbox": false,
-  "searchSources": {
-    "cadastre": {
-      "available": false
-    }
-  },
-  "icherche": {
-    "types": {
-      "mrc": true,
-      "entreprises": false,
-      "lieux": false
-      }
-  },
+  "mobileBreakPoint": "'(min-width: 768px)'",
   "language": {
     "prefix": ["./locale/", "./particular/locale/"]
     }

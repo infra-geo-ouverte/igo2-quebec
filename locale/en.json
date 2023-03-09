@@ -27,5 +27,12 @@
     "close": "Close",
     "open": "Open"
   },
-  "search-bar": "Search"
+  "search-bar": "Search",
+  "pwa": {
+    "new-version-title": "New version available. ",
+    "new-version": "Do you want to reload the app?",
+    "data-download-start": "Downloading data for offline use. Please don't leave the current app.",
+    "data-download-completed": "Offline data download completed"
+
+  }
 }
