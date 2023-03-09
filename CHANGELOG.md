@@ -1,3 +1,12 @@
+## [1.0.2-beta](https://github.com/infra-geo-ouverte/igo2-quebec/compare/1.0.1-beta...1.0.2-beta) (2023-03-09)
+
+
+### Bug Fixes
+
+* **github-demo:** fix gh pages icherche path ([030521f](https://github.com/infra-geo-ouverte/igo2-quebec/commit/030521f1d71f18bed00982281f6cfa65a4e2ac78))
+
+
+
 ## [1.0.1-beta](https://github.com/infra-geo-ouverte/igo2-quebec/compare/1.0.0-beta...1.0.1-beta) (2023-03-09)
 
 
