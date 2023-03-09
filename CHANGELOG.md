@@ -1,4 +1,13 @@
-# 1.0.0-beta (2023-03-09)
+## [1.0.1-beta](https://github.com/infra-geo-ouverte/igo2-quebec/compare/1.0.0-beta...1.0.1-beta) (2023-03-09)
+
+
+### Bug Fixes
+
+* **app:** fix gh-pages deploy ([a80f483](https://github.com/infra-geo-ouverte/igo2-quebec/commit/a80f48382896cc72c56d8e711b0ed9da2ababd0d))
+
+
+
+# [1.0.0-beta](https://github.com/infra-geo-ouverte/igo2-quebec/compare/da1fb91ad337472d53555f06fba648c8b80053f8...1.0.0-beta) (2023-03-09)
 
 
 ### Bug Fixes
