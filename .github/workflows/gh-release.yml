@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*.*.*"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,12 +21,11 @@ jobs:
       - name: Install zip
         uses: montudor/action-zip@v1
       - name: Zip output
-        run: zip igo2.zip *
-        run: zip -qq -r igo2.zip *
-        working-directory: dist/igo2
+        run: zip -qq -r igo2-quebec.zip *
+        working-directory: dist/igo2-quebec
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
-          files: dist/igo2/igo2.zip
+          files: dist/igo2-quebec/igo2-quebec.zip
