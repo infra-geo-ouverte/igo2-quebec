@@ -4,7 +4,9 @@ import {
   Input,
   OnInit,
   ElementRef,
-  OnDestroy
+  OnDestroy,
+  HostListener,
+  Output, EventEmitter
 } from '@angular/core';
 import { Observable, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -44,7 +46,8 @@ import {
   roundCoordTo
 } from '@igo2/geo';
 
-import { MapState, SearchState, ToolState, DirectionState } from '@igo2/integration';
+import { MapState, ToolState, DirectionState } from '@igo2/integration';
+import { SearchState } from '../search.state';
 
 /**
  * Tool to browse the search results
@@ -86,6 +89,10 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   public debouncedEmpty$ :BehaviorSubject<boolean> = new BehaviorSubject(true);
   private debouncedEmpty$$: Subscription;
+  public componentName = this.constructor.name;
+  public displaySearch = true;
+  public displayQuery = false;
+  @Output() featureSelected = new EventEmitter<boolean>();
 
   /**
    * Store holding the search results
@@ -148,6 +155,28 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
+  public initialized: boolean = undefined;
+
+  @Output() searchEvent = new EventEmitter();
+
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
+
+  @Input()
+  get searchInit(): boolean {
+    return this._searchInit;
+  }
+  set searchInit(value: boolean) {
+    this._searchInit = value;
+  }
+  private _searchInit: boolean;
+
   constructor(
     private mapState: MapState,
     private searchState: SearchState,
@@ -162,6 +191,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.initialized = true;
     this.searchTerm$$ = this.searchState.searchTerm$.subscribe(
       (searchTerm: string) => {
         if (searchTerm !== undefined && searchTerm !== null) {
@@ -367,6 +397,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('change')
   ngOnDestroy() {
     this.topPanelState$$.unsubscribe();
     this.searchTerm$$.unsubscribe();
@@ -404,6 +435,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         return;
       }
       this.map.searchResultsOverlay.addFeature(result.data as Feature, FeatureMotion.None);
+      this.featureSelected.emit();
     }
   }
 
@@ -414,6 +446,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     }
 
     if (this.store.state.get(result).selected === true) {
+      this.featureSelected.emit();
       const feature = this.map.searchResultsOverlay.dataSource.ol.getFeatureById(result.meta.id);
       if (feature) {
         const style = getCommonVectorSelectedStyle(
@@ -456,6 +489,8 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    this.displaySearch = true;
+    this.displayQuery = false;
     const results = event.results;
     const newResults = this.store.entities$.value
       .filter((result: SearchResult) => result.source !== event.research.source)

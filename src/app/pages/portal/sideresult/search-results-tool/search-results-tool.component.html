@@ -1,11 +1,3 @@
-<div *ngIf="(!store || store.stateView.empty) && (debouncedEmpty$ | async) " style="margin: 10px;">
-  <section class="mat-typography">
-    <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
-    <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
-    <div [innerHTML]="'igo.integration.searchResultsTool.examples' | translate | sanitizeHtml"></div>
-</section>
-</div>
-
 <igo-flexible
   *ngIf="store && (store.stateView.empty$ | async)===false"
   #topPanel
@@ -30,6 +22,7 @@
       (resultUnfocus)="onResultUnfocus($event)"
       (resultMouseenter)="onResultFocus($event)"
       (resultMouseleave)="onResultUnfocus($event)"
+      [searchInit]="searchInit"
       (moreResults)="onSearch($event)">
       <ng-template #igoSearchItemToolbar let-result="result">
         <igo-search-add-button
@@ -68,7 +61,7 @@
       </button>
 
       <igo-feature-details
-        igoFeatureDetailsDirective
+        appFeatureDetailsDirective
         [feature]="feature$ | async"
         [map]="map"
         [toolbox]="toolState.toolbox"

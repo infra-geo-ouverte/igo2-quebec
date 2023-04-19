@@ -1,0 +1,44 @@
+@import '../../portal.variables';
+
+:host {
+
+  @include mobile {
+    width: 100%;
+    overflow-x: clip;
+  }
+}
+  ::ng-deep div.igo-panel-header {
+    background-color: #fff!important;
+    color: #095797!important;
+}
+
+igo-panel ::ng-deep .igo-panel-header:hover {
+  cursor: pointer;
+}
+
+igo-panel {
+  height: 100%;
+  outline: none;
+}
+
+app-feature-details {
+  float: left;
+  width: calc(100% - 36px);
+  overflow-x: clip;
+  margin-right: 8px;
+}
+
+button.clear-button {
+  float: right;
+  width: 24px;
+}
+
+.sideresult-closed {
+  ::ng-deep mat-sidenav {
+    width: 0!important;
+  }
+  ::ng-deep #sideresult-button {
+    left: 0!important;
+    position: absolute;
+  }
+}

@@ -1,0 +1,105 @@
+<div class="query-content" *ngIf="this.ready && feature.properties.ids_station">
+  <h3 class="igo-panel-title">{{ 'sideResult.title.station' | translate }} {{ feature.properties.label ? feature.properties.label : 'sideResult.na' | translate }}</h3>
+  <p>
+    <span>{{ 'sideResult.location' | translate }} : </span><span class="value">{{ feature.properties.description ? feature.properties.description : 'sideResult.na' | translate }}</span>
+  </p>
+  <p>
+    <span>{{ 'sideResult.body' | translate }} : </span><span class="value">{{ feature.properties.plan_deau ? feature.properties.plan_deau : 'sideResult.na' | translate }}</span>
+  </p>
+  <p>
+    <span>{{ 'sideResult.state' | translate }} : </span>
+    <span><img [src]="getStationStateLegend(feature.properties.etat)" width="15" height="15"><span class="value"> {{ getStationState(feature.properties.etat) | translate }}</span></span>
+  </p>
+  <p>
+    <span>{{ 'trend.trend' | translate }} : </span><span class="value">{{ feature.properties.etat !== -1 && feature.properties.tendance ? getStationTrend(feature.properties.tendance) : 'sideResult.na' | translate }}</span>
+  </p>
+  <p>
+    <span>{{ 'sideResult.update' | translate }} : </span>
+    <span class="value">{{ feature.properties.date_prise_valeur ? (changeTimeZone(feature.properties.date_prise_valeur) | date : getDateFormat()) : 'sideResult.na' | translate }}</span>
+  </p>
+  <div *ngIf="feature.properties.prev === true" style="display: inline-flex;align-items: center;">
+      <span class="text" style="margin-right:8px; height:100%;"><img src="assets/legends/legend-stations/prevision.svg" style="height:1.5rem;margin: 0.5rem 0;"></span><span class="text">{{ 'stationsDetails.withForecasts' | translate }}</span>
+  </div>
+  <p>
+    <a class='link' [routerLink]="['/stations', feature.properties.ids_station]">{{ 'sideResult.details' | translate }}</a>
+  </p>
+</div>
+
+<div class="query-content" *ngIf="feature.properties.Troncon" #tronconDetails >
+  <h3 class="igo-panel-title">{{ 'sideResult.title.section' | translate }} {{feature.properties.Troncon}}</h3>
+  
+  <div class="attribute">
+    {{ 'sideResult.description.part1' | translate }}
+    <span class="value">{{ timeofMaxPrevX ? (timeofMaxPrevX | date : getDateFormat()) : 'sideResult.na' | translate }}.</span>
+  </div>
+  <div class="chart">
+    <h6 class="chartTitle" (click)="tooltipScenario.toggle()" >{{ (feature.properties.typePrevision === 'Q') ? ('sideResult.chart.q' | translate) : 'sideResult.chart.h' | translate}}
+      <mat-icon
+        #tooltipScenario="matTooltip"
+        class="info"
+        color="primary"
+        svgIcon="information"
+        [matTooltip]="(feature.properties.typePrevision === 'Q')? ('info.scenario-q' | translate) : ('info.scenario-h' | translate)"
+        [matTooltipPosition]="mobile? 'above' : 'right'"
+        [matTooltipClass]="mobile? 'tooltip-above' : 'tooltip-right'">
+      </mat-icon>
+    </h6>
+    <div class="chart-container" style="position: relative; height:225px; width:270px; padding:0px!important;">
+      <canvas #waterChartCanvas [plugins]="waterChartPlugins"></canvas>
+    </div>
+  </div>
+
+  <p>
+    {{ 'sideResult.body' | translate }} : <span class="value">{{ feature.properties.planEau ? feature.properties.planEau : 'sideResult.na' | translate }}</span>
+  </p>
+  <p class="attribute">
+    {{ 'sideResult.bassin' | translate }} : <span class="value">{{ feature.properties.nomBassin ? feature.properties.nomBassin : 'sideResult.na' | translate }}</span>
+  </p>
+  <p class="attribute">
+    <span>{{ 'sideResult.update' | translate }} : </span>
+    <span class="value">{{ feature.properties.DateHeureMAJPrevision ? (feature.properties.DateHeureMAJPrevision | date : getDateFormat()) : 'sideResult.na' | translate }}</span>
+  </p>
+  <p class="avis" *ngIf="feature.properties.messageParticulier">
+    <span class="avis-icon avis-important"><mat-icon svgIcon="alert-outline"></mat-icon></span>
+    <span class="avis-content">
+      <span class="avis-title">{{ 'sideResult.warning' | translate }}</span><br>
+      <span class="avis-label">{{ feature.properties.messageParticulier }}</span>
+    </span>
+  </p>
+</div>
+
+<ng-template #featureQuery class="igo-striped mat-typography feature-info query-content">
+  <h3 class="igo-panel-title">{{property.id}}</h3>
+  <div *ngFor="let property of filterFeatureProperties(feature) | keyvalue">
+
+      <p *ngIf="feature.properties.target === '_blank' && property.key === 'url'">
+        <mat-icon mat-list-avatar svgIcon="{{icon}}"></mat-icon>
+        <a href="{{property.value}}" target='_blank' rel="noopener noreferrer"> {{ 'igo.geo.targetHtmlUrl' | translate }} {{title}}</a>
+      </p>
+
+      <p id="keyValue" *ngIf="feature.properties.target === undefined">
+        {{property.key}}
+      </p>
+
+      <div class="value" *ngIf="feature.properties.target === undefined && !isObject(property.value) && !isUrl(property.value) && !isEmbeddedLink(property.value)" [innerHTML]="property.value">
+      </div>
+
+      <div class="value" *ngIf="feature.properties.target === undefined && isEmbeddedLink(property.value)">
+        <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ getEmbeddedLinkText(property.value) }}</u>
+      </div>
+
+      <div class="value" *ngIf="feature.properties.target === undefined && !isObject(property.value) && (isDoc(property.value) || isUrl(property.value)) && !isImg(property.value)">
+        <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ 'igo.geo.targetHtmlUrl' | translate }}</u>
+      </div>
+
+      <div class="value" *ngIf="feature.properties.target === undefined && !isObject(property.value) && isUrl(property.value) && isImg(property.value)">
+        <a href="{{property.value}}" target='_blank' (click)="openSecureUrl(property.value)" rel="noopener noreferrer">
+          <img src="{{(property.value | secureImage) | async}}" width="225" height="auto">
+        </a>
+      </div>
+
+      <div class="value" *ngIf="feature.properties.target === undefined && isObject(property.value)" [innerHTML]="property.value | json">
+      </div>
+
+    </div>
+  </ng-template>

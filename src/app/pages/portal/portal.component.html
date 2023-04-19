@@ -35,9 +35,23 @@
       <div *ngIf="!mobile" id="scaleLine"></div>
 
       <app-sideresult
+        #sideresultsDesktop
+        class="sideresult"
         [map]="map"
-        [(opened)]="sidenavOpened"
-        (toolChange)="toolChanged($event)">
+        [mobile]="mobile"
+        (clearFeature)="unselectResult()"
+        [sidenavOpened]="panelOpenState"
+        [(opened)]="panelOpenState"
+        [searchInit]="searchInit"
+        [store]="queryStore"
+        [legendPanelOpened]="legendPanelOpened"
+        [mapQueryClick]="mapQueryClick"
+        [panelOpenState]="panelOpenState"
+        (toggleLegend)="togglePanelLegend()"
+        (closeLegend)="closePanelLegend()"
+        (closeQuery)="closePanelOnCloseQuery()"
+        (openLegend)="openPanelLegend()"
+        [layers]="mapLayersShownInLegend">
       </app-sideresult>
     </div>
 
@@ -65,10 +79,21 @@
         <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
       </div>
 
-        <app-bottomresult
-          *ngIf="mobile"
-          [map]="map">
-        </app-bottomresult>
+      <app-bottomresult
+        *ngIf="mobile"
+        [mobile]="mobile"
+        [store]="searchStore"
+        [searchInit]="searchInit"
+        [mapQueryClick]="mapQueryClick"
+        [legendPanelOpened]="legendPanelOpened"
+        [panelOpenState]="panelOpenState"
+        [expanded]="expanded"
+        (closeQuery)="closePanelOnCloseQuery()"
+        (closeLegend)="closePanelLegend()"
+        (openLegend)="openPanelLegend()"
+        (toggleLegend)="togglePanelLegend()"
+        [layers]="mapLayersShownInLegend">
+      </app-bottomresult>
     </igo-map-browser>
 
     <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
