@@ -100,6 +100,7 @@ import {
 export class PortalComponent implements OnInit, OnDestroy {
   public showRotationButtonIfNoRotation: boolean = undefined;
   public hasFooter: boolean = true;
+  public hasHeader: boolean;
   public hasLegendButton: boolean = true;
   public hasGeolocateButton: boolean = true;
   public hasExpansionPanel: boolean = undefined;
@@ -293,6 +294,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   ) {
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
+      this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
+        this.configService.getConfig('header.hasHeader');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
         this.configService.getConfig('hasLegendButton');
       this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :

@@ -9,6 +9,7 @@
     <div id="scaleLine"></div>
   
     <div id="searchDesktop" *ngIf=!mobile>
+
       <igo-menu-button *ngIf="showMenuButton"
         [sidenavOpened]="sidenavOpened"
         (openSidenav)="onToggleSidenavClick()">
@@ -16,19 +17,22 @@
 
       <igo-search-bar *ngIf="showSearchBar"
         #searchbar
+        [ngClass]="hasHeader? (mobile? 'searchbar-with-header-mobile': 'searchbar-with-header') : 'searchbar-no-header'"
         (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
         appearance="outline"
         searchIcon ="magnify"
-        [matTooltip]="'search-bar' | translate"
+        [matTooltip]="'searchBar' | translate"
         matTooltipShowDelay="500"
         tooltip-position="after"
         [searchSettings]="false"
         color="primary"
+        [forceNA]="forceCoordsNA"
+        [term]="searchBarTerm"
         [store]="searchStore"
         [termSplitter]="termSplitter"
         (searchTermChange)="onSearchTermChange($event)"
         (search)="onSearch($event)"
-        (clearFeature)="removeFeatureFromMap()"
+        (clearFeature)="onClearSearch()"
         (searchSettingsChange)="onSearchSettingsChange()">
       </igo-search-bar>
 
@@ -63,6 +67,8 @@
       [map]="map"
       igoHoverFeature
       [igoHoverFeatureEnabled]="true"
+      igoQuery
+      [queryFeatures]="true"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
         
       <igo-baselayers-switcher

@@ -28,6 +28,7 @@ $footer-height: 29px;
 @media (min-width: 768px){
 
   ::ng-deep .portal-hasHeader {
+    top: $header-height !important;
     height: $portal-height-hasHeader !important;
     display: block;
   }
