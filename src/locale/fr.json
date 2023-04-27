@@ -27,7 +27,7 @@
     "close": "Fermer",
     "open": "Ouvrir"
   },
-  "search-bar": "Faire une recherche",
+  "searchBar": "Faire une recherche",
   "pwa": {
     "new-version-title": "Une nouvelle version de l'application est disponible. ",
     "new-version": "Voulez-vous recharger l'application?",

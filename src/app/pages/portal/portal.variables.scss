@@ -9,6 +9,7 @@ $menu-height-mobile: 40px;
 $header-height: 72px;
 $header-height-mobile: 72px;
 $footer-height: 29px;
+$search-bar-height: 60px;
 
 $portal-height-hasHeader-mobile: calc( 100% - #{$header-height-mobile});
 $portal-height-hasFooter-hasHeader-mobile: calc( 100% - #{$footer-height} - #{$header-height-mobile} );

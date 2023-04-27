@@ -1,13 +1,14 @@
 import {
   Component,
   OnInit,
+  AfterContentInit,
   OnDestroy,
   ViewChild,
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest, zip } from 'rxjs';
-import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap, concatMap, delay } from 'rxjs/operators';
+import { Subscription, BehaviorSubject, zip, concatMap, delay, of, skip } from 'rxjs';
+import { debounceTime, take, skipWhile, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
 import { MatPaginator } from '@angular/material/paginator';
@@ -24,7 +25,8 @@ import {
   ConfigService,
   LanguageService,
   MessageService,
-  StorageService
+  StorageService,
+  AnalyticsService
   } from '@igo2/core';
 
   import {
@@ -34,9 +36,6 @@ import {
     ActionStore,
     EntityStore,
     // getEntityTitle,
-    Toolbox,
-    Tool,
-    Widget,
     EntityTablePaginatorOptions,
     EntityRecord
   } from '@igo2/common';
@@ -58,16 +57,19 @@ import {
   handleFileImportError,
   handleFileImportSuccess,
   WfsWorkspace,
-  FeatureWorkspace,
-  EditionWorkspace,
   generateIdFromSourceOptions,
   computeOlFeaturesExtent,
-  addStopToStore,
   ImageLayer,
   VectorLayer,
   MapExtent,
   IgoMap,
-  DataSourceService
+  DataSourceService,
+  SearchSource,
+  QuerySearchSource,
+  featureToSearchResult,
+  QueryService,
+  Layer,
+  MapService
   } from '@igo2/geo';
 
 import {
@@ -75,16 +77,17 @@ import {
   WorkspaceState,
   QueryState,
   ContextState,
-  SearchState,
-  ToolState,
   DirectionState
 } from '@igo2/integration';
+
+import { SearchState } from '../portal/sideresult/search.state';
 
 import { PwaService } from '../../services/pwa.service';
 
 import {
   controlsAnimations, controlSlideX, controlSlideY
 } from './portal.animation';
+import { MapBrowserEvent } from 'ol';
 
 @Component({
   selector: 'app-portal',
@@ -97,13 +100,12 @@ import {
   ]
 })
 
-export class PortalComponent implements OnInit, OnDestroy {
+export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public showRotationButtonIfNoRotation: boolean = undefined;
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
   public hasGeolocateButton: boolean = true;
   public hasExpansionPanel: boolean = undefined;
-  public hasToolbox: boolean = false;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private workspaceMaximize$$: Subscription[] = [];
@@ -117,8 +119,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
-
-  public term: string;
+  public legendPanelOpened = false;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
   getBaseLayersUseStaticIcon(): Boolean {
@@ -146,6 +147,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public termSplitter = '|';
   public termDefinedInUrlTriggered = false;
   private addedLayers$$: Subscription[] = [];
+  private layers$$: Subscription;
   public forceCoordsNA = false;
 
   public contextMenuStore = new ActionStore([]);
@@ -153,14 +155,12 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private contextLoaded = false;
   private context$$: Subscription;
-  private openSidenav$$: Subscription;
+  private openPanels$$: Subscription;
   private sidenavMediaAndOrientation$$: Subscription;
+  private searchTerm$$: Subscription;
 
   public igoSearchPointerSummaryEnabled: boolean;
 
-  public toastPanelForExpansionOpened = true;
-  private activeWidget$$: Subscription;
-  public showToastPanelForExpansionToggle = false;
   private routeParams: Params;
   public toastPanelHtmlDisplay = false;
   public mobile: boolean;
@@ -213,7 +213,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   get backdropShown(): boolean {
     return (
       ('(min-width: 768px)' &&
-      this.sidenavOpened
+      this.sidenavOpened || this.panelOpenState || this.expanded
     ));
   }
 
@@ -227,14 +227,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     } else {
       this.map.viewController.setPadding({bottom: 0});
     }
-  }
-
-  get toastPanelShown(): boolean {
-    return true;
-  }
-
-  get expansionPanelBackdropShown(): boolean {
-    return this.expansionPanelExpanded && this.toastPanelForExpansionOpened;
   }
 
   get workspace(): Workspace {
@@ -257,13 +249,26 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.searchState.searchResultsGeometryEnabled$.value;
   }
 
-  get toolbox(): Toolbox {
-    return this.toolState.toolbox;
-  }
-
   get workspaceStore(): WorkspaceStore {
     return this.workspaceState.store;
   }
+
+  // GetInfo
+  get queryStore(): EntityStore<SearchResult> { //FeatureInfo
+    return this.queryState.store;
+  }
+
+  public panelOpenState = false;
+
+  public mapQueryClick = false;
+
+  public searchInit = false;
+
+  //Legend
+
+  public mapLayersShownInLegend: Layer[];
+  public legendInPanel = this.configService.getConfig('legendInPanel');
+  public expanded = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -275,9 +280,9 @@ export class PortalComponent implements OnInit, OnDestroy {
     public capabilitiesService: CapabilitiesService,
     private contextState: ContextState,
     private mapState: MapState,
+    private mapService: MapService,
     private searchState: SearchState,
     private queryState: QueryState,
-    private toolState: ToolState,
     private searchSourceService: SearchSourceService,
     private configService: ConfigService,
     private importService: ImportService,
@@ -288,8 +293,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private directionState: DirectionState,
     public dialog: MatDialog,
+    public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
-    private pwaService: PwaService
+    private pwaService: PwaService,
+    private analyticsService: AnalyticsService
   ) {
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
@@ -299,8 +306,6 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.configService.getConfig('hasSideSearch');
         this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') === undefined ? true :
         this.configService.getConfig('searchBar.showSearchBar');
-      this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? true :
-        this.configService.getConfig('hasToolbox');
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
       this.configService.getConfig('showMenuButton');
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
@@ -318,9 +323,12 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
       this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
         this.configService.getConfig('mobileBreakPoint');
+        this.hasHomeExtentButton =
+        this.configService.getConfig('homeExtentButton') === undefined ? false : true;
   }
 
   ngOnInit() {
+    this.queryService.defaultFeatureCount = 1;
     window['IGO'] = this;
     this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
       this.configService.getConfig('hasGeolocateButton');
@@ -371,80 +379,96 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.searchState.selectedResult$.subscribe((result) => {
       if (result && this.isMobile()) {
-        this.closeSidenav();
+        this.closePanels();
       }
     });
 
-    this.workspaceState.workspaceEnabled$.next(this.hasExpansionPanel);
-    this.workspaceState.store.empty$.subscribe((workspaceEmpty) => {
-      if (!this.hasExpansionPanel) {
-        return;
-      }
-      this.workspaceState.workspaceEnabled$.next(workspaceEmpty ? false : true);
-      if (workspaceEmpty) {
-        this.expansionPanelExpanded = false;
-      }
-      this.updateMapBrowserClass();
-    });
-
-    this.workspaceState.workspace$.subscribe((activeWks: WfsWorkspace | FeatureWorkspace | EditionWorkspace) => {
-      if (activeWks) {
-        this.selectedWorkspace$.next(activeWks);
-        this.expansionPanelExpanded = true;
-
-        if (activeWks.layer.options.workspace?.pageSize && activeWks.layer.options.workspace?.pageSizeOptions) {
-          this.paginatorOptions = {
-            pageSize: activeWks.layer.options.workspace?.pageSize,
-            pageSizeOptions: activeWks.layer.options.workspace?.pageSizeOptions
-          };
-        } else {
-          this.paginatorOptions = {
-            pageSize: 50,
-            pageSizeOptions: [1, 5, 10, 20, 50, 100, 500]
-          };
-        }
-      } else {
-        this.expansionPanelExpanded = false;
+    this.searchTerm$$ = this.searchState.searchTerm$.pipe(skip(1)).subscribe((searchTerm: string) => {
+      if (searchTerm !== undefined && searchTerm !== null) {
+        this.analyticsService.trackSearch(searchTerm, this.searchState.store.count);
       }
     });
 
-    this.activeWidget$$ = this.workspaceState.activeWorkspaceWidget$.subscribe(
-      (widget: Widget) => {
-        if (widget !== undefined) {
-          this.openToastPanelForExpansion();
-          this.showToastPanelForExpansionToggle = true;
-        } else {
-          this.closeToastPanelForExpansion();
-          this.showToastPanelForExpansionToggle = false;
-        }
-      }
-    );
+    //FeatureInfo
+    this.queryService.defaultFeatureCount = 1;
 
-    this.openSidenav$$ = this.toolState.openSidenav$.subscribe(
-      (openSidenav: boolean) => {
-        if (openSidenav) {
-          this.openSidenav();
-          this.toolState.openSidenav$.next(false);
+      this.queryStore.entities$
+      .subscribe(
+        (entities) => {
+        if (entities.length > 0) {
+          this.openPanelonQuery();
         }
-      }
-    );
-
-    this.sidenavMediaAndOrientation$$ =
-      combineLatest([
-        this.sidenavOpened$,
-        this.mediaService.media$,
-        this.mediaService.orientation$]
-      ).pipe(
-        debounceTime(50)
-      ).subscribe(() => {
-        this.computeToastPanelOffsetX();
       });
 
     // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
-      this.breakpointChanged()
+    this.breakpointChanged()
     );
+
+  } // End Oninit
+
+  ngAfterContentInit(): void {
+    this.map.viewController.setInitialState();
   }
+
+  // Legend
+
+  togglePanelLegend(){
+    if (this.legendPanelOpened === false) {
+      this.openPanelLegend();
+      if (this.searchInit === true){
+        this.onClearSearch();
+        this.searchBarTerm = '';
+        this.searchInit = false;
+        this.openPanels();
+      }
+      if (this.mapQueryClick === true){
+        this.onClearQuery();
+        this.mapQueryClick = false;
+        this.openPanels();
+      }
+    } else {
+      this.closePanelLegend();
+    }
+
+  }
+
+  closePanelLegend(){
+    this.legendPanelOpened = false;
+    this.closePanels();
+    this.map.propertyChange$.unsubscribe;
+  }
+
+  openPanelLegend(){
+    this.legendPanelOpened = true;
+    this.openPanels();
+    this.map.propertyChange$.subscribe(() => {
+      this.mapLayersShownInLegend = this.map.layers.filter(layer => (
+        layer.showInLayerList !== false
+      ));
+    });
+  }
+/*
+  togglePanel(event: boolean){
+    this.panelOpenState = event;
+    this.expanded = event;
+  }*/
+
+  public breakpointChanged() {
+    if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
+      this.currentBreakpoint = this.mobileBreakPoint;
+      this.mobile = false;
+    } else {
+      this.mobile = true;
+    }
+  }
+
+  readonly breakpoint$ = this.breakpointObserver
+  .observe(this.mobileBreakPoint)
+  .pipe(
+    tap(() => {}),
+    distinctUntilChanged()
+  );
 
   private initSW() {
     const dataDownload = this.configService.getConfig('pwa.dataDownload');
@@ -501,31 +525,6 @@ export class PortalComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  public breakpointChanged() {
-    if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
-      this.currentBreakpoint = this.mobileBreakPoint;
-      this.mobile = false;
-    } else {
-      this.mobile = true;
-    }
-  }
-
-  readonly breakpoint$ = this.breakpointObserver
-  .observe(this.mobileBreakPoint)
-  .pipe(
-    tap(() => {}),
-    distinctUntilChanged()
-  );
-
-  computeToastPanelOffsetX() {
-    if (this.isMobile() || !this.isLandscape()) {
-      Promise.resolve().then(() => this.toastPanelOffsetX$.next(undefined));
-    } else {
-      Promise.resolve().then(() => this.toastPanelOffsetX$.next(this.getToastPanelExtent()));
-    }
-  }
-
   createFeatureProperties(layer: ImageLayer | VectorLayer) {
     let properties = {};
     layer.options.sourceOptions.sourceFields.forEach(field => {
@@ -542,14 +541,107 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.context$$.unsubscribe();
-    this.activeWidget$$.unsubscribe();
-    this.openSidenav$$.unsubscribe();
     this.workspaceMaximize$$.map(f => f.unsubscribe());
-    this.sidenavMediaAndOrientation$$.unsubscribe();
+    if( this.layers$$){
+      this.layers$$.unsubscribe();
+    }
+    this.searchTerm$$.unsubscribe();
   }
 
-  removeFeatureFromMap() {
-    this.map.searchResultsOverlay.clear();
+  private getQuerySearchSource(): SearchSource {
+    return this.searchSourceService
+      .getSources()
+      .find(
+        (searchSource: SearchSource) =>
+          searchSource instanceof QuerySearchSource
+      );
+  }
+
+  private getFeatureIsSameActiveWks(feature: Feature): boolean {
+    if (this.workspace) {
+      const featureTitle = feature.meta.sourceTitle;
+      const wksTitle = this.workspace.title;
+      if (wksTitle === featureTitle) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  private getWksActiveOpenInResolution(): boolean {
+    if(this.workspace) {
+      const activeWks = this.workspace as WfsWorkspace;
+      if(activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
+        return true;
+      }
+    }
+    return false;
+   }
+
+  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    if(this.configService.getConfig('queryOnlyOne')){
+      event.features = [event.features[0]];
+      this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+    }
+    const baseQuerySearchSource = this.getQuerySearchSource();
+    const querySearchSourceArray: QuerySearchSource[] = [];
+    if (event.features.map) {
+      const results = event.features.map((feature: Feature) => {
+        if (feature) {
+          if (this.mapQueryClick === true) {
+            this.onClearQuery();
+          }
+          this.onClearSearch();
+          this.searchInit = false;
+          this.legendPanelOpened = false;
+          this.openPanelonQuery();
+          let querySearchSource = querySearchSourceArray.find(
+            (s) => s.title === feature.meta.sourceTitle
+          );
+          if (this.getFeatureIsSameActiveWks(feature)) {
+            if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+              return;
+            }
+          }
+          if (querySearchSource) {
+            this.onClearQuery();
+            this.openPanelonQuery();
+            this.mapQueryClick = true;
+          }
+          if (!querySearchSource) {
+            querySearchSource = new QuerySearchSource({
+              title: feature.meta.sourceTitle
+            });
+            querySearchSourceArray.push(querySearchSource);
+          }
+            return featureToSearchResult(feature, querySearchSource);
+        } else {
+          this.mapQueryClick = false;
+          if (this.mapQueryClick === false && this.searchInit === false && this.legendPanelOpened === false && !this.mobile){ // in desktop keep legend opened if user clicks on the map
+            this.panelOpenState = false;
+          }
+          if (this.mapQueryClick === false && this.searchInit === false && this.mobile){ // mobile mode, close legend when user click on the map
+            this.expanded = false;
+            this.panelOpenState = false;
+          }
+        }
+      });
+
+      const filteredResults = results.filter(x => x !== undefined);
+      const research = {
+        request: of(filteredResults),
+        reverse: false,
+        source: baseQuerySearchSource
+      };
+      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+        this.queryStore.load(queryResults);
+      });
+    } else {
+      this.mapQueryClick = false;
+      this.panelOpenState = false;
+    }
   }
 
   /**
@@ -561,22 +653,13 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onBackdropClick() {
-    this.closeSidenav();
-  }
-
-  onToggleSidenavClick() {
-    this.toggleSidenav();
-  }
-
-  closeToastPanelForExpansion() {
-    this.toastPanelForExpansionOpened = false;
-  }
-
-  openToastPanelForExpansion() {
-    this.toastPanelForExpansionOpened = true;
+    this.closePanels();
+    this.mapQueryClick = false;
   }
 
   onSearchTermChange(term?: string) {
+    this.legendPanelOpened = false;
+    this.expanded = true;
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
@@ -584,6 +667,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
+      this.expanded = true;
       this.onClearSearch();
       return;
     }
@@ -591,6 +675,16 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    this.searchInit = true;
+    this.legendPanelOpened = false;
+    this.expanded = true;
+    this.panelOpenState = true;
+    if (this.mapQueryClick === true) {
+      this.onClearQuery();
+      this.mapQueryClick = false;
+      this.panelOpenState = true;
+      this.expanded = true;
+    }
     const results = event.results;
 
     const isReverseSearch = !sourceCanSearch(event.research.source);
@@ -616,30 +710,21 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchStore.updateMany(newResults);
   }
 
-  onSearchSettingsChange() {
-    this.onSettingsChange$.next(true);
-  }
-
-  private closeSidenav() {
-    this.sidenavOpened = false;
-    this.map.viewController.padding[3] = 0;
-  }
-
-  private openSidenav() {
-    this.sidenavOpened = true;
-    this.map.viewController.padding[3] = this.isMobile() ? 0 : 400;
-  }
-
-  private toggleSidenav() {
-    this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
-    this.computeToastPanelOffsetX();
-  }
-
-  public toolChanged(tool: Tool) {
-    if (tool && tool.name === 'searchResults' && this.searchBar) {
-      this.searchBar.nativeElement.getElementsByTagName('input')[0].focus();
+  private closePanels() {
+    if (this.mapQueryClick === false && this.searchInit === false && this.legendPanelOpened === false){
+      this.panelOpenState = false;
+      this.expanded = false;
     }
   }
+
+  private openPanels() {
+    this.panelOpenState = true;
+    this.expanded = true;
+  }
+/*
+  private toggleSidenav() {
+    this.sidenavOpened ? this.closePanels() : this.openPanels(); //////////////////////////
+  }*/
 
   private computeHomeExtentValues(context: DetailedContext) {
     if (context?.map?.view?.homeExtent) {
@@ -667,53 +752,55 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
 
     this.computeHomeExtentValues(context);
-
     this.route.queryParams.pipe(debounceTime(250)).subscribe((qParams) => {
       if (!qParams['context'] || qParams['context'] === context.uri) {
         this.readLayersQueryParams(qParams);
       }
     });
 
-    if (this.contextLoaded) {
-      const contextManager = this.toolbox.getTool('contextManager');
-      const contextManagerOptions = contextManager
-        ? contextManager.options
-        : {};
-      let toolToOpen = contextManagerOptions.toolToOpenOnContextChange;
-
-      if (!toolToOpen) {
-        const toolOrderToOpen = ['mapTools', 'map', 'mapDetails', 'mapLegend'];
-        for (const toolName of toolOrderToOpen) {
-          if (this.toolbox.getTool(toolName)) {
-            toolToOpen = toolName;
-            break;
-          }
-        }
-      }
-
-      if (toolToOpen) {
-        this.toolbox.activateTool(toolToOpen);
-      }
-    }
-
     this.contextLoaded = true;
   }
 
   private onBeforeSearch() {
-    if (
-      !this.toolbox.activeTool$.value ||
-      this.toolbox.activeTool$.value.name !== 'searchResults'
-    ) {
-      this.toolbox.activateTool('searchResults');
-    }
-    this.openSidenav();
+    this.openPanels();
+    this.panelOpenState = true;
   }
 
-  public onClearSearch() {
+  onClearSearch() {
     this.map.searchResultsOverlay.clear();
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
+    this.searchInit = false;
+    this.searchBarTerm = '';
+    this.searchState.setSearchTerm('');
+  }
+
+  closePanelOnCloseQuery(){
+    this.mapQueryClick = false;
+    if (this.searchInit === false && this.legendPanelOpened === false){
+      //this.panelOpenState = false;
+      //this.expanded = false; //// causes panel to close when click searchbar after query
+    } if (this.searchInit === true || this.legendPanelOpened === true) {
+      this.panelOpenState = true;
+      this.expanded = true;
+    }
+  }
+
+  openPanelonQuery(){
+    this.mapQueryClick = true;
+    this.expanded = true;
+    this.panelOpenState = true;
+    this.searchInit = false;
+    this.legendPanelOpened = false;
+    this.onClearSearch();
+    this.searchBarTerm = '';
+  }
+
+  onClearQuery(){
+    this.queryState.store.clear(); // clears the info panel
+    this.queryState.store.softClear(); // clears the info panel
+    this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
   }
 
   onContextMenuOpen(event: { x: number; y: number }) {
@@ -750,79 +837,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchBarTerm = coord.map((c) => c.toFixed(6)).join(', ');
   }
 
-  updateMapBrowserClass() {
-    const header = this.queryState.store.entities$.value.length > 0;
-    if (this.hasExpansionPanel && this.workspaceState.workspaceEnabled$.value) {
-      this.mapBrowser.nativeElement.classList.add('has-expansion-panel');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove('has-expansion-panel');
-    }
-
-    if (this.hasExpansionPanel && this.expansionPanelExpanded) {
-      if (this.workspaceMaximize$.value) {
-        this.mapBrowser.nativeElement.classList.add('expansion-offset-maximized');
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset');
-      } else {
-        this.mapBrowser.nativeElement.classList.add('expansion-offset');
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset-maximized');
-      }
-    } else {
-      if (this.workspaceMaximize$.value) {
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset-maximized');
-      } else {
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset');
-      }
-    }
-
-    if (this.sidenavOpened) {
-      this.mapBrowser.nativeElement.classList.add('sidenav-offset');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove('sidenav-offset');
-    }
-
-    if (this.sidenavOpened && !this.isMobile()) {
-      this.mapBrowser.nativeElement.classList.add('sidenav-offset-baselayers');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove(
-        'sidenav-offset-baselayers'
-      );
-    }
-
-    if (
-      header &&
-      (this.isMobile() || this.isTablet() || this.sidenavOpened) &&
-      !this.expansionPanelExpanded
-    ) {
-      this.mapBrowser.nativeElement.classList.add('toast-offset-attribution');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove(
-        'toast-offset-attribution'
-      );
-    }
-  }
-
-  getToastPanelExtent() {
-    if (!this.sidenavOpened) {
-      if (this.toastPanelHtmlDisplay && this.mediaService.isDesktop()) {
-        return 'htmlDisplay';
-      }
-      if (this.fullExtent) {
-        return 'fullStandard';
-      } else {
-        return 'standard';
-      }
-    } else if (this.sidenavOpened) {
-      if (this.toastPanelHtmlDisplay && this.mediaService.isDesktop()) {
-        return 'htmlDisplayOffsetX';
-      }
-      if (this.fullExtent) {
-        return 'fullOffsetX';
-      } else {
-        return 'standardOffsetX';
-      }
-    }
-  }
-
   onPointerSummaryStatusChange(value) {
     this.storageService.set('searchPointerSummaryEnabled', value);
     this.igoSearchPointerSummaryEnabled = value;
@@ -837,7 +851,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   private readQueryParams() {
     this.route.queryParams.subscribe((params) => {
       this.routeParams = params;
-      this.readToolParams();
       this.readSearchParams();
       this.readFocusFirst();
       this.computeZoomToExtent();
@@ -923,73 +936,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
     if (this.routeParams['searchGeom'] === '1') {
       this.searchState.searchResultsGeometryEnabled$.next(true);
-    }
-  }
-
-  private readToolParams() {
-    if (this.routeParams['tool']) {
-      this.matDialogRef$.pipe(
-        skipWhile(r => r !== undefined),
-        first()
-      ).subscribe(matDialogOpened => {
-        if (!matDialogOpened) {
-          this.toolbox.activateTool(this.routeParams['tool']);
-        }
-      });
-    }
-
-    if (this.routeParams['sidenav'] === '1') {
-      setTimeout(() => {
-        this.openSidenav();
-      }, 250);
-    }
-
-    if (this.routeParams['routing']) {
-      let routingCoordLoaded = false;
-      const stopCoords = this.routeParams['routing'].split(';');
-      const routingOptions = this.routeParams['routingOptions'];
-      let resultSelection: number;
-      if (routingOptions) {
-        resultSelection = parseInt(routingOptions.split('result:')[1], 10);
-      }
-      this.directionState.stopsStore.storeInitialized$
-        .pipe(skipWhile(init => !init), first())
-        .subscribe((init: boolean) => {
-          if (init && !routingCoordLoaded) {
-            routingCoordLoaded = true;
-            stopCoords.map((coord, i) => {
-              if (i > 1) {
-                addStopToStore(this.directionState.stopsStore);
-              }
-            });
-            setTimeout(() => {
-              stopCoords.map((coord, i) => {
-                const stop = this.directionState.stopsStore.all().find(e => e.position === i);
-                stop.text = coord;
-                stop.coordinates = coord.split(',');
-                this.directionState.stopsStore.update(stop);
-              });
-            }, this.directionState.debounceTime * 1.25); // this delay is due to the default component debounce time
-          }
-        });
-      // zoom to active route
-      this.directionState.routesFeatureStore.count$
-        .pipe(skipWhile(c => c < 1), first())
-        .subscribe(c => {
-          if (c >= 1) {
-            this.directionState.zoomToActiveRoute$.next();
-          }
-        });
-      // select the active route by url controls
-      this.directionState.routesFeatureStore.count$
-        .pipe(skipWhile(c => c < 2), first())
-        .subscribe(() => {
-          if (resultSelection) {
-            this.directionState.routesFeatureStore.entities$.value.map(d => d.properties.active = false);
-            this.directionState.routesFeatureStore.entities$.value[resultSelection].properties.active = true;
-            this.directionState.zoomToActiveRoute$.next();
-          }
-        });
     }
   }
 
@@ -1221,4 +1167,5 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
     return visible;
   }
+
 }

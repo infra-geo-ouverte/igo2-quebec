@@ -7,11 +7,11 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ElementRef,
-  ViewChild
+  ViewChild,
+  HostListener,
+  ChangeDetectorRef
 } from '@angular/core';
 
-import * as proj from 'ol/proj';
-import { MediaService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 
 import { BehaviorSubject } from 'rxjs';
@@ -21,16 +21,17 @@ import {
   FEATURE,
   Feature,
   FeatureMotion,
-  GoogleLinks,
   LayerService,
   MapService,
-  Layer,
   Research,
   SearchResult,
-  SearchService
+  SearchService,
+  Layer
 } from '@igo2/geo';
-import { SearchState } from '@igo2/integration';
+import { QueryState, MapState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
+
+import { SearchState } from './search.state';
 
 @Component({
   selector: 'app-sideresult',
@@ -40,15 +41,12 @@ import { ConfigService } from '@igo2/core';
 })
 export class SideResultComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-  @Input() hasSearchQuery: boolean = undefined;
-
-  @Input()
-  public hasBackdrop: boolean;
 
   @Input()
   get map(): IgoMap {
     return this._map;
   }
+
   set map(value: IgoMap) {
     this._map = value;
   }
@@ -69,20 +67,76 @@ export class SideResultComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
+  @Output() sidenavClosed = new EventEmitter<boolean>();
 
-  events: string[] = [];
+  @Input()
+  get sidenavOpened(): boolean {
+    return this._sidenavOpened;
+  }
+  set sidenavOpened(value: boolean) {
+    this._sidenavOpened = value;
+  }
+  private _sidenavOpened: boolean;
+
+  @Input()
+  get mobile(): boolean {
+    return this._mobile;
+  }
+  set mobile(value: boolean) {
+    this._mobile = value;
+  }
+  private _mobile: boolean;
+
+    //QUERY
+
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
+
+  get queryStore(): EntityStore<SearchResult> {
+    return this.queryState.store;
+  }
+
+  resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
+
+  // Feature details
+  @Output() selectFeature = new EventEmitter<boolean>();
+
+  @Input()
+  get feature(): Feature {
+    return this._feature;
+  }
+  set feature(value: Feature) {
+    this._feature = value;
+    this.cdRef.detectChanges();
+    this.selectFeature.emit();
+  }
+  private _feature: Feature;
+
+  public selectedFeature: Feature;
+  public hasFeatureEmphasisOnSelection: Boolean = false;
+
+  // SEARCH
+
+  @Input()
+  get searchInit(): boolean {
+    return this._searchInit;
+  }
+  set searchInit(value: boolean) {
+    this._searchInit = value;
+  }
+  private _searchInit: boolean;
+
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
   public igoSearchPointerSummaryEnabled: boolean = false;
 
   public termSplitter: string = '|';
-
-  public view = {
-    center: [-73, 47.2],
-    zoom: 7
-  };
-
-  public osmLayer: Layer;
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true }) mapBrowser: ElementRef;
 
@@ -90,15 +144,53 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public mapProjection: string;
   public term: string;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
+
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
 
-  get isTouchScreen(): boolean {
-    return this.mediaService.isTouchScreen();
-  }
+  // legend
 
-  public selectedFeature: Feature;
+  @Input()
+  get layers(): Layer[] {
+    return this._layers;
+  }
+  set layers(value: Layer[]) {
+    this._layers = value;
+  }
+  private _layers: Layer[];
+
+  @Input()
+  get legendPanelOpened(): boolean {
+    return this._legendPanelOpened;
+  }
+  set legendPanelOpened(value: boolean) {
+    this._legendPanelOpened = value;
+  }
+  private _legendPanelOpened: boolean;
+
+  @Input()
+  get panelOpenState(): boolean {
+    return this._panelOpenState;
+  }
+  set panelOpenState(value: boolean) {
+    this._panelOpenState = value;
+  }
+  private _panelOpenState: boolean;
+
+  @Input()
+  get scenarioDateToggle(): string {
+    return this._scenarioDateToggle;
+  }
+  set scenarioDateToggle(value: string) {
+    this._scenarioDateToggle = value;
+  }
+  private _scenarioDateToggle: string;
+
+  @Output() closeLegend = new EventEmitter<boolean>();
+  @Output() openLegend = new EventEmitter<boolean>();
+  @Output() closeQuery = new EventEmitter<boolean>();
+  public mapLayersShownInLegend: Layer[];
 
   constructor(
     private configService: ConfigService,
@@ -106,24 +198,40 @@ export class SideResultComponent implements OnInit, OnDestroy {
     private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
-    private mediaService: MediaService
+    private queryState: QueryState,
+    private cdRef: ChangeDetectorRef,
+    private mapState: MapState
     ) {
-      this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
-
-      this.layerService
-        .createAsyncLayer({
-          title: 'OSM',
-          sourceOptions: {
-            type: 'osm'
-          }
-        })
-      .subscribe(layer => {
-        this.osmLayer = layer;
-      });
     }
 
+    ngOnInit(){
+      this.queryStore.entities$
+      .subscribe(
+        (entities) => {
+        if (entities.length > 0) {
+          this.opened = true;
+          this.mapQueryClick = true;
+          this.legendPanelOpened = false;
+          this.panelOpenState = true;
+          this.onClearSearch();
+        }
+      });
+    } // End OnInit
+
+    @HostListener('change')
+    ngOnDestroy() {
+      this.store.destroy();
+      this.store.entities$.unsubscribe();
+      this.opened = false;
+      this.legendPanelOpened = false;
+      this.onClearSearch();
+      this.clearQuery();
+      this.map.propertyChange$.unsubscribe;
+    }
+
+    //SEARCH
     onPointerSummaryStatusChange(value) {
       this.igoSearchPointerSummaryEnabled = value;
     }
@@ -138,6 +246,15 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
+      if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
+        this.queryState.store.softClear();
+        this.map.queryResultsOverlay.clear();
+        this.mapQueryClick = false;
+      }
+      this.store.clear();
+      // search
+      this.searchInit = true;
+      this.legendPanelOpened = false;
       const results = event.results;
       this.searchStore.state.updateAll({ focused: false, selected: false });
       const newResults = this.searchStore.entities$.value
@@ -178,64 +295,16 @@ export class SideResultComponent implements OnInit, OnDestroy {
         [layer.data] as Feature[],
         FeatureMotion.Default
       );
+
+      this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
     }
 
-  ngOnInit() {
-    this.store.load([
-      {
-        id: 'coordinates',
-        title: 'coordinates',
-        handler: this.onSearchCoordinate.bind(this)
-      },
-      {
-        id: 'googleMaps',
-        title: 'googleMap',
-        handler: this.onOpenGoogleMaps.bind(this),
-        args: ['1']
-      },
-      {
-        id: 'googleStreetView',
-        title: 'googleStreetView',
-        handler: this.onOpenGoogleStreetView.bind(this)
-      }
-    ]);
-  }
-
-  ngOnDestroy() {
-    this.store.destroy();
-  }
 
   /*
    * Remove a feature to the map overlay
    */
   removeFeatureFromMap() {
     this.map.searchResultsOverlay.clear();
-  }
-
-  onContextMenuOpen(event: { x: number; y: number }) {
-    const position = this.mapPosition(event);
-    const coord = this.mapService.getMap().ol.getCoordinateFromPixel(position);
-    this.mapProjection = this.mapService.getMap().projection;
-    this.lonlat = proj.transform(coord, this.mapProjection, 'EPSG:4326');
-  }
-
-  mapPosition(event: { x: number; y: number }) {
-    const contextmenuPoint = event;
-    contextmenuPoint.y =
-      contextmenuPoint.y -
-      this.mapBrowser.nativeElement.getBoundingClientRect().top +
-      window.scrollY;
-    contextmenuPoint.x =
-      contextmenuPoint.x -
-      this.mapBrowser.nativeElement.getBoundingClientRect().left +
-      window.scrollX;
-    const position = [contextmenuPoint.x, contextmenuPoint.y];
-    return position;
-  }
-
-  onPointerSearch(event) {
-    this.lonlat = event;
-    this.onSearchCoordinate();
   }
 
   onSearchCoordinate() {
@@ -251,13 +320,59 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
   }
 
-  onOpenGoogleMaps() {
-    window.open(GoogleLinks.getGoogleMapsCoordLink(this.lonlat[0], this.lonlat[1]));
+  closePanelOnCloseQuery(event){
+    this.closeQuery.emit();
+    this.mapQueryClick = false;
+    if (this.searchInit === false && this.legendPanelOpened === false){
+      this.panelOpenState = false;
+    } if (this.searchInit === true || this.legendPanelOpened === true) {
+      this.panelOpenState = true;
+    }
   }
 
-  onOpenGoogleStreetView() {
-    window.open(
-      GoogleLinks.getGoogleStreetViewLink(this.lonlat[0], this.lonlat[1])
-    );
+  onSearchPanel(){
+
   }
+
+  onClearSearch() {
+    this.map.searchResultsOverlay.clear();
+    this.searchStore.clear();
+    this.searchState.setSelectedResult(undefined);
+    this.searchState.deactivateCustomFilterTermStrategy();
+    this.searchInit = false;
+    this.term = '';
+    this.searchState.setSearchTerm('');
+  }
+
+  clearQuery(): void{
+    this.queryState.store.softClear();
+    this.queryState.store.clear();
+    this.mapQueryClick = false;
+    this.removeFeatureFromMap();
+  }
+
+  // LEGEND
+
+  closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
+    this.opened = false;
+    this.legendPanelOpened = false;
+    this.closeLegend.emit();
+    this.map.propertyChange$.unsubscribe;
+  }
+
+  openPanelLegend(){
+    this.map.propertyChange$.subscribe(() => {
+      this.mapLayersShownInLegend = this.map.layers.filter(layer => (
+        layer.showInLayerList !== false
+      ));
+    });
+    this.opened = true;
+    this.legendPanelOpened = true;
+    this.clearQuery();
+    this.onClearSearch();
+    this.mapQueryClick = false;
+    this.openLegend.emit(true);
+  }
+
 }
+

@@ -8,8 +8,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion'; // mobile
+import { IgoLanguageModule } from '@igo2/core';
+import { IgoMessageModule } from '@igo2/core';
+import { AppFeatureInfoModule} from './feature-info/feature-info.module';
+import { IgoFeatureModule } from './feature/feature.module';
+import { LegendButtonModule } from '../legend-button/legend-button.module';
+import { IgoFeatureDetailsModule} from './feature/feature-details/feature-details.module';
 
-import { IgoLanguageModule, IgoMessageModule } from '@igo2/core';
 import {
   IgoPanelModule,
   IgoFlexibleModule,
@@ -18,13 +23,15 @@ import {
   IgoContextMenuModule
 } from '@igo2/common';
 import {
-  IgoFeatureModule,
   IgoMapModule,
-  IgoSearchModule
+  IgoSearchModule,
+  IgoLayerModule,
+  IgoSearchResultsModule
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
 import { SideResultComponent } from './sideresult.component';
 import { BottomResultComponent } from './bottomresult.component';
+import { LegendPanelButtonComponent } from './legend-panel-button/legend-panel-button.component';
 
 @NgModule({
   imports: [
@@ -38,7 +45,6 @@ import { BottomResultComponent } from './bottomresult.component';
     IgoFlexibleModule,
     IgoContextManagerModule,
     IgoToolModule,
-    IgoFeatureModule,
     //SEARCH
     MatCardModule,
     IgoMessageModule,
@@ -49,10 +55,16 @@ import { BottomResultComponent } from './bottomresult.component';
     IgoAppSearchModule,
     IgoSearchModule.forRoot(),
     IgoAppSearchResultsToolModule,
-    MatExpansionModule
+    MatExpansionModule,
+    AppFeatureInfoModule,
+    IgoFeatureModule,
+    IgoFeatureDetailsModule,
+    LegendButtonModule,
+    IgoLayerModule,
+    IgoSearchResultsModule
   ],
-  exports: [SideResultComponent, BottomResultComponent ],
+  exports: [SideResultComponent, BottomResultComponent, LegendPanelButtonComponent ],
   //SEARCH
-  declarations: [SideResultComponent, BottomResultComponent]
+  declarations: [SideResultComponent, BottomResultComponent, LegendPanelButtonComponent]
 })
 export class AppSideResultModule {}

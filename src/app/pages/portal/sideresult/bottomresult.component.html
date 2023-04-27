@@ -1,39 +1,109 @@
-<div id="bottomResultMobile">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header _expanded = true>
+<div id="bottomResultMobile" >
+  <mat-expansion-panel 
+    #bottomresult
+    [hideToggle]="false"
+    (opened) ="openPanel()"
+    (closed)= "closePanelLegend()"
+    [expanded]= "expanded"
+    (openLegend)= "openPanelLegend()"
+    (closeLegend)= "closePanelLegend()"
+    (keydown.Enter)= "$event.stopPropagation()"
+    (click)= "$event.stopPropagation()"
+    >
+    <mat-expansion-panel-header>
       <igo-search-bar *ngIf="showSearchBar"
         #searchbar
-        (keydown.Space)="$event.stopPropagation()"
+        (click)= "onSearchBarClick($event)"
+        (keydown.Enter)= "$event.stopPropagation()"
         appearance="outline"
         searchIcon ="magnify"
-        [matTooltip]="'search-bar' | translate"
+        [matTooltip]="'searchBar' | translate"
         matTooltipShowDelay="500"
         tooltip-position="after"
         [searchSettings]="false"
         color="primary"
-        [termSplitter]="termSplitter"
-        [forceNA]="forceCoordsNA"
-        [store]="searchStore"
+        [term]= "term"
         (searchTermChange)="onSearchTermChange($event)"
-        [pointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
-        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
-        [searchResultsGeometryEnabled]="searchResultsGeometryEnabled"
-        (searchResultsGeometryStatus)="onSearchResultsGeometryStatusChange($event)"
-        
-        (clearFeature)="removeFeatureFromMap()"
-        (searchSettingsChange)="onSearchSettingsChange()"
-        >
+        [termSplitter]= "termSplitter"
+        [forceNA]= "forceCoordsNA"
+        [store]= "searchStore"
+        [pointerSummaryEnabled]= "igoSearchPointerSummaryEnabled"
+        (pointerSummaryStatus)= "onPointerSummaryStatusChange($event)"
+        [searchResultsGeometryEnabled]= "searchResultsGeometryEnabled"
+        (searchResultsGeometryStatus)= "onSearchResultsGeometryStatusChange($event)"
+        (clearFeature)= "clearSearchBar($event)"
+        (search)= "onSearch($event)">
       </igo-search-bar>
+
     </mat-expansion-panel-header>
 
-    <app-search-results-tool  
-      #searchresults
-      [showIcons]="true"
-      placeholder="false"
-      (resultSelect)="onResultFocus($event)"
-      (moreResults)="onSearch($event)"
-      >
-    </app-search-results-tool>
+    <div id="legend" [legendPanelOpened]="legendPanelOpened" *ngIf="legendPanelOpened === true">
+      <button
+        mat-icon-button
+        color="primary"
+        [matTooltip]="'legend.legendClose' | translate"
+        (click)="closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
+      </button>
+      <h4 mat-dialog-title>{{ 'legend.legendButton' | translate }}</h4>
+      <igo-layer-legend-list
+        [layers]="mapLayersShownInLegend"
+        [excludeBaseLayers]="true"
+        [allowShowAllLegends]="false"
+        [updateLegendOnResolutionChange]="true"
+        [showAllLegendsValue]="false"
+        [layers]="layers">
+      </igo-layer-legend-list>
+    </div>
+
+      <div style="margin: 20px;" *ngIf="searchInit !== true && (queryStore.empty$ | async)===true && legendPanelOpened === false">
+        <section class="mat-typography">
+          <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
+          <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
+          <p [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"></p>
+      </section>
+      </div>
+
+      <div #getInfo *ngIf="mapQueryClick === true" >
+
+        <app-feature-info
+          [map]="map"
+          [store]="queryStore"
+          [mobile]="mobile"
+          (sidenavClosed)="$event"
+          (closeQuery)="closePanelOnCloseQuery()"
+          [mapQueryClick]="mapQueryClick"
+          [panelOpenState]="panelOpenState"
+          [opened]="panelOpenState"
+          [scenarioDateToggle]="scenarioDateToggle"
+          >
+        </app-feature-info>
+
+      </div>
+
+      <div #search *ngIf="searchInit === true" >
+
+        <igo-search-results
+        [store]="searchStore"
+        [term]="term"
+        [showIcons]="true"
+        [termSplitter]="termSplitter"
+        placeholder="false"
+        [searchInit]="searchInit"
+        (searchTermChange)="onSearchTermChange($event)"
+        [settingsChange$]="settingsChange$"
+        (featureSelected)="closePanel()"
+        (resultFocus)="onResultFocus($event)"
+        (resultSelect)="onResultFocus($event)"
+        (moreResults)="onSearch($event)">
+          <ng-template #igoSearchItemToolbar let-result="result">
+            <igo-search-add-button
+              [map]="map"
+              [layer]="result">
+            </igo-search-add-button>
+          </ng-template>
+      </igo-search-results>
+
+        </div>
 
   </mat-expansion-panel>
 </div>
