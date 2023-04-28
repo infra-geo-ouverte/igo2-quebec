@@ -267,50 +267,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     //this.expandedChange.emit();
     this.closePanel();
     this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
-/*
-    this.queryStore.entities$
-    .subscribe(
-      (entities) => {
-      if (entities.length > 0) {
-        if (this.expanded) {
-          this.expanded;
-        }
-        if (this.panelOpenState) {
-          this.panelOpenState;
-        }
-        if (this.mapQueryClick) {
-          this.mapQueryClick;
-          }
-        if (this.legendPanelOpened) {
-          this.legendPanelOpened;
-        }
-       //this.panelOpenState = true;
-       //this.mapQueryClick = true;
-       this.onClearSearch();
-      }
-    });*/
-
-    /*
-    this.queryStore.count$
-    .pipe()
-    .subscribe(() => {
-      if (this.expanded) {
-        this.expanded;
-      }
-      if (this.panelOpenState) {
-        this.panelOpenState;
-      }
-      if (this.mapQueryClick) {
-        this.mapQueryClick;
-        }
-      if (this.legendPanelOpened) {
-        this.legendPanelOpened;
-        }
-        this.openQuery.emit();
-      //this.panelOpenState = true;
-      //this.mapQueryClick = true;
-      this.onClearSearch();
-    });*/
 
     this.queryStore.entities$
     .subscribe(

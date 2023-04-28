@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LanguageService } from '@igo2/core';
 
 @Component({
   selector: 'app-legend-panel-button',
@@ -18,7 +19,7 @@ export class LegendPanelButtonComponent {
   }
   private _legendPanelOpened: boolean;
 
-  constructor() { }
+  constructor(protected languageService: LanguageService) { }
 
   toggleLegendPanel(): void {
       this.toggleLegend.emit();

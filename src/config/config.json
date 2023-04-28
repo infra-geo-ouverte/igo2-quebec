@@ -10,6 +10,7 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
+  "legendInPanel": true,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
@@ -29,6 +30,6 @@
   "hasToolbox": false,
   "mobileBreakPoint": "'(min-width: 768px)'",
   "language": {
-    "prefix": ["./locale/", "./particular/locale/"]
+    "prefix": ["./locale/"]
     }
 }

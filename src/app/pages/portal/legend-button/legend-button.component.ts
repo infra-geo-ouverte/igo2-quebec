@@ -1,3 +1,4 @@
+import { LanguageService } from '@igo2/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogState } from '@angular/material/dialog';
 import { IgoMap, Layer } from '@igo2/geo';
@@ -14,7 +15,7 @@ export class LegendButtonComponent {
 
   public dialogRef = null;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, protected languageService: LanguageService) {}
 
   toggleDialog() {
     const dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');

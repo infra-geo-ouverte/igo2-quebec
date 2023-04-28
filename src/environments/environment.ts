@@ -46,7 +46,7 @@ export const environment: Environment = {
       }
     },
     language: {
-      prefix: ['./locale/', './particular/locale/']
+      prefix: ['./locale/']
     },
     projections: [
       {

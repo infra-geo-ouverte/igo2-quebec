@@ -1,11 +1,12 @@
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, NgModule, ApplicationRef, Injector } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
 import { MenuModule } from './pages/menu/menu.module';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { concatMap, first } from 'rxjs';
 
 export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
@@ -28,8 +29,6 @@ import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import {
   provideStyleListOptions
 } from '@igo2/geo';
-
-import { PwaService } from './services/pwa.service';
 
 import { environment } from '../environments/environment';
 import { PortalModule } from './pages';
@@ -83,7 +82,7 @@ function configLoader(
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFactory,
-      deps: [CONFIG_LOADER, LanguageService, PwaService],
+      deps: [Injector, ApplicationRef],
       multi: true
     },
     provideStyleListOptions({
@@ -96,17 +95,23 @@ function configLoader(
 export class AppModule {}
 
 function appInitializerFactory(
-  configLoader: Promise<unknown>,
-  languageService: LanguageService,
-  pwaService: PwaService
+  injector: Injector,
+  applicationRef: ApplicationRef
 ) {
+  // ensure to have the proper translations loaded once, when the app is stable.
   return () => new Promise<any>((resolve: any) => {
-    configLoader.then(() => {
-      const secondPromises = [languageService.translate.getTranslation(languageService.getLanguage())];
-      Promise.all(secondPromises).then(() => {
-        const thirdPromises = [pwaService.initPwaPrompt()];
-        Promise.all(thirdPromises).then(() => resolve());
+    applicationRef.isStable.pipe(
+      first(isStable => isStable === true),
+      concatMap(() => {
+        const languageService = injector.get(LanguageService);
+        const lang = languageService.getLanguage();
+        return languageService.translate.getTranslation(lang);
+      }))
+      .subscribe((translations) => {
+        const languageService = injector.get(LanguageService);
+        const lang = languageService.getLanguage();
+        languageService.translate.setTranslation(lang, translations);
+        resolve();
       });
-    });
   });
 }

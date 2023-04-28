@@ -1,5 +1,5 @@
 
-import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule, IgoAppToolModule } from '@igo2/integration';
+import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -9,7 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { IgoCoreModule } from '@igo2/core';
+import { IgoCoreModule, IgoLanguageModule } from '@igo2/core';
 import {
   IgoActionModule,
   IgoWorkspaceModule,
@@ -98,7 +98,7 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoAppSearchBarModule,
     IgoAppSearchModule,
     IgoAppSearchResultsToolModule,
-    IgoAppToolModule
+    IgoLanguageModule
   ],
   providers: [
     provideCoordinatesReverseSearchSource(),

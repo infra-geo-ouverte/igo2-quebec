@@ -29,7 +29,7 @@ import {
   Layer
 } from '@igo2/geo';
 import { QueryState, MapState } from '@igo2/integration';
-import { ConfigService } from '@igo2/core';
+import { ConfigService, LanguageService } from '@igo2/core';
 
 import { SearchState } from './search.state';
 
@@ -193,6 +193,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public mapLayersShownInLegend: Layer[];
 
   constructor(
+    protected languageService: LanguageService,
     private configService: ConfigService,
     private mapService: MapService,
     private layerService: LayerService,
