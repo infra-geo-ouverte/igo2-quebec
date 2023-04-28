@@ -32,6 +32,7 @@ app-legend-button, ::ng-deep .mat-raised-button {
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-radius: 0;
 
   igo-layer-legend-list {
     max-height: inherit;

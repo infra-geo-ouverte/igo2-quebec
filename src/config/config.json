@@ -10,7 +10,7 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
-  "legendInPanel": true,
+  "legendInPanel": false,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
