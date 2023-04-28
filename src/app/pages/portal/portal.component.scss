@@ -385,6 +385,11 @@ igo-zoom-button {
     transform: rotate(180deg);
   }
 
+::ng-deep .sideresult {
+    position: absolute!important;
+    height: 100%;
+  }
+
 //** ADJUSTMENTS TO FOOTER AND HEADER **//
 
 ::ng-deep .map-hasfooter {
