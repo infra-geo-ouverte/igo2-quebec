@@ -12,7 +12,6 @@ import { IgoLanguageModule } from '@igo2/core';
 import { IgoMessageModule } from '@igo2/core';
 import { AppFeatureInfoModule} from './feature-info/feature-info.module';
 import { IgoFeatureModule } from './feature/feature.module';
-import { LegendButtonModule } from '../legend-button/legend-button.module';
 import { IgoFeatureDetailsModule} from './feature/feature-details/feature-details.module';
 
 import {
@@ -59,7 +58,6 @@ import { LegendPanelButtonComponent } from './legend-panel-button/legend-panel-b
     AppFeatureInfoModule,
     IgoFeatureModule,
     IgoFeatureDetailsModule,
-    LegendButtonModule,
     IgoLayerModule,
     IgoSearchResultsModule
   ],

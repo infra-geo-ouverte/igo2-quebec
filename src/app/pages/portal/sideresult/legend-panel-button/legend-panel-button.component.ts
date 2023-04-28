@@ -3,7 +3,7 @@ import { LanguageService } from '@igo2/core';
 
 @Component({
   selector: 'app-legend-panel-button',
-  templateUrl: './legend-panel-button.component.html',
+  templateUrl: '../../legend-button.component.html',
   styleUrls: ['./legend-panel-button.component.scss']
 })
 export class LegendPanelButtonComponent {
@@ -21,7 +21,7 @@ export class LegendPanelButtonComponent {
 
   constructor(protected languageService: LanguageService) { }
 
-  toggleLegendPanel(): void {
+  toggleLegendButton(): void {
       this.toggleLegend.emit();
   }
 }

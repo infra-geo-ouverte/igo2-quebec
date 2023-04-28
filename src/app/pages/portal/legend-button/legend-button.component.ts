@@ -1,23 +1,30 @@
 import { LanguageService } from '@igo2/core';
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogState } from '@angular/material/dialog';
-import { IgoMap, Layer } from '@igo2/geo';
-import { MapState } from '@igo2/integration';
-import { Observable } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { LegendButtonDialogComponent } from './legend-button-dialog.component';
 
 @Component({
   selector: 'app-legend-button',
-  templateUrl: './legend-button.component.html',
-  styleUrls: ['./legend-button.component.scss']
+  templateUrl: '../legend-button.component.html',
+  styleUrls: ['../sideresult/legend-panel-button/legend-panel-button.component.scss']
 })
 
 export class LegendButtonComponent {
 
   public dialogRef = null;
 
+  @Input()
+  get legendPanelOpened(): boolean {
+    return this._legendPanelOpened;
+  }
+  set legendPanelOpened(value: boolean) {
+    this._legendPanelOpened = value;
+  }
+  private _legendPanelOpened: boolean;
+
   constructor(public dialog: MatDialog, protected languageService: LanguageService) {}
 
-  toggleDialog() {
+  toggleLegendButton() {
     const dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
       if (!dialogOpened) {
         this.dialogRef = this.dialog.open(LegendButtonDialogComponent, {
@@ -28,34 +35,5 @@ export class LegendButtonComponent {
       } else {
         this.dialogRef.close();
       }
-  }
-}
-
-@Component({
-  selector: 'app-legend-button-dialog',
-  templateUrl: 'legend-button-dialog.component.html'
-})
-export class LegendButtonDialogComponent implements OnInit {
-
-  public getState: MatDialogState;
-
-  get map(): IgoMap {
-    return this.mapState.map;
-  }
-
-  get layers$(): Observable<Layer[]> {
-    return this.map.layers$;
-  }
-
-  public mapLayersShownInLegend: Layer[];
-
-  constructor(
-    private mapState: MapState
-  ) {}
-
-  ngOnInit() {
-    this.mapLayersShownInLegend = this.map.layers.filter(layer => (
-      layer.showInLayerList !== false
-    ));
   }
 }
