@@ -1,35 +1,45 @@
-<ng-template #featureQuery class="igo-striped mat-typography feature-info query-content">
-  <h3 class="igo-panel-title">{{property.id}}</h3>
-  <div *ngFor="let property of filterFeatureProperties(feature) | keyvalue">
+<table class="igo-striped mat-typography" *ngIf="ready && feature && feature.properties">
+  <tbody>
+    <tr *ngFor="let property of filterFeatureProperties(feature) | keyvalue">
 
-      <p *ngIf="feature.properties.target === '_blank' && property.key === 'url'">
+      <td *ngIf="feature.properties.target === '_blank' && property.key === 'url'">
         <mat-icon mat-list-avatar svgIcon="{{icon}}"></mat-icon>
+      </td>
+
+      <td *ngIf="feature.properties.target === '_blank' && property.key === 'url'">
         <a href="{{property.value}}" target='_blank' rel="noopener noreferrer"> {{ 'igo.geo.targetHtmlUrl' | translate }} {{title}}</a>
-      </p>
+        <button class="copyClipboard" mat-icon-button (click)="copyTextToClipboard(property.value)">
+          <mat-icon svgIcon="content-copy"></mat-icon>
+        </button>
+      </td>
 
-      <p id="keyValue" *ngIf="feature.properties.target === undefined">
+      <td id="keyValue" *ngIf="feature.properties.target === undefined">
         {{property.key}}
-      </p>
+      </td>
 
-      <div class="value" *ngIf="feature.properties.target === undefined && !isObject(property.value) && !isUrl(property.value) && !isEmbeddedLink(property.value)" [innerHTML]="property.value">
-      </div>
+      <td *ngIf="feature.properties.target === undefined && !isObject(property.value) && !isUrl(property.value) && !isEmbeddedLink(property.value)" [innerHTML]="property.value">
+      </td>
 
-      <div class="value" *ngIf="feature.properties.target === undefined && isEmbeddedLink(property.value)">
+      <td *ngIf="feature.properties.target === undefined && isEmbeddedLink(property.value)">
         <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ getEmbeddedLinkText(property.value) }}</u>
-      </div>
+      </td>
 
-      <div class="value" *ngIf="feature.properties.target === undefined && !isObject(property.value) && (isDoc(property.value) || isUrl(property.value)) && !isImg(property.value)">
+      <td *ngIf="feature.properties.target === undefined && !isObject(property.value) && (isDoc(property.value) || isUrl(property.value)) && !isImg(property.value)">
         <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ 'igo.geo.targetHtmlUrl' | translate }}</u>
-      </div>
+        <button class="copyClipboard" mat-icon-button (click)="copyTextToClipboard(property.value)">
+          <mat-icon svgIcon="content-copy"></mat-icon>
+        </button>
+      </td>
 
-      <div class="value" *ngIf="feature.properties.target === undefined && !isObject(property.value) && isUrl(property.value) && isImg(property.value)">
+      <td *ngIf="feature.properties.target === undefined && !isObject(property.value) && isUrl(property.value) && isImg(property.value)">
         <a href="{{property.value}}" target='_blank' (click)="openSecureUrl(property.value)" rel="noopener noreferrer">
-          <img src="{{(property.value | secureImage) | async}}" width="225" height="auto">
+          <img igoImageError src="{{(property.value | secureImage) | async}}" width="225" height="auto">
         </a>
-      </div>
+      </td>
 
-      <div class="value" *ngIf="feature.properties.target === undefined && isObject(property.value)" [innerHTML]="property.value | json">
-      </div>
+      <td *ngIf="feature.properties.target === undefined && isObject(property.value)" [innerHTML]="property.value | json">
+      </td>
 
-    </div>
-  </ng-template>
+    </tr>
+  </tbody>
+</table>
