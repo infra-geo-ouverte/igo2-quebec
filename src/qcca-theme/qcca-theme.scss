@@ -219,7 +219,7 @@ mat-stroked-button .mat-primary, .qcca-theme .mat-button, .qcca-theme .mat-icon-
     border-radius: 0 !important;
 }
 
-::ng-deep .qcca-theme app-legend-dialog button, ::ng-deep .qcca-theme .mat-raised-button, mat-button-base {
+.mat-raised-button {
     color: #095797 !important;
     border-color: #095797 !important;
 }

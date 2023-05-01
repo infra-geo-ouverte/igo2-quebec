@@ -1,5 +1,15 @@
-::ng-deep .qcca-theme app-legend-dialog button, .qcca-theme app-legend-panel button, #legend-button, ::ng-deep .qcca-theme .mat-raised-button {
-    color: #095797 !important;
-    border-color: #095797 !important;
-    border-radius: 0 !important;
-  }
+ // Legend button
+
+ #legend-button, ::ng-deep .mat-raised-button {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  margin: 0;
+  min-width: 8px;
+  border: 0px;
+  border-radius: 0 !important;
+}
+
+::ng-deep .qcca-theme #legend-button { // if Qc desing theme is applied
+  color: #095797 !important;
+  border-color: #095797 !important;
+}

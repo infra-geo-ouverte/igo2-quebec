@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LanguageService } from '@igo2/core';
 
 @Component({
-  selector: 'app-legend-panel-button',
+  selector: 'app-legend-panel',
   templateUrl: '../../legend-button.component.html',
   styleUrls: ['../../legend-button.component.scss']
 })

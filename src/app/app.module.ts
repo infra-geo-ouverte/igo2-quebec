@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
 import { MenuModule } from './pages/menu/menu.module';
+import { PortalModule } from './pages/portal/portal.module';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
 
@@ -31,7 +32,6 @@ import {
 } from '@igo2/geo';
 
 import { environment } from '../environments/environment';
-import { PortalModule } from './pages';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 

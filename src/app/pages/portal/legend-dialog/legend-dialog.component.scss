@@ -1,21 +1,5 @@
 @import '../portal.variables.scss';
 
- // button
-
- app-legend-dialog, .legend-button, ::ng-deep .mat-raised-button {
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    margin: 0;
-    min-width: 8px;
-    border: 0px;
-    border-radius: 0 !important;
-}
-
-::ng-deep .qcca-theme app-legend-dialog button, .legend-button, #legend-button, ::ng-deep .qcca-theme .mat-raised-button {
-  color: #095797 !important;
-  border-color: #095797 !important;
-}
-
 // DIALOG
 
 // FLEX
