@@ -1,7 +1,7 @@
 import { LanguageService } from '@igo2/core';
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LegendButtonDialogComponent } from './legend-button-dialog.component';
+import { LegendDialogComponent } from './legend-dialog.component';
 
 @Component({
   selector: 'app-legend-dialog',
@@ -9,7 +9,7 @@ import { LegendButtonDialogComponent } from './legend-button-dialog.component';
   styleUrls: ['../legend-button.component.scss']
 })
 
-export class LegendButtonComponent {
+export class LegendDialogButtonComponent {
 
   public dialogRef = null;
 
@@ -25,10 +25,10 @@ export class LegendButtonComponent {
   constructor(public dialog: MatDialog, protected languageService: LanguageService) {}
 
   toggleLegendButton() {
-    const dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
+    const dialogOpened = this.dialog.getDialogById('legend-dialog-container');
       if (!dialogOpened) {
-        this.dialogRef = this.dialog.open(LegendButtonDialogComponent, {
-          id: 'legend-button-dialog-container',
+        this.dialogRef = this.dialog.open(LegendDialogComponent, {
+          id: 'legend-dialog-container',
           hasBackdrop: false,
           closeOnNavigation: true
         });

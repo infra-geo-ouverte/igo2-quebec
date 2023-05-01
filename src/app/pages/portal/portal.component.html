@@ -77,7 +77,7 @@
           <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
           <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
           <app-legend-panel-button *ngIf="hasLegendButton && legendInPanel" (toggleLegend)="togglePanelLegend()" [legendPanelOpened]="legendPanelOpened" ></app-legend-panel-button>
-          <app-legend-button *ngIf="hasLegendButton && !legendInPanel" [legendPanelOpened]="legendPanelOpened"></app-legend-button>
+          <app-legend-dialog *ngIf="hasLegendButton && !legendInPanel" [legendPanelOpened]="legendPanelOpened"></app-legend-dialog>
         </div>
 
         <app-bottomresult

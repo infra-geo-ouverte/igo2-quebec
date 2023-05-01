@@ -2,7 +2,7 @@
 
  // button
 
-app-legend-button, ::ng-deep .mat-raised-button {
+ app-legend-dialog, .legend-button, ::ng-deep .mat-raised-button {
     font-size: 0.9rem !important;
     font-weight: 500 !important;
     margin: 0;
@@ -11,7 +11,7 @@ app-legend-button, ::ng-deep .mat-raised-button {
     border-radius: 0 !important;
 }
 
-::ng-deep .qcca-theme app-legend-dialog button, ::ng-deep .qcca-theme .mat-raised-button {
+::ng-deep .qcca-theme app-legend-dialog button, .legend-button, #legend-button, ::ng-deep .qcca-theme .mat-raised-button {
   color: #095797 !important;
   border-color: #095797 !important;
 }
@@ -20,7 +20,7 @@ app-legend-button, ::ng-deep .mat-raised-button {
 
 // FLEX
 
-::ng-deep #legend-button-dialog-container {
+::ng-deep #legend-dialog-container {
   width: fit-content !important;
   z-index: 10;
   position: fixed;

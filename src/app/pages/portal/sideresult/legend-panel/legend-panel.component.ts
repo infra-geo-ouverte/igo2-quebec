@@ -6,7 +6,7 @@ import { LanguageService } from '@igo2/core';
   templateUrl: '../../legend-button.component.html',
   styleUrls: ['../../legend-button.component.scss']
 })
-export class LegendPanelButtonComponent {
+export class LegendPanelComponent {
 
   @Output() toggleLegend = new EventEmitter<boolean>();
 
