@@ -30,7 +30,7 @@ import {
 import { IgoContextManagerModule } from '@igo2/context';
 import { SideResultComponent } from './sideresult.component';
 import { BottomResultComponent } from './bottomresult.component';
-import { LegendPanelButtonComponent } from './legend-panel-button/legend-panel-button.component';
+import { LegendPanelComponent } from './legend-panel/legend-panel.component';
 
 @NgModule({
   imports: [
@@ -61,8 +61,8 @@ import { LegendPanelButtonComponent } from './legend-panel-button/legend-panel-b
     IgoLayerModule,
     IgoSearchResultsModule
   ],
-  exports: [SideResultComponent, BottomResultComponent, LegendPanelButtonComponent ],
+  exports: [SideResultComponent, BottomResultComponent, LegendPanelComponent ],
   //SEARCH
-  declarations: [SideResultComponent, BottomResultComponent, LegendPanelButtonComponent]
+  declarations: [SideResultComponent, BottomResultComponent, LegendPanelComponent]
 })
 export class AppSideResultModule {}
