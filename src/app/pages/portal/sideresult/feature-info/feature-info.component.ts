@@ -74,18 +74,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   @Output() closeQuery = new EventEmitter<boolean>();
 
   @Input()
-  get opened(): boolean {
-    return this._opened;
-  }
-  set opened(value: boolean) {
-    if (value !== !this._opened) {
-      return;
-    }
-    this._opened = value;
-  }
-  private _opened = true;
-
-  @Input()
   get mapQueryClick(): boolean {
     return this._mapQueryClick;
   }
@@ -120,17 +108,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this._mobile = value;
   }
   private _mobile: boolean;
-
-  @Input()
-  get scenarioDateToggle(): string {
-    return this._scenarioDateToggle;
-  }
-  set scenarioDateToggle(value: string) {
-    this._scenarioDateToggle = value;
-  }
-  private _scenarioDateToggle: string;
-
-  public refreshedDetails = true;
 
   public actionStore = new ActionStore([]);
   public actionbarMode = ActionbarMode.Overlay;
@@ -211,7 +188,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     //this.onClearSearch();
-    this.refreshedDetails = true;
     this.store.entities$.subscribe(() => {
       this.initialized = true;
     });
@@ -300,11 +276,4 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.closeQuery.emit();
   }
 
-  hideOnToggleChange(){
-    this.refreshedDetails = false;
-  }
-
-  showOnToggleChange(){
-    //this.refreshedDetails = true;
-  }
 }

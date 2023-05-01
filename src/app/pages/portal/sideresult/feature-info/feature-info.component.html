@@ -4,11 +4,10 @@
   (keydown)="handleKeyboardEvent($event)">
 
     <app-feature-details
-      *ngIf="resultSelected$.value && refreshedDetails === true"
+      *ngIf="resultSelected$.value"
       [mobile]="mobile"
       [feature]="resultSelected$.value.data"
-      [mapQueryClick]="mapQueryClick"
-      [scenarioDateToggle]="scenarioDateToggle">
+      [mapQueryClick]="mapQueryClick">
     </app-feature-details>
 
     <button
