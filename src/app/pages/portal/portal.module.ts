@@ -55,8 +55,6 @@ import { IgoIntegrationModule } from '@igo2/integration';
 import { MapOverlayModule } from './map-overlay/map-overlay.module';
 
 import { PortalComponent } from './portal.component';
-
-import { LegendButtonModule } from './legend-button/legend-button.module';
 import { FooterModule } from './../footer/footer.module';
 import { AppSideResultModule } from './sideresult/sideresult.module';
 
@@ -75,7 +73,6 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoContextManagerModule,
     IgoContextMapButtonModule,
     FooterModule,
-    LegendButtonModule,
     IgoLayerModule,
     IgoWorkspaceModule,
     IgoGeoWorkspaceModule,
