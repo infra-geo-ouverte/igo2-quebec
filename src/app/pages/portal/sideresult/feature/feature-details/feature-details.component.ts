@@ -15,9 +15,7 @@ import { NetworkService, ConnectionState, LanguageService, MessageService } from
 import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
-
 import { TooltipPosition } from '@angular/material/tooltip';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-feature-details',
@@ -72,9 +70,7 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
   private _feature: Feature;
   private _source: SearchSource;
 
-  //@Output() routeEvent = new EventEmitter<boolean>();
   @Output() selectFeature = new EventEmitter<boolean>();
-  @Output() htmlDisplayEvent = new EventEmitter<boolean>();
 
   @Input()
   matTooltipPosition: TooltipPosition;
@@ -103,34 +99,6 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
-  /**
-	 * @description get the trend label
-	 * @param value trend
-	 * @returns corresponding trend
-	 */
-	getStationTrend(value: string): string {
-		if (value === "Baisse") {
-			return this.languageService.translate.instant("trend.down");
-		} else if (value === "Hausse") {
-			return this.languageService.translate.instant("trend.up");
-		} else {
-			return value;
-		}
-	}
-
-  getDateFormat(): string {
-		if (this.getLanguage().includes("fr")) {
-			return "d MMM y, H:mm";
-		} else {
-			return "MMM d y, h:mm a";
-		}
-	}
-
-	getLanguage(): string {
-    // return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.language;
-		return "fr";
-	}
 
   formatReading(reading: number): string {
     return reading.toString().replace(".", ",");
