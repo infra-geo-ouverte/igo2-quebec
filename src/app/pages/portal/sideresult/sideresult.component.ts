@@ -348,7 +348,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
     this.map.propertyChange$.unsubscribe;
   }
 
-  openPanelLegend(){
+/*
+  openPanelLegend(){ /// semble inutile .. si oui (legendPanelOpened)="legendPanelOpened" dans mat-sidenav
     this.map.propertyChange$.subscribe(() => {
       this.mapLayersShownInLegend = this.map.layers.filter(layer => (
         layer.showInLayerList !== false
@@ -360,7 +361,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
     this.onClearSearch();
     this.mapQueryClick = false;
     this.openLegend.emit(true);
-  }
+  }*/
 
 }
 

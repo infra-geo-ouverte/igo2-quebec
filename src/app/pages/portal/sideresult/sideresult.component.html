@@ -5,12 +5,11 @@
     [autoFocus]="false"
     [(opened)]="panelOpenState"
     (closed)= "closePanelLegend()"
-    (legendPanelOpened)="legendPanelOpened"
     (closeLegend)="closePanelLegend()">
 
     <div #content class="app-sidenav-content">
 
-      <div id="legend" [mapQueryClick]="mapQueryClick" [legendPanelOpened]="legendPanelOpened" [panelOpenState]="panelOpenState"  *ngIf="legendPanelOpened === true">
+      <div id="legend" *ngIf="legendPanelOpened === true" [mapQueryClick]="mapQueryClick" [legendPanelOpened]="legendPanelOpened" [panelOpenState]="panelOpenState" >
         <button
           mat-icon-button
           [matTooltip]="'legend.legendClose' | translate"
@@ -24,7 +23,7 @@
           [allowShowAllLegends]="false"
           [updateLegendOnResolutionChange]="true"
           [showAllLegendsValue]="false"
-          [layers]="layers">{{layers}}
+          [layers]="layers">
         </igo-layer-legend-list>
       </div>
 
