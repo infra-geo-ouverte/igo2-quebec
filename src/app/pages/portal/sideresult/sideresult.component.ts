@@ -178,15 +178,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
   }
   private _panelOpenState: boolean;
 
-  @Input()
-  get scenarioDateToggle(): string {
-    return this._scenarioDateToggle;
-  }
-  set scenarioDateToggle(value: string) {
-    this._scenarioDateToggle = value;
-  }
-  private _scenarioDateToggle: string;
-
   @Output() closeLegend = new EventEmitter<boolean>();
   @Output() openLegend = new EventEmitter<boolean>();
   @Output() closeQuery = new EventEmitter<boolean>();
@@ -321,7 +312,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
     }
   }
 
-  closePanelOnCloseQuery(event){
+  closePanelOnCloseQuery(){
     this.closeQuery.emit();
     this.mapQueryClick = false;
     if (this.searchInit === false && this.legendPanelOpened === false){
@@ -329,10 +320,6 @@ export class SideResultComponent implements OnInit, OnDestroy {
     } if (this.searchInit === true || this.legendPanelOpened === true) {
       this.panelOpenState = true;
     }
-  }
-
-  onSearchPanel(){
-
   }
 
   onClearSearch() {

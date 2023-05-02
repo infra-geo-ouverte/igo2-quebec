@@ -17,6 +17,7 @@
     "followPosition": false,
     "activateDefault": false
   },
+  "hasFeatureEmphasisOnSelection": true,
   "useStaticIcon": false,
   "hasExpansionPanel": false,
   "searchBar": {

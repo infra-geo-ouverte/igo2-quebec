@@ -44,11 +44,9 @@
           [store]="queryStore"
           [mapQueryClick]="mapQueryClick"
           [searchInit]="searchInit"
-          (closeQuery)="closePanelOnCloseQuery($event)"
+          (closeQuery)="closePanelOnCloseQuery()"
           (sidenavClosed)="$event"
-          (pleaseCloseSidenav)="yesICloseSidenav($event)"
-          [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
-          [scenarioDateToggle]="scenarioDateToggle">
+          [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
         </app-feature-info>
 
       </div>
