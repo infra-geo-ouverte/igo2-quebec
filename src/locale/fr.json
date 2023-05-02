@@ -27,6 +27,11 @@
     "close": "Fermer",
     "open": "Ouvrir"
   },
+  "legend": {
+    "legendButton": "Légende",
+    "legendClose": "Fermer la légende",
+    "legendOpen": "Ouvrir la légende"
+  },
   "searchBar": "Faire une recherche",
   "pwa": {
     "new-version-title": "Une nouvelle version de l'application est disponible. ",

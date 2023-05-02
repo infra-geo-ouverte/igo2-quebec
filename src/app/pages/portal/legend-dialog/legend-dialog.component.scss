@@ -50,7 +50,7 @@
 
 } 
 
-::ng-deep app-legend-button-dialog {
+::ng-deep app-legend-dialog {
 
   max-height: calc(100% - 24px) !important;
   height: inherit;
@@ -90,7 +90,7 @@
 
 // CLOSE BUTTON
 
-::ng-deep app-legend-button-dialog {
+::ng-deep app-legend-dialog {
   .mat-icon, mat-button-wrapper, .mat-icon-button .mat-icon, .mat-icon-button {
     line-height: 26px;
     height: 24px;

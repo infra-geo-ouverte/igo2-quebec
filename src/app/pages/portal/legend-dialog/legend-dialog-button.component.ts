@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LegendDialogComponent } from './legend-dialog.component';
 
 @Component({
-  selector: 'app-legend-dialog',
+  selector: 'app-legend-dialog-button',
   templateUrl: '../legend-button.component.html',
   styleUrls: ['../legend-button.component.scss']
 })
