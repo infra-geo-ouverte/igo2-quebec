@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
-import { IgoAppSearchResultsToolModule } from './sideresult/search-results-tool/search-results-tool.module';
 
 import { IgoCoreModule, IgoLanguageModule } from '@igo2/core';
 import {
@@ -95,10 +94,8 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoToolModule,
     IgoEntityTableModule,
     IgoEntityTablePaginatorModule,
-    //IgoSearchBarModule,
     IgoAppSearchBarModule,
     IgoAppSearchModule,
-    IgoAppSearchResultsToolModule,
     IgoLanguageModule
   ],
   providers: [
