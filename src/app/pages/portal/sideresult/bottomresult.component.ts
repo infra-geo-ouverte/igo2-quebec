@@ -179,7 +179,9 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   private abstractFocusedResult: Feature;
   private abstractSelectedResult: Feature;
   public withZoomButton = false;
+
   zoomAuto$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   get zoomAuto(): boolean {
     return this._zoomAuto;
   }
@@ -187,8 +189,8 @@ export class BottomResultComponent implements OnInit, OnDestroy {
     if (value !== !this._zoomAuto) {
       return;
     }
-    this._zoomAuto = this.configService.getConfig('zoomAuto');
-    //this.zoomAuto$.next(value);
+    this._zoomAuto = value;
+    this.zoomAuto$.next(value);
     this.storageService.set('zoomAuto', value);
   }
   private _zoomAuto = false;
@@ -240,7 +242,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
       this.mapService.setMap(this.map);
       this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
       this.configService.getConfig('showSearchBar');
-      this.zoomAuto = this.configService.getConfig('zoomAuto');
+      this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
       //this.searchOverlayStyle = this.searchState.searchOverlayStyleFocus;
       //this.searchOverlayStyleSelection = this.searchState.searchOverlayStyleSelection;
       //this.searchOverlayStyleFocus = this.searchState.searchOverlayStyleFocus;
