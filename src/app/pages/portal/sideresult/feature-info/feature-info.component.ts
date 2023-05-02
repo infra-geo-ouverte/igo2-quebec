@@ -7,12 +7,10 @@ import {
   HostListener,
   ChangeDetectionStrategy,
   OnInit,
-  OnDestroy,
-  ChangeDetectorRef
+  OnDestroy
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import olFormatGeoJSON from 'ol/format/GeoJSON';
 
 import {
   getEntityTitle,
@@ -33,12 +31,11 @@ import {
 } from '@igo2/geo';
 import {
   MediaService,
-  //LanguageService,
+  LanguageService,
   StorageService,
   ConfigService
 } from '@igo2/core';
 import { QueryState, StorageState } from '@igo2/integration';
-
 import { SearchState } from '../search.state';
 
 @Component({
@@ -114,10 +111,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   private isResultSelected$ = new BehaviorSubject(false);
   public isSelectedResultOutOfView$ = new BehaviorSubject(false);
   private isSelectedResultOutOfView$$: Subscription;
-
   private initialized = true;
-
-  private format = new olFormatGeoJSON();
 
   private resultOrResolution$$: Subscription;
 
@@ -159,12 +153,11 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   constructor(
     public mediaService: MediaService,
-    //public languageService: LanguageService,
+    public languageService: LanguageService,
     private storageState: StorageState,
     private queryState: QueryState,
     private configService: ConfigService,
-    private searchState: SearchState,
-    private cdRef: ChangeDetectorRef
+    private searchState: SearchState
   ) {
   }
 
@@ -187,7 +180,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //this.onClearSearch();
     this.store.entities$.subscribe(() => {
       this.initialized = true;
     });
@@ -203,14 +195,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       this.isSelectedResultOutOfView$$.unsubscribe();
     }
     this.sidenavOpened$.unsubscribe();
-  }
-
-  // to clear the search if a mapQuery is initiated
-  public onClearSearch() {
-    this.map.searchResultsOverlay.clear();
-    this.searchStore.clear();
-    this.searchState.setSelectedResult(undefined);
-    this.searchState.deactivateCustomFilterTermStrategy();
   }
 
   getTitle(result: SearchResult) {
