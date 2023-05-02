@@ -373,10 +373,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
     this.contextMenuStore.load(contextActions);
 
-    this.onSettingsChange$.subscribe(() => {
-      this.searchState.setSearchSettingsChange();
-    });
-
     this.searchState.selectedResult$.subscribe((result) => {
       if (result && this.isMobile()) {
         this.closePanels();
@@ -448,11 +444,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       ));
     });
   }
-/*
-  togglePanel(event: boolean){
-    this.panelOpenState = event;
-    this.expanded = event;
-  }*/
 
   public breakpointChanged() {
     if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization

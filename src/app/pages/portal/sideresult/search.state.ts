@@ -29,8 +29,6 @@ export class SearchState {
 
   readonly searchResultsGeometryEnabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  readonly searchSettingsChange$: BehaviorSubject<boolean> = new BehaviorSubject(undefined);
-
   readonly selectedResult$: BehaviorSubject<SearchResult> = new BehaviorSubject(undefined);
 
   /**
@@ -133,10 +131,6 @@ export class SearchState {
   setSearchType(searchType: string) {
     this.searchSourceService.enableSourcesByType(searchType);
     this.searchType$.next(searchType);
-  }
-
-  setSearchSettingsChange() {
-    this.searchSettingsChange$.next(true);
   }
 
   setSelectedResult(result: SearchResult) {

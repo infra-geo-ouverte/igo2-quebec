@@ -192,7 +192,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef,
-    private mapState: MapState
+    private mapState: MapState,
+    private elRef: ElementRef
     ) {
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
@@ -253,10 +254,44 @@ export class SideResultComponent implements OnInit, OnDestroy {
         .filter((result: SearchResult) => result.source !== event.research.source)
         .concat(results);
       this.searchStore.updateMany(newResults);
+
+      setTimeout(() => {
+        const igoList = this.elRef.nativeElement.querySelector('igo-list');
+        let moreResults;
+        event.research.request.subscribe((source) => {
+          if (!source[0] || !source[0].source) {
+            moreResults = null;
+          } else if (source[0].source.getId() === 'icherche') {
+            moreResults = igoList.querySelector('.icherche .moreResults');
+          } else if (source[0].source.getId() === 'ilayer') {
+            moreResults = igoList.querySelector('.ilayer .moreResults');
+          } else if (source[0].source.getId() === 'nominatim') {
+            moreResults = igoList.querySelector('.nominatim .moreResults');
+          } else {
+            moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
+          }
+  
+          if (
+            moreResults !== null &&
+            !this.isScrolledIntoView(igoList, moreResults)
+          ) {
+            igoList.scrollTop =
+              moreResults.offsetTop +
+              moreResults.offsetHeight -
+              igoList.clientHeight;
+          }
+        });
+      }, 250);
     }
 
-    onSearchSettingsChange() {
-      this.settingsChange$.next(true);
+    isScrolledIntoView(elemSource, elem) {
+      const padding = 6;
+      const docViewTop = elemSource.scrollTop;
+      const docViewBottom = docViewTop + elemSource.clientHeight;
+  
+      const elemTop = elem.offsetTop;
+      const elemBottom = elemTop + elem.clientHeight + padding;
+      return elemBottom <= docViewBottom && elemTop >= docViewTop;
     }
 
     /**

@@ -59,18 +59,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   }
   private _legendPanelOpened: boolean;
 
-  @Input()
-  get scenarioDateToggle(): string {
-    return this._scenarioDateToggle;
-  }
-  set scenarioDateToggle(value: string) {
-    this._scenarioDateToggle = value;
-  }
-  private _scenarioDateToggle: string;
-
   @Output() closeLegend = new EventEmitter<boolean>();
-  //@Output() searchBarTerm = new EventEmitter<string>();
-  //@Output() openedChange = new EventEmitter<boolean>();
 
   @Input()
   get map(): IgoMap {
@@ -177,7 +166,6 @@ export class BottomResultComponent implements OnInit, OnDestroy {
 
   public lonlat;
   public mapProjection: string;
-  public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
@@ -196,7 +184,7 @@ export class BottomResultComponent implements OnInit, OnDestroy {
   }
   private abstractFocusedResult: Feature;
   private abstractSelectedResult: Feature;
-  public withZoomButton = true;
+  public withZoomButton = false;
   zoomAuto$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   get zoomAuto(): boolean {
     return this._zoomAuto;

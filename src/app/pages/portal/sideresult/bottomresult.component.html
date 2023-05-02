@@ -74,7 +74,6 @@
           [mapQueryClick]="mapQueryClick"
           [panelOpenState]="panelOpenState"
           [opened]="panelOpenState"
-          [scenarioDateToggle]="scenarioDateToggle"
           >
         </app-feature-info>
 
@@ -83,25 +82,19 @@
       <div #search *ngIf="searchInit === true" >
 
         <igo-search-results
-        [store]="searchStore"
-        [term]="term"
-        [showIcons]="true"
-        [termSplitter]="termSplitter"
-        placeholder="false"
-        [searchInit]="searchInit"
-        (searchTermChange)="onSearchTermChange($event)"
-        [settingsChange$]="settingsChange$"
-        (featureSelected)="closePanel()"
-        (resultFocus)="onResultFocus($event)"
-        (resultSelect)="onResultFocus($event)"
-        (moreResults)="onSearch($event)">
-          <ng-template #igoSearchItemToolbar let-result="result">
-            <igo-search-add-button
-              [map]="map"
-              [layer]="result">
-            </igo-search-add-button>
-          </ng-template>
-      </igo-search-results>
+          [store]="searchStore"
+          [term]="term"
+          [showIcons]="true"
+          [termSplitter]="termSplitter"
+          placeholder="false"
+          [searchInit]="searchInit"
+          (searchTermChange)="onSearchTermChange($event)"
+          (featureSelected)="closePanel()"
+          (resultFocus)="onResultFocus($event)"
+          (resultSelect)="onResultFocus($event)"
+          (moreResults)="onSearch($event)"
+          [zoomAuto]="false" >
+        </igo-search-results>
 
         </div>
 

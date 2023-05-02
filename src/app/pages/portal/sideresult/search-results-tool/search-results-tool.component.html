@@ -26,6 +26,7 @@
       (moreResults)="onSearch($event)">
       <ng-template #igoSearchItemToolbar let-result="result">
         <igo-search-add-button
+          *ngIf(addFeaturetoLayer)
           [map]="map"
           [layer]="result">
         </igo-search-add-button>

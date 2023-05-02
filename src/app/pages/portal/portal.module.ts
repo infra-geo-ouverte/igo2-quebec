@@ -1,5 +1,5 @@
 
-import { IgoAppSearchBarModule, IgoAppSearchModule, IgoAppSearchResultsToolModule } from '@igo2/integration';
+import { IgoAppSearchBarModule, IgoAppSearchModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { IgoAppSearchResultsToolModule } from './sideresult/search-results-tool/search-results-tool.module';
 
 import { IgoCoreModule, IgoLanguageModule } from '@igo2/core';
 import {

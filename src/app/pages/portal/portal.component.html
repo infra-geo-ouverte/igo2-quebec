@@ -24,8 +24,7 @@
         [termSplitter]="termSplitter"
         (searchTermChange)="onSearchTermChange($event)"
         (search)="onSearch($event)"
-        (clearFeature)="onClearSearch()"
-        (searchSettingsChange)="onSearchSettingsChange()">
+        (clearFeature)="onClearSearch()">
       </igo-search-bar>
 
       <div *ngIf="mobile" id="scaleLine"></div>

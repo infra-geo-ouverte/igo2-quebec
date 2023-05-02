@@ -73,7 +73,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
    */
   @Input() topPanelStateDefault: string = 'expanded';
 
-  private hasFeatureEmphasisOnSelection: boolean = false;
+  private hasFeatureEmphasisOnSelection: boolean;
 
   private showResultsGeometries$$: Subscription;
   private getRoute$$: Subscription;
@@ -93,6 +93,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   public displaySearch = true;
   public displayQuery = false;
   @Output() featureSelected = new EventEmitter<boolean>();
+  public addFeaturetoLayer : boolean; // in the result features list, display an icon "add this feature to a layer"
 
   /**
    * Store holding the search results
@@ -188,6 +189,9 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     this.hasFeatureEmphasisOnSelection = configService.getConfig(
       'hasFeatureEmphasisOnSelection'
     );
+    this.addFeaturetoLayer = configService.getConfig(
+      'addFeaturetoLayer'
+    );
   }
 
   ngOnInit() {
@@ -205,10 +209,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         this.topPanelState = 'expanded';
       }
     }
-
-    this.searchState.searchSettingsChange$.subscribe(() => {
-      this.settingsChange$.next(true);
-    });
 
     this.topPanelState$$ = this.topPanelState$.subscribe(() => {
       const igoList = this.computeElementRef()[0];
