@@ -19,6 +19,7 @@
   },
   "hasFeatureEmphasisOnSelection": true,
   "addFeaturetoLayer": false,
+  "zoomAuto": false,
   "useStaticIcon": false,
   "hasExpansionPanel": false,
   "searchBar": {
