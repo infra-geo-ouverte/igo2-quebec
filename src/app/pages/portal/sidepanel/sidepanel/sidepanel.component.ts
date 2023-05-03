@@ -31,7 +31,7 @@ import {
 import { QueryState, MapState } from '@igo2/integration';
 import { ConfigService, LanguageService } from '@igo2/core';
 
-import { SearchState } from '../search.state';
+import { SearchState } from '../search-results-tool/search.state';
 
 @Component({
   selector: 'app-sidepanel',

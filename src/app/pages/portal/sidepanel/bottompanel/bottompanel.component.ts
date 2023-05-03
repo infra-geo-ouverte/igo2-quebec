@@ -36,7 +36,7 @@ import {
   getCommonVectorStyle
 } from '@igo2/geo';
 import { MapState, QueryState, StorageState } from '@igo2/integration';
-import { SearchState } from '../search.state';
+import { SearchState } from '../search-results-tool/search.state';
 import { ConfigService } from '@igo2/core';
 
 import type { default as OlGeometry } from 'ol/geom/Geometry';
