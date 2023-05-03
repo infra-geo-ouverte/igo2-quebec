@@ -35,7 +35,7 @@ igo-search-bar {
   padding: 8px;
 }
 
-::ng-deep app-bottomresult .mat-expansion-panel-content {
+::ng-deep app-bottompanel .mat-expansion-panel-content {
   overflow-y: scroll!important;
   overflow-x: clip;
   height: 264px; // expanded panel height
@@ -44,16 +44,16 @@ igo-search-bar {
   scrollbar-width: thin; //firefox
 }
 
-::ng-deep app-bottomresult .mat-expansion-panel-content::-webkit-scrollbar {
+::ng-deep app-bottompanel .mat-expansion-panel-content::-webkit-scrollbar {
   width: 6px;
 }
 
-::ng-deep app-bottomresult .mat-expansion-panel-content::-webkit-scrollbar-track {
+::ng-deep app-bottompanel .mat-expansion-panel-content::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px #DAE6F0; 
   border-radius: 10px;
 }
 
-::ng-deep app-bottomresult .mat-expansion-panel-content::-webkit-scrollbar-thumb {
+::ng-deep app-bottompanel .mat-expansion-panel-content::-webkit-scrollbar-thumb {
   background: #095797; 
   border-radius: 10px;
 }
@@ -62,7 +62,7 @@ igo-search-bar {
   fill: #FFFFFF;
 }
 
-#bottomResultMobile {
+#bottomPanelMobile {
   position: relative;
   display: block;
   bottom: 0;

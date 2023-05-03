@@ -78,7 +78,7 @@
           <app-legend-dialog-button *ngIf="hasLegendButton && !legendInPanel" [legendPanelOpened]="legendPanelOpened"></app-legend-dialog-button>
         </div>
 
-        <app-bottomresult
+        <app-bottompanel
           *ngIf="mobile"
           [mobile]="mobile"
           [store]="searchStore"
@@ -92,7 +92,7 @@
           (openLegend)="openPanelLegend()"
           (toggleLegend)="togglePanelLegend()"
           [layers]="mapLayersShownInLegend">
-        </app-bottomresult>
+        </app-bottompanel>
     </igo-map-browser>
 
     <app-footer *ngIf="hasFooter && !mobile" [mobile]="mobile"></app-footer>

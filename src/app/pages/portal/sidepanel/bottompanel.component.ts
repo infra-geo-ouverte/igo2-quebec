@@ -41,12 +41,12 @@ import { ConfigService } from '@igo2/core';
 
 import type { default as OlGeometry } from 'ol/geom/Geometry';
 @Component({
-  selector: 'app-bottomresult',
-  templateUrl: './bottomresult.component.html',
-  styleUrls: ['./bottomresult.component.scss'],
+  selector: 'app-bottompanel',
+  templateUrl: './bottompanel.component.html',
+  styleUrls: ['./bottompanel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BottomResultComponent implements OnInit, OnDestroy {
+export class BottomPanelComponent implements OnInit, OnDestroy {
 
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
