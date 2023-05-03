@@ -28,6 +28,12 @@
     "close": "Hide panel",
     "open": "Open panel"
   },
+  "legend": {
+    "legendTitle": "Legend",
+    "legendButton": "Legend",
+    "legendClose": "Close legend",
+    "legendOpen": "Open legend"
+  },
   "pwa": {
     "new-version-title": "New version available. ",
     "new-version": "Do you want to reload the app?",

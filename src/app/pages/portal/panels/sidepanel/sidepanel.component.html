@@ -16,7 +16,7 @@
           color="primary"
           (click)="closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
         </button>
-        <h4 mat-dialog-title>{{ 'legend.legendButton' | translate }}</h4>
+        <h4 mat-dialog-title>{{ 'legend.legendTitle' | translate }}</h4>
         <igo-layer-legend-list
           [layers]="mapLayersShownInLegend"
           [excludeBaseLayers]="true"
@@ -42,7 +42,6 @@
           [mobile]="mobile"
           [store]="queryStore"
           [mapQueryClick]="mapQueryClick"
-          [searchInit]="searchInit"
           (closeQuery)="closePanelOnCloseQuery()"
           (sidenavClosed)="$event"
           [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
@@ -51,16 +50,14 @@
       </div>
 
       <div #search *ngIf="searchInit === true">
-          <app-search-results-tool 
-            #searchresults
-            [showIcons]="true"
-            placeholder="false"
-            [mapQueryClick]="mapQueryClick"
-            [searchInit]="searchInit"
-            (resultFocus)="onResultFocus($event)"
-            (resultSelect)="onResultFocus($event)"
-            (moreResults)="onSearch($event)">
-          </app-search-results-tool>
+        <app-search-results-tool 
+          #searchresults
+          [showIcons]="true"
+          placeholder="false"
+          (resultFocus)="onResultFocus($event)"
+          (resultSelect)="onResultFocus($event)"
+          (moreResults)="onSearch($event)">
+        </app-search-results-tool>
     </div></div>
 
   </mat-sidenav>

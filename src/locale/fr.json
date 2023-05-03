@@ -24,6 +24,7 @@
     "name": "Résultats de recherche"
   },
   "legend": {
+    "legendTitle": "Légende",
     "legendButton": "Légende",
     "legendClose": "Fermer la légende",
     "legendOpen": "Ouvrir la légende"
