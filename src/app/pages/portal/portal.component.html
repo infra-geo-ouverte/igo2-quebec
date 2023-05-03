@@ -29,9 +29,9 @@
 
       <div *ngIf="mobile" id="scaleLine"></div>
 
-      <app-sideresult
-        #sideresultsDesktop
-        class="sideresult"
+      <app-sidepanel
+        #sidepanel
+        class="sidepanel"
         [map]="map"
         [mobile]="mobile"
         [sidenavOpened]="panelOpenState"
@@ -46,7 +46,7 @@
         (closeQuery)="closePanelOnCloseQuery()"
         (openLegend)="openPanelLegend()"
         [layers]="mapLayersShownInLegend">
-      </app-sideresult>
+      </app-sidepanel>
     </div>
 
     <igo-map-browser

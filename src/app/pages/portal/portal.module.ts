@@ -56,7 +56,7 @@ import { MapOverlayModule } from './map-overlay/map-overlay.module';
 
 import { PortalComponent } from './portal.component';
 import { FooterModule } from './../footer/footer.module';
-import { AppSideResultModule } from './sideresult/sideresult.module';
+import { AppPanelsModule } from './sidepanel/sidepanel.module';
 
 @NgModule({
   imports: [
@@ -84,7 +84,7 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     IgoActionModule,
     IgoImportExportModule,
     MapOverlayModule,
-    AppSideResultModule,
+    AppPanelsModule,
     IgoPanelModule,
     IgoBackdropModule,
     IgoContextMenuModule,

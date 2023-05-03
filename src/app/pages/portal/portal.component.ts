@@ -80,7 +80,7 @@ import {
   DirectionState
 } from '@igo2/integration';
 
-import { SearchState } from '../portal/sideresult/search.state';
+import { SearchState } from '../portal/sidepanel/search.state';
 
 import { PwaService } from '../../services/pwa.service';
 

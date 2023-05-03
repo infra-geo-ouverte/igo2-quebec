@@ -23,16 +23,16 @@
   "icherche": {
     "name": "Résultats de recherche"
   },
-  "sideresult": {
-    "close": "Fermer",
-    "open": "Ouvrir"
-  },
   "legend": {
     "legendButton": "Légende",
     "legendClose": "Fermer la légende",
     "legendOpen": "Ouvrir la légende"
   },
   "searchBar": "Faire une recherche",
+  "sidePanel": {
+    "close": "Masquer le panneau",
+    "open": "Ouvrir le panneau"
+  },
   "pwa": {
     "new-version-title": "Une nouvelle version de l'application est disponible. ",
     "new-version": "Voulez-vous recharger l'application?",

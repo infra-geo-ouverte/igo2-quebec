@@ -364,7 +364,7 @@ igo-zoom-button {
 }
 
 // info-bulle arrows from panels
-::ng-deep .sideresult .tooltip-chart::after {
+::ng-deep .sidepanel .tooltip-chart::after {
     content: ''!important;
     position: absolute!important;
     top: 18%!important;
@@ -376,7 +376,7 @@ igo-zoom-button {
     transform: rotate(180deg);
   }
 
-::ng-deep .sideresult {
+::ng-deep .sidepanel {
     position: absolute!important;
     height: 100%;
   }

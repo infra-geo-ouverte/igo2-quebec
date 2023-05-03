@@ -1,4 +1,4 @@
-<div id="sideresultsDesktop" class="sideresult">
+<div id="sidepanel" class="sidepanel">
   <mat-sidenav 
     #sidenav
     mode="side"
@@ -65,15 +65,15 @@
 
   </mat-sidenav>
   <button
-    [ngClass]="sidenav.opened ? 'sideresult-opened' : 'sideresult-closed'"
+    [ngClass]="sidenav.opened ? 'sidepanel-opened' : 'sidepanel-closed'"
     #sidenavbutton
     mat-raised-button
     color="primary"
-    id="sideresult-button"
+    id="sidepanel-button"
     isRoundButton=false
     isIconButton=true
     MatDrawerMode="push"
-    [matTooltip]="sidenav.opened ? ('sideResult.close' | translate) : 'sideResult.open' | translate"
+    [matTooltip]="sidenav.opened ? ('sidePanel.close' | translate) : 'sidePanel.open' | translate"
     matTooltipPosition="after"
     (click)="sidenav.toggle()">
     <mat-icon

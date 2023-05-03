@@ -28,7 +28,7 @@ import {
   IgoSearchResultsModule
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
-import { SideResultComponent } from './sideresult.component';
+import { SidePanelComponent } from './sidepanel.component';
 import { BottomResultComponent } from './bottomresult.component';
 import { LegendPanelComponent } from './legend-panel/legend-panel.component';
 
@@ -61,8 +61,8 @@ import { LegendPanelComponent } from './legend-panel/legend-panel.component';
     IgoLayerModule,
     IgoSearchResultsModule
   ],
-  exports: [SideResultComponent, BottomResultComponent, LegendPanelComponent ],
+  exports: [SidePanelComponent, BottomResultComponent, LegendPanelComponent ],
   //SEARCH
-  declarations: [SideResultComponent, BottomResultComponent, LegendPanelComponent]
+  declarations: [SidePanelComponent, BottomResultComponent, LegendPanelComponent]
 })
-export class AppSideResultModule {}
+export class AppPanelsModule {}

@@ -33,11 +33,11 @@ button.clear-button {
   width: 24px;
 }
 
-.sideresult-closed {
+.sidepanel-closed {
   ::ng-deep mat-sidenav {
     width: 0!important;
   }
-  ::ng-deep #sideresult-button {
+  ::ng-deep #sidepanel-button {
     left: 0!important;
     position: absolute;
   }

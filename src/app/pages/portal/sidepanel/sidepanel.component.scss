@@ -25,14 +25,15 @@ mat-sidenav {
     height: 100%;
 }
 
-.app-sideresult-content {
+/*
+.app-sidepanel-content { // no reference to it, to delete ?
   height: 100%;
   display: block;
   position: relative;
   overflow: hidden;
-}
+}*/
 
-app-sideresult {
+app-sidepanel {
   width: $app-sidenav-width;
 }
 
@@ -52,7 +53,7 @@ igo-search-results-tool {
     height: 100%;
 }
 
-#sideresult-button {
+#sidepanel-button {
   position: absolute;
   top: 50%;
   left: calc($app-sidenav-width + 1px);
@@ -63,11 +64,11 @@ igo-search-results-tool {
   border-radius: 0;
 }
 
-#sideresult-button:hover {
+#sidepanel-button:hover {
   background-color: #156BB2;
 }
 
-.sideresult-closed {
+.sidepanel-closed {
   left: 0!important;
   position: absolute;
 }
@@ -111,16 +112,16 @@ app-feature-info {
   scrollbar-width: thin; //firefox
 }
 
-::ng-deep app-sideresult .mat-drawer-inner-container::-webkit-scrollbar {
+::ng-deep app-sidepanel .mat-drawer-inner-container::-webkit-scrollbar {
   width: 6px;
 }
 
-::ng-deep app-sideresult .mat-drawer-inner-container::-webkit-scrollbar-track {
+::ng-deep app-sidepanel .mat-drawer-inner-container::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px #DAE6F0; 
   border-radius: 10px;
 }
 
-::ng-deep app-sideresult .mat-drawer-inner-container::-webkit-scrollbar-thumb {
+::ng-deep app-sidepanel .mat-drawer-inner-container::-webkit-scrollbar-thumb {
   background: #095797; 
   border-radius: 10px;
   cursor: pointer; // I wish it worked out

@@ -23,11 +23,11 @@
   "icherche": {
     "name": "Search result"
   },
-  "sideresult": {
-    "close": "Close",
-    "open": "Open"
-  },
   "searchBar": "Search",
+  "sidePanel": {
+    "close": "Hide panel",
+    "open": "Open panel"
+  },
   "pwa": {
     "new-version-title": "New version available. ",
     "new-version": "Do you want to reload the app?",

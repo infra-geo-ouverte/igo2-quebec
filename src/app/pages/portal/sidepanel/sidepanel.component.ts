@@ -34,12 +34,12 @@ import { ConfigService, LanguageService } from '@igo2/core';
 import { SearchState } from './search.state';
 
 @Component({
-  selector: 'app-sideresult',
-  templateUrl: './sideresult.component.html',
-  styleUrls: ['./sideresult.component.scss'],
+  selector: 'app-sidepanel',
+  templateUrl: './sidepanel.component.html',
+  styleUrls: ['./sidepanel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideResultComponent implements OnInit, OnDestroy {
+export class SidePanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
   @Input()
