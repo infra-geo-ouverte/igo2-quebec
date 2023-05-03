@@ -3,8 +3,8 @@ import { LanguageService } from '@igo2/core';
 
 @Component({
   selector: 'app-legend-panel',
-  templateUrl: '../../legend-button.component.html',
-  styleUrls: ['../../legend-button.component.scss']
+  templateUrl: '../../sidepanel/legend-button/legend-button.component.html',
+  styleUrls: ['../../sidepanel/legend-button/legend-button.component.scss']
 })
 export class LegendPanelComponent {
 

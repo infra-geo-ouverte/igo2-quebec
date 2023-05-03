@@ -5,8 +5,8 @@ import { LegendDialogComponent } from './legend-dialog.component';
 
 @Component({
   selector: 'app-legend-dialog-button',
-  templateUrl: '../legend-button.component.html',
-  styleUrls: ['../legend-button.component.scss']
+  templateUrl: '../sidepanel/legend-button/legend-button.component.html',
+  styleUrls: ['../sidepanel/legend-button/legend-button.component.scss']
 })
 
 export class LegendDialogButtonComponent {
