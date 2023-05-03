@@ -66,7 +66,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   private _opened: boolean;
 
   @Output() openedChange = new EventEmitter<boolean>();
-  @Output() sidenavClosed = new EventEmitter<boolean>();
 
   @Input()
   get mobile(): boolean {
