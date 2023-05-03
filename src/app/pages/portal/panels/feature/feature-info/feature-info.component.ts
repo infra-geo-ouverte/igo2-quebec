@@ -79,15 +79,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
   private _mapQueryClick: boolean;
 
-  public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  get sidenavOpened(): boolean {
-    return this.sidenavOpened$.value;
-  }
-
-  set sidenavOpened(value: boolean) {
-    this.sidenavOpened$.next(value);
-  }
-
   @Input()
   get panelOpenState(): boolean {
     return this._panelOpenState;
@@ -194,7 +185,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     if (this.isSelectedResultOutOfView$$) {
       this.isSelectedResultOutOfView$$.unsubscribe();
     }
-    this.sidenavOpened$.unsubscribe();
   }
 
   getTitle(result: SearchResult) {
@@ -254,7 +244,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.map.queryResultsOverlay.clear();
     this.store.clear();
     this.unselectResult();
-    this.sidenavOpened = false;
     this.mapQueryClick = false;
     this.panelOpenState = false;
     this.closeQuery.emit();

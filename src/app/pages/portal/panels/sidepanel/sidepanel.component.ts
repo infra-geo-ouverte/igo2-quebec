@@ -46,7 +46,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   get map(): IgoMap {
     return this._map;
   }
-
   set map(value: IgoMap) {
     this._map = value;
   }
@@ -68,15 +67,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
   @Output() sidenavClosed = new EventEmitter<boolean>();
-
-  @Input()
-  get sidenavOpened(): boolean {
-    return this._sidenavOpened;
-  }
-  set sidenavOpened(value: boolean) {
-    this._sidenavOpened = value;
-  }
-  private _sidenavOpened: boolean;
 
   @Input()
   get mobile(): boolean {

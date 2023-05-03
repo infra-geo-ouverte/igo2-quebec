@@ -116,7 +116,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public hasSideSearch = true;
   public showSearchBar = true;
   public showMenuButton = true;
-  public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
   public legendPanelOpened = false;
@@ -176,14 +175,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.mapState.map;
   }
 
-  get sidenavOpened(): boolean {
-    return this.sidenavOpened$.value;
-  }
-
-  set sidenavOpened(value: boolean) {
-    this.sidenavOpened$.next(value);
-  }
-
   get auth(): AuthOptions {
     return this.configService.getConfig('auth') || [];
   }
@@ -213,7 +204,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   get backdropShown(): boolean {
     return (
       ('(min-width: 768px)' &&
-      this.sidenavOpened || this.panelOpenState || this.expanded
+      this.panelOpenState || this.expanded
     ));
   }
 
@@ -712,10 +703,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.panelOpenState = true;
     this.expanded = true;
   }
-/*
-  private toggleSidenav() {
-    this.sidenavOpened ? this.closePanels() : this.openPanels(); //////////////////////////
-  }*/
 
   private computeHomeExtentValues(context: DetailedContext) {
     if (context?.map?.view?.homeExtent) {

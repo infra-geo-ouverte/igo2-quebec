@@ -34,7 +34,6 @@
         class="sidepanel"
         [map]="map"
         [mobile]="mobile"
-        [sidenavOpened]="panelOpenState"
         [(opened)]="panelOpenState"
         [searchInit]="searchInit"
         [store]="queryStore"
@@ -64,7 +63,7 @@
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
 
         <igo-baselayers-switcher
-          [ngClass]="mobile? ['igo-baselayers-switcher-mobile'] : (sidenavOpened? ['baselayers-pushed'] : ['baselayers'])"
+          [ngClass]="mobile? ['igo-baselayers-switcher-mobile'] : (panelOpenState? ['baselayers-pushed'] : ['baselayers'])"
           [map]="map"
           [useStaticIcon]="getBaseLayersUseStaticIcon()">
         </igo-baselayers-switcher>
@@ -100,7 +99,7 @@
     <app-map-overlay
     [@controlStateY]="getControlsOffsetY()"
     [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
-                            sidenavOpened ? 'right' : 'left'">
+                            panelOpenState ? 'right' : 'left'">
     </app-map-overlay>
 
   </mat-sidenav-content>
