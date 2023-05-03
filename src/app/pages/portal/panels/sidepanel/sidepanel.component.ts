@@ -193,7 +193,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       .subscribe(
         (entities) => {
         if (entities.length > 0) {
-          this.opened = true;
+          //this.opened = true;
           this.mapQueryClick = true;
           this.legendPanelOpened = false;
           this.panelOpenState = true;
@@ -206,7 +206,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
       this.store.destroy();
       this.store.entities$.unsubscribe();
-      this.opened = false;
+      //this.opened = false;
       this.legendPanelOpened = false;
       this.onClearSearch();
       this.clearQuery();
@@ -366,7 +366,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   // LEGEND
 
   closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
-    this.opened = false;
+    //this.opened = false;
     this.legendPanelOpened = false;
     this.closeLegend.emit();
     this.map.propertyChange$.unsubscribe;
