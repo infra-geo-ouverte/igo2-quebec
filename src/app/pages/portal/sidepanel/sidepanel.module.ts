@@ -29,7 +29,7 @@ import {
 } from '@igo2/geo';
 import { IgoContextManagerModule } from '@igo2/context';
 import { SidePanelComponent } from './sidepanel.component';
-import { BottomPanelComponent } from './bottompanel.component';
+import { BottomPanelComponent } from './bottompanel/bottompanel.component';
 import { LegendPanelComponent } from './legend-panel/legend-panel.component';
 
 @NgModule({
