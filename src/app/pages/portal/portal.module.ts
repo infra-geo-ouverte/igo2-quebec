@@ -56,7 +56,7 @@ import { MapOverlayModule } from './map-overlay/map-overlay.module';
 
 import { PortalComponent } from './portal.component';
 import { FooterModule } from './../footer/footer.module';
-import { AppPanelsModule } from './sidepanel/sidepanel.module';
+import { AppPanelsModule } from './panels/panels.module';
 
 @NgModule({
   imports: [

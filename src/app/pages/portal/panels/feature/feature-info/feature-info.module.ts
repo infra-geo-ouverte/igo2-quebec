@@ -8,7 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IgoPanelModule, IgoStopPropagationModule, IgoActionModule } from '@igo2/common';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoSearchResultsModule } from '@igo2/geo';
-import { IgoFeatureModule } from '../feature/feature.module';
+import { IgoFeatureModule } from '../feature.module';
 
 import { FeatureInfoComponent } from './feature-info.component';
 import { MatBadgeModule } from '@angular/material/badge';

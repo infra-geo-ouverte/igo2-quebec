@@ -36,7 +36,7 @@ import {
   ConfigService
 } from '@igo2/core';
 import { QueryState, StorageState } from '@igo2/integration';
-import { SearchState } from '../search-results-tool/search.state';
+import { SearchState } from '../../search-results-tool/search.state';
 
 @Component({
   selector: 'app-feature-info',
