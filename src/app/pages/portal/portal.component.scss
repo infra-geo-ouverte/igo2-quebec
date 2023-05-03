@@ -45,15 +45,6 @@ mat-icon.disabled {
   ::ng-deep .mat-expansion-panel-body {
     padding: 0 8px 8px;
   }
-  .info-toggle {
-    transform: scale(0.7);
-  }
-  ::ng-deep #layer-toggle-date {
-    padding-right: 8px;
-  }
-  ::ng-deep #layer-toggle-scenario {
-    padding-left: 8px;
-  }
 }
 
 /*** Sidenav ***/
