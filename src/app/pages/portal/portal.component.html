@@ -41,11 +41,13 @@
       </app-sideresult>
     </div>
 
-    <igo-map-browser
+    <igo-map-browser      
+      igoMapOffline
       #mapBrowser
       igoMapContext
       igoLayerContext
       igoDropGeoFile
+      [contextUri]="contextUri"
       [map]="map"
       igoHoverFeature
       [igoHoverFeatureEnabled]="true"
