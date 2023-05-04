@@ -20,6 +20,7 @@ export class AppComponent {
   private themeClass = 'qcca-theme';
   public hasHeader: boolean = true;
   public hasFooter: boolean = true;
+  private promptEvent: any;
   public hasMenu: boolean = false;
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
@@ -34,9 +35,6 @@ export class AppComponent {
     private messageService: MessageService,
     private pwaService: PwaService
   ) {
-    this.pwaService.checkForUpdates();
-    this.languageService.translate.getTranslation(this.languageService.getLanguage()).subscribe();
-
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
@@ -51,6 +49,10 @@ export class AppComponent {
 
     this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
       this.configService.getConfig('hasMenu');
+
+    this.setManifest();
+    this.installPrompt();
+    this.pwaService.checkForUpdates();
   }
 
   private readTitleConfig() {
@@ -60,6 +62,32 @@ export class AppComponent {
         this.metaService.addTag({ name: 'title', content: title });
       }
     });
+  }
+
+  private setManifest() {
+    const appConfig = this.configService.getConfig('app');
+    if (appConfig?.install?.enabled) {
+      const manifestPath = appConfig.install.manifestPath || 'manifest.webmanifest';
+      document.querySelector('#igoManifestByConfig').setAttribute('href', manifestPath);
+    }
+  }
+
+  private installPrompt() {
+    const appConfig = this.configService.getConfig('app');
+    if (appConfig?.install?.enabled && appConfig?.install?.promote) {
+      if (userAgent.getOSName() !== 'iOS') {
+        window.addEventListener('beforeinstallprompt', (event: any) => {
+          event.preventDefault();
+          this.promptEvent = event;
+          window.addEventListener('click', () => {
+            setTimeout(() => {
+              this.promptEvent.prompt();
+              this.promptEvent = undefined;
+            }, 750);
+          }, { once: true });
+        }, { once: true });
+      }
+    }
   }
 
   private readThemeConfig() {
