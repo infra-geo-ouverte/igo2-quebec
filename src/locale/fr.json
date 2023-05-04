@@ -29,6 +29,9 @@
     "legendClose": "Fermer la légende",
     "legendOpen": "Ouvrir la légende"
   },
+  "feature": {
+    "title" : "Objet"
+  },
   "searchBar": "Faire une recherche",
   "sidePanel": {
     "close": "Masquer le panneau",

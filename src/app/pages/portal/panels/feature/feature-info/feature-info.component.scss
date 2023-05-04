@@ -7,18 +7,11 @@
     overflow-x: clip;
   }
 }
-  ::ng-deep div.igo-panel-header {
-    background-color: #fff!important;
-    color: #095797!important;
-}
-
-igo-panel ::ng-deep .igo-panel-header:hover {
-  cursor: pointer;
-}
-
-igo-panel {
-  height: 100%;
-  outline: none;
+  .title {
+    display: block;
+    text-align: center;
+    //background-color: #fff!important;
+    //color: #095797!important;
 }
 
 app-feature-details {
@@ -28,7 +21,7 @@ app-feature-details {
   margin-right: 8px;
 }
 
-button.clear-button {
+.clear-button {
   float: right;
   width: 24px;
 }

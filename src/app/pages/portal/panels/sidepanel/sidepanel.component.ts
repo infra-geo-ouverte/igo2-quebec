@@ -76,7 +76,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   }
   private _mobile: boolean;
 
-    //QUERY
+  // QUERY
 
   @Input()
   get mapQueryClick(): boolean {
@@ -110,6 +110,15 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
   public hasFeatureEmphasisOnSelection: Boolean = false;
 
+  @Input()
+  get featureTitle(): string {
+    return this._featureTitle;
+  }
+  set featureTitle(value: string) {
+    this._featureTitle = value;
+  }
+  private _featureTitle: string;
+
   // SEARCH
 
   @Input()
@@ -138,7 +147,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
-  // legend
+  // LEGEND
 
   @Input()
   get layers(): Layer[] {

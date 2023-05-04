@@ -3,20 +3,6 @@
   "base": "_base",
   "layers": [
     {
-      "title": "Zones d'alertes MRC (MSP)",
-      "visible": true,
-      "baseLayer": false,
-      "sourceOptions": {
-        "type": "wms",
-        "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/securite.fcgi",
-        "params": {
-          "layers": "MSP_ADM_ALERTE_MRC_GENERAL_S",
-          "version": "1.3.0"
-        },
-        "queryable": true
-      }
-    },
-    {
       "title": "Habitats floristiques",
       "showInLayerList": true,
       "visible": true,
@@ -28,7 +14,9 @@
           "layers": "HABITATS_FLORISTIQUES_V",
           "version": "1.3.0"
         },
-        "queryable": true
+        "queryable": true,
+        "queryLayerFeatures": true,
+        "queryTitle": "Habitats floristiques"
       }
     },
     {
@@ -44,7 +32,7 @@
           "version": "1.3.0"
         },
         "queryable": true,
-        "queryFormat": "htmlgml2",
+        "queryLayerFeatures": true,
         "queryTitle": "Établissements MTQ"
       }
     }

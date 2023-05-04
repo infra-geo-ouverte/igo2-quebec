@@ -16,6 +16,7 @@ import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { getEntityTitle } from '@igo2/common';
 
 @Component({
   selector: 'app-feature-details',
@@ -69,6 +70,7 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   private _feature: Feature;
   private _source: SearchSource;
+  public featureTitle: string;
 
   @Output() selectFeature = new EventEmitter<boolean>();
 
@@ -92,6 +94,7 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.ready = true;
+    console.log(this.feature);
   }
 
   ngOnDestroy() {
@@ -111,6 +114,13 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
       this.matTooltipPosition = 'right';
     }
   }
+
+    /**
+   * @internal
+   */
+    get title(): string {
+      return getEntityTitle(this.feature);
+    }
 
   isObject(value) {
     return typeof value === 'object';
@@ -197,6 +207,7 @@ getEmbeddedLinkText(value) {
 
 filterFeatureProperties(feature) {
   const allowedFieldsAndAlias = feature.meta ? feature.meta.alias : undefined;
+  this.featureTitle = feature.meta ? feature.meta.title : undefined; // will define the feature info title in the panel
   const properties = {};
   let offlineButtonState;
 

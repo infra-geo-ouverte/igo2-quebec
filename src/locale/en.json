@@ -28,6 +28,9 @@
     "close": "Hide panel",
     "open": "Open panel"
   },
+  "feature": {
+    "title" : "Object"
+  },
   "legend": {
     "legendTitle": "Legend",
     "legendButton": "Legend",

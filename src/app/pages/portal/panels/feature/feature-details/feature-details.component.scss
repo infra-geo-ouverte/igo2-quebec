@@ -32,14 +32,6 @@
   color: #223654;
 }
 
-.chartTitle {
-  color: #223654;
-  padding-bottom:8px;
-  position: relative;
-  display: block;
-  text-align: center;
-}
-
 .info {
   vertical-align: bottom;
   transform: scale(0.9);
@@ -84,15 +76,6 @@
   display: none;
 }
 
-.hydrogram {
-  background-color: #DAE6F0;
-  height: 4em;
-  width: 100%;
-  display: block;
-  padding: 6em 46%;
-  margin-top: 8px;
-}
-
 .legend-items img {
   width: 18px;
   vertical-align: middle;
@@ -104,8 +87,4 @@
   font-size: 18px;
   color: #095797;
   text-align: center;
-}
-
-#queryWaterChart {
-  padding-right: 3rem;
 }

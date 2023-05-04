@@ -13,7 +13,6 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import {
-  getEntityTitle,
   EntityStore,
   ActionStore,
   ActionbarMode
@@ -23,11 +22,11 @@ import {
   SearchResult,
   IgoMap,
   FeatureMotion,
-  featureToOl,
   getCommonVectorStyle,
   getCommonVectorSelectedStyle,
   featuresAreOutOfView,
-  computeOlFeaturesExtent
+  computeOlFeaturesExtent,
+  featureToOl
 } from '@igo2/geo';
 import {
   MediaService,
@@ -103,6 +102,18 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   public isSelectedResultOutOfView$ = new BehaviorSubject(false);
   private isSelectedResultOutOfView$$: Subscription;
   private initialized = true;
+  public featureTitle: string;
+  public title: string;
+  public customFeatureTitle: boolean;
+
+  @Input()
+  get feature(): Feature {
+    return this._feature;
+  }
+  set feature(value: Feature) {
+    this._feature = value;
+  }
+  private _feature: Feature;
 
   private resultOrResolution$$: Subscription;
 
@@ -150,6 +161,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private searchState: SearchState
   ) {
+    this.customFeatureTitle = this.configService.getConfig('customFeatureTitle') === undefined ? false :
+      this.configService.getConfig('customFeatureTitle');
   }
 
   private monitorResultOutOfView() {
@@ -187,8 +200,9 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTitle(result: SearchResult) {
-    return getEntityTitle(result);
+  onTitleClick(){
+    /// define your own function, ex zoom to feature
+    this.closeQuery.emit();
   }
 
   selectResult(result: SearchResult<Feature>) {
@@ -216,12 +230,18 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
             this.queryState.queryOverlayStyle));
       }
       features.push(feature.data);
+      this.featureTitle = feature.meta.title; // will define the feature info title in the panel
+      this.getTitle();
     }
     this.map.queryResultsOverlay.removeFeatures(features);
     this.map.queryResultsOverlay.addFeatures(features, FeatureMotion.None);
 
     this.isResultSelected$.next(true);
     this.initialized = false;
+  }
+
+  getTitle(){
+    this.customFeatureTitle? this.title = this.languageService.translate.instant('feature.title') : this.title = this.featureTitle;
   }
 
   public unselectResult() {

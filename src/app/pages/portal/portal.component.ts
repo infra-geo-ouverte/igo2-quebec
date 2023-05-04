@@ -35,7 +35,7 @@ import {
     WorkspaceStore,
     ActionStore,
     EntityStore,
-    // getEntityTitle,
+    getEntityTitle,
     EntityTablePaginatorOptions,
     EntityRecord
   } from '@igo2/common';
@@ -250,9 +250,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   public panelOpenState = false;
-
   public mapQueryClick = false;
-
   public searchInit = false;
 
   //Legend
@@ -779,6 +777,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.queryState.store.clear(); // clears the info panel
     this.queryState.store.softClear(); // clears the info panel
     this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+  }
+
+  getTitle(result: SearchResult) {
+    console.log(getEntityTitle(result));
+    return getEntityTitle(result);
   }
 
   onContextMenuOpen(event: { x: number; y: number }) {

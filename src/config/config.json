@@ -10,7 +10,7 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
-  "legendInPanel": true,
+  "legendInPanel": false,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
@@ -21,6 +21,7 @@
   "addFeaturetoLayer": false,
   "useStaticIcon": false,
   "hasExpansionPanel": false,
+  "customFeatureTitle": false,
   "searchBar": {
     "showSearchBar": true,
     "showSearchButton": true

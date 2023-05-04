@@ -2,6 +2,16 @@
   *ngIf="(store.entities$ | async)"
   class = "featureInfo"
   (keydown)="handleKeyboardEvent($event)">
+  <h4 class="title" color="primary" click="onTitleClick()">{{title}}</h4>
+
+  <button
+    class="clear-button sidepanel-closed"
+    mat-icon-button
+    igoStopPropagation
+    (click)="clearButton()"
+    color="primary">
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
 
     <app-feature-details
       *ngIf="resultSelected$.value"
@@ -9,14 +19,5 @@
       [feature]="resultSelected$.value.data"
       [mapQueryClick]="mapQueryClick">
     </app-feature-details>
-
-    <button
-      class="clear-button sidepanel-closed"
-      mat-icon-button
-      igoStopPropagation
-      (click)="clearButton()"
-      color="primary">
-      <mat-icon svgIcon="close"></mat-icon>
-    </button>
 
 </ng-container>
