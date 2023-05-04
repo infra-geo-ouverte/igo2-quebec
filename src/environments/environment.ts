@@ -65,6 +65,10 @@ export const environment: Environment = {
       }
     ],
     searchSources: {
+      workspace: {
+        available: false,
+        enabled: false
+      },
       nominatim: {
         available: false
       },

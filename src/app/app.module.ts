@@ -19,7 +19,8 @@ import {
   provideCoordinatesReverseSearchSource,
   provideILayerSearchSource,
   provideOptionsApi,
-  provideStyleListOptions
+  provideStyleListOptions,
+  provideWorkspaceSearchSource
 } from '@igo2/geo';
 
 
@@ -65,6 +66,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     }),
     RouteService,
     provideIChercheSearchSource(),
+    provideWorkspaceSearchSource(),
     provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),
     provideILayerSearchSource(),
