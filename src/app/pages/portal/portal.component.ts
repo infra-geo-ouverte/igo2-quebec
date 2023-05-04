@@ -6,8 +6,8 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest, zip } from 'rxjs';
-import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap, concatMap, delay } from 'rxjs/operators';
+import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
+import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
 import { MatPaginator } from '@angular/material/paginator';
