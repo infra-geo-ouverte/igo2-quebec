@@ -113,21 +113,9 @@ export class AppComponent {
     });
 
     if (oldBrowser) {
-      const translate = this.languageService.translate;
-      const title$ = translate.get('oldBrowser.title');
-      const message$ = translate.get('oldBrowser.message');
-      zip(title$, message$)
-        .pipe(
-          map(([title, message]) => ({
-            title,
-            message
-          }))
-        )
-        .subscribe((rep) =>
-          this.messageService.alert(rep.message, rep.title, {
-            timeOut: 15000
-          })
-        );
+      this.messageService.alert('oldBrowser.message', 'oldBrowser.title', {
+        timeOut: 15000
+      });
     }
   }
 }
