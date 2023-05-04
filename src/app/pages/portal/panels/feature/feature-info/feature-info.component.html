@@ -2,16 +2,21 @@
   *ngIf="(store.entities$ | async)"
   class = "featureInfo"
   (keydown)="handleKeyboardEvent($event)">
-  <h4 class="title" color="primary" click="onTitleClick()">{{title}}</h4>
+  <span class="title">
 
-  <button
-    class="clear-button sidepanel-closed"
-    mat-icon-button
-    igoStopPropagation
-    (click)="clearButton()"
-    color="primary">
-    <mat-icon svgIcon="close"></mat-icon>
-  </button>
+    <h4 color="primary" click="onTitleClick()">{{title}}</h4>
+
+    <button
+      class="clear-button"
+      mat-icon-button
+      igoStopPropagation
+      (click)="clearButton()"
+      color="primary">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+
+  </span>
+
 
     <app-feature-details
       *ngIf="resultSelected$.value"

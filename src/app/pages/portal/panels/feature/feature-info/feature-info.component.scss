@@ -7,11 +7,23 @@
     overflow-x: clip;
   }
 }
-  .title {
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title h4{
     display: block;
     text-align: center;
-    //background-color: #fff!important;
-    //color: #095797!important;
+}
+
+.title button {
+  float: right;
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
 }
 
 app-feature-details {
@@ -19,19 +31,4 @@ app-feature-details {
   width: calc(100% - 36px);
   overflow-x: clip;
   margin-right: 8px;
-}
-
-.clear-button {
-  float: right;
-  width: 24px;
-}
-
-.sidepanel-closed {
-  ::ng-deep mat-sidenav {
-    width: 0!important;
-  }
-  ::ng-deep #sidepanel-button {
-    left: 0!important;
-    position: absolute;
-  }
 }
