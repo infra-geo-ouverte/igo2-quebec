@@ -5,17 +5,12 @@ import {
   SearchSourceOptions,
   CommonVectorStyleOptions
 } from '@igo2/geo';
+import { AppOptions } from './environnement.interface';
 
 export interface Environment {
   production: boolean;
   igo: {
-    app: {
-      forceCoordsNA: boolean;
-      pwa?: {
-        enabled?: boolean;
-        promote?: boolean;
-      }
-    };
+    app: AppOptions;
     language?: LanguageOptions;
     optionsApi?: OptionsApiOptions;
     projections?: Projection[];
@@ -38,9 +33,12 @@ export const environment: Environment = {
   igo: {
     app: {
       forceCoordsNA: true,
-      pwa: {
+      install: {
         enabled: false,
         promote: false
+      },
+      pwa: {
+        enabled: false,
       }
     },
     language: {

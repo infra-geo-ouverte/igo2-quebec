@@ -5,16 +5,11 @@ import {
   CommonVectorStyleOptions
 } from '@igo2/geo';
 
+import { AppOptions } from './environnement.interface';
 interface Environment {
   production: boolean;
   igo: {
-    app: {
-      forceCoordsNA: boolean;
-      pwa?: {
-        enabled?: boolean;
-        promote?: boolean;
-      }
-    };
+    app: AppOptions,
     language?: LanguageOptions;
     projections?: Projection[];
     searchSources?: { [key: string]: SearchSourceOptions };
@@ -36,9 +31,13 @@ export const environment: Environment = {
   igo: {
     app: {
       forceCoordsNA: false,
+      install: {
+        enabled: true,
+        promote: true,
+        manifestPath: './config/github.webmanifest'
+      },
       pwa: {
         enabled: false,
-        promote: false
       }
     },
     language: {
