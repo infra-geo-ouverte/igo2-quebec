@@ -62,6 +62,8 @@
       [map]="map"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
 
+      <div *ngIf="mobile" id="scaleLine"></div>
+
         <igo-baselayers-switcher
           [ngClass]="mobile? ['igo-baselayers-switcher-mobile'] : (panelOpenState? ['baselayers-pushed'] : ['baselayers'])"
           [map]="map"
