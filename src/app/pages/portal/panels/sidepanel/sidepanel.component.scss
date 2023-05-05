@@ -141,6 +141,12 @@ app-feature-info {
   width: 20px;
 }
 
+.legend-items img {
+  width: 18px;
+  vertical-align: middle;
+  padding: 0 5px 0 0;
+}
+
 // info-bulle arrows from panels
 ::ng-deep .tooltip-chart::after {
   content: ''!important;

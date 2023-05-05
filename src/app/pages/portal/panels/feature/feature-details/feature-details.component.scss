@@ -1,35 +1,47 @@
 @import '@igo2/core/style/partial/core.variables';
 
-.feature-info {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  max-width: 90%;
-  flex-wrap: wrap;
+div {
+  box-sizing: border-box;
 }
 
-#keyValue{
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: normal;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    font-family: 'Roboto', sans-serif;
- }
-
-.value {
-  font-family: 'Open Sans', sans-serif;
-  color: #223654;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: bold;
-  margin-top: 4px;
-  margin-bottom: 8px;
+.table-container {
+  display: block;
+  margin: 2em auto;
   width: 100%;
 }
 
-.attribute {
+.table-row {
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: 1px solid #DAE6F0;
+}
+
+.table-row:hover {
+  cursor: pointer;
+  background-color: #DAE6F0;
+}
+
+.table-row .key {
+  width: 35%;
+  font: bold 16px/24px 'Open Sans', sans-serif;
   color: #223654;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.table-row .value {
+  width: 65%;
+  font: normal 16px/24px 'Open Sans', sans-serif;
+  color: #223654;
+  text-align: left;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.flex-row {
+  text-align: center;
+  padding: 0.5em 0.5em;
 }
 
 .info {
@@ -42,6 +54,8 @@
 }
 
 // angular material
+
+// if use a tooltip
 
 ::ng-deep .tooltip-right, ::ng-deep .tooltip-above{
   position: relative!important;
@@ -74,17 +88,4 @@
 
 ::ng-deep .tooltip-above::after {
   display: none;
-}
-
-.legend-items img {
-  width: 18px;
-  vertical-align: middle;
-  padding: 0 5px 0 0;
-}
-
-.igo-panel-title {
-  margin-top: 8px;
-  font-size: 18px;
-  color: #095797;
-  text-align: center;
 }
