@@ -124,9 +124,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   getBaseLayersUseStaticIcon(): Boolean {
     return this.configService.getConfig('useStaticIcon');
   }
-
-  public toastPanelOffsetX$: BehaviorSubject<string> = new BehaviorSubject(undefined);
-  public minSearchTermLength = 2;
+  public minSearchTermLength: number;
   public hasHomeExtentButton = false;
   public hasFeatureEmphasisOnSelection: Boolean = false;
   public workspacePaginator: MatPaginator;
@@ -312,8 +310,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
         this.configService.getConfig('mobileBreakPoint');
-        this.hasHomeExtentButton =
-        this.configService.getConfig('homeExtentButton') === undefined ? false : true;
+      this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
+      this.minSearchTermLength = this.configService.getConfig('minSearchTermLength') === undefined ? 2 : 
+        this.configService.getConfig('minSearchTermLength');
   }
 
   ngOnInit() {
@@ -646,7 +645,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
-    if (termWithoutHashtag.length < 2) {
+    if (termWithoutHashtag.length < this.minSearchTermLength) {
       this.expanded = true;
       this.onClearSearch();
       return;
