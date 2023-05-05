@@ -246,13 +246,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   get queryStore(): EntityStore<SearchResult> { //FeatureInfo
     return this.queryState.store;
   }
-
   public panelOpenState = false;
   public mapQueryClick = false;
   public searchInit = false;
 
   //Legend
-
   public mapLayersShownInLegend: Layer[];
   public legendInPanel: boolean;
   public expanded = false;

@@ -60,6 +60,7 @@
       (query)="onMapQuery($event)"
       [igoHoverFeatureDelay]=10
       [map]="map"
+      (menuPosition)="onContextMenuOpen($event)"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
 
       <div *ngIf="mobile" id="scaleLine"></div>
