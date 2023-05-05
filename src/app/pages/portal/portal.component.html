@@ -75,8 +75,8 @@
           <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
           <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
           <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-          <app-legend-panel *ngIf="hasLegendButton && legendInPanel" (toggleLegend)="togglePanelLegend()" [legendPanelOpened]="legendPanelOpened" ></app-legend-panel>
-          <app-legend-dialog-button *ngIf="hasLegendButton && !legendInPanel" [legendPanelOpened]="legendPanelOpened"></app-legend-dialog-button>
+          <app-legend-panel *ngIf="hasLegendButton && legendInPanel" (toggleLegend)="togglePanelLegend()" [legendPanelOpened]="legendPanelOpened" color="primary" ></app-legend-panel>
+          <app-legend-dialog-button *ngIf="hasLegendButton && !legendInPanel" [legendPanelOpened]="legendPanelOpened" color="primary"></app-legend-dialog-button>
         </div>
 
         <app-bottompanel

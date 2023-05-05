@@ -254,7 +254,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   //Legend
 
   public mapLayersShownInLegend: Layer[];
-  public legendInPanel = this.configService.getConfig('legendInPanel');
+  public legendInPanel: boolean;
   public expanded = false;
 
   constructor(
@@ -313,6 +313,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.minSearchTermLength = this.configService.getConfig('minSearchTermLength') === undefined ? 2 : 
         this.configService.getConfig('minSearchTermLength');
+      this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
+        this.configService.getConfig('legendInPanel');
   }
 
   ngOnInit() {
