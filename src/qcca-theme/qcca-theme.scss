@@ -509,6 +509,16 @@ igo-list [igolistitem][color=accent].igo-list-item-selected > mat-list-item {
     color: white!important;
 }
 
+.qcca-theme igo-list [igolistitem][color=accent].igo-list-item-selected > mat-list-item {
+    background-color: #4A98D9;
+
+    h4, small {
+        color: white!important;
+    }
+}
+
+//#sidepanel > mat-sidenav > div > div > div > app-search-results-tool > igo-flexible > div.column.igo-flexible-main.initial > div > div > igo-search-results > igo-list > mat-list > igo-collapsible.icherche.ng-star-inserted > div > igo-search-results-item.igo-list-item-selected.ng-star-inserted > mat-list-item > span > span.mat-list-text > h4 > small:nth-child(2)
+
 ::ng-deep igo-search-results-item small {
     color: white!important;
 }
