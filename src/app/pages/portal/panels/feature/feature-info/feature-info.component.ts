@@ -105,6 +105,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   public featureTitle: string;
   public title: string;
   public customFeatureTitle: boolean;
+  public customFeatureDetails: boolean;
 
   @Input()
   get feature(): Feature {
@@ -163,6 +164,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   ) {
     this.customFeatureTitle = this.configService.getConfig('customFeatureTitle') === undefined ? false :
       this.configService.getConfig('customFeatureTitle');
+    this.customFeatureDetails = this.configService.getConfig('customFeatureDetails') === undefined ? false :
+      this.configService.getConfig('customFeatureDetails');
   }
 
   private monitorResultOutOfView() {

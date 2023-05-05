@@ -3,6 +3,7 @@
   "base": "_base",
   "layers": [
     {
+      "id": "flor",
       "title": "Habitats floristiques",
       "showInLayerList": true,
       "visible": true,
@@ -20,6 +21,7 @@
       }
     },
     {
+      "id": "mtq",
       "title": "Établissements MTQ",
       "showInLayerList": true,
       "visible": true,

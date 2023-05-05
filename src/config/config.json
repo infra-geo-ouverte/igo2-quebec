@@ -26,6 +26,7 @@
     "showSearchBar": true,
     "showSearchButton": true
   },
+  "customFeatureDetails": true,
   "importExport": {
     "url": "/apis/ogre"
   },

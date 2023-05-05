@@ -7,6 +7,7 @@ import { IgoKeyValueModule, IgoImageModule } from '@igo2/common';
 import { RouterModule } from '@angular/router';
 
 import { FeatureDetailsComponent } from './feature-details.component';
+import { FeatureDetailsCustomComponent } from './feature-details-custom.component';
 import { FeatureDetailsDirective } from './feature-details.directive';
 
 /**
@@ -24,9 +25,11 @@ import { FeatureDetailsDirective } from './feature-details.directive';
   ],
   exports: [
     FeatureDetailsComponent,
+    FeatureDetailsCustomComponent,
     FeatureDetailsDirective],
   declarations: [
     FeatureDetailsComponent,
+    FeatureDetailsCustomComponent,
     FeatureDetailsDirective]
 })
 export class IgoFeatureDetailsModule {}
