@@ -307,7 +307,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.store.entities$.unsubscribe();
     this.map.propertyChange$.unsubscribe;
     this.queryState.store.destroy();
-    this.onClearSearch();
+    this.clearSearch();
   }
 
   //SEARCH
@@ -329,7 +329,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.searchStore.clear();
       this.selectedFeature = undefined;
       this.searchInit = false;
-      this.onClearSearch();
+      this.clearSearch();
       //this.closePanel(); causes the panel to close when typing the searchbar
     }
   }
@@ -493,7 +493,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   clearSearchBar(event){
     this.searchInit = false;
-    this.onClearSearch();
+    this.clearSearch();
     this.closePanel();
     this.clearedSearchbar = true;
     if (event){
@@ -502,7 +502,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClearSearch() {
+  clearSearch() {
     this.map.searchResultsOverlay.clear();
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
@@ -525,7 +525,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.searchInit = false;
       this.mapQueryClick = false;
       this.clearQuery();
-      this.onClearSearch();
+      this.clearSearch();
       this.openLegend.emit();
     }
   }

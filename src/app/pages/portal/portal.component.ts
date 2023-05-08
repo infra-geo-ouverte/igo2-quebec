@@ -401,7 +401,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.legendPanelOpened === false) {
       this.openPanelLegend();
       if (this.searchInit === true){
-        this.onClearSearch();
+        this.clearSearch();
         this.searchBarTerm = '';
         this.searchInit = false;
         this.openPanels();
@@ -574,7 +574,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
           if (this.mapQueryClick === true) {
             this.onClearQuery();
           }
-          this.onClearSearch();
+          this.clearSearch();
           this.searchInit = false;
           this.legendPanelOpened = false;
           this.openPanelonQuery();
@@ -649,7 +649,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < this.minSearchTermLength) {
       this.expanded = true;
-      this.onClearSearch();
+      this.clearSearch();
       return;
     }
     this.onBeforeSearch();
@@ -747,7 +747,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.panelOpenState = true;
   }
 
-  onClearSearch() {
+  clearSearch() {
     this.map.searchResultsOverlay.clear();
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
@@ -774,7 +774,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.panelOpenState = true;
     this.searchInit = false;
     this.legendPanelOpened = false;
-    this.onClearSearch();
+    this.clearSearch();
     this.searchBarTerm = '';
   }
 

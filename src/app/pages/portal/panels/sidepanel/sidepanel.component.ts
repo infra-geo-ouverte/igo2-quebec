@@ -21,14 +21,12 @@ import {
   FEATURE,
   Feature,
   FeatureMotion,
-  LayerService,
-  MapService,
   Research,
   SearchResult,
   SearchService,
   Layer
 } from '@igo2/geo';
-import { QueryState, MapState } from '@igo2/integration';
+import { QueryState } from '@igo2/integration';
 import { ConfigService, LanguageService } from '@igo2/core';
 
 import { SearchState } from '../search-results-tool/search.state';
@@ -130,9 +128,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
-  public igoSearchPointerSummaryEnabled: boolean = false;
-
-  public termSplitter: string = '|';
 
   @ViewChild('mapBrowser', { read: ElementRef, static: true }) mapBrowser: ElementRef;
 
@@ -182,13 +177,10 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   constructor(
     protected languageService: LanguageService,
     private configService: ConfigService,
-    private mapService: MapService,
-    private layerService: LayerService,
     private searchState: SearchState,
     private searchService: SearchService,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef,
-    private mapState: MapState,
     private elRef: ElementRef
     ) {
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
@@ -196,14 +188,14 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(){
-      this.queryStore.entities$
+      this.queryStore.entities$ // clear the search when a mapQuery is initialised
       .subscribe(
         (entities) => {
         if (entities.length > 0) {
           this.mapQueryClick = true;
           this.legendPanelOpened = false;
           this.panelOpenState = true;
-          this.onClearSearch();
+          this.clearSearch();
         }
       });
     } // End OnInit
@@ -213,7 +205,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       this.store.destroy();
       this.store.entities$.unsubscribe();
       this.legendPanelOpened = false;
-      this.onClearSearch();
+      this.clearSearch();
       this.clearQuery();
       this.map.propertyChange$.unsubscribe;
     }
@@ -314,19 +306,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.map.searchResultsOverlay.clear();
   }
 
-  onSearchCoordinate() {
-    this.searchStore.clear();
-    const results = this.searchService.reverseSearch(this.lonlat);
-
-    for (const i in results) {
-      if (results.length > 0) {
-        results[i].request.subscribe((_results: SearchResult<Feature>[]) => {
-          this.onSearch({ research: results[i], results: _results });
-        });
-      }
-    }
-  }
-
   closePanelOnCloseQuery(){
     this.closeQuery.emit();
     this.mapQueryClick = false;
@@ -337,7 +316,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClearSearch() {
+  clearSearch() {
     this.map.searchResultsOverlay.clear();
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
