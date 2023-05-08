@@ -638,6 +638,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.mapQueryClick = false;
   }
 
+
+  
   onSearchTermChange(term?: string) {
     this.legendPanelOpened = false;
     this.expanded = true;
@@ -645,8 +647,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
 
-
-    
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < this.minSearchTermLength) {
