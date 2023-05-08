@@ -23,3 +23,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install @angular/cli
+    - run: npm run lint
