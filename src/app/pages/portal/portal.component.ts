@@ -644,7 +644,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
-
+     
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < this.minSearchTermLength) {
