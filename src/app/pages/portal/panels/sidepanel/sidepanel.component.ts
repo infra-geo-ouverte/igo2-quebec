@@ -67,7 +67,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
 
-  @Input()
+  @Input() // for tooltipPosition in featureDetails
   get mobile(): boolean {
     return this._mobile;
   }

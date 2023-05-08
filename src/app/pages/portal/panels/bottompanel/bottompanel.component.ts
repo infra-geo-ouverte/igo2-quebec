@@ -66,7 +66,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     return this.mapState.map;
   }
 
-  @Input()
+  @Input() // for tooltipPosition in featureDetails
   get mobile(): boolean {
     return this._mobile;
   }
