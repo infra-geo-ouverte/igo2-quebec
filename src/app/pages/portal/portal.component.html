@@ -19,7 +19,7 @@
         [searchSettings]="false"
         color="primary"
         [forceNA]="forceCoordsNA"
-        [term]="searchBarTerm"
+        [searchBarTerm]="searchBarTerm"
         [store]="searchStore"
         [termSplitter]="termSplitter"
         (searchTermChange)="onSearchTermChange($event)"
@@ -48,7 +48,8 @@
       </app-sidepanel>
     </div>
 
-    <igo-map-browser
+    <igo-map-browser      
+      igoMapOffline
       #mapBrowser
       igoMapContext
       igoLayerContext

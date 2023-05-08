@@ -449,6 +449,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     distinctUntilChanged()
   );
 
+  /*
   private initSW() {
     const dataDownload = this.configService.getConfig('pwa.dataDownload');
     if ('serviceWorker' in navigator && dataDownload) {
@@ -503,7 +504,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
       });
     }
-  }
+  }*/
+
   createFeatureProperties(layer: ImageLayer | VectorLayer) {
     let properties = {};
     layer.options.sourceOptions.sourceFields.forEach(field => {
@@ -653,6 +655,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.onBeforeSearch();
   }
 
+  clearSearchbarterm(event){
+    this.searchBarTerm = event;
+  }
+
   onSearch(event: { research: Research; results: SearchResult[] }) {
     this.searchInit = true;
     this.legendPanelOpened = false;
@@ -747,7 +753,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
     this.searchInit = false;
-    this.searchBarTerm = '';
+    this.searchBarTerm = ''; // the searchbarterm doesn't clear up
     this.searchState.setSearchTerm('');
   }
 
@@ -779,7 +785,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   getTitle(result: SearchResult) {
-    console.log(getEntityTitle(result));
     return getEntityTitle(result);
   }
 
@@ -1039,8 +1044,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       file,
       features,
       this.map,
+      this.contextState.context$.value.uri,
       this.messageService,
-      this.languageService
+      this.layerService
     );
   }
 
@@ -1048,8 +1054,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     handleFileImportError(
       file,
       error,
-      this.messageService,
-      this.languageService
+      this.messageService
     );
   }
 

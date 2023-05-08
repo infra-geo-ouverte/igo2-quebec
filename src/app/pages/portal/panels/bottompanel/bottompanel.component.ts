@@ -273,6 +273,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
         layer.showInLayerList !== false
       ));
     });
+
+    // Feature
+    /*
     let latestResult;
     let trigger;
     if (this.hasFeatureEmphasisOnSelection) {
@@ -292,7 +295,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
         this.map.viewController.resolution$,
         this.store.entities$
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
-    }
+    }*/
 
   } // End OnInit
 
@@ -313,7 +316,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
 
   onSearchTermChange(term = '') {
-    //this.openPanel();
     this.term = term;
     this.searchInit = true;
     this.clearedSearchbar = false;
@@ -505,9 +507,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
-    //this.term = '';
-    //this.searchBarTerm.emit('');
-    //this.searchState.setSearchTerm('');
   }
 
   // Legend

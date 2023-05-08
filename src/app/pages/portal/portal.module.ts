@@ -1,15 +1,12 @@
-
-import { IgoAppSearchBarModule, IgoAppSearchModule } from '@igo2/integration';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LegendDialogModule} from './legend-dialog/legend-dialog.module';
-import { IgoCoreModule, IgoLanguageModule } from '@igo2/core';
+import { IgoCoreModule } from '@igo2/core';
 import {
   IgoActionModule,
   IgoWorkspaceModule,
@@ -29,29 +26,16 @@ import {
   IgoImportExportModule,
   IgoMapModule,
   IgoQueryModule,
-  IgoSearchModule,
   IgoLayerModule,
-  provideIChercheReverseSearchSource,
-  provideNominatimSearchSource,
-  provideCoordinatesReverseSearchSource,
-  provideILayerSearchSource,
-  provideOsrmDirectionsSource,
-  provideOptionsApi,
-  IChercheSearchSource,
-  provideIChercheSearchSource,
-  provideDefaultIChercheSearchResultFormatter,
-  provideStyleListOptions,
-  provideDefaultCoordinatesSearchResultFormatter,
-  CoordinatesSearchResultFormatter,
-  provideSearchSourceService,
-  SearchService
+  IgoSearchModule
 } from '@igo2/geo';
 import {
   IgoContextManagerModule,
   IgoContextMapButtonModule
 } from '@igo2/context';
 
-import { IgoIntegrationModule } from '@igo2/integration';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { IgoAppSearchBarModule, IgoIntegrationModule } from '@igo2/integration';
 import { MapOverlayModule } from './map-overlay/map-overlay.module';
 
 import { PortalComponent } from './portal.component';
@@ -71,7 +55,6 @@ import { AppPanelsModule } from './panels/panels.module';
     IgoFlexibleModule,
     IgoIntegrationModule,
     IgoContextManagerModule,
-    IgoContextMapButtonModule,
     FooterModule,
     IgoLayerModule,
     IgoWorkspaceModule,
@@ -79,7 +62,6 @@ import { AppPanelsModule } from './panels/panels.module';
     IgoQueryModule.forRoot(),
     IgoSearchModule.forRoot(),
     IgoContextMapButtonModule,
-    MatSidenavModule,
     MatDialogModule,
     IgoActionModule,
     IgoImportExportModule,
@@ -91,31 +73,10 @@ import { AppPanelsModule } from './panels/panels.module';
     IgoToolModule,
     IgoEntityTableModule,
     IgoEntityTablePaginatorModule,
+    LegendDialogModule,
+    MatSidenavModule,
     IgoAppSearchBarModule,
-    IgoAppSearchModule,
-    IgoLanguageModule,
-    LegendDialogModule
-  ],
-  providers: [
-    provideCoordinatesReverseSearchSource(),
-    provideIChercheSearchSource(),
-    provideNominatimSearchSource(),
-    provideIChercheReverseSearchSource(),
-    provideNominatimSearchSource(),
-    provideIChercheReverseSearchSource(),
-    provideCoordinatesReverseSearchSource(),
-    provideILayerSearchSource(),
-    provideOsrmDirectionsSource(),
-    provideOptionsApi(),
-    CoordinatesSearchResultFormatter,
-    provideDefaultCoordinatesSearchResultFormatter(),
-    provideDefaultIChercheSearchResultFormatter(),
-    provideSearchSourceService(),
-    SearchService,
-    IChercheSearchSource,
-    provideStyleListOptions({
-      path: './assets/list-style.json'
-    })
+    IgoSearchModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

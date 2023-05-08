@@ -94,7 +94,6 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.ready = true;
-    console.log(this.feature);
   }
 
   ngOnDestroy() {
@@ -210,12 +209,6 @@ filterFeatureProperties(feature) {
   this.featureTitle = feature.meta ? feature.meta.title : undefined; // will define the feature info title in the panel
   const properties = {};
   let offlineButtonState;
-
-  if (this.map) {
-    this.map.offlineButtonToggle$.pipe(takeUntil(this.unsubscribe$)).subscribe(state => {
-      offlineButtonState = state;
-    });
-  }
 
   if (feature.properties && feature.properties.Route) {
     delete feature.properties.Route;

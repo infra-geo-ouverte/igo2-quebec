@@ -94,7 +94,6 @@ export class FeatureDetailsCustomComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.ready = true;
-    console.log(this.feature);
   }
 
   ngOnDestroy() {
@@ -209,13 +208,6 @@ filterFeatureProperties(feature) {
   const allowedFieldsAndAlias = feature.meta ? feature.meta.alias : undefined;
   this.featureTitle = feature.meta ? feature.meta.title : undefined; // will define the feature info title in the panel
   const properties = {};
-  let offlineButtonState;
-
-  if (this.map) {
-    this.map.offlineButtonToggle$.pipe(takeUntil(this.unsubscribe$)).subscribe(state => {
-      offlineButtonState = state;
-    });
-  }
 
   if (feature.properties && feature.properties.Route) {
     delete feature.properties.Route;
@@ -226,27 +218,6 @@ filterFeatureProperties(feature) {
       properties[allowedFieldsAndAlias[field]] = feature.properties[field];
     });
     return properties;
-    } else if (offlineButtonState !== undefined) {
-      if (!offlineButtonState) {
-        if (this.state.connection && feature.meta && feature.meta.excludeAttribute) {
-          const excludeAttribute = feature.meta.excludeAttribute;
-          excludeAttribute.forEach(attribute => {
-            delete feature.properties[attribute];
-          });
-        } else if (!this.state.connection && feature.meta && feature.meta.excludeAttributeOffline) {
-          const excludeAttributeOffline = feature.meta.excludeAttributeOffline;
-          excludeAttributeOffline.forEach(attribute => {
-            delete feature.properties[attribute];
-          });
-        }
-      } else {
-        if (feature.meta && feature.meta.excludeAttributeOffline) {
-          const excludeAttributeOffline = feature.meta.excludeAttributeOffline;
-          excludeAttributeOffline.forEach(attribute => {
-            delete feature.properties[attribute];
-          });
-        }
-      }
     } else {
       if (this.state.connection && feature.meta && feature.meta.excludeAttribute) {
         const excludeAttribute = feature.meta.excludeAttribute;

@@ -91,8 +91,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     return this.queryState.store;
   }
 
-  resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
-
   // Feature details
   @Output() selectFeature = new EventEmitter<boolean>();
 
@@ -140,7 +138,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   public lonlat;
   public mapProjection: string;
-  public term: string;
+
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
   get searchStore(): EntityStore<SearchResult> {
@@ -202,7 +200,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       .subscribe(
         (entities) => {
         if (entities.length > 0) {
-          //this.opened = true;
           this.mapQueryClick = true;
           this.legendPanelOpened = false;
           this.panelOpenState = true;
@@ -215,7 +212,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
       this.store.destroy();
       this.store.entities$.unsubscribe();
-      //this.opened = false;
       this.legendPanelOpened = false;
       this.onClearSearch();
       this.clearQuery();
@@ -223,18 +219,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     }
 
     //SEARCH
-    onPointerSummaryStatusChange(value) {
-      this.igoSearchPointerSummaryEnabled = value;
-    }
-
-    onSearchTermChange(term = '') {
-      this.term = term;
-      const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
-      if (termWithoutHashtag.length < 2) {
-        this.searchStore.clear();
-        this.selectedFeature = undefined;
-      }
-    }
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
       if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
@@ -268,7 +252,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
           } else {
             moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
           }
-  
           if (
             moreResults !== null &&
             !this.isScrolledIntoView(igoList, moreResults)
@@ -361,7 +344,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
     this.searchInit = false;
-    this.term = '';
     this.searchState.setSearchTerm('');
   }
 
@@ -375,26 +357,10 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   // LEGEND
 
   closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
-    //this.opened = false;
     this.legendPanelOpened = false;
     this.closeLegend.emit();
     this.map.propertyChange$.unsubscribe;
   }
-
-/*
-  openPanelLegend(){ /// semble inutile .. si oui (legendPanelOpened)="legendPanelOpened" dans mat-sidenav
-    this.map.propertyChange$.subscribe(() => {
-      this.mapLayersShownInLegend = this.map.layers.filter(layer => (
-        layer.showInLayerList !== false
-      ));
-    });
-    this.opened = true;
-    this.legendPanelOpened = true;
-    this.clearQuery();
-    this.onClearSearch();
-    this.mapQueryClick = false;
-    this.openLegend.emit(true);
-  }*/
 
 }
 
