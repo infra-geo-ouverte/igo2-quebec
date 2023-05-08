@@ -30,7 +30,7 @@
               "src/assets",
               "src/config",
               "src/contexts",
-              "src/locale",
+              "src/locale"
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/common/assets/",
@@ -211,6 +211,15 @@
               ]
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -224,6 +233,14 @@
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "igo2-quebec:serve"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "e2e/**/*.ts"
+            ]
+          }
         }
       }
     }
@@ -235,7 +252,6 @@
     "cache": {
       "enabled": false,
       "environment": "all"
-    },
-    "analytics": false
+    }
   }
 }
