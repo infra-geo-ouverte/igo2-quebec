@@ -269,7 +269,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       const padding = 6;
       const docViewTop = elemSource.scrollTop;
       const docViewBottom = docViewTop + elemSource.clientHeight;
-  
       const elemTop = elem.offsetTop;
       const elemBottom = elemTop + elem.clientHeight + padding;
       return elemBottom <= docViewBottom && elemTop >= docViewTop;

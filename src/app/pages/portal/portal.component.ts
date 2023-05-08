@@ -7,7 +7,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, zip, concatMap, delay, of, skip } from 'rxjs';
+import { Subscription, BehaviorSubject, of, skip } from 'rxjs';
 import { debounceTime, take, skipWhile, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
@@ -309,7 +309,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
         this.configService.getConfig('mobileBreakPoint');
       this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
-      this.minSearchTermLength = this.configService.getConfig('minSearchTermLength') === undefined ? 2 : 
+      this.minSearchTermLength = this.configService.getConfig('minSearchTermLength') === undefined ? 2 :
         this.configService.getConfig('minSearchTermLength');
       this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
         this.configService.getConfig('legendInPanel');
@@ -638,8 +638,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.mapQueryClick = false;
   }
 
-
-  
   onSearchTermChange(term?: string) {
     this.legendPanelOpened = false;
     this.expanded = true;

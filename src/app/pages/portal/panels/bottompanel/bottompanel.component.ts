@@ -17,7 +17,7 @@ import olPoint from 'ol/geom/Point';
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService, StorageService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
-import { BehaviorSubject, combineLatest, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, Subscription} from 'rxjs';
 
 import {
   IgoMap,
