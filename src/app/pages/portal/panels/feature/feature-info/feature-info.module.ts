@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
 import { IgoPanelModule, IgoStopPropagationModule, IgoActionModule } from '@igo2/common';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoSearchResultsModule } from '@igo2/geo';

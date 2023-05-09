@@ -29,7 +29,8 @@
     "open": "Open panel"
   },
   "feature": {
-    "title" : "Object"
+    "title" : "Object",
+    "close": "Fermer le panneau"
   },
   "legend": {
     "legendTitle": "Legend",

@@ -30,7 +30,8 @@
     "legendOpen": "Ouvrir la légende"
   },
   "feature": {
-    "title" : "Objet"
+    "title" : "Objet",
+    "close": "Fermer le panneau"
   },
   "searchBar": "Faire une recherche",
   "sidePanel": {
