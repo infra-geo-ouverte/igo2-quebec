@@ -17,7 +17,7 @@ import olPoint from 'ol/geom/Point';
 import * as proj from 'ol/proj';
 import { LanguageService, MediaService, StorageService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
-import { BehaviorSubject, Subscription} from 'rxjs';
+import { BehaviorSubject, Subscription, combineLatest, tap} from 'rxjs';
 
 import {
   IgoMap,
@@ -275,7 +275,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     });
 
     // Feature
-    /*
+
     let latestResult;
     let trigger;
     if (this.hasFeatureEmphasisOnSelection) {
@@ -295,7 +295,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
         this.map.viewController.resolution$,
         this.store.entities$
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
-    }*/
+    }
 
   } // End OnInit
 
@@ -458,18 +458,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       }
     }
   }
-/*
-  onSearchBarClick(){
-    if (this.searchInit === false || this.mapQueryClick === true) {
-      this.openPanel();
-    }
-  }*/
 
   onSearchBarClick(event){ /// prevents panel to close on clear search
     if (this.expanded === false && this.clearedSearchbar === false){
       this.openPanel();
     }
-    //this.searchInit = true;
     event.stopPropagation();
   }
 
