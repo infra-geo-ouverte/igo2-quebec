@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 
 import { FeatureDetailsComponent } from './feature-details.component';
 import { FeatureDetailsCustomComponent } from './feature-details-custom.component';
-import { FeatureDetailsDirective } from './feature-details.directive';
+import { FeatureDetailsDirective } from '@igo2/geo';
 
 /**
  * @ignore
