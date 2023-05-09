@@ -15,8 +15,8 @@ import { NetworkService, ConnectionState, LanguageService, MessageService } from
 import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
-import { TooltipPosition } from '@angular/material/tooltip';
-import { getEntityTitle } from '@igo2/common';
+//import { TooltipPosition } from '@angular/material/tooltip'; if using informational tooltips
+import { Clipboard } from '@igo2/utils';
 
 @Component({
   selector: 'app-feature-details',
@@ -74,8 +74,15 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   @Output() selectFeature = new EventEmitter<boolean>();
 
-  @Input()
-  matTooltipPosition: TooltipPosition;
+  public title: string;
+
+  /*
+  get title(): string {
+    return getEntityTitle(this.feature);
+  }*/
+
+  /*@Input()
+  matTooltipPosition: TooltipPosition;*/ // if using informational tooltips
 
   public ready : boolean;
 
@@ -94,6 +101,8 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.ready = true;
+    this.title = this.feature.properties.value;
+    console.log(this.feature.properties);
   }
 
   ngOnDestroy() {
@@ -106,20 +115,23 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
     return reading.toString().replace(".", ",");
   }
 
-  tooltipPosition(){
-    if (this.mobile) {
-      this.matTooltipPosition = 'above';
-    } else {
-      this.matTooltipPosition = 'right';
-    }
-  }
+  /* Tooltip info: add this to your element :
+  /*
+        <mat-icon
+        #tooltipScenario="matTooltip"
+        class="info"
+        color="primary"
+        svgIcon="information"
+        [matTooltip]="('text'| translate)"
+        [matTooltipPosition]="mobile? 'above' : 'right'"
+        [matTooltipClass]="mobile? 'tooltip-above' : 'tooltip-right'">
+      </mat-icon>
+  */
+
 
     /**
    * @internal
    */
-    get title(): string {
-      return getEntityTitle(this.feature);
-    }
 
   isObject(value) {
     return typeof value === 'object';
@@ -253,7 +265,18 @@ filterFeatureProperties(feature) {
         });
       }
     }
+
     return feature.properties;
   }
+
+    /**
+   * Copy the url to a clipboard
+   */
+    copyTextToClipboard(value: string): void {
+      const successful = Clipboard.copy(value);
+      if (successful) {
+        this.messageService.success('igo.geo.query.link.message');
+      }
+    }
 
 }
