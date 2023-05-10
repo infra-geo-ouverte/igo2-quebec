@@ -102,7 +102,6 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.ready = true;
     this.title = this.feature.properties.value;
-    console.log(this.feature.properties);
   }
 
   ngOnDestroy() {
