@@ -519,7 +519,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.mapQueryClick = false;
       this.clearQuery();
       this.clearSearch();
-      this.openLegend.emit();
+      //this.openLegend.emit();
     }
   }
 
