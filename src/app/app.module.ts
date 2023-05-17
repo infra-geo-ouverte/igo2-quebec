@@ -76,8 +76,6 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     provideIChercheSearchSource(),
     provideNominatimSearchSource(),
     provideIChercheReverseSearchSource(),
-    provideIChercheReverseSearchSource(),
-    provideCoordinatesReverseSearchSource(),
     provideILayerSearchSource(),
     provideOsrmDirectionsSource(),
     provideOptionsApi(),
@@ -91,13 +89,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       path: './assets/list-style.json'
     }),
     RouteService,
-    SearchService,
-    provideIChercheSearchSource(),
     provideWorkspaceSearchSource(),
-    provideIChercheReverseSearchSource(),
-    provideCoordinatesReverseSearchSource(),
-    provideILayerSearchSource(),
-    provideOptionsApi(),
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFactory,
