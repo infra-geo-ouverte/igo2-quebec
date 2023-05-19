@@ -31,6 +31,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
+import { SimpleFeatureListComponent } from './pages/list/simple-feature-list/simple-feature-list.component';
+import { SimpleFiltersComponent } from './pages/filters/simple-filters/simple-filters.component';
 
 export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
@@ -40,7 +42,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SimpleFeatureListComponent, SimpleFiltersComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
