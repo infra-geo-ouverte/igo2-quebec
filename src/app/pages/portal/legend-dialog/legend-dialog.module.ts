@@ -19,16 +19,6 @@ import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/materia
     MatTooltipModule,
     IgoLanguageModule
   ],
-  providers:
-  [{
-    provide: 'app-legend-dialog',
-    useValue: LegendDialogComponent,
-},
-      {provide:MatDialogRef , useValue:{} },
-
-      { provide: MAT_DIALOG_DATA, useValue: {} }
-
-],
   exports: [
     LegendDialogButtonComponent,
     LegendDialogComponent,
