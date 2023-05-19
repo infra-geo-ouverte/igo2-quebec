@@ -523,9 +523,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.workspaceMaximize$$.map(f => f.unsubscribe());
-    if( this.layers$$){
-      this.layers$$.unsubscribe();
-    }
+    this.layers$$?.unsubscribe();
     this.searchTerm$$.unsubscribe();
   }
 
