@@ -389,7 +389,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.breakpointChanged()
     );
 
-  } // End Oninit
+  }
 
   ngAfterContentInit(): void {
     this.map.viewController.setInitialState();
