@@ -211,7 +211,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
   set expansionPanelExpanded(value: boolean) {
     this.workspaceState.workspacePanelExpanded = value;
-    if (value === true) {
+    if (value) {
       this.map.viewController.setPadding({bottom: 280});
     } else {
       this.map.viewController.setPadding({bottom: 0});
@@ -398,15 +398,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   // Legend
 
   togglePanelLegend(){
-    if (this.legendPanelOpened === false) {
+    if (!this.legendPanelOpened) {
       this.openPanelLegend();
-      if (this.searchInit === true){
+      if (this.searchInit){
         this.clearSearch();
         this.searchBarTerm = '';
         this.searchInit = false;
         this.openPanels();
       }
-      if (this.mapQueryClick === true){
+      if (this.mapQueryClick){
         this.onClearQuery();
         this.mapQueryClick = false;
         this.openPanels();
@@ -569,7 +569,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     if (event.features.map) {
       const results = event.features.map((feature: Feature) => {
         if (feature) {
-          if (this.mapQueryClick === true) {
+          if (this.mapQueryClick) {
             this.onClearQuery();
           }
           this.clearSearch();
@@ -596,10 +596,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
             return featureToSearchResult(feature, querySearchSource);
         } else {
           this.mapQueryClick = false;
-          if (this.searchInit === false && this.legendPanelOpened === false && !this.mobile){ // in desktop keep legend opened if user clicks on the map
+          if (!this.searchInit && !this.legendPanelOpened && !this.mobile){ // in desktop keep legend opened if user clicks on the map
             this.panelOpenState = false;
           }
-          if (this.searchInit === false && this.mobile){ // mobile mode, close legend when user click on the map
+          if (!this.searchInit && this.mobile){ // mobile mode, close legend when user click on the map
             this.expanded = false;
             this.panelOpenState = false;
           }
@@ -660,7 +660,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.legendPanelOpened = false;
     this.expanded = true;
     this.panelOpenState = true;
-    if (this.mapQueryClick === true) {
+    if (this.mapQueryClick) {
       this.onClearQuery();
       this.mapQueryClick = false;
       this.panelOpenState = true;
@@ -692,7 +692,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private closePanels() {
-    if (this.mapQueryClick === false && this.searchInit === false && this.legendPanelOpened === false){
+    if (!this.mapQueryClick && !this.searchInit && !this.legendPanelOpened){
       this.panelOpenState = false;
       this.expanded = false;
     }
@@ -755,10 +755,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   closePanelOnCloseQuery(){
     this.mapQueryClick = false;
-    if (this.searchInit === false && this.legendPanelOpened === false){
+    if (!this.searchInit && !this.legendPanelOpened){
       //this.panelOpenState = false;
       //this.expanded = false; //// causes panel to close when click searchbar after query
-    } if (this.searchInit === true || this.legendPanelOpened === true) {
+    } if (this.searchInit || this.legendPanelOpened) {
       this.panelOpenState = true;
       this.expanded = true;
     }
