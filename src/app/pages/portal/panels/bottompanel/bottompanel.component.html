@@ -15,6 +15,7 @@
         #searchbar
         (click)= "onSearchBarClick($event)"
         (keydown.Enter)= "$event.stopPropagation()"
+        (keydown.Space)= "$event.stopPropagation()"
         appearance="outline"
         searchIcon ="magnify"
         [matTooltip]="'searchBar' | translate"
