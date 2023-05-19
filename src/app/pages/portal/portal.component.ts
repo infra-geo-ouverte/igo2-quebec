@@ -754,12 +754,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   closePanelOnCloseQuery(){
     this.mapQueryClick = false;
-    if (!this.searchInit && !this.legendPanelOpened){
-      //this.panelOpenState = false;
-      //this.expanded = false; //// causes panel to close when click searchbar after query
-    } if (this.searchInit || this.legendPanelOpened) {
-      this.panelOpenState = true;
-      this.expanded = true;
+    if (this.searchInit || this.legendPanelOpened) {
+      this.openPanels(); // to prevent the panel to close when click searchbar after query
     }
   }
 
