@@ -573,7 +573,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
             this.onClearQuery();
           }
           this.clearSearch();
-          this.legendPanelOpened = false;
           this.openPanelonQuery();
           let querySearchSource = querySearchSourceArray.find(
             (s) => s.title === feature.meta.sourceTitle
