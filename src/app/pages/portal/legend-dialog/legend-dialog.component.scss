@@ -17,6 +17,7 @@
   flex-direction: column;
   height: 100%;
   border-radius: 0;
+  height: fit-content;
 
   igo-layer-legend-list {
     max-height: inherit;
@@ -46,6 +47,7 @@
 
   @media (min-width: 768px){
     max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px) !important; //TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
+    height: fit-content;
   }
 
 } 
