@@ -376,13 +376,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     //FeatureInfo
     this.queryService.defaultFeatureCount = 1;
 
-      this.queryStore.entities$
-      .subscribe(
-        (entities) => {
-        if (entities.length > 0) {
-          this.openPanelonQuery();
-        }
-      });
+    this.queryStore.entities$
+    .subscribe(
+      (entities) => {
+      if (entities.length > 0) {
+        this.openPanelonQuery();
+      }
+    });
 
     // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
