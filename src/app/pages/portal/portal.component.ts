@@ -740,7 +740,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private onBeforeSearch() {
     this.openPanels();
-    this.panelOpenState = true;
   }
 
   clearSearch() {
