@@ -761,12 +761,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   openPanelonQuery(){
     this.mapQueryClick = true;
-    this.expanded = true;
-    this.panelOpenState = true;
-    this.searchInit = false;
+    this.openPanels;
     this.legendPanelOpened = false;
     this.clearSearch();
-    this.searchBarTerm = '';
   }
 
   onClearQuery(){
