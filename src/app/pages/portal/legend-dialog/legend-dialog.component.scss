@@ -1,7 +1,5 @@
 @import '../portal.variables.scss';
 
-// DIALOG
-
 // FLEX
 
 ::ng-deep #legend-dialog-container {
@@ -25,7 +23,7 @@
       overflow-y: auto;
       height: inherit;
       max-height: inherit;
-  }
+    }
   }
 
   igo-layer-legend-item {
