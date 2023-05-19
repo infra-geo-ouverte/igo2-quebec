@@ -596,10 +596,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
             return featureToSearchResult(feature, querySearchSource);
         } else {
           this.mapQueryClick = false;
-          if (this.mapQueryClick === false && this.searchInit === false && this.legendPanelOpened === false && !this.mobile){ // in desktop keep legend opened if user clicks on the map
+          if (this.searchInit === false && this.legendPanelOpened === false && !this.mobile){ // in desktop keep legend opened if user clicks on the map
             this.panelOpenState = false;
           }
-          if (this.mapQueryClick === false && this.searchInit === false && this.mobile){ // mobile mode, close legend when user click on the map
+          if (this.searchInit === false && this.mobile){ // mobile mode, close legend when user click on the map
             this.expanded = false;
             this.panelOpenState = false;
           }
