@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { IgoMapModule, IgoLayerModule } from '@igo2/geo';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IgoLanguageModule } from '@igo2/core';
-import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [LegendDialogButtonComponent, LegendDialogComponent],
@@ -21,9 +21,7 @@ import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/materia
   ],
   exports: [
     LegendDialogButtonComponent,
-    LegendDialogComponent,
-    MatIconModule
-  ],
-  bootstrap: [LegendDialogButtonComponent, LegendDialogComponent],
+    LegendDialogComponent
+  ]
 })
 export class LegendDialogModule { }
