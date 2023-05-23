@@ -12,11 +12,11 @@
       <div id="legend" *ngIf="legendPanelOpened === true" [mapQueryClick]="mapQueryClick" [legendPanelOpened]="legendPanelOpened" [panelOpenState]="panelOpenState" >
         <button
           mat-icon-button
-          [matTooltip]="'legend.legendClose' | translate"
+          [matTooltip]="'legend.close' | translate"
           color="primary"
           (click)="closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
         </button>
-        <h4 mat-dialog-title>{{ 'legend.legendTitle' | translate }}</h4>
+        <h4 mat-dialog-title>{{ 'legend.title' | translate }}</h4>
         <igo-layer-legend-list
           [layers]="mapLayersShownInLegend"
           [excludeBaseLayers]="true"

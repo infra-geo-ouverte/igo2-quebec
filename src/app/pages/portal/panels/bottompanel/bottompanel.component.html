@@ -42,10 +42,10 @@
       <button
         mat-icon-button
         color="primary"
-        [matTooltip]="'legend.legendClose' | translate"
+        [matTooltip]="'legend.close' | translate"
         (click)="closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
       </button>
-      <h4 mat-dialog-title>{{ 'legend.legendTitle' | translate }}</h4>
+      <h4 mat-dialog-title>{{ 'legend.title' | translate }}</h4>
       <igo-layer-legend-list
         [layers]="mapLayersShownInLegend"
         [excludeBaseLayers]="true"

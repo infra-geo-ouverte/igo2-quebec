@@ -24,10 +24,10 @@
     "name": "Résultats de recherche"
   },
   "legend": {
-    "legendTitle": "Légende",
-    "legendButton": "Légende",
-    "legendClose": "Fermer la légende",
-    "legendOpen": "Ouvrir la légende"
+    "title": "Légende",
+    "button": "Légende",
+    "close": "Fermer la légende",
+    "open": "Afficher la légende"
   },
   "feature": {
     "title" : "Objet",

@@ -34,10 +34,10 @@
     "tooltip": "Customise this template as you wish, even by layer using feature.meta.id or other layers metadatas"
   },
   "legend": {
-    "legendTitle": "Legend",
-    "legendButton": "Legend",
-    "legendClose": "Close legend",
-    "legendOpen": "Open legend"
+    "title": "Legend",
+    "button": "Legend",
+    "close": "Close legend",
+    "open": "Open legend"
   },
   "pwa": {
     "new-version-title": "New version available. ",
