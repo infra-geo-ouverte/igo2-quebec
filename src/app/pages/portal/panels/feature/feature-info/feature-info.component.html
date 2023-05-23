@@ -4,7 +4,7 @@
   (keydown)="handleKeyboardEvent($event)">
   <span class="title">
 
-    <h4 color="primary" click="onTitleClick()">{{title}}</h4>
+    <h4 color="primary" (click)="onTitleClick()" style="cursor:pointer;">{{title}}</h4>
 
     <button
       class="clear-button"
