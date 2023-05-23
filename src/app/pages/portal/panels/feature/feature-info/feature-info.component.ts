@@ -96,8 +96,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
   private _mobile: boolean;
 
-  public actionStore = new ActionStore([]);
-  public actionbarMode = ActionbarMode.Overlay;
+
   private isResultSelected$ = new BehaviorSubject(false);
   public isSelectedResultOutOfView$ = new BehaviorSubject(false);
   private isSelectedResultOutOfView$$: Subscription;
@@ -119,8 +118,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   private resultOrResolution$$: Subscription;
 
   resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
-
-  public urlStationDetailsMetadata: string = this.configService.getConfig("postgrest.stationDetailsMetadata"); // url for station details metadata
 
   @HostBinding('style.visibility')
   get displayStyle() {
