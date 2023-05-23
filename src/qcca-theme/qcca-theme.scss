@@ -204,8 +204,6 @@ igo-baselayers-switcher, igo-geolocate-button {
 box-shadow: 0 1px 4px rgb(34 54 84 / 24%);
 }
 
-// ANGULAR MATERIAL
-
 app-search-results-tool ul{
     margin-left: 1rem;
   }
@@ -517,13 +515,11 @@ igo-list [igolistitem][color=accent].igo-list-item-selected > mat-list-item {
     }
 }
 
-//#sidepanel > mat-sidenav > div > div > div > app-search-results-tool > igo-flexible > div.column.igo-flexible-main.initial > div > div > igo-search-results > igo-list > mat-list > igo-collapsible.icherche.ng-star-inserted > div > igo-search-results-item.igo-list-item-selected.ng-star-inserted > mat-list-item > span > span.mat-list-text > h4 > small:nth-child(2)
-
 ::ng-deep igo-search-results-item small {
     color: white!important;
 }
 
-// AVIS
+// Exemple de template d'AVIS:
 
 // Structure html :
 //<p class="avis">
@@ -668,8 +664,6 @@ border-radius: 0 !important;
 ::ng-deep .toast-message, ::ng-deep #toast-container, ::ng-deep .toast-title, toast-container, ::ng-deep .toast-error {
     color: white!important;
 }
-
-//* Spinner *//
 
 igo-spinner {
   position: absolute;
