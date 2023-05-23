@@ -74,8 +74,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   }
   private _mobile: boolean;
 
-  // QUERY
-
   @Input()
   get mapQueryClick(): boolean {
     return this._mapQueryClick;
@@ -89,7 +87,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     return this.queryState.store;
   }
 
-  // Feature details
   @Output() selectFeature = new EventEmitter<boolean>();
 
   @Input()
@@ -115,8 +112,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   }
   private _featureTitle: string;
 
-  // SEARCH
-
   @Input()
   get searchInit(): boolean {
     return this._searchInit;
@@ -139,8 +134,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
   }
-
-  // LEGEND
 
   @Input()
   get layers(): Layer[] {
@@ -198,7 +191,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
           this.clearSearch();
         }
       });
-    } // End OnInit
+    }
 
     @HostListener('change')
     ngOnDestroy() {
@@ -209,8 +202,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       this.clearQuery();
       this.map.propertyChange$.unsubscribe;
     }
-
-    //SEARCH
 
     onSearch(event: { research: Research; results: SearchResult[] }) {
       if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
@@ -331,8 +322,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.mapQueryClick = false;
     this.removeFeatureFromMap();
   }
-
-  // LEGEND
 
   closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
     this.legendPanelOpened = false;

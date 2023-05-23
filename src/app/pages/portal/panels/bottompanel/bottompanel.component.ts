@@ -6,16 +6,13 @@ import {
   OnDestroy,
   EventEmitter,
   ChangeDetectionStrategy,
-  HostListener,
-  ChangeDetectorRef,
-  ElementRef
+  ChangeDetectorRef
 } from '@angular/core';
 
 import olFeature from 'ol/Feature';
 import olPoint from 'ol/geom/Point';
 
-import * as proj from 'ol/proj';
-import { LanguageService, MediaService, StorageService } from '@igo2/core';
+import { LanguageService, StorageService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 import { BehaviorSubject, Subscription, combineLatest, tap} from 'rxjs';
 
@@ -231,25 +228,18 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private searchState: SearchState,
     private searchService: SearchService,
-    private mediaService: MediaService,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef,
     private mapState: MapState,
-    private elRef: ElementRef,
     private storageState: StorageState
     ) {
-      // SEARCH
       this.mapService.setMap(this.map);
       this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
       this.configService.getConfig('showSearchBar');
       this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
-      //this.searchOverlayStyle = this.searchState.searchOverlayStyleFocus;
-      //this.searchOverlayStyleSelection = this.searchState.searchOverlayStyleSelection;
-      //this.searchOverlayStyleFocus = this.searchState.searchOverlayStyleFocus;
     }
 
   ngOnInit(){
-    //this.expandedChange.emit();
     this.closePanel();
     this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
 
@@ -259,7 +249,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       if (entities.length > 0) {
         this.openPanel();
         this.mapQueryClick = true;
-        //this.legendPanelOpened = false;
       } else {
         if (this.legendPanelOpened === false && this.searchInit === false){
           this.closePanel();
@@ -267,14 +256,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Légende
     this.map.propertyChange$.subscribe(() => {
       this.mapLayersShownInLegend = this.map.layers.filter(layer => (
         layer.showInLayerList !== false
       ));
     });
-
-    // Feature
 
     let latestResult;
     let trigger;
@@ -297,9 +283,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
     }
 
-  } // End OnInit
+  }
 
-  @HostListener('changes')
   ngOnDestroy() {
     this.searchInit = false;
     this.mapQueryClick = false;
@@ -310,7 +295,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.clearSearch();
   }
 
-  //SEARCH
   onPointerSummaryStatusChange(value) {
     this.igoSearchPointerSummaryEnabled = value;
   }
@@ -425,27 +409,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.closePanel();
   }
 
-  onContextMenuOpen(event: { x: number; y: number }) {
-    const position = this.mapPosition(event);
-    const coord = this.mapService.getMap().ol.getCoordinateFromPixel(position);
-    this.mapProjection = this.mapService.getMap().projection;
-    this.lonlat = proj.transform(coord, this.mapProjection, 'EPSG:4326');
-  }
-
-  mapPosition(event: { x: number; y: number }) {
-    const contextmenuPoint = event;
-    contextmenuPoint.y =
-      contextmenuPoint.y -
-      //this.mapBrowser.nativeElement.getBoundingClientRect().top +
-      window.scrollY;
-    contextmenuPoint.x =
-      contextmenuPoint.x -
-      //this.mapBrowser.nativeElement.getBoundingClientRect().left +
-      window.scrollX;
-    const position = [contextmenuPoint.x, contextmenuPoint.y];
-    return position;
-  }
-
   onSearchCoordinate() {
     this.searchStore.clear();
     const results = this.searchService.reverseSearch(this.lonlat);
@@ -502,8 +465,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.searchState.deactivateCustomFilterTermStrategy();
   }
 
-  // Legend
-
   closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
     this.legendPanelOpened = false;
     this.closePanel();
@@ -519,7 +480,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.mapQueryClick = false;
       this.clearQuery();
       this.clearSearch();
-      //this.openLegend.emit();
     }
   }
 
