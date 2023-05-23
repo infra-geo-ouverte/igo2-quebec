@@ -31,7 +31,8 @@
   },
   "feature": {
     "title" : "Objet",
-    "close": "Fermer le panneau"
+    "close": "Fermer le panneau",
+    "tooltip": "Personnalisez ce template, même par couche avec une condition sous feature.meta.id ou autres metadatas"
   },
   "searchBar": "Faire une recherche",
   "sidePanel": {

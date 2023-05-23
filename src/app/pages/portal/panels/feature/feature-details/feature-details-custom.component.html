@@ -1,7 +1,14 @@
 
 <div class="flextable" role="table" class="igo-striped mat-typography table-container" *ngIf="ready && feature && feature.properties">
-  Custom feature details template <!-- customise this template as you wish, even by layer using feature.meta.id or other layers metadatas -->
-  
+  Custom feature details template
+  <mat-icon
+    class="info"
+    color="primary"
+    svgIcon="information"
+    [matTooltip]="('feature.tooltip'| translate)"
+    [matTooltipPosition]="mobile? 'above' : 'right'"
+    [matTooltipClass]="mobile? 'tooltip-above' : 'tooltip-right'">
+  </mat-icon> <!-- customise this template as you wish, even by layer using feature.meta.id or other layers metadatas -->
 
     <div *ngFor="let property of filterFeatureProperties(feature) | keyvalue">
 

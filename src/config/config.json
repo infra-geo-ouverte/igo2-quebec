@@ -10,7 +10,7 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
-  "legendInPanel": true,
+  "legendInPanel": false,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
@@ -22,12 +22,12 @@
   "useStaticIcon": false,
   "hasExpansionPanel": false,
   "customFeatureTitle": false,
+  "customFeatureDetails": false,
   "searchBar": {
     "showSearchBar": true,
     "showSearchButton": true
   },
   "minSearchTermLength": 2,
-  "customFeatureDetails": false,
   "importExport": {
     "url": "/apis/ogre"
   },

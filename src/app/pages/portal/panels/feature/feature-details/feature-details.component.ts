@@ -15,7 +15,6 @@ import { NetworkService, ConnectionState, LanguageService, MessageService } from
 import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
-//import { TooltipPosition } from '@angular/material/tooltip'; if using informational tooltips
 import { Clipboard } from '@igo2/utils';
 
 @Component({
@@ -76,14 +75,6 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   public title: string;
 
-  /*
-  get title(): string {
-    return getEntityTitle(this.feature);
-  }*/
-
-  /*@Input()
-  matTooltipPosition: TooltipPosition;*/ // if using informational tooltips
-
   public ready : boolean;
 
   constructor(
@@ -113,20 +104,6 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
   formatReading(reading: number): string {
     return reading.toString().replace(".", ",");
   }
-
-  /* Tooltip info: add this to your element :
-  /*
-        <mat-icon
-        #tooltipScenario="matTooltip"
-        class="info"
-        color="primary"
-        svgIcon="information"
-        [matTooltip]="('text'| translate)"
-        [matTooltipPosition]="mobile? 'above' : 'right'"
-        [matTooltipClass]="mobile? 'tooltip-above' : 'tooltip-right'">
-      </mat-icon>
-  */
-
 
     /**
    * @internal

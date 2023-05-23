@@ -30,7 +30,8 @@
   },
   "feature": {
     "title" : "Object",
-    "close": "Fermer le panneau"
+    "close": "Fermer le panneau",
+    "tooltip": "Customise this template as you wish, even by layer using feature.meta.id or other layers metadatas"
   },
   "legend": {
     "legendTitle": "Legend",
