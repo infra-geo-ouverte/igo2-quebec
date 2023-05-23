@@ -13,9 +13,7 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import {
-  EntityStore,
-  ActionStore,
-  ActionbarMode
+  EntityStore
 } from '@igo2/common';
 import {
   Feature,
@@ -241,7 +239,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
 
   getTitle(){
-    this.customFeatureTitle? this.title = this.languageService.translate.instant('feature.title') : this.title = this.featureTitle;
+    this.title = this.customFeatureTitle? this.languageService.translate.instant('feature.title') : this.featureTitle;
   }
 
   public unselectResult() {
