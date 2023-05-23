@@ -6,7 +6,8 @@ import {
   OnDestroy,
   EventEmitter,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 
 import olFeature from 'ol/Feature';
@@ -72,8 +73,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
   private _mobile: boolean;
 
-  // EXPANSION PANEL
-
   @Input()
   hideToggle = false;
 
@@ -91,8 +90,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   private _expanded: boolean;
 
   @Output() expandedChange = new EventEmitter<boolean>();
-
-  // QUERY
 
   @Input()
   get mapQueryClick(): boolean {
@@ -113,7 +110,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
 
-  // Feature details
   @Output() selectFeature = new EventEmitter<boolean>();
 
   @Input()
@@ -129,8 +125,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   public selectedFeature: Feature;
   public hasFeatureEmphasisOnSelection = false;
-
-  // SEARCH
 
   @Input()
   get term(): string {
@@ -196,7 +190,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   private shownResultsEmphasisGeometries: Feature[] = [];
 
-  // LEGEND
   @Input()
   get layers(): Layer[] {
     return this._layers;
@@ -223,7 +216,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   constructor(
     private configService: ConfigService,
-    //SEARCH
     private languageService: LanguageService,
     private mapService: MapService,
     private searchState: SearchState,
@@ -231,7 +223,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef,
     private mapState: MapState,
-    private storageState: StorageState
+    private storageState: StorageState,
+    private elRef: ElementRef
     ) {
       this.mapService.setMap(this.map);
       this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
@@ -314,7 +307,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.selectedFeature = undefined;
       this.searchInit = false;
       this.clearSearch();
-      //this.closePanel(); causes the panel to close when typing the searchbar
     }
   }
 
@@ -336,6 +328,33 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       .filter((result: SearchResult) => result.source !== event.research.source)
       .concat(results);
     this.searchStore.updateMany(newResults);
+
+    setTimeout(() => {
+      const igoList = this.elRef.nativeElement.querySelector('igo-list');
+      let moreResults;
+      event.research.request.subscribe((source) => {
+        if (!source[0] || !source[0].source) {
+          moreResults = null;
+        } else if (source[0].source.getId() === 'icherche') {
+          moreResults = igoList.querySelector('.icherche .moreResults');
+        } else if (source[0].source.getId() === 'ilayer') {
+          moreResults = igoList.querySelector('.ilayer .moreResults');
+        } else if (source[0].source.getId() === 'nominatim') {
+          moreResults = igoList.querySelector('.nominatim .moreResults');
+        } else {
+          moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
+        }
+        if (
+          moreResults !== null &&
+          !this.isScrolledIntoView(igoList, moreResults)
+        ) {
+          igoList.scrollTop =
+            moreResults.offsetTop +
+            moreResults.offsetHeight -
+            igoList.clientHeight;
+        }
+      });
+    }, 250);
   }
 
   isScrolledIntoView(elemSource, elem) {
