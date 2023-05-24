@@ -1,5 +1,5 @@
 import { LanguageService } from '@igo2/core';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LegendDialogComponent } from './legend-dialog.component';
 
@@ -13,6 +13,8 @@ export class LegendDialogButtonComponent {
 
   public dialogRef = null;
 
+  public tooltipDisabled = false;
+
   @Input()
   get legendPanelOpened(): boolean {
     return this._legendPanelOpened;
@@ -22,18 +24,26 @@ export class LegendDialogButtonComponent {
   }
   private _legendPanelOpened: boolean;
 
+  public legendButtonTooltip = this.languageService.translate.instant('legend.open');
+
+  @Output() toggleLegend = new EventEmitter<boolean>();
+
   constructor(public dialog: MatDialog, protected languageService: LanguageService) {}
 
   toggleLegendButton() {
     const dialogOpened = this.dialog.getDialogById('legend-dialog-container');
+    //this.toggleLegend.emit();
       if (!dialogOpened) {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
         this.dialogRef = this.dialog.open(LegendDialogComponent, {
           id: 'legend-dialog-container',
           hasBackdrop: false,
           closeOnNavigation: true
         });
       } else {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
         this.dialogRef.close();
       }
   }
+
 }

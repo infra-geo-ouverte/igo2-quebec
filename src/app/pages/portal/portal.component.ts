@@ -119,6 +119,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
   public legendPanelOpened = false;
+  public legendDialogOpened = false;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
   getBaseLayersUseStaticIcon(): Boolean {
@@ -250,10 +251,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public mapQueryClick = false;
   public searchInit = false;
 
-  //Legend
   public mapLayersShownInLegend: Layer[];
   public legendInPanel: boolean;
   public expanded = false;
+  public legendButtonTooltip = this.languageService.translate.instant('legend.open');
 
   constructor(
     private route: ActivatedRoute,
@@ -395,15 +396,18 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.map.viewController.setInitialState();
   }
 
-  // Legend
+  toggleDialogLegend(){
+    if (!this.legendDialogOpened) {
+      this.legendDialogOpened = true;
+    }
+  }
 
   togglePanelLegend(){
     if (!this.legendPanelOpened) {
+      this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
       this.openPanelLegend();
       if (this.searchInit){
         this.clearSearch();
-        this.searchBarTerm = '';
-        this.searchInit = false;
         this.openPanels();
       }
       if (this.mapQueryClick){
@@ -412,9 +416,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         this.openPanels();
       }
     } else {
+      this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
       this.closePanelLegend();
     }
-
   }
 
   closePanelLegend(){

@@ -11,13 +11,22 @@ export class LegendPanelComponent {
   @Output() toggleLegend = new EventEmitter<boolean>();
 
   @Input()
-  get legendPanelOpened(): boolean {
-    return this._legendPanelOpened;
+  get tooltipDisabled(): boolean {
+    return this._tooltipDisabled;
   }
-  set legendPanelOpened(value: boolean) {
-    this._legendPanelOpened = value;
+  set tooltipDisabled(value: boolean) {
+    this._tooltipDisabled = value;
   }
-  private _legendPanelOpened: boolean;
+  private _tooltipDisabled: boolean;
+
+  @Input()
+  get legendButtonTooltip(): boolean {
+    return this._legendButtonTooltip;
+  }
+  set legendButtonTooltip(value: boolean) {
+    this._legendButtonTooltip = value;
+  }
+  private _legendButtonTooltip: boolean;
 
   constructor(protected languageService: LanguageService) { }
 
