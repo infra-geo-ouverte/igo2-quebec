@@ -13,7 +13,7 @@ import {
 import olFeature from 'ol/Feature';
 import olPoint from 'ol/geom/Point';
 
-import { LanguageService, StorageService } from '@igo2/core';
+import { StorageService } from '@igo2/core';
 import { EntityStore, ActionStore } from '@igo2/common';
 import { BehaviorSubject, Subscription, combineLatest, tap} from 'rxjs';
 
@@ -64,17 +64,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     return this.mapState.map;
   }
 
-  @Input() // for tooltipPosition in featureDetails
-  get mobile(): boolean {
-    return this._mobile;
-  }
-  set mobile(value: boolean) {
-    this._mobile = value;
-  }
-  private _mobile: boolean;
+  @Input() mobile: boolean; // for tooltipPosition in featureDetails
 
-  @Input()
-  hideToggle = false;
+  @Input() hideToggle = false;
 
   @Input()
   get expanded(): boolean {
@@ -211,12 +203,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   private _panelOpenState: boolean;
 
   @Output() closeQuery = new EventEmitter<boolean>();
-  @Output() openQuery = new EventEmitter<boolean>();
-  @Output() openLegend = new EventEmitter<boolean>();
 
   constructor(
     private configService: ConfigService,
-    private languageService: LanguageService,
     private mapService: MapService,
     private searchState: SearchState,
     private searchService: SearchService,

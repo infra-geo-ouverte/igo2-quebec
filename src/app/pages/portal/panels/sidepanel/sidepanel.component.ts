@@ -23,11 +23,10 @@ import {
   FeatureMotion,
   Research,
   SearchResult,
-  SearchService,
   Layer
 } from '@igo2/geo';
 import { QueryState } from '@igo2/integration';
-import { ConfigService, LanguageService } from '@igo2/core';
+import { ConfigService } from '@igo2/core';
 
 import { SearchState } from '../search-results-tool/search.state';
 
@@ -65,14 +64,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   @Output() openedChange = new EventEmitter<boolean>();
 
-  @Input() // for tooltipPosition in featureDetails
-  get mobile(): boolean {
-    return this._mobile;
-  }
-  set mobile(value: boolean) {
-    this._mobile = value;
-  }
-  private _mobile: boolean;
+  @Input() mobile: boolean; // for tooltipPosition in featureDetails
 
   @Input()
   get mapQueryClick(): boolean {
@@ -163,15 +155,12 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   private _panelOpenState: boolean;
 
   @Output() closeLegend = new EventEmitter<boolean>();
-  @Output() openLegend = new EventEmitter<boolean>();
   @Output() closeQuery = new EventEmitter<boolean>();
   public mapLayersShownInLegend: Layer[];
 
   constructor(
-    protected languageService: LanguageService,
     private configService: ConfigService,
     private searchState: SearchState,
-    private searchService: SearchService,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef,
     private elRef: ElementRef
