@@ -10,23 +10,9 @@ export class LegendPanelComponent {
 
   @Output() toggleLegend = new EventEmitter<boolean>();
 
-  @Input()
-  get tooltipDisabled(): boolean {
-    return this._tooltipDisabled;
-  }
-  set tooltipDisabled(value: boolean) {
-    this._tooltipDisabled = value;
-  }
-  private _tooltipDisabled: boolean;
+  @Input() tooltipDisabled: boolean;
 
-  @Input()
-  get legendButtonTooltip(): boolean {
-    return this._legendButtonTooltip;
-  }
-  set legendButtonTooltip(value: boolean) {
-    this._legendButtonTooltip = value;
-  }
-  private _legendButtonTooltip: boolean;
+  @Input() legendButtonTooltip: boolean;
 
   constructor(protected languageService: LanguageService) { }
 

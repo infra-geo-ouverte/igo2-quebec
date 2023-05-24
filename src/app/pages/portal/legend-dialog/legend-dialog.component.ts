@@ -1,5 +1,5 @@
 import { LanguageService } from '@igo2/core';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogState } from '@angular/material/dialog';
 import { IgoMap, Layer } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
@@ -23,15 +23,6 @@ export class LegendDialogComponent implements OnInit {
   }
 
   public mapLayersShownInLegend: Layer[];
-
-  @Input()
-  get legendPanelOpened(): boolean {
-    return this._legendPanelOpened;
-  }
-  set legendPanelOpened(value: boolean) {
-    this._legendPanelOpened = value;
-  }
-  private _legendPanelOpened: boolean;
 
   constructor(
     private mapState: MapState,
