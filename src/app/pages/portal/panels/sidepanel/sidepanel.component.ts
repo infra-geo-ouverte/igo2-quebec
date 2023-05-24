@@ -187,51 +187,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       this.map.propertyChange$.unsubscribe;
     }
 
-    onSearch(event: { research: Research; results: SearchResult[] }) {
-      if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
-        this.queryState.store.softClear();
-        this.map.queryResultsOverlay.clear();
-        this.mapQueryClick = false;
-      }
-      this.store.clear();
-      // search
-      this.searchInit = true;
-      this.legendPanelOpened = false;
-      const results = event.results;
-      this.searchStore.state.updateAll({ focused: false, selected: false });
-      const newResults = this.searchStore.entities$.value
-        .filter((result: SearchResult) => result.source !== event.research.source)
-        .concat(results);
-      this.searchStore.updateMany(newResults);
-
-      setTimeout(() => {
-        const igoList = this.elRef.nativeElement.querySelector('igo-list');
-        let moreResults;
-        event.research.request.subscribe((source) => {
-          if (!source[0] || !source[0].source) {
-            moreResults = null;
-          } else if (source[0].source.getId() === 'icherche') {
-            moreResults = igoList.querySelector('.icherche .moreResults');
-          } else if (source[0].source.getId() === 'ilayer') {
-            moreResults = igoList.querySelector('.ilayer .moreResults');
-          } else if (source[0].source.getId() === 'nominatim') {
-            moreResults = igoList.querySelector('.nominatim .moreResults');
-          } else {
-            moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
-          }
-          if (
-            moreResults !== null &&
-            !this.isScrolledIntoView(igoList, moreResults)
-          ) {
-            igoList.scrollTop =
-              moreResults.offsetTop +
-              moreResults.offsetHeight -
-              igoList.clientHeight;
-          }
-        });
-      }, 250);
-    }
-
     isScrolledIntoView(elemSource, elem) {
       const padding = 6;
       const docViewTop = elemSource.scrollTop;

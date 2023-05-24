@@ -44,7 +44,7 @@ import {
   roundCoordTo
 } from '@igo2/geo';
 
-import { MapState, ToolState, DirectionState } from '@igo2/integration';
+import { MapState, ToolState, DirectionState, QueryState } from '@igo2/integration';
 import { SearchState } from './search.state';
 
 /**
@@ -136,13 +136,45 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   @Output() searchEvent = new EventEmitter();
 
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
+
+  @Input()
+  get searchInit(): boolean {
+    return this._searchInit;
+  }
+  set searchInit(value: boolean) {
+    this._searchInit = value;
+  }
+  private _searchInit: boolean;
+
+  @Input()
+  get legendPanelOpened(): boolean {
+    return this._legendPanelOpened;
+  }
+  set legendPanelOpened(value: boolean) {
+    this._legendPanelOpened = value;
+  }
+  private _legendPanelOpened: boolean;
+
+  get queryStore(): EntityStore<SearchResult> {
+    return this.queryState.store;
+  }
+
   constructor(
     private mapState: MapState,
     private searchState: SearchState,
     private elRef: ElementRef,
     public toolState: ToolState,
     private directionState: DirectionState,
-    configService: ConfigService
+    configService: ConfigService,
+    private queryState: QueryState
   ) {
     this.hasFeatureEmphasisOnSelection = configService.getConfig(
       'hasFeatureEmphasisOnSelection'
@@ -411,21 +443,20 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
+      this.queryState.store.softClear();
+      this.map.queryResultsOverlay.clear();
+      this.mapQueryClick = false;
+    }
+    this.store.clear();
+    this.searchInit = true;
+    this.legendPanelOpened = false;
     const results = event.results;
-    const newResults = this.store.entities$.value
+    this.searchStore.state.updateAll({ focused: false, selected: false });
+    const newResults = this.searchStore.entities$.value
       .filter((result: SearchResult) => result.source !== event.research.source)
       .concat(results);
-
-    this.store.load(newResults);
-
-    for (const res of this.store.all()) {
-      if (
-        this.store.state.get(res).focused === true &&
-        this.store.state.get(res).selected !== true
-      ) {
-        this.store.state.update(res, { focused: false }, true);
-      }
-    }
+    this.searchStore.updateMany(newResults);
 
     setTimeout(() => {
       const igoList = this.elRef.nativeElement.querySelector('igo-list');
@@ -442,7 +473,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         } else {
           moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
         }
-
         if (
           moreResults !== null &&
           !this.isScrolledIntoView(igoList, moreResults)

@@ -55,9 +55,11 @@
           #searchresults
           [showIcons]="true"
           placeholder="false"
-          (resultFocus)="onResultFocus($event)"
-          (resultSelect)="onResultFocus($event)"
-          (moreResults)="onSearch($event)">
+          [mapQueryClick]="mapQueryClick"
+          [legendPanelOpened]="legendPanelOpened"
+          [panelOpenState]="panelOpenState"
+          [searchInit]="searchInit"
+          >
         </app-search-results-tool>
     </div></div>
 
