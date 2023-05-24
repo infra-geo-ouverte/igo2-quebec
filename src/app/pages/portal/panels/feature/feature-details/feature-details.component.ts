@@ -11,7 +11,7 @@ import {
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NetworkService, ConnectionState, LanguageService, MessageService } from '@igo2/core';
+import { NetworkService, ConnectionState, MessageService } from '@igo2/core';
 import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
@@ -49,14 +49,7 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
     this.selectFeature.emit();
   }
 
-  @Input()
-  get mobile(): boolean {
-    return this._mobile;
-  }
-  set mobile(value: boolean) {
-    this._mobile = value;
-  }
-  private _mobile: boolean;
+  @Input() mobile: boolean;
 
   @Input()
   get mapQueryClick(): boolean {
@@ -80,7 +73,6 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private networkService: NetworkService,
-    private languageService: LanguageService,
     private configService: ConfigService,
     private http: HttpClient,
     private messageService: MessageService,
