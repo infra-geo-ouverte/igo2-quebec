@@ -565,7 +565,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     }
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
-    if (event.features.map) {
+    if (event.features) {
       const results = event.features.map((feature: Feature) => {
         if (feature) {
           if (this.mapQueryClick) {
