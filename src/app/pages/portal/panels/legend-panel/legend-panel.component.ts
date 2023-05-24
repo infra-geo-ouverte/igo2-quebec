@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { LanguageService } from '@igo2/core';
 
 @Component({
   selector: 'app-legend-panel',
@@ -14,7 +13,7 @@ export class LegendPanelComponent {
 
   @Input() legendButtonTooltip: boolean;
 
-  constructor(protected languageService: LanguageService) { }
+  constructor() { }
 
   toggleLegendButton(): void {
       this.toggleLegend.emit();
