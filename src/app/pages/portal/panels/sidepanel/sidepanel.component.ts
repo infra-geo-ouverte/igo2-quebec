@@ -113,10 +113,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   }
   private _searchInit: boolean;
 
-  public hasToolbox: boolean = undefined;
   public store = new ActionStore([]);
-
-  @ViewChild('mapBrowser', { read: ElementRef, static: true }) mapBrowser: ElementRef;
 
   public lonlat;
   public mapProjection: string;
@@ -165,8 +162,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     private cdRef: ChangeDetectorRef,
     private elRef: ElementRef
     ) {
-      this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
-        this.configService.getConfig('hasToolbox');
     }
 
     ngOnInit(){

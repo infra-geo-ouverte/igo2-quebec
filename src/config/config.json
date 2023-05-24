@@ -32,7 +32,6 @@
     "url": "/apis/ogre"
   },
   "showMenuButton": false,
-  "hasToolbox": false,
   "mobileBreakPoint": "'(min-width: 768px)'",
   "language": {
     "prefix": ["./locale/"]
