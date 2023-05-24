@@ -6,8 +6,6 @@ import {
   OnDestroy,
   EventEmitter,
   ChangeDetectionStrategy,
-  ElementRef,
-  ViewChild,
   HostListener,
   ChangeDetectorRef
 } from '@angular/core';
@@ -21,13 +19,11 @@ import {
   FEATURE,
   Feature,
   FeatureMotion,
-  Research,
   SearchResult,
   Layer
 } from '@igo2/geo';
 import { QueryState } from '@igo2/integration';
 import { ConfigService } from '@igo2/core';
-
 import { SearchState } from '../search-results-tool/search.state';
 
 @Component({
@@ -159,8 +155,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private searchState: SearchState,
     private queryState: QueryState,
-    private cdRef: ChangeDetectorRef,
-    private elRef: ElementRef
+    private cdRef: ChangeDetectorRef
     ) {
     }
 
