@@ -430,7 +430,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   public breakpointChanged() {
-    if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
+    if(this.breakpointObserver.isMatched('(min-width: 768px)')) {
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
     } else {
