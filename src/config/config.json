@@ -27,7 +27,6 @@
     "showSearchBar": true,
     "showSearchButton": true
   },
-  "minSearchTermLength": 2,
   "importExport": {
     "url": "/apis/ogre"
   },

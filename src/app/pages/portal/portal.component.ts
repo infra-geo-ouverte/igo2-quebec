@@ -125,7 +125,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   getBaseLayersUseStaticIcon(): Boolean {
     return this.configService.getConfig('useStaticIcon');
   }
-  public minSearchTermLength: number;
   public hasHomeExtentButton = false;
   public hasFeatureEmphasisOnSelection: Boolean = false;
   public workspacePaginator: MatPaginator;
@@ -307,8 +306,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
         this.configService.getConfig('mobileBreakPoint');
       this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
-      this.minSearchTermLength = this.configService.getConfig('minSearchTermLength') === undefined ? 2 :
-        this.configService.getConfig('minSearchTermLength');
       this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
         this.configService.getConfig('legendInPanel');
   }
@@ -642,7 +639,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
-    if (termWithoutHashtag.length < this.minSearchTermLength) {
+    if (termWithoutHashtag.length < 2) {
       this.expanded = true;
       this.clearSearch();
       return;
