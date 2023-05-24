@@ -178,8 +178,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.configService.getConfig('auth') || [];
   }
 
-  // Responsiveness
-
   isMobile(): boolean {
     return this.mediaService.getMedia() === Media.Mobile;
   }
@@ -243,7 +241,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.workspaceState.store;
   }
 
-  // GetInfo
   get queryStore(): EntityStore<SearchResult> { //FeatureInfo
     return this.queryState.store;
   }
@@ -385,11 +382,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     });
 
-    // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
     this.breakpointChanged()
     );
-
   }
 
   ngAfterContentInit(): void {
