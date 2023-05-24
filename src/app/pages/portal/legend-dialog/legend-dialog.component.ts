@@ -1,4 +1,3 @@
-import { LanguageService } from '@igo2/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogState } from '@angular/material/dialog';
 import { IgoMap, Layer } from '@igo2/geo';
@@ -25,8 +24,7 @@ export class LegendDialogComponent implements OnInit {
   public mapLayersShownInLegend: Layer[];
 
   constructor(
-    private mapState: MapState,
-    protected languageService: LanguageService
+    private mapState: MapState
   ) {}
 
   ngOnInit() {
