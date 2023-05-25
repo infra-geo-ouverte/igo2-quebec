@@ -234,9 +234,9 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   closePanelOnCloseQuery(){
     this.closeQuery.emit();
     this.mapQueryClick = false;
-    if (this.searchInit === false && this.legendPanelOpened === false){
+    if (!this.searchInit && !this.legendPanelOpened){
       this.panelOpenState = false;
-    } if (this.searchInit === true || this.legendPanelOpened === true) {
+    } if (this.searchInit || this.legendPanelOpened) {
       this.panelOpenState = true;
     }
   }

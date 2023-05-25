@@ -89,7 +89,6 @@
           [mapQueryClick]="mapQueryClick"
           [legendPanelOpened]="legendPanelOpened"
           [panelOpenState]="panelOpenState"
-          [expanded]="expanded"
           (closeQuery)="closePanelOnCloseQuery()"
           (closeLegend)="closePanelLegend()"
           (openLegend)="openPanelLegend()"
@@ -101,7 +100,6 @@
     <app-footer *ngIf="hasFooter && !mobile" [mobile]="mobile"></app-footer>
 
     <app-map-overlay
-    [@controlStateY]="getControlsOffsetY()"
     [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
                             panelOpenState ? 'right' : 'left'">
     </app-map-overlay>

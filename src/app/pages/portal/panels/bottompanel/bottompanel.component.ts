@@ -64,24 +64,20 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     return this.mapState.map;
   }
 
-  @Input() mobile: boolean; // for tooltipPosition in featureDetails
+  /*
+  @Input()
+  get mobile(): boolean { // for tooltipPosition in featureDetails
+    return this._mobile;
+  }
+  set mobile(value: boolean) { // prevents value has been changed error
+    this._mobile = value;
+  }
+  private _mobile: boolean;*/
+
 
   @Input() hideToggle = false;
 
-  @Input()
-  get expanded(): boolean {
-    return this._expanded;
-  }
-  set expanded(value: boolean) {
-    if (value === this._expanded) {
-      return;
-    }
-    this._expanded = value;
-    this.expandedChange.emit(this._expanded);
-  }
-  private _expanded: boolean;
-
-  @Output() expandedChange = new EventEmitter<boolean>();
+  @Input() mobile = true;
 
   @Input()
   get mapQueryClick(): boolean {
@@ -232,7 +228,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
         this.openPanel();
         this.mapQueryClick = true;
       } else {
-        if (this.legendPanelOpened === false && this.searchInit === false){
+        if (!this.legendPanelOpened && !this.searchInit){
           this.closePanel();
         }
       }
@@ -285,7 +281,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.term = term;
     this.searchInit = true;
     this.clearedSearchbar = false;
-    if (this.mapQueryClick === true){
+    if (this.mapQueryClick){
       this.queryState.store.softClear();
       this.mapQueryClick = false;
     }
@@ -301,7 +297,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
     this.openPanel();
-    if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
+    if (this.mapQueryClick) { // to clear the mapQuery if a search is initialized
       this.queryState.store.softClear();
       this.map.queryResultsOverlay.clear();
       this.mapQueryClick = false;
@@ -431,7 +427,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
 
   onSearchBarClick(event){ /// prevents panel to close on clear search
-    if (this.expanded === false && this.clearedSearchbar === false){
+    if (!this.panelOpenState && this.clearedSearchbar === false){
       this.openPanel();
     }
     event.stopPropagation();
@@ -448,9 +444,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.mapQueryClick = false;
     this.closeQuery.emit();
     this.cdRef.detectChanges();
-    if (this.searchInit === false && this.legendPanelOpened === false){
+    if (!this.searchInit && !this.legendPanelOpened){
       //this.closePanel(); //// causes panel to close when click searchbar after query
-    } if (this.searchInit === true || this.legendPanelOpened === true) {
+    } if (this.searchInit || this.legendPanelOpened) {
       this.openPanel();
     }
   }
@@ -492,13 +488,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
 
   closePanel(){
-    this.expanded = false;
     this.panelOpenState = false;
   }
 
   openPanel(){
     this.panelOpenState = true;
-    this.expanded = true;
   }
 
   private clearFeatureEmphasis(trigger: 'selected' | 'focused' | 'shown') {

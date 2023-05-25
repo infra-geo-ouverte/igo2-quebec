@@ -9,7 +9,7 @@
 
     <div #content class="app-sidenav-content">
 
-      <div id="legend" *ngIf="legendPanelOpened === true" [mapQueryClick]="mapQueryClick" [legendPanelOpened]="legendPanelOpened" [panelOpenState]="panelOpenState" >
+      <div id="legend" *ngIf="legendPanelOpened" [mapQueryClick]="mapQueryClick" [legendPanelOpened]="legendPanelOpened" [panelOpenState]="panelOpenState" >
         <button
           mat-icon-button
           [matTooltip]="'legend.close' | translate"
@@ -27,7 +27,7 @@
         </igo-layer-legend-list>
       </div>
 
-      <div style="margin: 24px;" *ngIf="searchInit === false && (queryStore.empty$ | async)===true && legendPanelOpened === false">
+      <div style="margin: 24px;" *ngIf="!searchInit && (queryStore.empty$ | async)===true && !legendPanelOpened">
         <section class="mat-typography">
           <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
           <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
@@ -35,7 +35,7 @@
       </section>
       </div>
 
-      <div #getInfo *ngIf="mapQueryClick === true">
+      <div #getInfo *ngIf="mapQueryClick">
 
         <app-feature-info
           [map]="map"
@@ -50,7 +50,7 @@
 
       </div>
 
-      <div #search *ngIf="searchInit === true">
+      <div #search *ngIf="searchInit">
         <app-search-results-tool 
           #searchresults
           [showIcons]="true"

@@ -4,7 +4,7 @@
     [hideToggle]="false"
     (opened) ="openPanel()"
     (closed)= "closePanelLegend()"
-    [expanded]= "expanded"
+    [expanded]= "panelOpenState"
     (openLegend)= "openPanelLegend()"
     (closeLegend)= "closePanelLegend()"
     (keydown.Enter)= "$event.stopPropagation()"

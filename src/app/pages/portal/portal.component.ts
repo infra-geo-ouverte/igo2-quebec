@@ -200,10 +200,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   get backdropShown(): boolean {
     return (
       ('(min-width: 768px)' &&
-      this.panelOpenState || this.expanded
+      this.panelOpenState
     ));
   }
 
+  
   get expansionPanelExpanded(): boolean {
     return this.workspaceState.workspacePanelExpanded;
   }
@@ -249,7 +250,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   public mapLayersShownInLegend: Layer[];
   public legendInPanel: boolean;
-  public expanded = false;
   public legendButtonTooltip = this.languageService.translate.instant('legend.open');
 
   constructor(
@@ -368,7 +368,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     });
 
-    //FeatureInfo
     this.queryService.defaultFeatureCount = 1;
 
     this.queryStore.entities$
@@ -596,7 +595,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
             this.panelOpenState = false;
           }
           if (!this.searchInit && this.mobile){ // mobile mode, close legend when user click on the map
-            this.expanded = false;
             this.panelOpenState = false;
           }
         }
@@ -631,8 +629,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onSearchTermChange(term?: string) {
-    this.legendPanelOpened = false;
-    this.expanded = true;
+    if(this.mobile) {this.panelOpenState = true};
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
@@ -640,7 +637,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
-      this.expanded = true;
+      if(this.mobile) {this.panelOpenState = true};
       this.clearSearch();
       return;
     }
@@ -654,13 +651,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   onSearch(event: { research: Research; results: SearchResult[] }) {
     this.searchInit = true;
     this.legendPanelOpened = false;
-    this.expanded = true;
     this.panelOpenState = true;
     if (this.mapQueryClick) {
       this.onClearQuery();
       this.mapQueryClick = false;
       this.panelOpenState = true;
-      this.expanded = true;
     }
     const results = event.results;
 
@@ -690,13 +685,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   private closePanels() {
     if (!this.mapQueryClick && !this.searchInit && !this.legendPanelOpened){
       this.panelOpenState = false;
-      this.expanded = false;
     }
   }
 
   private openPanels() {
     this.panelOpenState = true;
-    this.expanded = true;
   }
 
   private computeHomeExtentValues(context: DetailedContext) {
@@ -811,12 +804,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.igoSearchPointerSummaryEnabled = value;
   }
 
-  getControlsOffsetY() {
-    return this.expansionPanelExpanded ?
-      this.workspaceMaximize$.value ? 'firstRowFromBottom-expanded-maximized' : 'firstRowFromBottom-expanded' :
-      'firstRowFromBottom';
-  }
-
   private readQueryParams() {
     this.route.queryParams.subscribe((params) => {
       this.routeParams = params;
@@ -843,6 +830,12 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       );
       this.map.viewController.zoomToExtent(olExtent as [number, number, number, number]);
     }
+  }
+
+  getControlsOffsetY() {
+    return this.expansionPanelExpanded ?
+      this.workspaceMaximize$.value ? 'firstRowFromBottom-expanded-maximized' : 'firstRowFromBottom-expanded' :
+      'firstRowFromBottom';
   }
 
   private computeFocusFirst() {
