@@ -204,7 +204,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     ));
   }
 
-  
   get expansionPanelExpanded(): boolean {
     return this.workspaceState.workspacePanelExpanded;
   }
@@ -629,7 +628,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onSearchTermChange(term?: string) {
-    if(this.mobile) {this.panelOpenState = true};
+    if(this.mobile) {this.panelOpenState = true;}
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
@@ -637,7 +636,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
-      if(this.mobile) {this.panelOpenState = true};
+      if(this.mobile) {this.panelOpenState = true;}
       this.clearSearch();
       return;
     }
