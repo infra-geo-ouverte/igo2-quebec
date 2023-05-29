@@ -1,6 +1,5 @@
 {
   "theme": "qcca-theme",
-  "showRotationButtonIfNoRotation": true,
   "title": "IGO",
   "header": {
     "hasHeader": true,
@@ -11,6 +10,7 @@
   "hasFooter": true,
   "hasLegendButton": true,
   "legendInPanel": true,
+  "showRotationButtonIfNoRotation": true,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
@@ -29,7 +29,6 @@
   "importExport": {
     "url": "/apis/ogre"
   },
-  "showMenuButton": false,
   "mobileBreakPoint": "'(min-width: 768px)'",
   "language": {
     "prefix": ["./locale/"]

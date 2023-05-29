@@ -1,3 +1,4 @@
+import { LegendButtonModule } from './legend-button/legend-button.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -76,7 +77,8 @@ import { AppPanelsModule } from './panels/panels.module';
     LegendDialogModule,
     MatSidenavModule,
     IgoAppSearchBarModule,
-    IgoSearchModule
+    IgoSearchModule,
+    LegendButtonModule
   ],
   exports: [PortalComponent],
   declarations: [PortalComponent]

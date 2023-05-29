@@ -114,7 +114,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(undefined);;
   public hasSideSearch = true;
   public showSearchBar = true;
-  public showMenuButton = true;
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
   public legendPanelOpened = false;
@@ -286,8 +285,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         this.configService.getConfig('hasSideSearch');
         this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') === undefined ? true :
         this.configService.getConfig('searchBar.showSearchBar');
-      this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
-      this.configService.getConfig('showMenuButton');
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -390,22 +387,29 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  togglePanelLegend(){
-    if (!this.legendPanelOpened) {
-      this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
-      this.openPanelLegend();
-      if (this.searchInit){
-        this.clearSearch();
-        this.openPanels();
+  toggleLegend(){
+    if (this.legendInPanel && !this.mobile){
+      if (!this.legendPanelOpened) {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
+        this.openPanelLegend();
+        if (this.searchInit){
+          this.clearSearch();
+          this.openPanels();
+        }
+        if (this.mapQueryClick){
+          this.onClearQuery();
+          this.mapQueryClick = false;
+          this.openPanels();
+        }
+      } else {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
+        this.closePanelLegend();
       }
-      if (this.mapQueryClick){
-        this.onClearQuery();
-        this.mapQueryClick = false;
-        this.openPanels();
+    }
+    else {
+      if (!this.legendDialogOpened) {
+        this.legendDialogOpened = true;
       }
-    } else {
-      this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
-      this.closePanelLegend();
     }
   }
 
