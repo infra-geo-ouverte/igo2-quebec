@@ -11,12 +11,13 @@
     (click)= "$event.stopPropagation()"
     >
     <mat-expansion-panel-header>
-      <igo-search-bar *ngIf="showSearchBar"
+      <igo-search-bar *ngIf= "showSearchBar"
         #searchbar
         (click)= "onSearchBarClick($event)"
         (keydown.Enter)= "$event.stopPropagation()"
         (keydown.Space)= "$event.stopPropagation()"
         appearance="outline"
+        [mobile]="mobile"
         searchIcon ="magnify"
         [matTooltip]="'searchBar' | translate"
         matTooltipShowDelay="500"
@@ -24,7 +25,7 @@
         [searchSettings]="false"
         color="primary"
         [term]= "term"
-        (searchTermChange)="onSearchTermChange($event)"
+        (searchTermChange)= "onSearchTermChange($event)"
         [termSplitter]= "termSplitter"
         [forceNA]= "forceCoordsNA"
         [store]= "searchStore"
@@ -38,60 +39,60 @@
 
     </mat-expansion-panel-header>
 
-    <div id="legend" [legendPanelOpened]="legendPanelOpened" *ngIf="legendPanelOpened === true">
+    <div id="legend" [legendPanelOpened]= "legendPanelOpened" *ngIf= "legendPanelOpened === true">
       <button
         mat-icon-button
         color="primary"
-        [matTooltip]="'legend.close' | translate"
-        (click)="closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
+        [matTooltip]= "'legend.close' | translate"
+        (click)= "closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
       </button>
       <h4 mat-dialog-title>{{ 'legend.title' | translate }}</h4>
       <igo-layer-legend-list
-        [layers]="mapLayersShownInLegend"
+        [layers]= "mapLayersShownInLegend"
         [excludeBaseLayers]="true"
         [allowShowAllLegends]="false"
         [updateLegendOnResolutionChange]="true"
         [showAllLegendsValue]="false"
-        [layers]="layers">
+        [layers]= "layers">
       </igo-layer-legend-list>
     </div>
 
-      <div style="margin: 20px;" *ngIf="searchInit !== true && (queryStore.empty$ | async)===true && legendPanelOpened === false">
+      <div style="margin: 20px;" *ngIf= "searchInit !== true && (queryStore.empty$ | async)===true && legendPanelOpened === false">
         <section class="mat-typography">
           <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
           <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
-          <p [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"></p>
+          <p [innerHTML]= "'igo.integration.searchResultsTool.examples' | translate"></p>
       </section>
       </div>
 
-      <div #getInfo *ngIf="mapQueryClick === true" >
+      <div #getInfo *ngIf= "mapQueryClick === true" >
 
         <app-feature-info
-          [map]="map"
-          [store]="queryStore"
-          [mobile]="mobile"
-          (closeQuery)="closePanelOnCloseQuery()"
-          [mapQueryClick]="mapQueryClick"
-          [panelOpenState]="panelOpenState"
+          [map]= "map"
+          [store]= "queryStore"
+          [mobile]= "mobile"
+          (closeQuery)= "closePanelOnCloseQuery()"
+          [mapQueryClick]= "mapQueryClick"
+          [panelOpenState]= "panelOpenState"
           >
         </app-feature-info>
 
       </div>
 
-      <div #search *ngIf="searchInit === true" >
+      <div #search *ngIf=" searchInit === true" >
 
         <igo-search-results
-          [store]="searchStore"
-          [term]="term"
-          [showIcons]="true"
-          [termSplitter]="termSplitter"
-          placeholder="false"
-          (searchTermChange)="onSearchTermChange($event)"
-          (featureSelected)="closePanel()"
-          (resultFocus)="onResultFocus($event)"
-          (resultSelect)="onResultFocus($event)"
-          (moreResults)="onSearch($event)"
-          [zoomAuto]="false" >
+          [store]= "searchStore"
+          [term]= "term"
+          [showIcons]= "true"
+          [termSplitter]= "termSplitter"
+          placeholder ="false"
+          (searchTermChange)= "onSearchTermChange($event)"
+          (featureSelected) ="closePanel()"
+          (resultFocus) ="onResultFocus($event)"
+          (resultSelect) ="onResultFocus($event)"
+          (moreResults)= "onSearch($event)"
+          [zoomAuto]= "false" >
         </igo-search-results>
 
         </div>

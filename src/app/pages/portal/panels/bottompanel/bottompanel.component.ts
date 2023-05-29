@@ -64,20 +64,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     return this.mapState.map;
   }
 
-  /*
-  @Input()
-  get mobile(): boolean { // for tooltipPosition in featureDetails
-    return this._mobile;
-  }
-  set mobile(value: boolean) { // prevents value has been changed error
-    this._mobile = value;
-  }
-  private _mobile: boolean;*/
-
-
   @Input() hideToggle = false;
 
-  @Input() mobile = true;
+  @Input() mobile : boolean; // to pass the input to featureDetails tooltip
 
   @Input()
   get mapQueryClick(): boolean {
