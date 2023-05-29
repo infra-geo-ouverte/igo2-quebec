@@ -20,7 +20,6 @@
   "hasFeatureEmphasisOnSelection": true,
   "addFeaturetoLayer": false,
   "useStaticIcon": false,
-  "hasExpansionPanel": false,
   "customFeatureTitle": false,
   "customFeatureDetails": false,
   "searchBar": {

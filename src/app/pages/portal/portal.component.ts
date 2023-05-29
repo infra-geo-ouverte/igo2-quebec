@@ -105,7 +105,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
   public hasGeolocateButton: boolean = true;
-  public hasExpansionPanel: boolean = undefined;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private workspaceMaximize$$: Subscription[] = [];
@@ -289,7 +288,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         this.configService.getConfig('searchBar.showSearchBar');
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
       this.configService.getConfig('showMenuButton');
-      this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
