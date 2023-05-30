@@ -4,4 +4,6 @@
 
 <app-menu *ngIf="hasMenu"></app-menu>
 
+<app-simple-feature-list></app-simple-feature-list>
+
 <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
