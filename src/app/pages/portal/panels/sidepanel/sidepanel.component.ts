@@ -239,10 +239,10 @@ export class SidePanelComponent implements OnInit, OnDestroy {
           geometry: new olPoint([x, y])
         });
         const abstractResult = featureFromOl(feature1, this.map.projection);
-  
+
         let computedStyle;
         let zIndexOffset = 0;
-  
+
         switch (trigger) {
           case 'focused':
             computedStyle = getCommonVectorSelectedStyle(
@@ -330,7 +330,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
       this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
     }
-
 
   /*
    * Remove a feature to the map overlay
