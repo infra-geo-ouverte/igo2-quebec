@@ -12,7 +12,7 @@ import {
 
 import { EntityStore, ActionStore } from '@igo2/common';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import {
   IgoMap,
@@ -89,7 +89,9 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   private _feature: Feature;
 
   public selectedFeature: Feature;
-  public hasFeatureEmphasisOnSelection: Boolean = false;
+  private resultOrResolution$$: Subscription;
+  private shownResultsEmphasisGeometries: Feature[] = [];
+  public hasFeatureEmphasisOnSelection: Boolean = true;
 
   @Input()
   get featureTitle(): string {
@@ -149,6 +151,8 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   @Output() closeLegend = new EventEmitter<boolean>();
   @Output() closeQuery = new EventEmitter<boolean>();
+  @Output() panelOpened = new EventEmitter<boolean>();
+
   public mapLayersShownInLegend: Layer[];
 
   constructor(
@@ -166,10 +170,32 @@ export class SidePanelComponent implements OnInit, OnDestroy {
         if (entities.length > 0) {
           this.mapQueryClick = true;
           this.legendPanelOpened = false;
-          this.panelOpenState = true;
+          this.panelOpened.emit(true);
           this.clearSearch();
         }
+        else {
+          this.closePanelOnCloseQuery();
+        }
       });
+/*
+      if (this.hasFeatureEmphasisOnSelection) {
+        this.resultOrResolution$$ = combineLatest([
+          this.focusedResult$.pipe(
+            tap((res) => {
+              latestResult = res;
+              trigger = 'focused';
+            })
+          ),
+          this.resultSelected$.pipe(
+            tap((res) => {
+              latestResult = res;
+              trigger = 'selected';
+            })
+          ),
+          this.map.viewController.resolution$,
+          this.store.entities$
+        ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
+      }*/
     }
 
     @HostListener('change')
@@ -190,6 +216,88 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       const elemBottom = elemTop + elem.clientHeight + padding;
       return elemBottom <= docViewBottom && elemTop >= docViewTop;
     }
+
+    /*
+    private buildResultEmphasis(
+      result: SearchResult<Feature>,
+      trigger: 'selected' | 'focused' | 'shown' | undefined
+    ) {
+      if (trigger !== 'shown') {
+        this.clearFeatureEmphasis(trigger);
+      }
+      if (!result || !result.data.geometry) {
+        return;
+      }
+      const myOlFeature = featureToOl(result.data, this.map.projection);
+      const olGeometry = myOlFeature.getGeometry();
+      if (featuresAreTooDeepInView(this.map, olGeometry.getExtent() as [number, number, number, number], 0.0025)) {
+        const extent = olGeometry.getExtent();
+        const x = extent[0] + (extent[2] - extent[0]) / 2;
+        const y = extent[1] + (extent[3] - extent[1]) / 2;
+        const feature1 = new olFeature({
+          name: `${trigger}AbstractResult'`,
+          geometry: new olPoint([x, y])
+        });
+        const abstractResult = featureFromOl(feature1, this.map.projection);
+  
+        let computedStyle;
+        let zIndexOffset = 0;
+  
+        switch (trigger) {
+          case 'focused':
+            computedStyle = getCommonVectorSelectedStyle(
+              Object.assign({},
+                { feature: abstractResult },
+                this.searchState.searchOverlayStyleFocus,
+                result.style?.focus ? result.style.focus : {}));
+            zIndexOffset = 2;
+            break;
+          case 'shown':
+            computedStyle = getCommonVectorStyle(Object.assign({},
+              { feature: abstractResult },
+              this.searchState.searchOverlayStyle,
+              result.style?.base ? result.style.base : {}));
+            break;
+          case 'selected':
+            computedStyle = getCommonVectorSelectedStyle(
+              Object.assign({},
+                { feature: abstractResult },
+                this.searchState.searchOverlayStyleSelection,
+                result.style?.selection ? result.style.selection : {}));
+            zIndexOffset = 1;
+            break;
+        }
+        abstractResult.meta.style = computedStyle;
+        abstractResult.meta.style.setZIndex(2000 + zIndexOffset);
+        this.map.searchResultsOverlay.addFeature(abstractResult, FeatureMotion.None);
+        if (trigger === 'focused') {
+          this.abstractFocusedResult = abstractResult;
+        }
+        if (trigger === 'selected') {
+          this.abstractSelectedResult = abstractResult;
+        }
+        if (trigger === 'shown') {
+          this.shownResultsEmphasisGeometries.push(abstractResult);
+        }
+      } else {
+        this.clearFeatureEmphasis(trigger);
+      }
+    }
+
+    private clearFeatureEmphasis(trigger: 'selected' | 'focused' | 'shown') {
+      if (trigger === 'focused' && this.abstractFocusedResult) {
+        this.map.searchResultsOverlay.removeFeature(this.abstractFocusedResult);
+        this.abstractFocusedResult = undefined;
+      }
+      if (trigger === 'selected' && this.abstractSelectedResult) {
+        this.map.searchResultsOverlay.removeFeature(this.abstractSelectedResult);
+        this.abstractSelectedResult = undefined;
+      }
+      if (trigger === 'shown') {
+        this.shownResultsEmphasisGeometries.map(shownResult => this.map.searchResultsOverlay.removeFeature(shownResult));
+        this.shownResultsEmphasisGeometries = [];
+      }
+    }*/
 
     /**
      * Try to add a feature to the map when it's being focused
@@ -235,9 +343,9 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.closeQuery.emit();
     this.mapQueryClick = false;
     if (!this.searchInit && !this.legendPanelOpened){
-      this.panelOpenState = false;
+      this.panelOpened.emit(false);
     } if (this.searchInit || this.legendPanelOpened) {
-      this.panelOpenState = true;
+      this.panelOpened.emit(true);
     }
   }
 

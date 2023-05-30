@@ -40,6 +40,7 @@
         [legendPanelOpened]="legendPanelOpened"
         [mapQueryClick]="mapQueryClick"
         [panelOpenState]="panelOpenState"
+        (panelOpened)="panelOpened($event)"
         (toggleLegend)="togglePanelLegend()"
         (closeLegend)="closePanelLegend()"
         (closeQuery)="closePanelOnCloseQuery()"

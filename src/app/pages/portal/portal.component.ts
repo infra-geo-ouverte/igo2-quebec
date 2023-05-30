@@ -413,6 +413,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
+  panelOpened(event) {
+    this.panelOpenState = event;
+  }
+
   closePanelLegend(){
     this.legendPanelOpened = false;
     this.closePanels();
