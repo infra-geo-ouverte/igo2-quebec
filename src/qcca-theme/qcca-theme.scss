@@ -664,31 +664,3 @@ border-radius: 0 !important;
 ::ng-deep .toast-message, ::ng-deep #toast-container, ::ng-deep .toast-title, toast-container, ::ng-deep .toast-error {
     color: white!important;
 }
-
-igo-spinner {
-  position: absolute;
-  top: calc($header-height-mobile + 4px) !important;
-  right: 4px;
-  z-index: 100;
-}
-
-spinner-with-legend-dialog {
-  position: absolute;
-  top: calc($header-height-mobile + 4px) !important;
-  right: 345px;
-  z-index: 100;
-}
-
-@media (min-width: 768px){
-  igo-spinner {
-    top: calc($header-height + 4px)!important;
-    right: 4px;
-    z-index: 100;
-  }
-
-  spinner-with-legend-dialog {
-    top: calc($header-height + 4px)!important;
-    right: 345px!important;
-    z-index: 100;
-  }
-}
