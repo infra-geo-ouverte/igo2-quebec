@@ -138,14 +138,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   }
   private _legendPanelOpened: boolean;
 
-  @Input()
-  get panelOpenState(): boolean {
-    return this._panelOpenState;
-  }
-  set panelOpenState(value: boolean) {
-    this._panelOpenState = value;
-  }
-  private _panelOpenState: boolean;
+  @Input() panelOpenState: boolean;
 
   @Output() closeLegend = new EventEmitter<boolean>();
   @Output() closeQuery = new EventEmitter<boolean>();
