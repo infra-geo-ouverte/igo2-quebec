@@ -1,1 +1,48 @@
-<p>simple-feature-list works!</p>
+<!-- <h1>Testing</h1> -->
+<div class="entities-container">
+    <div *ngFor="let entity of entitiesShown; let i = index" #entity
+      [ngClass]="i % 2 === 0 ? 'entityGrey' : 'entityWhite'">
+      <div class="attributes">
+        <ng-container *ngFor="let attribute of attributeOrder">
+          <ng-container *ngIf="attribute.header; else notHeader">
+            <span *ngIf="attribute.description"
+              [ngClass]="attribute.header">
+              <strong>{{ attribute.description }}</strong>:
+            </span>
+            <span
+              [ngClass]="attribute.header"
+              [innerHTML]="createAttribute(entity, attribute)">
+            </span>
+            <br>
+          </ng-container>
+          <ng-template #notHeader>
+            <span *ngIf="attribute.description && createAttribute(entity, attribute)"
+              class="description">
+              <strong>{{ attribute.description }}</strong>:
+            </span>
+            <span
+              class="attribute"
+              [innerHTML]="createAttribute(entity, attribute)">
+            </span>
+            <br *ngIf="createAttribute(entity, attribute)">
+          </ng-template>
+        </ng-container>
+      </div>
+      <div class="selectButton">
+        <button
+          mat-mini-fab
+          class="mat-elevation-z0"
+          [color]="!entityIsSelected ? 'primary' : 'warn'"
+          [matTooltip]="!entityIsSelected ? ('igo.common.simpleFeatureList.selectEntity' | translate) : ('igo.common.simpleFeatureList.unselectEntity' | translate)"
+          tooltip-position="below"
+          matTooltipShowDelay="500">
+          <mat-icon
+            [svgIcon]="!entityIsSelected ? 'magnify-plus-outline' : 'close'"
+            (click)="!entityIsSelected ? selectEntity(entity) : unselectEntity(entity)">
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>

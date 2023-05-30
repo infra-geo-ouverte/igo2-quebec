@@ -1,0 +1,72 @@
+.entities-container {
+    overflow-y: auto;
+    height: 200px;
+    width: 100%
+}
+
+.entityGrey, .entityWhite, .selectedEntity {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.entityGrey, .selectedEntity {
+    background-color: #f2f1f1;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+    color: #095797;
+}
+
+.h1 {
+    font-size: 48px;
+    line-height: 54px;
+    margin-top: 72px;
+    margin-bottom: 32px;
+}
+
+.h2 {
+    font-size: 35px;
+    line-height: 40px;
+    margin-top: 48px;
+    margin-bottom: 16px;
+}
+
+.h3 {
+    font-size: 28px;
+    line-height: 32px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.h4 {
+    font-size: 21px;
+    line-height: 24px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.h5 {
+    font-size: 19px;
+    line-height: 24px;
+    margin-top: 26px;
+}
+
+.h6 {
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 16px;
+}
+
+.attribute, .description {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.selectButton, .unselectButton {
+    padding: 0px 16px;
+}

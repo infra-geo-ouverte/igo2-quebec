@@ -30,6 +30,12 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
 import { SimpleFeatureListComponent } from './pages/list/simple-feature-list.component';
 import { SimpleFiltersComponent } from './pages/filters/simple-filters.component';
@@ -44,6 +50,12 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
 @NgModule({
   declarations: [AppComponent, SimpleFeatureListComponent, SimpleFiltersComponent],
   imports: [
+    CommonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatPaginatorModule,
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
