@@ -216,6 +216,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       if (entities.length > 0) {
         this.openPanel();
         this.mapQueryClick = true;
+        this.clearSearch();
+        this.searchInit = false;
       } else {
         if (!this.legendPanelOpened && !this.searchInit){
           this.closePanel();
