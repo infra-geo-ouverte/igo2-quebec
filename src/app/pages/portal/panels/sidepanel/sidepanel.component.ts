@@ -91,14 +91,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   public selectedFeature: Feature;
   public hasFeatureEmphasisOnSelection: Boolean = true;
 
-  @Input()
-  get featureTitle(): string {
-    return this._featureTitle;
-  }
-  set featureTitle(value: string) {
-    this._featureTitle = value;
-  }
-  private _featureTitle: string;
+  @Input() featureTitle: string
 
   @Input()
   get searchInit(): boolean {

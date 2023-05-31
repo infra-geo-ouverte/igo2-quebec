@@ -89,6 +89,7 @@
           [mapQueryClick]="mapQueryClick"
           [legendPanelOpened]="legendPanelOpened"
           [panelOpenState]="panelOpenState"
+          (panelOpened)="panelOpened($event)"
           (closeQuery)="closePanelOnCloseQuery()"
           (closeLegend)="closePanelLegend()"
           (openLegend)="openPanelLegend()"

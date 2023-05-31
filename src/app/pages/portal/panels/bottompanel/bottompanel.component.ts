@@ -178,14 +178,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   public mapLayersShownInLegend: Layer[];
 
-  @Input()
-  get panelOpenState(): boolean {
-    return this._panelOpenState;
-  }
-  set panelOpenState(value: boolean) {
-    this._panelOpenState = value;
-  }
-  private _panelOpenState: boolean;
+  @Input() panelOpenState: boolean;
+
+  @Output() panelOpened = new EventEmitter<boolean>();
 
   @Output() closeQuery = new EventEmitter<boolean>();
 
@@ -435,9 +430,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.mapQueryClick = false;
     this.closeQuery.emit();
     this.cdRef.detectChanges();
-    if (!this.searchInit && !this.legendPanelOpened){
-      //this.closePanel(); //// causes panel to close when click searchbar after query
-    } if (this.searchInit || this.legendPanelOpened) {
+    if (this.searchInit || this.legendPanelOpened) {
       this.openPanel();
     }
   }
@@ -449,7 +442,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.clearedSearchbar = true;
     if (event){
       event.stopPropagation(); //prevents panel toggling on click or focus
-      //event.stopImmediatePropagation();
     }
   }
 
@@ -479,11 +471,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
 
   closePanel(){
-    this.panelOpenState = false;
+    this.panelOpened.emit(false);
   }
 
   openPanel(){
-    this.panelOpenState = true;
+    this.panelOpened.emit(true);
   }
 
   private clearFeatureEmphasis(trigger: 'selected' | 'focused' | 'shown') {
