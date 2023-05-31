@@ -86,8 +86,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   );
 
   resultSelected$ = new BehaviorSubject<SearchResult<Feature>>(undefined);
-
+  @Input() panelOpenState: boolean;
   @Output() selectFeature = new EventEmitter<boolean>();
+  @Output() panelOpened = new EventEmitter<boolean>();
 
   @Input()
   get feature(): Feature {
@@ -177,15 +178,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   private _layers: Layer[];
 
   public mapLayersShownInLegend: Layer[];
-
-  @Input()
-  get panelOpenState(): boolean {
-    return this._panelOpenState;
-  }
-  set panelOpenState(value: boolean) {
-    this._panelOpenState = value;
-  }
-  private _panelOpenState: boolean;
 
   @Output() closeQuery = new EventEmitter<boolean>();
 
@@ -445,6 +437,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.clearSearch();
     this.closePanel();
     this.clearedSearchbar = true;
+    this.clearSearch();
     if (event){
       event.stopPropagation(); //prevents panel toggling on click or focus
       //event.stopImmediatePropagation();
@@ -456,6 +449,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
+    this.searchInit = false;
+    this.searchState.setSearchTerm('');
   }
 
   closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
@@ -477,11 +472,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
 
   closePanel(){
-    this.panelOpenState = false;
+    this.panelOpened.emit(false);
   }
 
   openPanel(){
-    this.panelOpenState = true;
+    this.panelOpened.emit(true);
   }
 
   private clearFeatureEmphasis(trigger: 'selected' | 'focused' | 'shown') {
