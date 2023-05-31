@@ -82,19 +82,20 @@
         </div>
 
         <app-bottompanel
-          *ngIf="mobile"
-          [mobile]="mobile"
-          [store]="searchStore"
-          [searchInit]="searchInit"
-          [mapQueryClick]="mapQueryClick"
-          [legendPanelOpened]="legendPanelOpened"
-          [panelOpenState]="panelOpenState"
-          (panelOpened)="panelOpened($event)"
-          (closeQuery)="closePanelOnCloseQuery()"
-          (closeLegend)="closePanelLegend()"
-          (openLegend)="openPanelLegend()"
-          (toggleLegend)="togglePanelLegend()"
-          [layers]="mapLayersShownInLegend">
+          *ngIf= "mobile"
+          [mobile]= "mobile"
+          [store]= "searchStore"
+          [searchInit]= "searchInit"
+          [mapQueryClick]= "mapQueryClick"
+          [legendPanelOpened]= "legendPanelOpened"
+          [panelOpenState]= "panelOpenState"
+          (panelOpened)= "panelOpened($event)"
+          (mapQuery)= "mapQuery($event)"
+          (closeQuery)= "closePanelOnCloseQuery()"
+          (closeLegend)= "closePanelLegend()"
+          (openLegend)= "openPanelLegend()"
+          (toggleLegend)= "togglePanelLegend()"
+          [layers]= "mapLayersShownInLegend">
         </app-bottompanel>
     </igo-map-browser>
 

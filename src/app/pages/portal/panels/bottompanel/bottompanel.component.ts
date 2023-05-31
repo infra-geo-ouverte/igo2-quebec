@@ -68,14 +68,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   @Input() mobile : boolean; // to pass the input to featureDetails tooltip
 
-  @Input()
-  get mapQueryClick(): boolean {
-    return this._mapQueryClick;
-  }
-  set mapQueryClick(value: boolean) {
-    this._mapQueryClick = value;
-  }
-  private _mapQueryClick: boolean;
+  @Input() mapQueryClick : boolean;
+
+  @Output() mapQuery = new EventEmitter<boolean>();
 
   get queryStore(): EntityStore<SearchResult> {
     return this.queryState.store;
@@ -210,7 +205,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       (entities) => {
       if (entities.length > 0) {
         this.openPanel();
-        this.mapQueryClick = true;
+        //this.mapQueryClick = true;
+        this.mapQuery.emit(true);
         this.clearSearch();
         this.searchInit = false;
       } else {
@@ -251,7 +247,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.searchInit = false;
-    this.mapQueryClick = false;
+    //this.mapQueryClick = false;
+    this.mapQuery.emit(false);
     this.store.destroy();
     this.store.entities$.unsubscribe();
     this.map.propertyChange$.unsubscribe;
@@ -269,7 +266,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.clearedSearchbar = false;
     if (this.mapQueryClick){
       this.queryState.store.softClear();
-      this.mapQueryClick = false;
+      //this.mapQueryClick = false;
+      this.mapQuery.emit(false);
     }
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
 
@@ -286,7 +284,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     if (this.mapQueryClick) { // to clear the mapQuery if a search is initialized
       this.queryState.store.softClear();
       this.map.queryResultsOverlay.clear();
-      this.mapQueryClick = false;
+      //this.mapQueryClick = false;
+      this.mapQuery.emit(false);
     }
     this.legendPanelOpened = false;
     this.queryState.store.softClear();
@@ -422,12 +421,14 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   clearQuery(): void{
     this.queryState.store.softClear();
     this.queryState.store.clear();
-    this.mapQueryClick = false;
+    this.mapQuery.emit(false);
+    //this.mapQueryClick = false;
     this.removeFeatureFromMap();
   }
 
   closePanelOnCloseQuery(){
-    this.mapQueryClick = false;
+    //this.mapQueryClick = false;
+    this.mapQuery.emit(false);
     this.closeQuery.emit();
     this.cdRef.detectChanges();
     if (this.searchInit || this.legendPanelOpened) {
@@ -464,7 +465,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.openPanel();
     if (this.legendPanelOpened === true){
       this.searchInit = false;
-      this.mapQueryClick = false;
+      //this.mapQueryClick = false;
+      this.mapQuery.emit(false);
       this.clearQuery();
       this.clearSearch();
     }

@@ -417,6 +417,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.panelOpenState = event;
   }
 
+  mapQuery(event) {
+    this.mapQueryClick = event;
+  }
+
   closePanelLegend(){
     this.legendPanelOpened = false;
     this.closePanels();
