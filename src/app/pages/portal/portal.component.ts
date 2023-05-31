@@ -388,7 +388,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   toggleLegend(){
-    if (this.legendInPanel && !this.mobile){
+    if (this.legendInPanel || this.mobile){
       if (!this.legendPanelOpened) {
         this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
         this.openPanelLegend();

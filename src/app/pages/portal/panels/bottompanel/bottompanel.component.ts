@@ -205,7 +205,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       (entities) => {
       if (entities.length > 0) {
         this.openPanel();
-        //this.mapQueryClick = true;
         this.mapQuery.emit(true);
         this.clearSearch();
         this.searchInit = false;
@@ -247,7 +246,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.searchInit = false;
-    //this.mapQueryClick = false;
     this.mapQuery.emit(false);
     this.store.destroy();
     this.store.entities$.unsubscribe();
@@ -266,7 +264,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.clearedSearchbar = false;
     if (this.mapQueryClick){
       this.queryState.store.softClear();
-      //this.mapQueryClick = false;
       this.mapQuery.emit(false);
     }
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
@@ -284,7 +281,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     if (this.mapQueryClick) { // to clear the mapQuery if a search is initialized
       this.queryState.store.softClear();
       this.map.queryResultsOverlay.clear();
-      //this.mapQueryClick = false;
       this.mapQuery.emit(false);
     }
     this.legendPanelOpened = false;
@@ -422,12 +418,10 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.queryState.store.softClear();
     this.queryState.store.clear();
     this.mapQuery.emit(false);
-    //this.mapQueryClick = false;
     this.removeFeatureFromMap();
   }
 
   closePanelOnCloseQuery(){
-    //this.mapQueryClick = false;
     this.mapQuery.emit(false);
     this.closeQuery.emit();
     this.cdRef.detectChanges();
@@ -458,18 +452,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.closePanel();
     this.closeLegend.emit();
     this.map.propertyChange$.unsubscribe;
-  }
-
-  openPanelLegend() {
-    this.legendPanelOpened = true;
-    this.openPanel();
-    if (this.legendPanelOpened === true){
-      this.searchInit = false;
-      //this.mapQueryClick = false;
-      this.mapQuery.emit(false);
-      this.clearQuery();
-      this.clearSearch();
-    }
   }
 
   closePanel(){
