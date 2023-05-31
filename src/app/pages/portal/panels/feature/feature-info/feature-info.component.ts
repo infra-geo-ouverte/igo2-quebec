@@ -67,33 +67,15 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   @Output() closeQuery = new EventEmitter<boolean>();
 
-  @Input()
-  get mapQueryClick(): boolean {
-    return this._mapQueryClick;
-  }
-  set mapQueryClick(value: boolean) {
-    this._mapQueryClick = value;
-  }
-  private _mapQueryClick: boolean;
+  @Input() mapQueryClick: boolean;
 
-  @Input()
-  get panelOpenState(): boolean {
-    return this._panelOpenState;
-  }
-  set panelOpenState(value: boolean) {
-    this._panelOpenState = value;
-  }
-  private _panelOpenState: boolean;
+  @Output() mapQuery = new EventEmitter<boolean>();
 
-  @Input()
-  get mobile(): boolean {
-    return this._mobile;
-  }
-  set mobile(value: boolean) {
-    this._mobile = value;
-  }
-  private _mobile: boolean;
+  @Input() panelOpenState: boolean;
 
+  @Input() mobile: boolean;
+
+  @Output() panelOpened = new EventEmitter<boolean>();
 
   private isResultSelected$ = new BehaviorSubject(false);
   public isSelectedResultOutOfView$ = new BehaviorSubject(false);
@@ -262,9 +244,13 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.map.queryResultsOverlay.clear();
     this.store.clear();
     this.unselectResult();
-    this.mapQueryClick = false;
-    this.panelOpenState = false;
+    this.mapQuery.emit(false);
+    this.panelOpened.emit(false);
     this.closeQuery.emit();
+  }
+
+  mapQueryFromFeatureDetails(event) {
+    this.mapQuery.emit(event);
   }
 
 }

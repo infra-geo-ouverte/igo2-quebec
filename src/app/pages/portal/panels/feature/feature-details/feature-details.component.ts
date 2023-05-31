@@ -50,15 +50,8 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
   }
 
   @Input() mobile: boolean;
-
-  @Input()
-  get mapQueryClick(): boolean {
-    return this._mapQueryClick;
-  }
-  set mapQueryClick(value: boolean) {
-    this._mapQueryClick = value;
-  }
-  private _mapQueryClick: boolean;
+  @Input() mapQueryClick: boolean;
+  @Output() mapQuery = new EventEmitter<boolean>();
 
   private _feature: Feature;
   private _source: SearchSource;
@@ -88,7 +81,7 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.mapQueryClick = false;
+    this.mapQuery.emit(false);
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

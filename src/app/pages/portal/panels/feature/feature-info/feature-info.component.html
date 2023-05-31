@@ -30,6 +30,7 @@
       *ngIf="resultSelected$.value && customFeatureDetails "
       [mobile]="mobile"
       [feature]="resultSelected$.value.data"
+      (mapQuery) ="mapQueryFromFeatureDetails($event)"
       [mapQueryClick]="mapQueryClick">
     </app-feature-details-custom>
 

@@ -44,6 +44,8 @@
           [mapQueryClick]="mapQueryClick"
           (closeQuery)="closePanelOnCloseQuery()"
           (clearSearchbarterm)="$event"
+          (panelOpened)= "panelOpenedFromFeature($event)"
+          (mapQuery)= "mapQueryFromFeature($event)"
           [title]="featureTitle"
           [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
         </app-feature-info>

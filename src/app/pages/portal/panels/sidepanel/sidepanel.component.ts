@@ -62,14 +62,9 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   @Input() mobile: boolean; // for tooltipPosition in featureDetails
 
-  @Input()
-  get mapQueryClick(): boolean {
-    return this._mapQueryClick;
-  }
-  set mapQueryClick(value: boolean) {
-    this._mapQueryClick = value;
-  }
-  private _mapQueryClick: boolean;
+  @Input() mapQueryClick: boolean;
+
+  @Output() mapQuery = new EventEmitter<boolean>();
 
   get queryStore(): EntityStore<SearchResult> {
     return this.queryState.store;
@@ -152,7 +147,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
       .subscribe(
         (entities) => {
         if (entities.length > 0) {
-          this.mapQueryClick = true;
+          this.mapQuery.emit(true);
           this.legendPanelOpened = false;
           this.panelOpened.emit(true);
           this.clearSearch();
@@ -223,7 +218,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   closePanelOnCloseQuery(){
     this.closeQuery.emit();
-    this.mapQueryClick = false;
+    this.mapQuery.emit(false);
     if (!this.searchInit && !this.legendPanelOpened){
       this.panelOpened.emit(false);
     } if (this.searchInit || this.legendPanelOpened) {
@@ -243,7 +238,7 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   clearQuery(): void{
     this.queryState.store.softClear();
     this.queryState.store.clear();
-    this.mapQueryClick = false;
+    this.mapQuery.emit(false);
     this.removeFeatureFromMap();
   }
 
@@ -251,6 +246,14 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.legendPanelOpened = false;
     this.closeLegend.emit();
     this.map.propertyChange$.unsubscribe;
+  }
+
+  panelOpenedFromFeature(event) {
+    this.panelOpened.emit(event);
+  }
+
+  mapQueryFromFeature(event) {
+    this.mapQuery.emit(event);
   }
 
 }

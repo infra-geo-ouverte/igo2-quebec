@@ -260,12 +260,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   onSearchTermChange(term = '') {
     this.term = term;
-    this.searchInit = true;
     this.clearedSearchbar = false;
-    if (this.mapQueryClick){
-      this.queryState.store.softClear();
-      this.mapQuery.emit(false);
-    }
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
 
     if (termWithoutHashtag.length < 2) {
@@ -273,6 +268,12 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.selectedFeature = undefined;
       this.searchInit = false;
       this.clearSearch();
+    } else {
+      if (this.mapQueryClick){
+        this.queryState.store.softClear();
+        this.mapQuery.emit(false);
+        this.searchInit = true;
+      }
     }
   }
 
@@ -445,6 +446,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
+    this.term="";
   }
 
   closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
@@ -454,8 +456,18 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.map.propertyChange$.unsubscribe;
   }
 
+  panelOpenedFromFeature(event) {
+    this.panelOpened.emit(event);
+  }
+
+  mapQueryFromFeature(event) {
+    this.mapQuery.emit(event);
+  }
+
   closePanel(){
-    this.panelOpened.emit(false);
+    if (!this.searchInit && !this.mapQueryClick && !this.legendPanelOpened){
+      this.panelOpened.emit(false);
+    }
   }
 
   openPanel(){
