@@ -95,6 +95,7 @@ export const environment: Environment = {
         enabled: true
       },
       ilayer: {
+        enabled: false,
         searchUrl: '/apis/icherche/layers',
         order: 4,
         params: {
