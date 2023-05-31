@@ -4,7 +4,8 @@ import {
   AfterContentInit,
   OnDestroy,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Input
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription, BehaviorSubject, of, skip } from 'rxjs';
@@ -190,6 +191,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   isPortrait(): boolean {
     return this.mediaService.getOrientation() === MediaOrientation.Portrait;
   }
+
+  @Input() term: string;
 
   public mobileBreakPoint: string = '(min-width: 768px)';
   public Breakpoints = Breakpoints;
@@ -573,6 +576,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     if (event.features) {
       const results = event.features.map((feature: Feature) => {
         if (feature) {
+          this.clearSearchbarterm('');
           if (this.mapQueryClick) {
             this.onClearQuery();
           }
@@ -646,9 +650,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
-      if(this.mobile) {this.panelOpenState = true;}
+      if (this.mobile) {this.panelOpenState = true;}
       this.clearSearch();
       return;
+    } else {
+      if (this.mapQueryClick){
+        this.queryState.store.softClear();
+        this.mapQueryClick = false;
+        this.searchInit = true;
+      }
     }
     this.onBeforeSearch();
   }
