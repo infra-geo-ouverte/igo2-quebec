@@ -564,7 +564,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
    }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    if (this.searchInit) {this.clearSearch();}
     if(this.configService.getConfig('queryOnlyOne')){
       event.features = [event.features[0]];
       this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
@@ -572,12 +571,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
     if (event.features.length) {
+      if (this.searchInit) {this.clearSearch();}
+      this.clearSearchbarterm('');
+      if (this.mapQueryClick) {
+        this.onClearQuery();
+      }
+      this.openPanelonQuery();
       const results = event.features.map((feature: Feature) => {
-        this.clearSearchbarterm('');
-        if (this.mapQueryClick) {
-          this.onClearQuery();
-        }
-        this.openPanelonQuery();
         let querySearchSource = querySearchSourceArray.find(
           (s) => s.title === feature.meta.sourceTitle
         );
