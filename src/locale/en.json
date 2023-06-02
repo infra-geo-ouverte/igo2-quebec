@@ -34,5 +34,20 @@
     "data-download-start": "Downloading data for offline use. Please don't leave the current app.",
     "data-download-completed": "Offline data download completed"
 
+  },
+  "paginator": {
+    "elementsLowercase": "element(s)",
+    "elementsUppercase": "Elements",
+    "of": "of"
+  },
+  "simpleFeatureList": {
+    "selectEntity": "Zoom on element",
+    "unselectEntity": "Unselect element"
+  },
+    "simpleFilters": {
+    "filtersTitle": "Filters",
+    "placeholder": "Show filters",
+    "resetFilters": "Reset filters",
+    "submit": "Filter"
   }
 }

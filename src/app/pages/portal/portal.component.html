@@ -1,3 +1,7 @@
+<app-simple-filters *ngIf="showSimpleFilters"
+  (filterSelection)="onFilterSelection($event)">
+</app-simple-filters>
+
 <mat-sidenav-container *ngIf="!hasToolbox">
   <mat-sidenav-content position="end">
 
@@ -85,3 +89,11 @@
 
   
 </mat-sidenav-container>
+
+<h1> Simple feature list should start here</h1>
+<app-simple-feature-list *ngIf="showSimpleFeatureList && selectedWorkspace$ | async as workspace"
+[entityStore]="workspace.entityStore"
+[clickedEntities]="clickedEntities$ | async"
+[simpleFiltersValue]="simpleFiltersValue$ | async"
+(listSelection)="entitySelectChange($event)"></app-simple-feature-list>
+<h1> Simple feature list should end here</h1>

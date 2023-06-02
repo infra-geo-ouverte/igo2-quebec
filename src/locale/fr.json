@@ -33,5 +33,20 @@
     "new-version": "Voulez-vous recharger l'application?",
     "data-download-start": "Téléchargement des données pour utilisation hors-ligne. Veuillez ne pas quitter.",
     "data-download-completed": "Téléchargement des données hors-ligne terminé"
+  },
+  "paginator": {
+    "elementsLowercase": "élément(s)",
+    "elementsUppercase": "Éléments",
+    "of": "de"
+  },
+  "simpleFeatureList": {
+    "selectEntity": "Cadrer sur l'élément",
+    "unselectEntity": "Désélectionner l'élément"
+  },
+    "simpleFilters": {
+    "filtersTitle": "Filtres",
+    "placeholder": "Afficher les filtres",
+    "resetFilters": "Réinitialiser les filtres",
+    "submit": "Filtrer"
   }
 }

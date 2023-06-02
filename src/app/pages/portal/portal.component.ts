@@ -33,7 +33,6 @@ import {
     WorkspaceStore,
     ActionStore,
     EntityStore,
-    // getEntityTitle,
     Toolbox,
     Tool,
     Widget,
@@ -98,11 +97,15 @@ import {
 })
 
 export class PortalComponent implements OnInit, OnDestroy {
-  public showRotationButtonIfNoRotation: boolean = undefined;
+  public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
+  public clickedEntities$: BehaviorSubject<Feature[]> = new BehaviorSubject(undefined);
+  public showSimpleFilters: boolean = false;
+  public showSimpleFeatureList: boolean = false;
+  public showRotationButtonIfNoRotation: boolean = false;
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
   public hasGeolocateButton: boolean = true;
-  public hasExpansionPanel: boolean = undefined;
+  public hasExpansionPanel: boolean = false;
   public hasToolbox: boolean = false;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -308,6 +311,8 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
       this.configService.getConfig('showMenuButton');
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
+      this.showSimpleFilters = this.configService.getConfig('simpleFilters') === undefined ? false : true;
+      this.showSimpleFeatureList = this.configService.getConfig('simpleFeatureList') === undefined ? false : true;
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -388,11 +393,22 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (workspaceEmpty) {
         this.expansionPanelExpanded = false;
       }
-      this.updateMapBrowserClass();
+      // this.updateMapBrowserClass();
     });
 
+    // this.workspaceMaximize$$.push(this.workspaceState.workspaceMaximize$.subscribe((workspaceMaximize) => {
+    //   this.workspaceMaximize$.next(workspaceMaximize);
+    //   this.updateMapBrowserClass();
+    // }));
+    // this.workspaceMaximize$$.push(
+    //   this.workspaceMaximize$.subscribe(() => this.updateMapBrowserClass())
+    // );
+
     this.workspaceState.workspace$.subscribe((activeWks: WfsWorkspace | FeatureWorkspace | EditionWorkspace) => {
+      console.log("workspacestate")
+      console.log(activeWks)
       if (activeWks) {
+        console.log("wks 5 (active wks)");
         this.selectedWorkspace$.next(activeWks);
         this.expansionPanelExpanded = true;
 
@@ -408,9 +424,26 @@ export class PortalComponent implements OnInit, OnDestroy {
           };
         }
       } else {
+        console.log("no activeWks");
         this.expansionPanelExpanded = false;
       }
     });
+
+    console.log("typeof: ", typeof this.configService.getConfig('simpleFeatureList.layerId'));
+    console.log("id: ", this.configService.getConfig('simpleFeatureList.layerId'));
+    if (this.showSimpleFeatureList && typeof this.configService.getConfig('simpleFeatureList.layerId') === 'string') {
+      console.log("if entered")
+      setTimeout(() => {
+        this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('simpleFeatureList.layerId'));
+        console.log(this.workspaceState.workspace$.getValue())
+        this.expansionPanelExpanded = true;
+        if(this.workspace){
+          console.log("workspace exists")
+        }else{
+          console.log("workspace doesnt exist")
+        }
+      }, 15000);
+    }
 
     this.activeWidget$$ = this.workspaceState.activeWorkspaceWidget$.subscribe(
       (widget: Widget) => {
@@ -1168,5 +1201,9 @@ export class PortalComponent implements OnInit, OnDestroy {
       visible = false;
     }
     return visible;
+  }
+
+  onFilterSelection(event: object) {
+    this.simpleFiltersValue$.next(event);
   }
 }

@@ -1,0 +1,57 @@
+<div class="paginator">
+  <button *ngIf="showFirstLastPageButtons && numberOfPages > 1"
+    class="navigationButton"
+		mat-icon-button
+    color="primary"
+		disableRipple="true"
+    [disabled]="currentPageIsFirst"
+    [matTooltip]="'paginator.firstPageLabel' | translate"
+    tooltip-position="below"
+    matTooltipShowDelay="500"
+    (click)="goToFirstPage()">
+    <mat-icon svgIcon="page-first"></mat-icon>
+  </button>
+  <button *ngIf="showPreviousNextPageButtons && numberOfPages > 1"
+		class="navigationButton"
+    mat-icon-button
+    color="primary"
+		disableRipple="true"
+    [disabled]="currentPageIsFirst"
+    [matTooltip]="'paginator.previousPageLabel' | translate"
+    tooltip-position="below"
+    matTooltipShowDelay="500"
+    (click)="goToPreviousPage()">
+  <mat-icon svgIcon="chevron-left"></mat-icon>
+  </button>
+  <span *ngFor="let page of [].constructor(numberOfPages); let i = index"
+    [ngClass]="i + 1 === currentPageNumber$.getValue() ? 'pageButtonBold' : 'pageButton'"
+    mat-button
+    color="primary"
+    (click)="goToPage($event)">
+    {{ i + 1 }}
+  </span>
+  <button *ngIf="showPreviousNextPageButtons && numberOfPages > 1"
+		class="navigationButton"
+    mat-icon-button
+    color="primary"
+		disableRipple="true"
+    [disabled]="currentPageIsLast"
+    [matTooltip]="'paginator.nextPageLabel' | translate"
+    tooltip-position="below"
+    matTooltipShowDelay="500"
+    (click)="goToNextPage()">
+    <mat-icon svgIcon="chevron-right"></mat-icon>
+  </button>
+  <button *ngIf="showFirstLastPageButtons && numberOfPages > 1"
+		class="navigationButton"
+    mat-icon-button
+    color="primary"
+		disableRipple="true"
+    [disabled]="currentPageIsLast"
+    [matTooltip]="'paginator.lastPageLabel' | translate"
+    tooltip-position="below"
+    matTooltipShowDelay="500"
+    (click)="goToLastPage()">
+    <mat-icon svgIcon="page-last"></mat-icon>
+  </button>
+</div>

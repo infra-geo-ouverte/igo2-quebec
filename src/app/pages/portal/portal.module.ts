@@ -1,3 +1,5 @@
+import { IgoSimpleFiltersModule } from './../filters/simple-filters.module';
+import { IgoSimpleFeatureListModule } from './../list/simple-feature-list.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -45,6 +47,8 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
 
 @NgModule({
   imports: [
+    IgoSimpleFeatureListModule,
+    IgoSimpleFiltersModule,
     CommonModule,
     MatTooltipModule,
     MatButtonModule,

@@ -37,8 +37,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
-import { SimpleFeatureListComponent } from './pages/list/simple-feature-list.component';
-import { SimpleFiltersComponent } from './pages/filters/simple-filters.component';
 
 export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
@@ -48,7 +46,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
 };
 
 @NgModule({
-  declarations: [AppComponent, SimpleFeatureListComponent, SimpleFiltersComponent],
+  declarations: [AppComponent],
   imports: [
     CommonModule,
     MatIconModule,
