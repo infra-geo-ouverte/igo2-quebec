@@ -57,7 +57,8 @@
     "geo": {
       "search": {
         "icherche": {
-          "name": "Résultats de recherche"
+          "name": "Résultats de recherche",
+          "placeholder": "Rechercher une localisation"
         }
       }
     }
