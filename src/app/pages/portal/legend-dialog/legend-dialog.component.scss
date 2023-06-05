@@ -1,0 +1,112 @@
+@import '../portal.variables.scss';
+
+// FLEX
+
+::ng-deep #legend-dialog-container {
+  width: fit-content !important;
+  z-index: 10;
+  position: fixed;
+  right: 0.5%;
+  max-width: 99% !important;
+  padding: 16px !important;
+  max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px) !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 0;
+  height: fit-content;
+
+  igo-layer-legend-list {
+    max-height: inherit;
+    .layer-legend-list-container {
+      overflow-y: auto;
+      height: inherit;
+      max-height: inherit;
+    }
+  }
+
+  igo-layer-legend-item {
+    flex-wrap: wrap;
+    width: min-content;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+
+  igo-layer-legend-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .igo-layer-legend-container {
+    padding-left: 0 !important;
+    width: max-content !important;
+  }
+
+  @media (min-width: 768px){
+    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px) !important; //TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
+    height: fit-content;
+  }
+
+} 
+
+::ng-deep app-legend-dialog {
+
+  max-height: calc(100% - 24px) !important;
+  height: inherit;
+
+  .mat-list-base .mat-list-item .mat-list-item-content {
+    padding: 0 !important;
+  }
+
+  // TITLES
+
+  .mat-dialog-title {
+    margin: 0;
+    display: block;
+  }
+
+  .mat-dialog-title:after {
+    content: "";
+    display: block;
+    width: 2.8rem;
+    border-bottom: 4px solid #f09686;
+    margin-bottom: 0.8rem;
+  }
+
+  .mat-list-item:after {
+    content: "";
+    display: block;
+    width: 1.8rem;
+    border-bottom: 3px solid #DAE6F0;
+    margin-bottom: 0.4rem;
+    padding-top: 2px;
+  }
+
+  .igo-layer-list-item {
+    height: fit-content !important;
+  }
+}
+
+// CLOSE BUTTON
+
+::ng-deep app-legend-dialog {
+  .mat-icon, mat-button-wrapper, .mat-icon-button .mat-icon, .mat-icon-button {
+    line-height: 26px;
+    height: 24px;
+    width: 24px;
+  }
+  .mat-icon svg {
+    height: 20px;
+    width: 20px;
+  }
+  div.mat-dialog-content.legend > img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+  div.mat-dialog-actions {
+    float: right;
+    padding: 0;
+    min-height: auto;
+  }
+}

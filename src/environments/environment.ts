@@ -44,7 +44,7 @@ export const environment: Environment = {
       }
     },
     language: {
-      prefix: ['./locale/', './particular/locale/']
+      prefix: ['./locale/']
     },
     projections: [
       {
@@ -95,6 +95,7 @@ export const environment: Environment = {
         enabled: true
       },
       ilayer: {
+        enabled: false,
         searchUrl: '/apis/icherche/layers',
         order: 4,
         params: {

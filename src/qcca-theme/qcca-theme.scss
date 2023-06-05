@@ -17,7 +17,7 @@ margin: 0 !important;
 width: 100%;
 height: 100%;
 font-size: 16px;
-font-family: 'Open sans', sans-serif;
+font-family: 'Open Sans', sans-serif;
 color: #223654;
 }
 
@@ -26,7 +26,7 @@ color: #223654;
     margin: 0 !important;
     width: 100%;
     font-size: 16px;
-    font-family: 'Open sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     //overflow: hidden;
     }
     
@@ -68,7 +68,7 @@ vertical-align: baseline;
 }
 
 html, body {
-    font-family: 'Open sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .col-12 {
@@ -96,7 +96,7 @@ margin: auto;
 
 .page {
     overflow-y: auto!important;
-    overflow-x: auto;
+    overflow-x: clip;
     height: calc($portal-height-hasMenu-hasHeader - (4 * $igo-margin)); //if no header: $portal-height-hasMenu
     width: 100%;
 }
@@ -204,8 +204,6 @@ igo-baselayers-switcher, igo-geolocate-button {
 box-shadow: 0 1px 4px rgb(34 54 84 / 24%);
 }
 
-// ANGULAR MATERIAL
-
 app-search-results-tool ul{
     margin-left: 1rem;
   }
@@ -214,20 +212,50 @@ app-search-results-tool ul{
     border: 2px solid currentColor;
 }
 
-::ng-deep .mat-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button {
+::ng-deep .mat-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, mat-button-base,
+mat-stroked-button .mat-primary, .qcca-theme .mat-button, .qcca-theme .mat-icon-button, .qcca-theme .mat-stroked-button {
     border-radius: 0 !important;
 }
 
-::ng-deep .qcca-theme app-legend-button button, ::ng-deep .qcca-theme .mat-raised-button {
+.mat-raised-button {
     color: #095797 !important;
     border-color: #095797 !important;
 }
 
 .headline {
     background-color: #223654 !important;
-    }
+}
+
+// give a different class to each tooltip depending on the arrow side
+::ng-deep .tooltip {
+    position: relative!important;
+    top: 30%;
+    z-index: 5000!important;
+    background-color:white!important;
+    color: #223654!important;
+    margin: 0 8px!important;
+    padding: 8px 12px!important;
+    font-size: 14px!important;
+    line-height: 24px!important;
+    border: 1px solid #c5cad2;
+    border-radius: 0!important;
+    overflow: visible !important;
+    box-shadow: 0px 1px 7px #22365450!important;
+    white-space: pre-line;
+}
 
 
+::ng-deep .tooltip::after {
+  content: ''!important;
+  position: absolute!important;
+  top: 18%!important;
+  right: 100%!important;
+  margin-top: -5px!important;
+  border-width: 10px!important;
+  border-style: solid!important;
+  border-color: transparent transparent transparent white!important;
+  transform: rotate(180deg);
+}
 
 // Pour afficher le symbole de lien externe. Ex de HTML : 
 /*
@@ -328,8 +356,8 @@ text-decoration: underline;
 background-color: transparent;
 }
 
-p, ul, li, u  {
-    font-family: 'Open Sans',sans-serif;
+p, ul, li, u, .text  {
+    font-family: 'Open Sans', sans-serif;
     color: #223654;
     font-size: 16px;
     line-height: 24px;
@@ -354,10 +382,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { // removed h3 for conflic
 
 h1 {
     font-size: 48px;
-    line-height: 40px;
+    line-height: 56px;
     font-weight: bold;
-    margin-top: 48px;
-    margin-bottom: 16px;
+    margin-top: 72px;
+    margin-bottom: 32px;
 }
 
 @media (max-width: 1200px) {
@@ -373,9 +401,9 @@ h1:after {
     content: "";
     display: block;
     margin: 0;
-    width: 4.8rem;
-    padding-top: 0.4rem;
-    border-bottom: 4px solid #f09686;
+    width: 48px;
+    padding-top: 4px;
+    border-bottom: 4px solid #e58271;
 }
 
 h2 {
@@ -388,7 +416,7 @@ h2 {
 
 @media (max-width: 1200px) {
     h2 {
-        font-size: 29px;
+        font-size: 28px;
         line-height: 32px;
         font-weight: bold;
         margin-top: 48px;
@@ -432,10 +460,15 @@ h5 {
 
 h6 {
     font-size: 16px!important;
-    line-height: 24px!important;
+    line-height: 20px!important;
     font-weight: bold;
     margin-top: 16px;
     margin-bottom: 0px;
+}
+
+// class to capitalize the first letter
+.cap-first::first-letter {
+    text-transform: capitalize;
 }
 
 .headline {
@@ -465,7 +498,7 @@ border-radius: 0 !important;
 
     .qcca-theme input.mat-input-element {
     color: #647287;
-    font-family: 'open sans';
+    font-family: 'Open Sans', sans-serif;
 }
 
 
@@ -474,8 +507,103 @@ igo-list [igolistitem][color=accent].igo-list-item-selected > mat-list-item {
     color: white!important;
 }
 
+.qcca-theme igo-list [igolistitem][color=accent].igo-list-item-selected > mat-list-item {
+    background-color: #4A98D9;
+
+    h4, small {
+        color: white!important;
+    }
+}
+
 ::ng-deep igo-search-results-item small {
     color: white!important;
+}
+
+// Exemple de template d'AVIS:
+
+// Structure html :
+//<p class="avis">
+//  <span class="avis-icon avis-important"><mat-icon svgIcon="alert-outline"></mat-icon></span>
+//  <span class="avis-content">
+//      <span class="avis-title">Title</span><br>
+//      <span class="avis-label">Label</span>
+//  </span>
+//</p>
+//
+
+.avis {
+    height: max-content;
+    width: 100%;
+    display: flex;
+}
+
+.avis-icon {
+    width: 40px;
+    display: inline-block;
+}
+
+.avis-icon .mat-icon {
+    margin: 24px 8px 0 8px;
+}
+
+.avis-content {
+    padding: 24px 24px 24px 16px;
+    display: inline-block;
+}
+
+.avis-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #223654;
+    display: inline-block;
+    width: 100%;
+}
+
+.avis-label {
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    color: #223654;
+}
+
+.avis-general {
+    background-color:#D9E6F0;
+}
+
+.avis-general svg { // <mat-icon svgIcon="information-outline"></mat-icon>
+    color: #095797!important;
+}
+
+.avis-important {
+    background-color:#F8E69A;
+}
+
+.avis-important svg { // <mat-icon svgIcon="alert-outline"></mat-icon>
+    color: #E0AD03!important;
+}
+
+.avis-success {
+    background-color:#BCDA9A;
+}
+
+.avis-success svg { // <mat-icon svgIcon="check-circle-outline "></mat-icon>
+    color: #4F813D!important;
+}
+
+.avis-erreur {
+    background-color:#EDBAB1;
+}
+
+.avis-erreur svg { // <mat-icon svgIcon="close-circle-outline "></mat-icon>
+    color: #CB381F!important;
+}
+
+.avis-complementaire {
+    background-color:#F2F1F1;
+}
+
+.avis-complementaire svg { // <mat-icon svgIcon="lightbulb-outline"></mat-icon>
+    color: #83868B!important;
 }
 
 // input fields
@@ -535,34 +663,4 @@ border-radius: 0 !important;
 
 ::ng-deep .toast-message, ::ng-deep #toast-container, ::ng-deep .toast-title, toast-container, ::ng-deep .toast-error {
     color: white!important;
-}
-
-//* Spinner *//
-
-igo-spinner {
-  position: absolute;
-  top: calc(#{$header-height-mobile} + 4px) !important;
-  right: 4px;
-  z-index: 100;
-}
-
-spinner-with-legend-dialog {
-  position: absolute;
-  top: calc(#{$header-height-mobile} + 4px) !important;
-  right: 345px;
-  z-index: 100;
-}
-
-@media (min-width: 768px){
-  igo-spinner {
-    top: calc(#{$header-height} + 4px)!important;
-    right: 4px;
-    z-index: 100;
-  }
-
-  spinner-with-legend-dialog {
-    top: calc(#{$header-height} + 4px)!important;
-    right: 345px!important;
-    z-index: 100;
-  }
 }

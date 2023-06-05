@@ -20,7 +20,15 @@ import {
   provideILayerSearchSource,
   provideOptionsApi,
   provideStyleListOptions,
-  provideWorkspaceSearchSource
+  provideWorkspaceSearchSource,
+  SearchService,
+  provideOsrmDirectionsSource,
+  provideNominatimSearchSource,
+  CoordinatesSearchResultFormatter,
+  provideDefaultCoordinatesSearchResultFormatter,
+  provideDefaultIChercheSearchResultFormatter,
+  provideSearchSourceService,
+  IChercheSearchSource
 } from '@igo2/geo';
 
 
@@ -64,13 +72,24 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       default: environment.igo,
       path: './config/config.json'
     }),
-    RouteService,
-    provideIChercheSearchSource(),
-    provideWorkspaceSearchSource(),
-    provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),
+    provideIChercheSearchSource(),
+    provideNominatimSearchSource(),
+    provideIChercheReverseSearchSource(),
     provideILayerSearchSource(),
+    provideOsrmDirectionsSource(),
     provideOptionsApi(),
+    CoordinatesSearchResultFormatter,
+    provideDefaultCoordinatesSearchResultFormatter(),
+    provideDefaultIChercheSearchResultFormatter(),
+    provideSearchSourceService(),
+    SearchService,
+    IChercheSearchSource,
+    provideStyleListOptions({
+      path: './assets/list-style.json'
+    }),
+    RouteService,
+    provideWorkspaceSearchSource(),
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFactory,
