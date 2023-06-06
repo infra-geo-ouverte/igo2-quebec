@@ -722,7 +722,7 @@
 				"nw": "nord-ouest"
 			},
 			"search": {
-				"placeholder": "Rechercher une localisation ou une couche de données",
+				"placeholder": "Rechercher une localisation",
 				"emptyType.placeholder": "Veuillez choisir un type de recherche",
 				"feature.title": "Localisation",
 				"feature.placeholder": "Rechercher une localisation",
