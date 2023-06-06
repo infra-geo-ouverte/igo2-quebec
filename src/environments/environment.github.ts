@@ -52,11 +52,13 @@ export const environment: Environment = {
         available: false
       },
       icherche: {
-        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
+        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche/',
         order: 2,
         params: {
           limit: '5'
-        }
+        },
+        settings:[],
+        showInPointerSummary: true
       },
       coordinatesreverse: {
         showInPointerSummary: true
@@ -68,6 +70,7 @@ export const environment: Environment = {
         enabled: true
       },
       ilayer: {
+        enabled: false,
         searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche/layers',
         order: 4,
         params: {
