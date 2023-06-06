@@ -649,7 +649,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   clearSearchbarterm(event){
-    this.searchBar.setTerm('');
+    if(!this.mobile){this.searchBar.setTerm('');}
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {

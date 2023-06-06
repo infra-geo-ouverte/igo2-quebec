@@ -1,5 +1,5 @@
 {
-  "IGO": "IGO",
+  "IGO": "IGO ― Infrastructure géomatique ouverte",
   "oldBrowser": {
     "title": "Navigateur obsolète",
     "message": "IGO2 ne supporte pas pleinement votre navigateur. Veuillez le mettre à jour ou utilisez un navigateur différent."
@@ -56,7 +56,8 @@
     "geo": {
       "search": {
         "icherche": {
-          "name": "Résultats de recherche"
+          "name": "Résultats de recherche",
+          "placeholder": "Rechercher une localisation"
         }
       }
     }
