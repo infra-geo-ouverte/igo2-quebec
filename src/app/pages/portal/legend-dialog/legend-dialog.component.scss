@@ -51,7 +51,7 @@
 } 
 
 ::ng-deep app-legend-dialog {
-
+  overflow-y: scroll;
   max-height: calc(100% - 24px) !important;
   height: inherit;
 

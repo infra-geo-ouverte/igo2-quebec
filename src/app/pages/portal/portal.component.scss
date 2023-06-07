@@ -383,16 +383,11 @@ igo-zoom-button {
   height: calc( 100% - $footer-height)!important;
 }
 
-::ng-deep #legend-dialog-container, app-legend-dialog {
-  top: calc($header-height-mobile + 4px); 
-  max-height: calc(100% - $header-height-mobile - $footer-height - 100px);
-}
-
 @media (min-width: 768px){
 
-  ::ng-deep #legend-dialog-container, app-legend-dialog {
-    top: calc($header-height + 4px); 
-    max-height: calc(100% - $header-height - $footer-height - 180px);
+  ::ng-deep #legend-dialog-container {
+    top: calc($header-height + $menu-height + 4px); // $header-height + $menu-height
+    max-height: calc($portal-height-hasFooter-hasHeader-hasMenu - 180px)!important; // without menu : $portal-height-hasFooter-hasHeader
   }
 }
 
