@@ -1,12 +1,13 @@
 import { FeatureCollection } from 'geojson';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { SimpleFilter, TypeOptions, Option } from './simple-filters.interface';
 import { ConfigService } from '@igo2/core';
 import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
+import { FilterService } from './filters-service.service';
 
 @Component({
   selector: 'app-simple-filters',
@@ -15,6 +16,8 @@ import { Subscription } from 'rxjs';
 })
 export class SimpleFiltersComponent implements OnInit, OnDestroy {
   @Output() filterSelection: EventEmitter<object> = new EventEmitter();
+  @ViewChild(MatAutocompleteTrigger) panelTrigger: MatAutocompleteTrigger;
+
 
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
 	public terrAPITypes: Array<string>; // an array of strings containing the types available from terrAPI
@@ -25,8 +28,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public filtersFormGroup: FormGroup; // form group containing the controls (one control per filter)
   public previousFiltersFormGroupValue: object; // object representing the previous value held in each control
   public filtersFormGroupValueChange$$: Subscription; // subscription to form group value changes
+  public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
 
-  constructor(private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder) {}
+  constructor(private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder, private filterService: FilterService) {}
 
   // getter of the form group controls
   get controls(): {[key: string]: AbstractControl} {
@@ -35,7 +39,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
 
   public async ngOnInit(): Promise<void> {
     // get the simpleFilters config input by the user in the config file
-    this.simpleFiltersConfig = this.configService.getConfig('simpleFilters');
+    this.simpleFiltersConfig = this.configService.getConfig('useEmbeddedVersion.simpleFilters');
+
+    this.emptyActiveFilters();
 
     // create a form group used to hold various controls
     this.filtersFormGroup = this.formBuilder.group({});
@@ -66,6 +72,12 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       this.filterOptions(spatialFiltersFormCurrentValue);
 			this.filterSelection.emit(this.filtersFormGroup.value);
     });
+
+    this.filterService.onEvent().subscribe(option => {
+      // Handle the emitted event
+      console.log('Event received:', option);
+      this.onSelection(option);
+    });
   }
 
   public ngOnDestroy() {
@@ -88,6 +100,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @returns The options for the given filter in the TypeOptions format
    */
   private async getOptionsOfFilter(filter: SimpleFilter): Promise<TypeOptions> {
+    console.log("getOptionsOfFilter");
     let typeOptions: TypeOptions;
 
 		// if type is included in terrAPI...
@@ -171,16 +184,58 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @returns An array representing the options
    */
   public getOptions(formControlName: string): Array<Option> {
-    return this.filteredTypesOptions.find(typeOptions => typeOptions.type === formControlName)?.options;
+    let filteredOptions: Array<Option> = this.filteredTypesOptions.find(typeOptions => typeOptions.type === formControlName)?.options;
+    if(!Array.isArray(filteredOptions)){
+      return filteredOptions;
+    }else{
+      let activeFilteredOptions: Array<Option> = this.activeFilters.get(formControlName);
+      //runtime here could be improved if needed
+      for(let element of filteredOptions) {
+        for(let activeElement of activeFilteredOptions) {
+          if(element.nom === activeElement.nom && element.code === activeElement.code && element.type === activeElement.type){
+            element.selected = activeElement.selected;
+          };
+        }
+      }
+    }
+    return filteredOptions;
   }
 
   /**
    * @description On selection of an option, filter options of other filters
    * @param event The event fired when selecting an option from auto-complete
    */
-  public async onSelection(event: MatAutocompleteSelectedEvent) {
+  public async onSelection(selectedOption: Option) {
+    //return autocomplete form to prior state
+    this.filtersFormGroup.reset();
+
     // extract selected option from event
-    const selectedOption: Option = event.option.value;
+    console.log("onSelection received")
+    // const selectedOption: Option = event.option.value;
+    console.log("selectedOption: ",selectedOption);
+
+    //Every time we select an option we toggle its selected status
+    selectedOption.selected = !selectedOption.selected;
+
+    // If it is not already in the activeFilters map, add it. Otherwise, remove it from activeFilters
+    // Manually checking if it includes the selectedOption fields match any in the activeFilters map - except for selected field
+    let matchingOptions = this.activeFilters.get(selectedOption.type).filter(element =>
+      element.code === selectedOption.code && element.nom === selectedOption.nom && element.type === selectedOption.type);
+    if(matchingOptions.length === 0) {
+      console.log("adding element")
+      this.activeFilters.get(selectedOption.type).push(selectedOption);
+    }else {
+      console.log("removing element")
+      //remove element from activeFilters
+      let temp = this.activeFilters.get(selectedOption.type);
+      temp = temp.filter(element =>
+        element.code !== selectedOption.code || element.nom !== selectedOption.nom || element.type !== selectedOption.type);
+      this.activeFilters.set(selectedOption.type, temp);
+    }
+
+    console.log("activeFilters: ", this.activeFilters);
+
+    //TODO modify this.filteredTypesOptions to contain to only contain 
 
     // for every type of filter...
     for (let typeOptions of this.filteredTypesOptions) {
@@ -205,6 +260,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
     }
     this.allTypesOptions = JSON.parse(JSON.stringify(this.filteredTypesOptions));
+    console.log("allTypesOptions: ", this.allTypesOptions);
   }
 
   /**
@@ -262,6 +318,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     // reset the controls
     this.filtersFormGroup.reset();
 
+    //reset active filters
+    this.emptyActiveFilters();
+
     // reset all of the options for every filter
     for (let filter of this.simpleFiltersConfig) {
       if (filter.type) {
@@ -275,4 +334,25 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     // deep-copy the array containing all the options
     this.filteredTypesOptions = JSON.parse(JSON.stringify(this.allTypesOptions));
   }
+
+    /**
+   * @description Close autocomplete panel when it is opened
+   */
+  closeOpenPanel(isPanelOpen: boolean, event: Event): void {
+    if(isPanelOpen) {
+      event.stopPropagation();
+      document.getElementById("list-scroll").click();
+      isPanelOpen ? this.panelTrigger.closePanel() : this.panelTrigger.openPanel();
+    }
+  }
+
+    /**
+   * @description Initialize/reset map so that it contains all required keys but with empty arrays
+   */
+  emptyActiveFilters() {
+    for(let filter of this.simpleFiltersConfig) {
+      this.activeFilters.set(filter.type, []);
+    }
+  }
+
 }

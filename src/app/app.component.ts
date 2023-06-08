@@ -39,8 +39,9 @@ export class AppComponent {
 
     this.detectOldBrowser();
 
-    this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
-      this.configService.getConfig('header.hasHeader');
+    this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+      this.configService.getConfig('header.hasHeader') : false;
+    // console.log("hasHeader: ", this.hasHeader);
 
     this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
       this.configService.getConfig('hasFooter');

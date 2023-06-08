@@ -41,12 +41,20 @@
   },
   "simpleFeatureList": {
     "selectEntity": "Cadrer sur l'élément",
-    "unselectEntity": "Désélectionner l'élément"
+    "unselectEntity": "Désélectionner l'élément",
+    "header": {
+      "options": {
+        "filters": "Filtres"
+      }
+    }
   },
     "simpleFilters": {
     "filtersTitle": "Filtres",
     "placeholder": "Afficher les filtres",
-    "resetFilters": "Réinitialiser les filtres",
-    "submit": "Filtrer"
+    "resetFilters": "Effacer les filtres",
+    "submit": "Filtrer",
+    "openPanel": "Ouvrir le paneau",
+    "closePanel": "Fermer le paneau",
+    "removeFilter": "Enlever le filtre"
   }
 }

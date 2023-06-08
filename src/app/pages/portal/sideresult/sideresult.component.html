@@ -19,6 +19,7 @@
     </div>
   </mat-sidenav>
   <button
+    *ngIf="hasSideresultButton"
     [ngClass]=" sidenav.opened? 'sideresult-opened' : 'sideresult-closed' "
     #sidenavbutton
     mat-raised-button

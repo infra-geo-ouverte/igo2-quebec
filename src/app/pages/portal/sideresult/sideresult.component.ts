@@ -72,6 +72,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
 
   events: string[] = [];
   public hasToolbox: boolean = undefined;
+  public hasSideresultButton: boolean = undefined;
   public store = new ActionStore([]);
   public igoSearchPointerSummaryEnabled: boolean = false;
 
@@ -111,6 +112,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
+      this.hasSideresultButton = this.configService.getConfig('hasSideresultButton') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+        this.configService.getConfig('hasSideresultButton') : false;
 
       this.layerService
         .createAsyncLayer({

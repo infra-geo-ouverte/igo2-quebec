@@ -13,4 +13,5 @@ export interface Option {
 	type: string;
 	code: string;
 	nom: string;
+	selected?: boolean;
 }

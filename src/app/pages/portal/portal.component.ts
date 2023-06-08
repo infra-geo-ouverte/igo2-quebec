@@ -300,18 +300,18 @@ export class PortalComponent implements OnInit, OnDestroy {
   ) {
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
-      this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
-        this.configService.getConfig('hasLegendButton');
+      this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+        this.configService.getConfig('hasLegendButton') : false;
       this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
         this.configService.getConfig('hasSideSearch');
-        this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') === undefined ? true :
-        this.configService.getConfig('searchBar.showSearchBar');
+      this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+        this.configService.getConfig('searchBar.showSearchBar') : false;
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? true :
         this.configService.getConfig('hasToolbox');
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
       this.configService.getConfig('showMenuButton');
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
-      this.showSimpleFilters = this.configService.getConfig('simpleFilters') === undefined ? false : true;
+      this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
       this.showSimpleFeatureList = this.configService.getConfig('simpleFeatureList') === undefined ? false : true;
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
@@ -405,10 +405,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     // );
 
     this.workspaceState.workspace$.subscribe((activeWks: WfsWorkspace | FeatureWorkspace | EditionWorkspace) => {
-      console.log("workspacestate")
-      console.log(activeWks)
+      // console.log("workspacestate")
+      // console.log(activeWks)
       if (activeWks) {
-        console.log("wks 5 (active wks)");
+        // console.log("wks 5 (active wks)");
         this.selectedWorkspace$.next(activeWks);
         this.expansionPanelExpanded = true;
 
@@ -424,23 +424,23 @@ export class PortalComponent implements OnInit, OnDestroy {
           };
         }
       } else {
-        console.log("no activeWks");
+        // console.log("no activeWks");
         this.expansionPanelExpanded = false;
       }
     });
 
-    console.log("typeof: ", typeof this.configService.getConfig('simpleFeatureList.layerId'));
-    console.log("id: ", this.configService.getConfig('simpleFeatureList.layerId'));
-    if (this.showSimpleFeatureList && typeof this.configService.getConfig('simpleFeatureList.layerId') === 'string') {
-      console.log("if entered")
+    // console.log("typeof: ", typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+    // console.log("id: ", this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+    if (this.showSimpleFeatureList && typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId') === 'string') {
+      // console.log("if entered")
       setTimeout(() => {
-        this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('simpleFeatureList.layerId'));
-        console.log(this.workspaceState.workspace$.getValue())
+        this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+        // console.log(this.workspaceState.workspace$.getValue())
         this.expansionPanelExpanded = true;
         if(this.workspace){
-          console.log("workspace exists")
+          // console.log("workspace exists")
         }else{
-          console.log("workspace doesnt exist")
+          // console.log("workspace doesnt exist")
         }
       }, 15000);
     }
@@ -1204,6 +1204,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onFilterSelection(event: object) {
+    // console.log("onFilterSelection event: ", event);
     this.simpleFiltersValue$.next(event);
   }
 }

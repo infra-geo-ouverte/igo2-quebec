@@ -16,6 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IgoImageModule } from '@igo2/common';
 import { IgoCustomHtmlModule } from '@igo2/common';
 import { IgoLanguageModule } from '@igo2/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SimpleFiltersTemporaryHeaderComponent } from './simple-filters-temporary-header/simple-filters-temporary-header.component';
 
 /**
  * @ignore
@@ -32,6 +34,7 @@ import { IgoLanguageModule } from '@igo2/core';
     MatInputModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
     ReactiveFormsModule,
     MatPaginatorModule,
     IgoStopPropagationModule,
@@ -43,7 +46,8 @@ import { IgoLanguageModule } from '@igo2/core';
     SimpleFiltersComponent
   ],
   declarations: [
-    SimpleFiltersComponent
+    SimpleFiltersComponent,
+    SimpleFiltersTemporaryHeaderComponent
   ]
 })
 export class IgoSimpleFiltersModule {}

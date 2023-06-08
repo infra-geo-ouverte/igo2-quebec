@@ -1,99 +1,128 @@
-<app-simple-filters *ngIf="showSimpleFilters"
-  (filterSelection)="onFilterSelection($event)">
-</app-simple-filters>
+<div id="list-scroll" class="left-filter-and-map-div">
+  <app-simple-filters *ngIf="showSimpleFilters"
+    (filterSelection)="onFilterSelection($event)">
+  </app-simple-filters>
 
-<mat-sidenav-container *ngIf="!hasToolbox">
-  <mat-sidenav-content position="end">
+  <mat-sidenav-container *ngIf="!hasToolbox">
+    <mat-sidenav-content position="end">
 
-    <igo-backdrop
-      [shown]="false"
-      (click)="onBackdropClick()">
-    </igo-backdrop>
-  
-    <div id="scaleLine"></div>
-  
-    <div id="searchDesktop" *ngIf=!mobile>
-      <igo-menu-button *ngIf="showMenuButton"
-        [sidenavOpened]="sidenavOpened"
-        (openSidenav)="onToggleSidenavClick()">
-      </igo-menu-button>
-
-      <igo-search-bar *ngIf="showSearchBar"
-        #searchbar
-        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
-        appearance="outline"
-        searchIcon ="magnify"
-        [matTooltip]="'search-bar' | translate"
-        matTooltipShowDelay="500"
-        tooltip-position="after"
-        [searchSettings]="false"
-        color="primary"
-        [store]="searchStore"
-        [termSplitter]="termSplitter"
-        (searchTermChange)="onSearchTermChange($event)"
-        (search)="onSearch($event)"
-        (clearFeature)="removeFeatureFromMap()"
-        (searchSettingsChange)="onSearchSettingsChange()">
-      </igo-search-bar>
-
-      <div *ngIf="!mobile" id="scaleLine"></div>
-
-      <app-sideresult
-        [map]="map"
-        [(opened)]="sidenavOpened"
-        (toolChange)="toolChanged($event)">
-      </app-sideresult>
-    </div>
-
-    <igo-map-browser      
-      igoMapOffline
-      #mapBrowser
-      igoMapContext
-      igoLayerContext
-      igoDropGeoFile
-      [contextUri]="contextUri"
-      [map]="map"
-      igoHoverFeature
-      [igoHoverFeatureEnabled]="true"
-      [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
-        
-      <igo-baselayers-switcher
-        [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
-        [map]="map"
-        [useStaticIcon]="getBaseLayersUseStaticIcon()">
-      </igo-baselayers-switcher>
+      <igo-backdrop
+        [shown]="false"
+        (click)="onBackdropClick()">
+      </igo-backdrop>
     
-      <div id="map-buttons"
-      [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
-        <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
-        <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
-        <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-        <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
+      <div id="scaleLine"></div>
+    
+      <div id="searchDesktop" *ngIf=!mobile>
+        <igo-menu-button *ngIf="showMenuButton"
+          [sidenavOpened]="sidenavOpened"
+          (openSidenav)="onToggleSidenavClick()">
+        </igo-menu-button>
+
+        <igo-search-bar *ngIf="showSearchBar"
+          #searchbar
+          (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+          appearance="outline"
+          searchIcon ="magnify"
+          [matTooltip]="'search-bar' | translate"
+          matTooltipShowDelay="500"
+          tooltip-position="after"
+          [searchSettings]="false"
+          color="primary"
+          [store]="searchStore"
+          [termSplitter]="termSplitter"
+          (searchTermChange)="onSearchTermChange($event)"
+          (search)="onSearch($event)"
+          (clearFeature)="removeFeatureFromMap()"
+          (searchSettingsChange)="onSearchSettingsChange()">
+        </igo-search-bar>
+
+        <div *ngIf="!mobile" id="scaleLine"></div>
+
+        <app-sideresult
+          [map]="map"
+          [(opened)]="sidenavOpened"
+          (toolChange)="toolChanged($event)">
+        </app-sideresult>
       </div>
 
-        <app-bottomresult
-          *ngIf="mobile"
-          [map]="map">
-        </app-bottomresult>
-    </igo-map-browser>
+      <igo-map-browser      
+        igoMapOffline
+        #mapBrowser
+        igoMapContext
+        igoLayerContext
+        igoDropGeoFile
+        [contextUri]="contextUri"
+        [map]="map"
+        igoHoverFeature
+        [igoHoverFeatureEnabled]="true"
+        [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+          
+        <igo-baselayers-switcher
+          [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
+          [map]="map"
+          [useStaticIcon]="getBaseLayersUseStaticIcon()">
+        </igo-baselayers-switcher>
+      
+        <div id="map-buttons"
+        [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
+          <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
+          <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
+          <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+          <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
+        </div>
 
-    <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
+          <app-bottomresult
+            *ngIf="mobile"
+            [map]="map">
+          </app-bottomresult>
+      </igo-map-browser>
 
-    <app-map-overlay
-    [@controlStateY]="getControlsOffsetY()"
-    [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
-                            sidenavOpened ? 'right' : 'left'">
-    </app-map-overlay>
+      <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
 
-  </mat-sidenav-content>
+      <app-map-overlay
+      [@controlStateY]="getControlsOffsetY()"
+      [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
+                              sidenavOpened ? 'right' : 'left'">
+      </app-map-overlay>
 
-  
-</mat-sidenav-container>
+    </mat-sidenav-content>
 
-<h1> Simple feature list should start here</h1>
-<app-simple-feature-list *ngIf="showSimpleFeatureList && selectedWorkspace$ | async as workspace"
-[entityStore]="workspace.entityStore"
-[clickedEntities]="clickedEntities$ | async"
-[simpleFiltersValue]="simpleFiltersValue$ | async"
-(listSelection)="entitySelectChange($event)"></app-simple-feature-list>
-<h1> Simple feature list should end here</h1>
+    
+  </mat-sidenav-container>
+</div>
+
+<div class="right-list-div">
+  <h1> Simple feature list should start here</h1>
+  <app-simple-feature-list *ngIf="showSimpleFeatureList && selectedWorkspace$ | async as workspace"
+  [entityStore]="workspace.entityStore"
+  [clickedEntities]="clickedEntities$ | async"
+  [simpleFiltersValue]="simpleFiltersValue$ | async"
+  (listSelection)="entitySelectChange($event)"></app-simple-feature-list>
+  <h1> Simple feature list should end here</h1>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+  <h2>List...</h2>
+
+</div>

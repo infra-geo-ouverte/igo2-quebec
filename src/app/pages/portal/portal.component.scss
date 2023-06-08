@@ -5,7 +5,12 @@
   overflow: auto;
   width: 100%;
   height: 100%;
-  display: block;
+  display: flex;
+  gap: 20px;
+}
+
+.right-list-div {
+  min-width: 400px;
 }
 
 mat-icon.disabled {
@@ -22,6 +27,7 @@ mat-sidenav-container {
 }
 
 mat-sidenav-content {
+  height: 70%;
   @include mobile {
     z-index: auto;
   }

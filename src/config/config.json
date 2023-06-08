@@ -1,29 +1,31 @@
 {
   "theme": "qcca-theme",
   "showSearchBar": false,
-  "simpleFilters": [
-    {"type": "regadmin", "description": "Région administrative"},
-    {"type": "mrc", "description": "MRC"},
-    {"type": "municipalites", "description": "Municipalité"},
-    {"type": "prenom_resp", "description": "Prénom"}
-  ],
-  "simpleFeatureList": {
-    "layerId": "dq2",
-    "attributeOrder": [
-      {"attributeName": "bureau", "personalizedFormatting": "[nom] de [region]", "header": "h6"},
-      {"attributeName": "adressebur"},
-      {"attributeName": "responsable", "description": "Responsable"},
-      {"attributeName": "telephonebur", "description": "Téléphone"},
-      {"attributeName": "telecopieurbur", "description": "Télécopieur"},
-      {"attributeName": "courriel"}
+  "useEmbeddedVersion": {
+    "simpleFilters": [
+      {"type": "regadmin", "description": "Région administrative"},
+      {"type": "mrc", "description": "MRC"},
+      {"type": "municipalites", "description": "Municipalité"},
+      {"type": "prenom_resp", "description": "Prénom"}
     ],
-    "sortBy": {"attributeName": "region"},
-    "formatURL": true,
-    "formatEmail": true,
-    "paginator": {
-      "pageSize": 5,
-      "showFirstLastPageButtons": true,
-      "showPreviousNextPageButtons": true
+    "simpleFeatureList": {
+      "layerId": "dq2",
+      "attributeOrder": [
+        {"attributeName": "bureau", "personalizedFormatting": "[nom] de [region]", "header": "h6"},
+        {"attributeName": "adressebur"},
+        {"attributeName": "responsable", "description": "Responsable"},
+        {"attributeName": "telephonebur", "description": "Téléphone"},
+        {"attributeName": "telecopieurbur", "description": "Télécopieur"},
+        {"attributeName": "courriel"}
+      ],
+      "sortBy": {"attributeName": "region"},
+      "formatURL": true,
+      "formatEmail": true,
+      "paginator": {
+        "pageSize": 5,
+        "showFirstLastPageButtons": true,
+        "showPreviousNextPageButtons": true
+      }
     }
   },
   "searchSources": {
@@ -41,6 +43,7 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
+  "hasSideresultButton": true,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,

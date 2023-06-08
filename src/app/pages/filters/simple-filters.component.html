@@ -1,5 +1,18 @@
 <div class="filters-header">
-  <span class="filters-title">{{ 'simpleFilters.filtersTitle' | translate }}</span>
+  <p class="filters-title"> {{ 'simpleFilters.filtersTitle' | translate }} </p>
+  <p class="filters-reset"
+    (click)="onResetFilters()"
+  > {{ 'simpleFilters.resetFilters' | translate }} </p>
+
+    <!-- <button
+      [ngClass]="areButtonsDisabled() ? 'filters-buttons-disabled filter-button-disabled' : 'filters-buttons-abled filter-button-abled'"
+      [disabled]="areButtonsDisabled()"
+      [matTooltip]="'simpleFilters.submit' | translate"
+      tooltip-position="below"
+      matTooltipShowDelay="500"
+      (click)="onFilter()">{{ 'simpleFilters.submit' | translate }}
+    </button> -->
+
 </div>
 
 <div class="filters-container">
@@ -18,38 +31,29 @@
             type="text"
             [formControlName]="control.key"
             [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event)">
+          <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
             <mat-option *ngFor="let option of getOptions(control.key)" [value]="option">
-              {{ option.nom }}
+              <mat-checkbox
+                [checked]="option.selected">
+                {{ option.nom }}
+              </mat-checkbox>
             </mat-option>
           </mat-autocomplete>
           <mat-icon *ngIf="getOptions(control.key)"
+            [matTooltip]="(auto.isOpen ? 'simpleFilters.closePanel' : 'simpleFilters.openPanel') | translate"
+            tooltip-position="below"
+            matTooltipShowDelay="500"
+            class="dropdown-icon"
             matSuffix
             color="primary"
-            [svgIcon]="auto.isOpen ? 'chevron-up' : 'chevron-down'">
+            [svgIcon]="auto.isOpen ? 'chevron-up' : 'chevron-down'"
+            (click)="closeOpenPanel(auto.isOpen, $event)">
           </mat-icon>
         </mat-form-field>
       </div>
     </form>
   </div>
-
-  <div class="filters-buttons">
-    <button
-      [ngClass]="areButtonsDisabled() ? 'filters-buttons-disabled filter-button-disabled' : 'filters-buttons-abled filter-button-abled'"
-      [disabled]="areButtonsDisabled()"
-      [matTooltip]="'simpleFilters.submit' | translate"
-      tooltip-position="below"
-      matTooltipShowDelay="500"
-      (click)="onFilter()">{{ 'simpleFilters.submit' | translate }}
-    </button>
-    <button
-      [ngClass]="areButtonsDisabled() ? 'filters-buttons-disabled reset-button-disabled' : 'filters-buttons-abled reset-button-abled'"
-      [disabled]="areButtonsDisabled()"
-      [matTooltip]="'simpleFilters.resetFilters' | translate"
-      tooltip-position="below"
-      matTooltipShowDelay="500"
-      (click)="onResetFilters()">{{ 'simpleFilters.resetFilters' | translate }}
-    </button>
-  </div>
 </div>
 <br>
+
+<app-simple-filters-temporary-header [activeFilters]="activeFilters"></app-simple-filters-temporary-header>

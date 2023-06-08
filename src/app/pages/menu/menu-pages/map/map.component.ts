@@ -11,8 +11,10 @@ export class MapComponent {
 
   constructor(private configService: ConfigService) {
 
-    this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
-      this.configService.getConfig('header.hasHeader');
+    this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && this.configService.getConfig('header.hasHeader') === undefined ?
+      this.configService.getConfig('header.hasHeader') : false;
+
+    console.log("header: ", this.hasHeader);
    }
 
 }

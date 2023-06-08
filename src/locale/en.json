@@ -42,12 +42,20 @@
   },
   "simpleFeatureList": {
     "selectEntity": "Zoom on element",
-    "unselectEntity": "Unselect element"
+    "unselectEntity": "Unselect element",
+    "header": {
+      "options": {
+        "filters": "Filters"
+      }
+    }
   },
     "simpleFilters": {
     "filtersTitle": "Filters",
     "placeholder": "Show filters",
-    "resetFilters": "Reset filters",
-    "submit": "Filter"
+    "resetFilters": "Erase filters",
+    "submit": "Filter",
+    "openPanel": "Open panel",
+    "closePanel": "Close panel",
+    "removeFilter": "Remove filter"
   }
 }
