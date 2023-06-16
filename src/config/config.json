@@ -10,7 +10,7 @@
   "hasFooter": true,
   "hasLegendButton": true,
   "legendInPanel": true,
-  "showRotationButtonIfNoRotation": true,
+  "showRotationButtonIfNoRotation": false,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,

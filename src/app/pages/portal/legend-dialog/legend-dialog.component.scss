@@ -1,22 +1,23 @@
 @import '../portal.variables.scss';
 
+
 // FLEX
 
-::ng-deep #legend-dialog-container {
+
+::ng-deep #legendDialog {
   width: fit-content !important;
   z-index: 10;
   position: fixed;
   right: 0.5%;
   max-width: 99% !important;
   padding: 16px !important;
-  max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px) !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
   border-radius: 0;
   height: fit-content;
-
+  
   igo-layer-legend-list {
     max-height: inherit;
     .layer-legend-list-container {
@@ -43,16 +44,14 @@
     width: max-content !important;
   }
 
-  @media (min-width: 768px){
-    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px) !important; //TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
-    height: fit-content;
-  }
+}
 
-} 
+mat-dialog-container app-legend-dialog .legend-hasFooter-hasHeader-hasMenu  {
+  max-height: calc($portal-height-hasFooter-hasHeader-hasMenu - $map-buttons-height)!important;
+}
 
 ::ng-deep app-legend-dialog {
-  overflow-y: scroll;
-  max-height: calc(100% - 24px) !important;
+  overflow-y: auto;
   height: inherit;
 
   .mat-list-base .mat-list-item .mat-list-item-content {

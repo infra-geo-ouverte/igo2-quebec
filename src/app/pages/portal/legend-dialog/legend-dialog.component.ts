@@ -32,4 +32,5 @@ export class LegendDialogComponent implements OnInit {
       layer.showInLayerList !== false
     ));
   }
+
 }

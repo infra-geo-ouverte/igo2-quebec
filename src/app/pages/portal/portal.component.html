@@ -72,7 +72,7 @@
           [map]="map"
           [useStaticIcon]="getBaseLayersUseStaticIcon()">
         </igo-baselayers-switcher>
-
+        
         <div id="map-buttons"
         [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
           <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
