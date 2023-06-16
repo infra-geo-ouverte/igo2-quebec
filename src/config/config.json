@@ -9,7 +9,7 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
-  "legendInPanel": true,
+  "legendInPanel": false,
   "showRotationButtonIfNoRotation": false,
   "hasGeolocateButton": true,
   "geolocate": {

@@ -23,8 +23,8 @@
   }
 
   ::ng-deep #legendDialog {
-    top: $top-legend-dialog-hasHeader-hasMenu!important; // no header: $top-legend-dialog-hasMenu
-    max-height: calc($portal-height-hasFooter-hasHeader-hasMenu - $map-buttons-height)!important; // see portal variables $map-buttons-height-xxxx - $map-buttons-height
+    top: $top-legend-dialog-hasMenu!important; // no header: $top-legend-dialog-hasMenu
+    max-height: calc($portal-height-hasFooter-hasMenu - $map-buttons-height)!important; // see portal variables $map-buttons-height-xxxx - $map-buttons-height
   }
 
 }

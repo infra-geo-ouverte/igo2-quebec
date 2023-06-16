@@ -20,6 +20,7 @@ $portal-height-hasMenu-mobile: calc( 100% - #{$menu-height-mobile});
 $portal-height-hasFooter: calc( 100% - #{$footer-height} );
 $portal-height-hasHeader: calc( 100% - #{$header-height});
 $portal-height-hasMenu: calc( 100% - #{$menu-height});
+$portal-height-hasFooter-hasMenu: calc( 100% - #{$menu-height} - #{$footer-height});
 $portal-height-hasMenu-hasHeader: calc( 100% - #{$header-height} - #{$menu-height} );
 $portal-height-hasFooter-hasHeader: calc( 100% - #{$footer-height} - #{$header-height} );
 $portal-height-hasFooter-hasHeader-hasMenu: calc( 100% - #{$footer-height} - #{$header-height} - #{$menu-height} );

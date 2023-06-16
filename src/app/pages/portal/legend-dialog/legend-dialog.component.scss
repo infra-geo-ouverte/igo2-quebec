@@ -46,10 +46,6 @@
 
 }
 
-mat-dialog-container app-legend-dialog .legend-hasFooter-hasHeader-hasMenu  {
-  max-height: calc($portal-height-hasFooter-hasHeader-hasMenu - $map-buttons-height)!important;
-}
-
 ::ng-deep app-legend-dialog {
   overflow-y: auto;
   height: inherit;
