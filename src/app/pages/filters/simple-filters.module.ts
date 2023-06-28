@@ -17,7 +17,6 @@ import { IgoImageModule } from '@igo2/common';
 import { IgoCustomHtmlModule } from '@igo2/common';
 import { IgoLanguageModule } from '@igo2/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SimpleFiltersTemporaryHeaderComponent } from './simple-filters-temporary-header/simple-filters-temporary-header.component';
 
 /**
  * @ignore
@@ -46,8 +45,6 @@ import { SimpleFiltersTemporaryHeaderComponent } from './simple-filters-temporar
     SimpleFiltersComponent
   ],
   declarations: [
-    SimpleFiltersComponent,
-    SimpleFiltersTemporaryHeaderComponent
-  ]
+    SimpleFiltersComponent  ]
 })
 export class IgoSimpleFiltersModule {}

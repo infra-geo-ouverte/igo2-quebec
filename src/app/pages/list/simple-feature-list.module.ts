@@ -3,6 +3,8 @@ import { SimpleFeatureListPaginatorComponent } from './simple-feature-list-pagin
 import { IgoCustomHtmlModule } from '@igo2/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { SimpleFeatureListComponent } from './simple-feature-list.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -29,7 +31,9 @@ import { IgoStopPropagationModule } from '@igo2/common';
     IgoCustomHtmlModule,
     IgoEntityTablePaginatorModule,
     IgoImageModule,
-    IgoLanguageModule
+    IgoLanguageModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   exports: [
     SimpleFeatureListComponent

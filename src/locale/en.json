@@ -36,16 +36,32 @@
 
   },
   "paginator": {
-    "elementsLowercase": "element(s)",
+    "noElements": "No element",
+    "elementLowercase": "element",
+    "elementsLowercase": "elements",
+    "elementUpperCase": "Element",
     "elementsUppercase": "Elements",
-    "of": "of"
+    "of": "of",
+    "no": "No",
+    "to": "to",
+    "firstPageLabel": "First page",
+    "lastPageLabel": "Last page",
+    "nextPageLabel": "Next page",
+    "previousPageLabel": "Previous page"
   },
   "simpleFeatureList": {
     "selectEntity": "Zoom on element",
     "unselectEntity": "Unselect element",
     "header": {
       "options": {
-        "filters": "Filters"
+        "filters": "Filters",
+        "sort": "Sort by",
+        "numberOfStations": "Number per page",
+        "filterTitles": {
+          "regadmin": "Administrative region",
+          "mrc": "MRC",
+          "municipality": "Municipality"
+        }
       }
     }
   },
@@ -56,6 +72,9 @@
     "submit": "Filter",
     "openPanel": "Open panel",
     "closePanel": "Close panel",
-    "removeFilter": "Remove filter"
+    "removeFilter": "Remove filter",
+    "selected": "selected",
+    "selecteds": "selected"
+
   }
 }

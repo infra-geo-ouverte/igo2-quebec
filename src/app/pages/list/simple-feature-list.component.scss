@@ -1,72 +1,114 @@
 .entities-container {
-    overflow-y: auto;
-    height: 200px;
+    // overflow-y: auto;
+    height: 100%;
     width: 100%
 }
 
-.entityGrey, .entityWhite, .selectedEntity {
-    padding: 8px;
+.entity, .selectedEntity {
+    border-bottom: 1px solid #C5CAD2;
+    padding: 20px 0px 20px 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.entityGrey, .selectedEntity {
+.selectedEntity {
     background-color: #f2f1f1;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: "Roboto", sans-serif;
     font-weight: bold;
+    margin-bottom: 0px
+}
+
+// .h1 {
+//     font-size: 48px;
+//     line-height: 54px;
+//     margin-top: 72px;
+//     margin-bottom: 32px;
+// }
+
+// .h2 {
+//     font-size: 35px;
+//     line-height: 40px;
+//     margin-top: 48px;
+//     margin-bottom: 16px;
+// }
+
+// .h3 {
+//     font-size: 28px;
+//     line-height: 32px;
+//     margin-top: 24px;
+//     margin-bottom: 16px;
+// }
+
+// .h4 {
+//     font-size: 21px;
+//     line-height: 24px;
+//     margin-top: 24px;
+//     margin-bottom: 8px;
+// }
+
+// .h5 {
+//     font-size: 19px;
+//     line-height: 24px;
+//     margin-top: 26px;
+// }
+
+// .h6 {
+//     font-size: 16px;
+//     line-height: 24px;
+//     margin-top: 16px;
+// }
+
+
+.h1 {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 5px 0px 5px 0px;
     color: #095797;
 }
 
-.h1 {
-    font-size: 48px;
-    line-height: 54px;
-    margin-top: 72px;
-    margin-bottom: 32px;
-}
-
 .h2 {
-    font-size: 35px;
-    line-height: 40px;
-    margin-top: 48px;
-    margin-bottom: 16px;
-}
-
-.h3 {
-    font-size: 28px;
-    line-height: 32px;
-    margin-top: 24px;
-    margin-bottom: 16px;
-}
-
-.h4 {
-    font-size: 21px;
-    line-height: 24px;
-    margin-top: 24px;
-    margin-bottom: 8px;
-}
-
-.h5 {
-    font-size: 19px;
-    line-height: 24px;
-    margin-top: 26px;
-}
-
-.h6 {
     font-size: 16px;
-    line-height: 24px;
-    margin-top: 16px;
+    // line-height: 24px;
+    // margin-top: 16px;
 }
 
 .attribute, .description {
     font-family: "Open Sans", sans-serif;
-    font-size: 16px;
-    line-height: 24px;
+    // font-size: 16px;
+    // line-height: 24px;
+}
+
+.title{
+    cursor: pointer;
+}
+
+.title:hover {
+    text-decoration: underline;
 }
 
 .selectButton, .unselectButton {
     padding: 0px 16px;
+}
+
+.attributes .attribute {
+    display: flex !important;
+    flex-direction: row;
+}
+
+.description {
+    margin-right: 10px;
+    font-weight: 100;
+}
+
+.info {
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.title {
+    margin: 1px 0px 1px 0px;
 }

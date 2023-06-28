@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 import { IgoCoreModule } from '@igo2/core';
 import {
@@ -55,6 +57,8 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     MatIconModule,
     MatSidenavModule,
     MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
     IgoCoreModule,
     IgoFeatureModule,
     IgoImportExportModule,

@@ -1,16 +1,40 @@
 @import './portal.variables';
 
 /*** Main ***/
-:host {
+// :host {
+//   overflow: auto;
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   gap: 20px;
+// }
+
+$right-min-width : 400px;
+$map-min-height: 400px;
+$left-min-width : 400px;
+
+.portal-desktop {
   overflow: auto;
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.portal-mobile {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  // display: flex;
+  // flex-direction: column;
   gap: 20px;
 }
 
 .right-list-div {
-  min-width: 400px;
+  height: fit-content;
+  min-width: $right-min-width;
+  width: 100%;
 }
 
 mat-icon.disabled {
@@ -329,10 +353,28 @@ igo-zoom-button {
   max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px);
 }
 
-@media (min-width: 768px){
+//adjustment to filters and map
+.left-filter-and-map-div {
+  background-color: #f2f1f1;
+  min-width: $left-min-width;
+  // padding: 0px 16px 0px 16px;
+}
 
-  ::ng-deep #legend-button-dialog-container {
-    top: calc( #{$header-height} + 4px); 
-    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px);
-  }
+.sidenav {
+  background-color: white;
+}
+
+//map height
+.igo-attribution-offset {
+  min-height: $map-min-height;
+}
+
+
+::ng-deep .igo-map-browser-target .ol-viewport {
+  min-height: $map-min-height !important;
+}
+
+//map overflow prevented
+.mat-drawer-content {
+  overflow: hidden;
 }

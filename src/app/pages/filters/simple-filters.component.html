@@ -1,59 +1,114 @@
-<div class="filters-header">
-  <p class="filters-title"> {{ 'simpleFilters.filtersTitle' | translate }} </p>
-  <p class="filters-reset"
-    (click)="onResetFilters()"
-  > {{ 'simpleFilters.resetFilters' | translate }} </p>
-
-    <!-- <button
-      [ngClass]="areButtonsDisabled() ? 'filters-buttons-disabled filter-button-disabled' : 'filters-buttons-abled filter-button-abled'"
-      [disabled]="areButtonsDisabled()"
-      [matTooltip]="'simpleFilters.submit' | translate"
-      tooltip-position="below"
-      matTooltipShowDelay="500"
-      (click)="onFilter()">{{ 'simpleFilters.submit' | translate }}
-    </button> -->
-
-</div>
-
-<div class="filters-container">
-  <div class="filters">
-    <form [formGroup]="filtersFormGroup">
-      <div *ngFor="let control of controls | keyvalue"
-        class="filter">
-        <span class="filter-description">{{ getLabel(control.key) }}</span>
-        <mat-form-field
-          class="filter-field"
-          appearance="outline"
-          floatLabel="auto">
-          <mat-label>{{ getLabel(control.key) }}</mat-label>
-          <input
-            matInput
-            type="text"
-            [formControlName]="control.key"
-            [matAutocomplete]="auto">
-          <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
-            <mat-option *ngFor="let option of getOptions(control.key)" [value]="option">
-              <mat-checkbox
-                [checked]="option.selected">
-                {{ option.nom }}
-              </mat-checkbox>
-            </mat-option>
-          </mat-autocomplete>
-          <mat-icon *ngIf="getOptions(control.key)"
-            [matTooltip]="(auto.isOpen ? 'simpleFilters.closePanel' : 'simpleFilters.openPanel') | translate"
-            tooltip-position="below"
-            matTooltipShowDelay="500"
-            class="dropdown-icon"
-            matSuffix
-            color="primary"
-            [svgIcon]="auto.isOpen ? 'chevron-up' : 'chevron-down'"
-            (click)="closeOpenPanel(auto.isOpen, $event)">
-          </mat-icon>
-        </mat-form-field>
-      </div>
-    </form>
+<div *ngIf="!isMobile" class="filters">
+  <div class="header">
+    <p class="filters-title"> {{ 'simpleFilters.filtersTitle' | translate }} </p>
+    <p class="filters-reset"
+      (click)="onResetFilters()"
+    > {{ 'simpleFilters.resetFilters' | translate }} </p>
   </div>
-</div>
-<br>
 
-<app-simple-filters-temporary-header [activeFilters]="activeFilters"></app-simple-filters-temporary-header>
+  <div class="filters-container">
+    <div class="filters">
+      <form [formGroup]="filtersFormGroup">
+        <div *ngFor="let control of controls | keyvalue"
+          class="filter">
+          <div class="filter-description-info">
+            <span class="filter-description">{{ getLabel(control.key) }}</span>
+            <span *ngIf="getSelectionCount(control.key) == 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
+            <span *ngIf="getSelectionCount(control.key) > 1" class="filter-info"> {{getSelectionCount(control.key)}} {{ 'simpleFilters.selecteds' | translate}} </span>
+          </div>
+          <mat-form-field
+            class="filter-field"
+            appearance="outline"
+            floatLabel="auto">
+            <input
+              matInput
+              type="text"
+              [formControlName]="control.key"
+              [matAutocomplete]="auto"
+              [placeholder]="'simpleFilters.placeholder' | translate">
+            <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
+              <mat-option *ngFor="let option of getOptions(control.key)" [value]="option">
+                <mat-checkbox
+                  [checked]="option.selected">
+                  {{ option.nom }}
+                  <!-- {{ option.nom + " count: " + option.count }} -->
+                </mat-checkbox>
+                <!-- <mat-checkbox *ngIf="!option.nom">
+                  {{ option }}
+                </mat-checkbox> -->
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon *ngIf="getOptions(control.key)"
+              [matTooltip]="(auto.isOpen ? 'simpleFilters.closePanel' : 'simpleFilters.openPanel') | translate"
+              tooltip-position="below"
+              matTooltipShowDelay="500"
+              class="dropdown-icon"
+              matSuffix
+              color="primary"
+              [svgIcon]="auto.isOpen ? 'chevron-up' : 'chevron-down'"
+              (click)="closeOpenPanel(auto.isOpen, $event)">
+            </mat-icon>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+</div>
+
+
+<div *ngIf="isMobile" class="filters">
+  <div class="header-mobile header" (click)="filtersShown = !filtersShown">
+		<p class="header-label header-label-mobile">{{ 'simpleFilters.filtersTitle' | translate }}</p>
+		<mat-icon
+			class="filters-icon"
+			color="primary"
+      [svgIcon]="filtersShown ? 'chevron-up' : 'chevron-down'"></mat-icon>
+	</div>
+  <mat-divider *ngIf="filtersShown"></mat-divider>
+  <p *ngIf="filtersShown"class="filters-reset header" (click)="onResetFilters()"> {{ 'simpleFilters.resetFilters' | translate }} </p>
+
+  <div *ngIf="filtersShown" class="filters-container">
+    <div class="filters">
+      <form [formGroup]="filtersFormGroup">
+        <div *ngFor="let control of controls | keyvalue"
+          class="filter">
+          <div class="filter-description-info">
+            <span class="filter-description">{{ getLabel(control.key) }}</span>
+            <span *ngIf="getSelectionCount(control.key) == 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
+            <span *ngIf="getSelectionCount(control.key) > 1" class="filter-info"> {{getSelectionCount(control.key)}} {{ 'simpleFilters.selecteds' | translate}} </span>
+          </div>          <mat-form-field
+            class="filter-field"
+            appearance="outline"
+            floatLabel="auto">
+            <mat-label>{{ getLabel(control.key) }}</mat-label>
+            <input
+              matInput
+              type="text"
+              [formControlName]="control.key"
+              [matAutocomplete]="auto">
+            <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
+              <mat-option *ngFor="let option of getOptions(control.key)" [value]="option">
+                <mat-checkbox
+                  [checked]="option.selected">
+                  {{ option.nom }}
+                </mat-checkbox>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon *ngIf="getOptions(control.key)"
+              [matTooltip]="(auto.isOpen ? 'simpleFilters.closePanel' : 'simpleFilters.openPanel') | translate"
+              tooltip-position="below"
+              matTooltipShowDelay="500"
+              class="dropdown-icon"
+              matSuffix
+              color="primary"
+              [svgIcon]="auto.isOpen ? 'chevron-up' : 'chevron-down'"
+              (click)="closeOpenPanel(auto.isOpen, $event)">
+            </mat-icon>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+</div>

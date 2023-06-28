@@ -1,31 +1,44 @@
-<!-- <h1>Testing</h1> -->
+<igo-simple-feature-list-header
+  (pageSizeSelected)="onPageSizeSelection($event)"
+  (sortBySelected)="onSortSelection($event)"
+  [activeFilters]="activeFilters"
+  [entitiesList]="entitiesList"
+  [elementsLowerBound]="elementsLowerBound"
+  [elementsUpperBound]="elementsUpperBound"
+  [pageOptions]="pageOptions"
+  [sortOptions]="sortOptions">
+</igo-simple-feature-list-header>
+
 <div class="entities-container">
-    <div *ngFor="let entity of entitiesShown; let i = index" #entity
-      [ngClass]="i % 2 === 0 ? 'entityGrey' : 'entityWhite'">
+    <!-- <p *ngIf="entitiesShown"> {{entitiesShown.length}} entities exist </p> -->
+    <div *ngFor="let entity of entitiesShown; let i = index" #entity class="entity">
       <div class="attributes">
         <ng-container *ngFor="let attribute of attributeOrder">
-          <ng-container *ngIf="attribute.header; else notHeader">
-            <span *ngIf="attribute.description"
-              [ngClass]="attribute.header">
-              <strong>{{ attribute.description }}</strong>:
-            </span>
-            <span
-              [ngClass]="attribute.header"
-              [innerHTML]="createAttribute(entity, attribute)">
-            </span>
-            <br>
+          <ng-container>
+            <div class="attribute">
+              <div>
+                <div class ="description" *ngIf="attribute.description"
+                [ngClass]="attribute.header">
+                {{ attribute.description }}
+                </div>
+              </div>
+              <div class="info">
+                <div *ngIf="attribute.header === 'h1'"
+                class="title"
+                [matTooltip]="!entityIsSelected ? ('simpleFeatureList.selectEntity' | translate) : ('simpleFeatureList.unselectEntity' | translate)"
+                tooltip-position="below"
+                matTooltipShowDelay="500"
+                [ngClass]="attribute.header"
+                (click)="!entityIsSelected ? selectEntity(entity) : unselectEntity(entity)"
+                [innerHTML]="createAttribute(entity, attribute)">
+                </div>
+                <div *ngIf="!attribute.header || attribute.header !== 'h1'"
+                [ngClass]="attribute.header ? attribute.header : undefined"
+                [innerHTML]="createAttribute(entity, attribute)">
+                </div>
+              </div>
+            </div>
           </ng-container>
-          <ng-template #notHeader>
-            <span *ngIf="attribute.description && createAttribute(entity, attribute)"
-              class="description">
-              <strong>{{ attribute.description }}</strong>:
-            </span>
-            <span
-              class="attribute"
-              [innerHTML]="createAttribute(entity, attribute)">
-            </span>
-            <br *ngIf="createAttribute(entity, attribute)">
-          </ng-template>
         </ng-container>
       </div>
       <div class="selectButton">
@@ -46,3 +59,11 @@
   </div>
 
   <mat-divider></mat-divider>
+
+<igo-simple-feature-list-paginator *ngIf="simpleFeatureListConfig.paginator"
+  [pageSize]="pageSize"
+  [numberOfPages]="numberOfPages"
+  [showFirstLastPageButtons]="showFirstLastPageButtons"
+  [showPreviousNextPageButtons]="showPreviousNextPageButtons"
+  (pageChange)="onPageChange($event)">
+</igo-simple-feature-list-paginator>

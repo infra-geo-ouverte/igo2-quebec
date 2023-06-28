@@ -8,10 +8,15 @@ export interface TypeOptions {
 	description: string;
 	options?: Array<Option>;
 }
-
+export interface CustomEvent {
+	option: Option;
+	sortBy: string;
+	pageSize: number;
+}
 export interface Option {
 	type: string;
-	code: string;
 	nom: string;
+	code?: string;
 	selected?: boolean;
+	count?: number;
 }

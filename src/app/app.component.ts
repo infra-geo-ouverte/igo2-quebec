@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild, HostListener } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { userAgent } from '@igo2/utils';
 import {
@@ -14,6 +14,13 @@ import { PwaService } from './services/pwa.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @HostListener('window:resize', ['$event'])
+	onResize() {
+  		this.isMobile = window.innerWidth >= 768 ? false : true;
+      // console.log("isMobile: ", this.isMobile);
+	}
+
+  public isMobile: boolean = window.innerWidth >= 768 ? false : true; //boolean to determine screen width for layout
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
   public hasHeader: boolean = true;

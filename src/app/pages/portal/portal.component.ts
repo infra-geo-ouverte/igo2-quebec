@@ -3,7 +3,8 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Input
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
@@ -85,6 +86,8 @@ import {
   controlsAnimations, controlSlideX, controlSlideY
 } from './portal.animation';
 
+import { Option } from '../filters/simple-filters.interface';
+
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -97,6 +100,9 @@ import {
 })
 
 export class PortalComponent implements OnInit, OnDestroy {
+  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
+  public entitiesAll: Array<Object>;  //all entities
+  public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
   public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
   public clickedEntities$: BehaviorSubject<Feature[]> = new BehaviorSubject(undefined);
   public showSimpleFilters: boolean = false;
@@ -298,6 +304,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private pwaService: PwaService
   ) {
+      this.entitiesAll = this.configService.getConfig('temporaryEntitiesAll');
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
@@ -312,7 +319,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.configService.getConfig('showMenuButton');
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
       this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
-      this.showSimpleFeatureList = this.configService.getConfig('simpleFeatureList') === undefined ? false : true;
+      this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -481,14 +488,30 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.breakpoint$.subscribe(() =>
       this.breakpointChanged()
     );
+
+    let properties = Object.keys(this.entitiesAll[0]["properties"]);
+    console.log("properties ", properties);
+    for(let property of properties){
+      let values: Array<Option> = [];
+      for(let entry of this.entitiesAll){
+        // console.log("entry ", entry, "property ", property)
+        // console.log(entry["properties"][property]);
+        let option: Option = {nom: entry["properties"][property], type: property};
+        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
+      }
+      this.propertiesMap.set(property, values);
+    }
+    // console.log("propertiesMap ", this.propertiesMap);
   }
 
   public breakpointChanged() {
     if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
+      console.log("mobile ", this.mobile);
     } else {
       this.mobile = true;
+      console.log("mobile ", this.mobile);
     }
   }
 
@@ -1206,5 +1229,9 @@ export class PortalComponent implements OnInit, OnDestroy {
   onFilterSelection(event: object) {
     // console.log("onFilterSelection event: ", event);
     this.simpleFiltersValue$.next(event);
+  }
+
+  onActiveFiltersUpdate(event: Map<string, Option[]>) {
+    this.activeFilters = event;
   }
 }
