@@ -1,5 +1,6 @@
+import { createCustomElement } from '@angular/elements';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, ApplicationRef, Injector, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ApplicationRef, Injector, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
@@ -46,6 +47,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
 };
 
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [AppComponent],
   imports: [
     CommonModule,
@@ -96,7 +98,14 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(injector: Injector) {
+    const el = createCustomElement(AppComponent, {injector});
+    customElements.define("igo2-quebec-integrable", el);
+  }
+
+  ngDoBootstrap() { }
+}
 
 function appInitializerFactory(
   injector: Injector,

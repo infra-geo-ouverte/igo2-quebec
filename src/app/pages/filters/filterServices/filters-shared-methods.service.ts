@@ -13,7 +13,7 @@ export class FiltersSharedMethodsService {
 
   public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
 
-  async getMunicipalityFromTerrAPI(locationType: string, coordinates: string): Promise<FeatureCollection> {
+  async getLocationDataFromTerrAPI(locationType: string, coordinates: string): Promise<FeatureCollection> {
     const url: string = this.terrAPIBaseURL + "locate?type=" + locationType + "&loc=" + coordinates;
 
     let response: FeatureCollection;

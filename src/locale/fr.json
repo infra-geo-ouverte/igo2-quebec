@@ -49,6 +49,7 @@
     "previousPageLabel": "Page précédente"
   },
   "simpleFeatureList": {
+    "email": "Email",
     "selectEntity": "Cadrer sur l'élément",
     "unselectEntity": "Désélectionner l'élément",
     "header": {

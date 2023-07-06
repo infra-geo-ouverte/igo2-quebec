@@ -19,7 +19,7 @@
               <div>
                 <div class ="description" *ngIf="attribute.description"
                 [ngClass]="attribute.header">
-                {{ attribute.description }}
+                {{ attribute.description + " :"}}
                 </div>
               </div>
               <div class="info">
@@ -30,11 +30,11 @@
                 matTooltipShowDelay="500"
                 [ngClass]="attribute.header"
                 (click)="!entityIsSelected ? selectEntity(entity) : unselectEntity(entity)"
-                [innerHTML]="createAttribute(entity, attribute)">
+                [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
                 <div *ngIf="!attribute.header || attribute.header !== 'h1'"
-                [ngClass]="attribute.header ? attribute.header : undefined"
-                [innerHTML]="createAttribute(entity, attribute)">
+                [ngClass]="attribute.header ? attribute.header : 'standard'"
+                [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
               </div>
             </div>

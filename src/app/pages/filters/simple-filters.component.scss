@@ -43,9 +43,9 @@
 
 .filter-description {
 	font-family: "Open Sans", sans-serif;
-	font-weight: bold;
-	color: #095797;
+	font-weight: 600;
 	font-size: 16px;
+	cursor: text;
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
@@ -133,6 +133,19 @@
 .filter-description-info {
 	display:flex;
 	justify-content: space-between;
+}
+
+.disabled {
+	color: gray;
+}
+
+.filter-info {
+	font-size: 14.4px;
+	cursor: text;
+}
+
+mat-divider {
+	margin: 0px 16px;
 }
 
 // ::ng-deep .mat-form-field-wrapper {

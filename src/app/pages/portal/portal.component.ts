@@ -102,11 +102,14 @@ import { Option } from '../filters/simple-filters.interface';
 export class PortalComponent implements OnInit, OnDestroy {
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
   public entitiesAll: Array<Object>;  //all entities
-  public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
+  public entitiesList: Array<Object>  //filtered entities
+  // public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
+  // public activeFilters$: BehaviorSubject<Map<string, Option[]>> = new BehaviorSubject<Map<string, Option[]>>(new Map()));
   public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
   public clickedEntities$: BehaviorSubject<Feature[]> = new BehaviorSubject(undefined);
   public showSimpleFilters: boolean = false;
   public showSimpleFeatureList: boolean = false;
+  public showMap: boolean = false;
   public showRotationButtonIfNoRotation: boolean = false;
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
@@ -144,6 +147,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     pageSize: 50, // Number of items to display on a page.
     pageSizeOptions: [1, 5, 10, 20, 50, 100, 500] // The set of provided page size options to display to the user.
   };
+  public useEmbeddedVersion = false;
   public workspaceMenuClass = 'workspace-menu';
 
   public fullExtent = this.storageService.get('fullExtent') as boolean;
@@ -304,6 +308,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private pwaService: PwaService
   ) {
+      this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion');
       this.entitiesAll = this.configService.getConfig('temporaryEntitiesAll');
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
@@ -320,6 +325,9 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
       this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
       this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
+      this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ? false : this.configService.getConfig('useEmbeddedVersion.showMap');
+
+      console.log("SHOW STATUS ", this.showSimpleFeatureList, " ", this.showSimpleFilters, " ", this.showMap);
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -490,7 +498,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     );
 
     let properties = Object.keys(this.entitiesAll[0]["properties"]);
-    console.log("properties ", properties);
+    // console.log("properties ", properties);
     for(let property of properties){
       let values: Array<Option> = [];
       for(let entry of this.entitiesAll){
@@ -508,10 +516,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
-      console.log("mobile ", this.mobile);
+      // console.log("mobile ", this.mobile);
     } else {
       this.mobile = true;
-      console.log("mobile ", this.mobile);
+      // console.log("mobile ", this.mobile);
     }
   }
 
@@ -1231,7 +1239,13 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.simpleFiltersValue$.next(event);
   }
 
-  onActiveFiltersUpdate(event: Map<string, Option[]>) {
-    this.activeFilters = event;
+  // onActiveFiltersUpdate(event: Map<string, Option[]>) {
+  //   console.log("change af ", event)
+  //   this.activeFilters = event;
+  //   // this.activeFilters$.next(event);
+  // }
+
+  onEntitiesListUpdate(event: Array<Object>) {
+    this.entitiesList = event;
   }
 }

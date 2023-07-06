@@ -27,11 +27,12 @@
               [matAutocomplete]="auto"
               [placeholder]="'simpleFilters.placeholder' | translate">
             <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
-              <mat-option *ngFor="let option of getOptions(control.key)" [value]="option">
+              <mat-option *ngFor="let option of getOptions(control.key)" [value]="option"
+              [ngClass]="option.count === 0 ? 'disabled' : 'enabled'">
                 <mat-checkbox
                   [checked]="option.selected">
-                  {{ option.nom }}
-                  <!-- {{ option.nom + " count: " + option.count }} -->
+                  <!-- {{ option.nom }} -->
+                  {{ option.nom + " (" + option.count + ")"}}
                 </mat-checkbox>
                 <!-- <mat-checkbox *ngIf="!option.nom">
                   {{ option }}
@@ -53,7 +54,6 @@
       </form>
     </div>
   </div>
-  <br>
 </div>
 
 
@@ -77,21 +77,23 @@
             <span class="filter-description">{{ getLabel(control.key) }}</span>
             <span *ngIf="getSelectionCount(control.key) == 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
             <span *ngIf="getSelectionCount(control.key) > 1" class="filter-info"> {{getSelectionCount(control.key)}} {{ 'simpleFilters.selecteds' | translate}} </span>
-          </div>          <mat-form-field
+          </div>
+          <mat-form-field
             class="filter-field"
             appearance="outline"
             floatLabel="auto">
-            <mat-label>{{ getLabel(control.key) }}</mat-label>
             <input
               matInput
               type="text"
               [formControlName]="control.key"
-              [matAutocomplete]="auto">
+              [matAutocomplete]="auto"
+              [placeholder]="'simpleFilters.placeholder' | translate">
             <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
-              <mat-option *ngFor="let option of getOptions(control.key)" [value]="option">
+              <mat-option *ngFor="let option of getOptions(control.key)" [value]="option"
+              [ngClass]="option.count === 0 ? 'disabled' : 'enabled'">
                 <mat-checkbox
                   [checked]="option.selected">
-                  {{ option.nom }}
+                  {{ option.nom + " (" + option.count + ")"}}
                 </mat-checkbox>
               </mat-option>
             </mat-autocomplete>
@@ -110,5 +112,4 @@
       </form>
     </div>
   </div>
-  <br>
 </div>

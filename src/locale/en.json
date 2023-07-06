@@ -50,6 +50,7 @@
     "previousPageLabel": "Previous page"
   },
   "simpleFeatureList": {
+    "email": "Email",
     "selectEntity": "Zoom on element",
     "unselectEntity": "Unselect element",
     "header": {

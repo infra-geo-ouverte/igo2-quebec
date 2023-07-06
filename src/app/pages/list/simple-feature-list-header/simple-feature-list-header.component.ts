@@ -30,9 +30,9 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
   constructor(private filterOptionService: FiltersOptionService, private filterSortService: FiltersSortService, private filterPageService: FiltersPageService, private configService: ConfigService, private translateService: LanguageService) {  }
 
   ngOnInit() {
-    console.log("sortOptions ", this.sortOptions);
+    // console.log("sortOptions ", this.sortOptions);
     this.defaultSortOption = this.sortOptions[1][1];
-    console.log("defaultOption ", this.sortOptions[1]);
+    // console.log("defaultOption ", this.sortOptions[1]);
     let paginator = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator')
     // this.defaultPageOption = this.pageOptions[0];
     this.defaultPageOption = paginator.pageSize !== undefined ? paginator.pageSize : this.pageOptions[0];

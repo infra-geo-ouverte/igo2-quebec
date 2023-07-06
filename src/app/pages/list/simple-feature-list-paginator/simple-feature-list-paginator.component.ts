@@ -43,13 +43,13 @@ export class SimpleFeatureListPaginatorComponent implements OnInit, OnChanges, O
 
   ngOnChanges(changes: SimpleChanges) {
     // if number of pages changes...
-    console.log("changes ", changes);
-    console.log("changes.numberOfPages ", changes.numberOfPages)
+    // console.log("changes ", changes);
+    // console.log("changes.numberOfPages ", changes.numberOfPages)
     // if (!changes.numberOfPages?.firstChange) {
       // update number of pages and reset page number
       // this.pageSize = changes.pageSize.currentValue;
       if(changes.numberOfPages){
-        console.log("changes.numberOfPages.currentValue ", changes.numberOfPages.currentValue)
+        // console.log("changes.numberOfPages.currentValue ", changes.numberOfPages.currentValue)
         this.numberOfPages = changes.numberOfPages.currentValue;
         this.currentPageNumber$.next(1);
       }

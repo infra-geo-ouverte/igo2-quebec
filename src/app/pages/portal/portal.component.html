@@ -1,4 +1,4 @@
-<div [ngClass]="mobile ? 'portal-mobile' : 'portal-desktop'">
+<div [ngClass]="mobile ? 'portal-mobile' : (showSimpleFeatureList? 'portal-desktop-flex' : 'portal-desktop')">
 
   <div id="list-scroll" class="left-filter-and-map-div">
     <app-simple-filters *ngIf="showSimpleFilters"
@@ -9,7 +9,7 @@
       (activeFiltersUpdate)="onActiveFiltersUpdate($event)">
     </app-simple-filters>
 
-    <mat-sidenav-container class="sidenav" *ngIf="!hasToolbox">
+    <mat-sidenav-container *ngIf="showMap && !hasToolbox" class="sidenav">
       <mat-sidenav-content position="end">
 
         <igo-backdrop
@@ -74,12 +74,12 @@
           [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
             <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
             <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
-            <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+            <igo-rotation-button *ngIf="!useEmbeddedVersion" [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
             <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
           </div>
 
             <app-bottomresult
-              *ngIf="mobile"
+              *ngIf="mobile && !useEmbeddedVersion"
               [map]="map">
             </app-bottomresult>
         </igo-map-browser>
@@ -97,15 +97,15 @@
       
     </mat-sidenav-container>
   </div>
-  <div class="right-list-div">
+  <div class="right-list-div" *ngIf="showSimpleFeatureList">
     <!-- <app-simple-feature-list *ngIf="showSimpleFeatureList && selectedWorkspace$ | async as workspace"
     [entityStore]="workspace.entityStore"
     [clickedEntities]="clickedEntities$ | async"
     [simpleFiltersValue]="simpleFiltersValue$ | async"
     (listSelection)="entitySelectChange($event)"></app-simple-feature-list> -->
-    <app-simple-feature-list *ngIf="showSimpleFeatureList"
+    <app-simple-feature-list
     [propertiesMap]="propertiesMap"
-    [activeFilters]="activeFilters"
+    [entitiesList]="entitiesList"
     [simpleFiltersValue]="simpleFiltersValue$ | async"
     (listSelection)="entitySelectChange($event)"></app-simple-feature-list>
   </div>
