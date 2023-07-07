@@ -4,6 +4,7 @@ import { TypeOptions, Option } from '../../filters/simple-filters.interface'
 import { FiltersSortService } from '../../filters/filterServices/filters-sort-service.service';
 import { FiltersPageService } from '../../filters/filterServices/filters-page-service.service';
 import { FiltersOptionService } from '../../filters/filterServices/filters-option-service.service';
+import { FiltersTypesService } from '../../filters/filterServices/filters-types.service';
 import { ConfigService } from '@igo2/core';
 import { LanguageService } from '@igo2/core';
 
@@ -25,14 +26,70 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
   public entitiesLength: number;
 
   public defaultSortOption: string;
+  public defaultSortCode: string;
   public defaultPageOption: number;
+  public possibleSortOptions: [string, string][] = [];
 
-  constructor(private filterOptionService: FiltersOptionService, private filterSortService: FiltersSortService, private filterPageService: FiltersPageService, private configService: ConfigService, private translateService: LanguageService) {  }
+  constructor(private filterTypeService: FiltersTypesService, private filterOptionService: FiltersOptionService, private filterSortService: FiltersSortService, private filterPageService: FiltersPageService, private configService: ConfigService, private translateService: LanguageService) {  }
 
   ngOnInit() {
-    // console.log("sortOptions ", this.sortOptions);
-    this.defaultSortOption = this.sortOptions[1][1];
-    // console.log("defaultOption ", this.sortOptions[1]);
+
+    this.defaultSortOption = this.sortOptions[0][1];
+    this.defaultSortCode = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.attributeName');
+
+    // console.log("defaultSortCode ", this.defaultSortCode);
+
+    this.filterTypeService.onEvent().subscribe( filterTypes => {
+      // console.log("filterTypes event ", filterTypes);
+      let filter: [string, string];
+      for(let sortOption of filterTypes) {
+        for(let option of this.sortOptions) {
+          // console.log("option[0] ", option[0], " sortOption ", sortOption);
+          if(option[0] === sortOption){
+            filter = option;
+          }
+        }
+        // let filter = this.sortOptions.find(filter => filter[0] === sortOption);
+        // console.log("filterrrr ", filter);
+        if(filter && !this.possibleSortOptions.includes(filter)){
+          this.possibleSortOptions.push(filter);
+        }
+      }
+
+      // console.log("possibleSortOptions ", this.possibleSortOptions);
+
+      if(this.defaultSortCode === undefined) {
+        this.defaultSortCode = this.sortOptions[0][0]
+      }else{
+        let valid = false;
+        for(let sort of this.possibleSortOptions){
+          if(sort[0] === this.defaultSortCode){
+            valid = true;
+          }
+        }
+        if(!valid) {
+          this.defaultSortCode = this.sortOptions[0][0];
+        }
+      }
+
+      let set = false;
+      for(let possibleSortOption of this.possibleSortOptions){
+        // console.log("possibleSortOption ", possibleSortOption);
+        if(possibleSortOption[0] === this.defaultSortCode){
+          // console.log("matched ", this.defaultSortCode);
+          this.defaultSortOption = possibleSortOption[1];
+          this.defaultSortCode = possibleSortOption[0];
+          this.sortBySelected.emit(this.defaultSortCode);
+          set = true;
+        }
+      }
+      // console.log("set ", set);
+      // console.log("defaultcode ", this.defaultSortCode);
+      if(!set) {
+        this.sortBySelected.emit(this.defaultSortCode);
+      }
+    });
+
     let paginator = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator')
     // this.defaultPageOption = this.pageOptions[0];
     this.defaultPageOption = paginator.pageSize !== undefined ? paginator.pageSize : this.pageOptions[0];

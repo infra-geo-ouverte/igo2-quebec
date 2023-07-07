@@ -101,7 +101,7 @@ import { Option } from '../filters/simple-filters.interface';
 
 export class PortalComponent implements OnInit, OnDestroy {
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
-  public entitiesAll: Array<Object>;  //all entities
+  // public entitiesAll: Array<Object>;  //all entities
   public entitiesList: Array<Object>  //filtered entities
   // public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
   // public activeFilters$: BehaviorSubject<Map<string, Option[]>> = new BehaviorSubject<Map<string, Option[]>>(new Map()));
@@ -309,7 +309,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     private pwaService: PwaService
   ) {
       this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion');
-      this.entitiesAll = this.configService.getConfig('temporaryEntitiesAll');
+      // this.entitiesAll = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
@@ -457,7 +457,7 @@ export class PortalComponent implements OnInit, OnDestroy {
         }else{
           // console.log("workspace doesnt exist")
         }
-      }, 15000);
+      }, 5000);
     }
 
     this.activeWidget$$ = this.workspaceState.activeWorkspaceWidget$.subscribe(
@@ -496,20 +496,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.breakpoint$.subscribe(() =>
       this.breakpointChanged()
     );
-
-    let properties = Object.keys(this.entitiesAll[0]["properties"]);
-    // console.log("properties ", properties);
-    for(let property of properties){
-      let values: Array<Option> = [];
-      for(let entry of this.entitiesAll){
-        // console.log("entry ", entry, "property ", property)
-        // console.log(entry["properties"][property]);
-        let option: Option = {nom: entry["properties"][property], type: property};
-        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
-      }
-      this.propertiesMap.set(property, values);
-    }
-    // console.log("propertiesMap ", this.propertiesMap);
   }
 
   public breakpointChanged() {

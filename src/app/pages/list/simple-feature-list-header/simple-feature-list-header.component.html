@@ -31,7 +31,7 @@
           <p class="option-label"> {{'simpleFeatureList.header.options.sort'| translate}} </p>
           <mat-form-field id="order-select" appearance="outline">
               <mat-select (selectionChange)="onSortSelected($event.value, sortOptions)" disableOptionCentering [(value)]="defaultSortOption">
-                  <mat-option *ngFor="let sortOption of sortOptions"
+                  <mat-option *ngFor="let sortOption of possibleSortOptions"
                       [value]="sortOption[1]">
                       {{ sortOption[1] }}
                   </mat-option>

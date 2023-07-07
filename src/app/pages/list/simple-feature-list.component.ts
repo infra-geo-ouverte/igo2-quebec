@@ -13,6 +13,7 @@ import { FiltersSharedMethodsService } from '../filters/filterServices/filters-s
 import { ListEntitiesService } from './listServices/list-entities-services.service';
 import { FiltersActiveFiltersService } from '../filters/filterServices/filters-active-filters.service';
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
+import { FiltersTypesService } from '../filters/filterServices/filters-types.service';
 
 @Component({
   selector: 'app-simple-feature-list',
@@ -21,14 +22,15 @@ import { FiltersAdditionalTypesService } from '../filters/filterServices/filters
 })
 
 export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy {
-  // @Input() entityStore: EntityStore; // a store that contains all the entities
+  @Input() entityStore: EntityStore; // a store that contains all the entities
   // @Input() clickedEntities: Array<Feature>; // an array that contains the entities clicked in the map
   @Input() entitiesList: Array<Object>
   @Input() simpleFiltersValue: object; // an object containing the value of the filters
   @Output() listSelection = new EventEmitter(); // an event emitter that outputs the entity selected in the list
   // @Input() activeFilters: Map<string, Option[]>;
-  @Input() propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 
+  public filterTypes: string[];
+  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
   public entitiesAll: Array<Object>; // an array containing all the entities in the store
   public entitiesShown: Array<Object>; // an array containing the entities currently shown
@@ -56,10 +58,11 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   public activeFilters: Map<string, Option[]> = new Map();
   public additionalProperties: Map<number, Map<string,string>>;
   public additionalTypes: Array<string>;
-  public pageOptions: Array<number> = [1,2,5,10,25];  //page size options
-  public sortOptions: [string, string][] = this.configService.getConfig('useEmbeddedVersion.simpleFilters') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFilters').map(filter => [filter.type, filter.description]) : [];  //sort options of the form ['Région', 'reg'], ['Numéro de Bureau', 'id'], ...
+  public pageOptions: Array<number> = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
+  public sortOptions: [string, string][] = this.configService.getConfig('useEmbeddedVersion.simpleFilters') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFilters').map(filter => [filter.type, filter.description] ) : [];
 
-  constructor(private igoLanguageModule: IgoLanguageModule, private languageService: LanguageService, private additionalTypesService: FiltersAdditionalTypesService,private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private configService: ConfigService, private filterAdditionalPropertiesService: FiltersAdditionalPropertiesService, private filterPageService: FiltersPageService, private filterSortService: FiltersSortService) {}
+
+  constructor(private filterTypeService: FiltersTypesService, private languageService: LanguageService, private additionalTypesService: FiltersAdditionalTypesService,private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private configService: ConfigService, private filterAdditionalPropertiesService: FiltersAdditionalPropertiesService, private filterPageService: FiltersPageService, private filterSortService: FiltersSortService) {}
 
   ngOnInit(): void {
     //set additionalProperties when they get created in the filters component
@@ -68,13 +71,15 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       this.additionalProperties = event; });
 
     // get the entities from the layer/store
-    // this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
-    // this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
+    this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
+    this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
+
+    console.log("entitiesAll ", this.entitiesAll);
 
     this.simpleFeatureListConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList');
 
-    this.entitiesAll = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
-    this.entitiesList = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
+    // this.entitiesAll = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
+    // this.entitiesList = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
 
     this.listEntitiesService.emitEvent(this.entitiesList);
 
@@ -166,6 +171,19 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       console.log("additionalTypes service ", types);
     })
 
+    let properties = Object.keys(this.entitiesAll[0]["properties"]);
+    // console.log("properties ", properties);
+    for(let property of properties){
+      let values: Array<Option> = [];
+      for(let entry of this.entitiesAll){
+        // console.log("entry ", entry, "property ", property)
+        // console.log(entry["properties"][property]);
+        let option: Option = {nom: entry["properties"][property], type: property};
+        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
+      }
+      this.propertiesMap.set(property, values);
+    }
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -231,7 +249,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private sortEntities(entities: Array<Object>, sortBy: string) {
-    let sortedEntities: Array<Object> = [];
+    console.log("sortEntities ", sortBy)
 
     if(this.additionalTypes && this.additionalTypes.includes(sortBy)) {
       entities.sort((a,b) => {

@@ -1,8 +1,9 @@
 <div [ngClass]="mobile ? 'portal-mobile' : (showSimpleFeatureList? 'portal-desktop-flex' : 'portal-desktop')">
 
   <div id="list-scroll" class="left-filter-and-map-div">
-    <app-simple-filters *ngIf="showSimpleFilters"
+    <app-simple-filters *ngIf="showSimpleFilters && selectedWorkspace$ | async as workspace"
       [propertiesMap]="propertiesMap"
+      [entityStore]="workspace.entityStore"
       class="simple-filters"
       [isMobile] = "mobile"
       (filterSelection)="onFilterSelection($event)"
@@ -54,6 +55,8 @@
 
         <igo-map-browser      
           igoMapOffline
+          igoWorkspaceUpdator
+          [workspaceStore]="workspaceStore"
           #mapBrowser
           igoMapContext
           igoLayerContext
@@ -103,8 +106,8 @@
     [clickedEntities]="clickedEntities$ | async"
     [simpleFiltersValue]="simpleFiltersValue$ | async"
     (listSelection)="entitySelectChange($event)"></app-simple-feature-list> -->
-    <app-simple-feature-list
-    [propertiesMap]="propertiesMap"
+    <app-simple-feature-list *ngIf="selectedWorkspace$ | async as workspace"
+    [entityStore]="workspace.entityStore"
     [entitiesList]="entitiesList"
     [simpleFiltersValue]="simpleFiltersValue$ | async"
     (listSelection)="entitySelectChange($event)"></app-simple-feature-list>

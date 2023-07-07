@@ -2,7 +2,7 @@ import { FiltersAdditionalTypesService } from './filterServices/filters-addition
 import { FiltersActiveFiltersService } from './filterServices/filters-active-filters.service';
 import { FiltersSharedMethodsService } from './filterServices/filters-shared-methods.service';
 import { FiltersAdditionalPropertiesService } from './filterServices/filters-additional-properties.service';
-import { FeatureCollection } from 'geojson';
+import { Feature, FeatureCollection } from 'geojson';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { SimpleFilter, TypeOptions, Option } from './simple-filters.interface';
@@ -13,6 +13,7 @@ import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/m
 import { Subscription } from 'rxjs';
 import { FiltersOptionService } from './filterServices/filters-option-service.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
+import { FiltersTypesService } from './filterServices/filters-types.service';
 
 @Component({
   selector: 'app-simple-filters',
@@ -21,7 +22,8 @@ import { ListEntitiesService } from '../list/listServices/list-entities-services
 })
 export class SimpleFiltersComponent implements OnInit, OnDestroy {
   @Input() isMobile: boolean;
-  @Input() propertiesMap: Map<string, Array<Option>>;
+  // @Input() propertiesMap: Map<string, Array<Option>>;
+  @Input() entityStore;
   @Output() filterSelection: EventEmitter<object> = new EventEmitter();
   @Output() activeFiltersUpdate: EventEmitter<Map<string, Option[]>> = new EventEmitter();
   @ViewChild(MatAutocompleteTrigger) panelTrigger: MatAutocompleteTrigger;
@@ -43,11 +45,11 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public additionalTypes: Array<string> = [];  //list of all additional filter types (corresponding to the keys of the map in additional properties)
   public additionalProperties: Map<number, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
   public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "id", "nom", etc.)
-  // public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
+  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
+  public filterTypes: Array<string> = [];
 
-  constructor(private additionalTypesService: FiltersAdditionalTypesService, private cdRef: ChangeDetectorRef, private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private filterMethods: FiltersSharedMethodsService, private additionalPropertiesService: FiltersAdditionalPropertiesService, private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder, private filterOptionService: FiltersOptionService) {
-    this.entitiesAll = this.configService.getConfig("temporaryEntitiesAll");
-    this.entitiesList = this.entitiesAll;
+  constructor(private filterTypesService: FiltersTypesService, private additionalTypesService: FiltersAdditionalTypesService, private cdRef: ChangeDetectorRef, private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private filterMethods: FiltersSharedMethodsService, private additionalPropertiesService: FiltersAdditionalPropertiesService, private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder, private filterOptionService: FiltersOptionService) {
+
   }
 
   // getter of the form group controls
@@ -56,6 +58,22 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+    this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
+    this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
+
+    let properties = Object.keys(this.entitiesAll[0]["properties"]);
+    // console.log("properties ", properties);
+    for(let property of properties){
+      let values: Array<Option> = [];
+      for(let entry of this.entitiesAll){
+        // console.log("entry ", entry, "property ", property)
+        // console.log(entry["properties"][property]);
+        let option: Option = {nom: entry["properties"][property], type: property};
+        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
+      }
+      this.propertiesMap.set(property, values);
+    }
+
     // get the simpleFilters config input by the user in the config file
     this.simpleFiltersConfig = this.configService.getConfig('useEmbeddedVersion.simpleFilters');
 
@@ -188,7 +206,11 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     // 	// when options (feature collection) are returned...
 		// // if type is not included in terrAPI...
   	// } else
+
+    console.log("propertyMap ", this.propertiesMap);
+
     if (this.propertiesMap.has(filter.type)){
+      this.filterTypes.push(filter.type);
     // console.log("terrapi does not contain ", filter.type);
     // Add the options from the entitiesAll, not from the terrAPI call
       let ops: Array<Option> = [];
@@ -202,9 +224,13 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     }
     //need to also check if it is one of the location types that are accepted for the location terrapi call... can worry about this later
     else if (this.terrAPITypes.includes(filter.type)){
+      this.filterTypes.push(filter.type);
       let options: Array<Option> = [];
       for(let entity of this.entitiesAll) {
-        let coords = entity["properties"]["coordonnees"];
+        console.log("entity ", entity);
+        let longitude = entity["geometry"]["coordinates"][0];
+        let latitude = entity["geometry"]["coordinates"][1];
+        let coords: string = longitude + "," + latitude;
         await this.filterMethods.getLocationDataFromTerrAPI(filter.type, coords).then((featureCollection: FeatureCollection) => {
           featureCollection.features.forEach(feature => {
           // ...push type, code and name of each option
@@ -243,6 +269,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
       this.additionalPropertiesService.emitEvent(this.additionalProperties);
       this.additionalTypesService.emitEvent(this.additionalTypes);
+      this.filterTypesService.emitEvent(this.filterTypes);
       typeOptions = {type: filter.type, description: filter.description, options: options};
       // console.log("entities do not contain ", filter.type);
     }

@@ -8,6 +8,8 @@ import {
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
 import { PwaService } from './services/pwa.service';
+import { Option } from './pages/filters/simple-filters.interface';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -19,6 +21,11 @@ export class AppComponent {
   		this.isMobile = window.innerWidth >= 768 ? false : true;
       // console.log("isMobile: ", this.isMobile);
 	}
+
+  // public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
+  // public entitiesAll: Array<Object>;  //all entities
+  // public entitiesList: Array<Object>  //filtered entities
+  // public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
 
   public isMobile: boolean = window.innerWidth >= 768 ? false : true; //boolean to determine screen width for layout
   public authConfig: AuthOptions;
