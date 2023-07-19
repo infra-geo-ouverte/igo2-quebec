@@ -615,7 +615,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.entitiesAllService.onEvent().subscribe(entitiesAll => this.entitiesAll = entitiesAll);
     this.entitiesListService.onEvent().subscribe(entitiesList => {
       this.entitiesList = entitiesList;
-      // this.fitFeatures();
+      this.fitFeatures();
       console.log("EL SERVICE ", this.entitiesList);
     });
 
@@ -1653,11 +1653,14 @@ export class PortalComponent implements OnInit, OnDestroy {
 
       const longitude = feature["geometry"]["coordinates"][0];  //E-W
       const latitude = feature["geometry"]["coordinates"][1];   //N-S
+      console.log("COORD ", feature["geometry"]["coordinates"]);
 
       w = Math.min(longitude, w);
       s = Math.min(latitude, s);
       e = Math.max(longitude, e);
       n = Math.max(latitude, n);
+      console.log([n,s,e,w]);
+
     }
 
     // [minx, miny, maxx, maxy]
@@ -1683,14 +1686,15 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
 
     let mapExtent: MapExtent = [minX, minY, maxX, maxY];
-    let mapCenter: [number, number] = [centerX, centerY];
+    // let mapCenter: [number, number] = [centerX, centerY];
     console.log("current center ", this.map.getCenter());
-    console.log("center ", mapCenter)
+    // console.log("center ", mapCenter)
     // console.log("current extent " , this.map.getExtent());
-    // console.log("new extent ", mapExtent);
-    let options: MapViewOptions = {center: mapCenter};
+    console.log("new extent ", mapExtent);
+    // let options: MapViewOptions = {center: mapCenter};
+    this.map.viewController.zoomToExtent(mapExtent);
     // console.log("options ", options);
-    this.map.updateView(options);
+    // this.map.updateView(options);
   }
 
   public async terrAPICoordReformat(coord: string, projection: string): Promise<number[]> {
