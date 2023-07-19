@@ -29,6 +29,6 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/
     LegendButtonDialogComponent,
     MatIconModule
   ],
-  bootstrap: [LegendButtonComponent],
+  // bootstrap: [LegendButtonComponent],
 })
 export class LegendButtonModule { }

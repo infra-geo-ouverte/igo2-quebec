@@ -6,9 +6,9 @@ import { Subject } from 'rxjs';
 })
 export class FiltersAdditionalPropertiesService {
 
-  private eventSubject = new Subject<Map<number, Map<string, string>>>();
+  private eventSubject = new Subject<Map<string, Map<string, string>>>();
 
-  emitEvent(newMap: Map<number, Map<string, string>>) {
+  emitEvent(newMap: Map<string, Map<string, string>>) {
     this.eventSubject.next(newMap);
   }
 

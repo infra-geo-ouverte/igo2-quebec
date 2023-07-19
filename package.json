@@ -11,7 +11,7 @@
     "ng": "ng",
     "start": "gulp watch:locale | ng serve --host 0.0.0.0 --port 4202 --proxy-config proxy.conf.json",
     "start-pwa": "ng build --configuration pwa --output-path ./dist/pwa && npm run serve.pwa",
-    "build": "ng build --output-hashing=none --configuration production",
+    "build": "ng build --output-hashing none --configuration production",
     "package":"cat dist/igo2-quebec/{runtime,polyfills,main}.js > elements/igo2-qc-element.js",
     "lint": "ng lint",
     "lint.fix": "ng lint --fix",

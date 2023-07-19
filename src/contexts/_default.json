@@ -7,7 +7,7 @@
       "id": "dq2",
       "sourceOptions": {
         "type": "wms",
-        "url": "https://geoegl.msp.gouv.qc.ca/apis/ws/igo_gouvouvert.fcgi",
+        "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/complet.fcgi",
         "params": {
           "layers": "MSP_DIRECTION_REG_COG_P_V"
         },

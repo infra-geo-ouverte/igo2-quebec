@@ -96,15 +96,21 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     }),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions }
   ],
+  entryComponents: [
+    AppComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  public injector: Injector;
   constructor(injector: Injector) {
-    const el = createCustomElement(AppComponent, {injector});
-    customElements.define("igo2-quebec-integrable", el);
+    this.injector = injector;
   }
 
-  ngDoBootstrap() { }
+  ngDoBootstrap() {
+    const el = createCustomElement(AppComponent, {injector: this.injector});
+    customElements.define("igo2-quebec-integrable", el);
+  }
 }
 
 function appInitializerFactory(

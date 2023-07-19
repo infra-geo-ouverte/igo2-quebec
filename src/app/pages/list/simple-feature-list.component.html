@@ -23,16 +23,16 @@
                 </div>
               </div>
               <div class="info">
-                <div *ngIf="attribute.header === 'h1'"
+                <div *ngIf="attribute.header === 'title'"
                 class="title"
-                [matTooltip]="!entityIsSelected ? ('simpleFeatureList.selectEntity' | translate) : ('simpleFeatureList.unselectEntity' | translate)"
+                [matTooltip]="'simpleFeatureList.selectEntity' | translate"
                 tooltip-position="below"
                 matTooltipShowDelay="500"
                 [ngClass]="attribute.header"
-                (click)="!entityIsSelected ? selectEntity(entity) : unselectEntity(entity)"
+                (click)="selectEntity(entity)"
                 [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
-                <div *ngIf="!attribute.header || attribute.header !== 'h1'"
+                <div *ngIf="!attribute.header || attribute.header !== 'title'"
                 [ngClass]="attribute.header ? attribute.header : 'standard'"
                 [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
@@ -40,20 +40,6 @@
             </div>
           </ng-container>
         </ng-container>
-      </div>
-      <div class="selectButton">
-        <button
-          mat-mini-fab
-          class="mat-elevation-z0"
-          [color]="!entityIsSelected ? 'primary' : 'warn'"
-          [matTooltip]="!entityIsSelected ? ('simpleFeatureList.selectEntity' | translate) : ('simpleFeatureList.unselectEntity' | translate)"
-          tooltip-position="below"
-          matTooltipShowDelay="500">
-          <mat-icon
-            [svgIcon]="!entityIsSelected ? 'magnify-plus-outline' : 'close'"
-            (click)="!entityIsSelected ? selectEntity(entity) : unselectEntity(entity)">
-          </mat-icon>
-        </button>
       </div>
     </div>
   </div>

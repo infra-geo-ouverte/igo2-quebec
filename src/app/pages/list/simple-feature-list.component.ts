@@ -1,3 +1,4 @@
+import { Meta } from '@angular/platform-browser';
 import { Feature } from 'geojson';
 import { ConfigService, LanguageService, IgoLanguageModule } from '@igo2/core';
 import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
@@ -11,9 +12,11 @@ import { FiltersAdditionalPropertiesService } from '../filters/filterServices/fi
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FiltersSharedMethodsService } from '../filters/filterServices/filters-shared-methods.service';
 import { ListEntitiesService } from './listServices/list-entities-services.service';
+import { FilteredEntitiesService } from './listServices/filtered-entities.service';
 import { FiltersActiveFiltersService } from '../filters/filterServices/filters-active-filters.service';
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { FiltersTypesService } from '../filters/filterServices/filters-types.service';
+import { EntitiesAllService } from './listServices/entities-all.service';
 
 @Component({
   selector: 'app-simple-feature-list',
@@ -23,12 +26,13 @@ import { FiltersTypesService } from '../filters/filterServices/filters-types.ser
 
 export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() entityStore: EntityStore; // a store that contains all the entities
-  // @Input() clickedEntities: Array<Feature>; // an array that contains the entities clicked in the map
+  @Input() clickedEntities: Array<Feature>; // an array that contains the entities clicked in the map
   @Input() entitiesList: Array<Object>
   @Input() simpleFiltersValue: object; // an object containing the value of the filters
   @Output() listSelection = new EventEmitter(); // an event emitter that outputs the entity selected in the list
   // @Input() activeFilters: Map<string, Option[]>;
 
+  public clickedEntitiesUpdated: Array<Feature> = [];
   public filterTypes: string[];
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
@@ -36,7 +40,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   public entitiesShown: Array<Object>; // an array containing the entities currently shown
   public entitiesList$: BehaviorSubject<Array<Object>> = new BehaviorSubject([]); // an observable of an array of filtered entities
   public entitiesList$$: Subscription; // subscription to filtered list
-  public entityIsSelected: boolean; // a boolean stating whether an entity has been selected in the list or not
 
   public simpleFeatureListConfig: SimpleFeatureList; // the simpleFeatureList config input by the user
   public attributeOrder: AttributeOrder; // the attribute order specified in the simpleFeatureList config
@@ -56,25 +59,27 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   public elementsUpperBound: number; /// the highest index (+ 1) of an element in the current page
 
   public activeFilters: Map<string, Option[]> = new Map();
-  public additionalProperties: Map<number, Map<string,string>>;
+  public additionalProperties: Map<string, Map<string,string>>;
   public additionalTypes: Array<string>;
   public pageOptions: Array<number> = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
   public sortOptions: [string, string][] = this.configService.getConfig('useEmbeddedVersion.simpleFilters') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFilters').map(filter => [filter.type, filter.description] ) : [];
 
 
-  constructor(private filterTypeService: FiltersTypesService, private languageService: LanguageService, private additionalTypesService: FiltersAdditionalTypesService,private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private configService: ConfigService, private filterAdditionalPropertiesService: FiltersAdditionalPropertiesService, private filterPageService: FiltersPageService, private filterSortService: FiltersSortService) {}
+  constructor(private entitiesAllService: EntitiesAllService, private filteredEntitiesService: FilteredEntitiesService, private languageService: LanguageService, private additionalTypesService: FiltersAdditionalTypesService,private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private configService: ConfigService, private filterAdditionalPropertiesService: FiltersAdditionalPropertiesService, private filterPageService: FiltersPageService, private filterSortService: FiltersSortService) {}
 
   ngOnInit(): void {
     //set additionalProperties when they get created in the filters component
     this.filterAdditionalPropertiesService.onEvent().subscribe( event => {
-      console.log("additionalPropertyService: ", event)
+      // console.log("additionalPropertyService: ", event)
       this.additionalProperties = event; });
 
     // get the entities from the layer/store
     this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
     this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
+    console.log("entities test ", this.entitiesAll)
 
-    console.log("entitiesAll ", this.entitiesAll);
+
+    // console.log("entitiesAll ", this.entitiesAll);
 
     this.simpleFeatureListConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList');
 
@@ -82,6 +87,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // this.entitiesList = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
 
     this.listEntitiesService.emitEvent(this.entitiesList);
+    this.entitiesAllService.emitEvent(this.entitiesAll);
 
     // console.log(this.entitiesAll);
     // console.log(this.entitiesList);
@@ -115,12 +121,12 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       this.showPreviousNextPageButtons = this.paginator.showPreviousNextPageButtons !== undefined ?
         this.paginator.showPreviousNextPageButtons : true;
       this.entitiesList$.next(this.entitiesList);
-      // console.log("entitiesList ", this.entitiesList$);
+      console.log("entitiesList ", this.entitiesList$);
     // if the paginator config does not exist, all the entities are shown
     } else {
       // console.log("no paginator");
       this.entitiesShown = this.entitiesList;
-      // console.log("entitiesShown 1 ", this.entitiesShown);
+      console.log("entitiesShown 1 ", this.entitiesShown);
     }
 
     // subscribe to the current page number
@@ -160,7 +166,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // });
 
     this.activeFilterService.onEvent().subscribe(activeFilters => {
-      console.log("afservice ");
+      // console.log("afservice ");
       this.activeFilters = activeFilters;
       this.entitiesList$.next(this.filterEntities());
       this.listEntitiesService.emitEvent(this.entitiesList);
@@ -168,7 +174,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
     this.additionalTypesService.onEvent().subscribe( types => {
       this.additionalTypes = types;
-      console.log("additionalTypes service ", types);
+      // console.log("additionalTypes service ", types);
     })
 
     let properties = Object.keys(this.entitiesAll[0]["properties"]);
@@ -191,21 +197,47 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // console.log("activefilters ", this.activeFilters);
     // if the most recent change is a click on entities on the map...
     if (changes.clickedEntities) {
+      // console.log("clickedEntities change! ", changes)
       if (!changes.clickedEntities.firstChange) {
+
+        // console.log("change: ", changes.clickedEntities.currentValue);
+
         // console.log("clickedEntities not first change");
-        // // change selected state to false for all entities
-        // this.entityStore.state.updateAll({selected: false});
-        // // get array of clicked entities
+        // change selected state to false for all entities
+        this.entityStore.state.updateAll({selected: false});
+        // get array of clicked entities
         // const clickedEntities: Array<Feature> = changes.clickedEntities.currentValue as Array<Feature>;
-        // // if an entity or entities have been clicked...
-        // if (clickedEntities?.length > 0 && clickedEntities !== undefined) {
-        //   // ...show current entities in list
-        //   this.entityStore.state.updateMany(clickedEntities, {selected: true});
-        //   this.entitiesList$.next(clickedEntities);
-        // // ...else show all entities in list
-        // } else {
-        //   this.entitiesList$.next(this.entitiesAll);
+        const clickedEntities: Array<Feature> = changes.clickedEntities.currentValue as Array<Feature>;
+
+
+        // console.log("clickedEntitiesUpdated before loop ", this.clickedEntitiesUpdated);
+        // for(let element of this.clickedEntitiesUpdated){
+        //   console.log("element ", element.properties, " clickedEntities ", clickedEntities[0].properties);
+        //   console.log(element.properties === clickedEntities[0].properties);
         // }
+
+        // if(this.clickedEntitiesUpdated.filter(element => JSON.stringify(element["properties"]) === JSON.stringify(clickedEntities[0]["properties"])).length === 0) {
+        //   console.log("adding")
+        //   this.clickedEntitiesUpdated.push(clickedEntities[0]);
+        // }else{
+        //   console.log("removing")
+        //   this.clickedEntitiesUpdated = this.clickedEntitiesUpdated.filter(element => JSON.stringify(element["properties"]) !== JSON.stringify(clickedEntities[0]["properties"]));
+        // }
+
+        // this.entitiesList$.next(this.clickedEntitiesUpdated);
+
+        // // console.log("clickedEntities ", this.clickedEntities);
+        // console.log("clickedEntitiesUpdated ", this.clickedEntitiesUpdated);
+
+        // if an entity or entities have been clicked...
+        if (clickedEntities?.length > 0 && clickedEntities !== undefined) {
+          // ...show current entities in list
+          this.entityStore.state.updateMany(clickedEntities, {selected: true});
+          this.entitiesList$.next(clickedEntities);
+        // ...else show all entities in list
+        } else {
+          this.entitiesList$.next(this.entitiesAll);
+        }
       }
       // if the most recent change is a filter change...
     } else if (changes.simpleFiltersValue) {
@@ -249,15 +281,15 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private sortEntities(entities: Array<Object>, sortBy: string) {
-    console.log("sortEntities ", sortBy)
+    // console.log("sortEntities ", sortBy)
 
     if(this.additionalTypes && this.additionalTypes.includes(sortBy)) {
       entities.sort((a,b) => {
-        const idA: number = a["properties"]["id"];
-        const idB: number = b["properties"]["id"];
+        let coordsA: string = a["geometry"]["coordinates"][0] + "," + a["geometry"]["coordinates"][1];
+        let coordsB: string = b["geometry"]["coordinates"][0] + "," + b["geometry"]["coordinates"][1];
 
-        let propA: Map<string, string> = this.additionalProperties.get(idA);
-        let propB: Map<string, string> = this.additionalProperties.get(idB);
+        let propA: Map<string, string> = this.additionalProperties.get(coordsA);
+        let propB: Map<string, string> = this.additionalProperties.get(coordsB);
 
         let munA = propA.get(sortBy);
         let munB = propB.get(sortBy);
@@ -271,166 +303,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         return a['properties'][sortBy] > b['properties'][sortBy] ? 1 : a['properties'][sortBy] < b['properties'][sortBy] ? -1 : 0;
       });
     }
-  }
-
-  /**
-   * @description Sort entities according to an attribute
-   * @param entities The entities to sort
-   */
-  private async oldSortEntities(entities: Array<Object>, sortBy: string) {
-    //perform swapping
-    // console.log("list before ", entities);
-
-    if(sortBy === "municipalites"){
-      //TODO - no idea yet how to do this with async stuff and the promises...
-      // console.log("MUNUNUN")
-      // console.log(entities.length);
-      let munA: string;
-      let munB: string;
-
-
-      // entities.sort((a, b) => {
-      //   this.filterMethods.getMunicipality("municipalites", a['properties']['coordonnees']).subscribe(
-      //     (municipality: string) => {
-      //       munA = municipality;
-      //       console.log("Municipality:", municipality);
-      //     },
-      //   );
-      //   this.filterMethods.getMunicipality("municipalites", b['properties']['coordonnees']).subscribe(
-      //     (municipality: string) => {
-      //       munB = municipality;
-      //       console.log("Municipality:", municipality);
-      //     },
-      //   );
-      //   // let munA: string = this.filterMethods.getMunicipality("municipalites", a['properties']['coordonnees']);
-      //   // let munB: string = this.filterMethods.getMunicipality("municipalites", b['properties']['coordonnees']);
-      //   console.log("munA ", munA, " munB ", munB);
-      //   return munB > munB ? 1 : munA < munB ? -1 : 0;
-      // });
-
-      // entities.sort(async (a,b) => {
-      //   await this.filterMethods.getMunicipalityFromTerrAPI(sortBy, a["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-      //     featureCollection.features.forEach(feature => {munA = feature.properties.nom; })});
-      //   await this.filterMethods.getMunicipalityFromTerrAPI(sortBy, b["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-      //     featureCollection.features.forEach(feature => {munB = feature.properties.nom; })});
-      //   console.log("munA ", munA, " munB ", munB);
-      //   console.log("swapping ", munA > munB);
-      //   return Promise.resolve(munA && munB ? (munA > munB ? 1 : munA < munB ? -1 : 0) : 0);
-      //   }).
-        // return munA > munB ? 1 : munA < munB ? -1 : 0; })
-        // .then(featureCollection: FeatureCollection => {
-
-
-        //this approach works for identifying which elements need to be swapped but it doesn't actually swap them... idk why
-        // for (let i = 0; i < entities.length - 1; i++) {
-        //   for (let j = 0; j < entities.length - i - 1; j++) {
-        //     await Promise.all([
-        //       this.filterMethods.getMunicipalityFromTerrAPI(sortBy, entities[j]["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-        //         featureCollection.features.forEach(feature => {
-        //           munA = feature.properties.nom;
-        //           console.log("munAAA", munA);
-        //         });
-        //       }),
-        //       this.filterMethods.getMunicipalityFromTerrAPI(sortBy, entities[j + 1]["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-        //         featureCollection.features.forEach(feature => {
-        //           munB = feature.properties.nom;
-        //           console.log("munBBB", munB);
-        //         });
-        //       })
-        //     ]);
-        //     if (munA > munB) {
-        //       console.log("[i] ", entities[j])
-        //       console.log("[i+1] ", entities[j+1])
-        //       console.log("swapping before ", entities)
-        //       // Swap elements
-        //       const temp = entities[j];
-        //       entities[j] = entities[j + 1];
-        //       entities[j + 1] = temp;
-        //       console.log("swapping after ", entities)
-        //     }
-        //   }
-        // }
-
-        // entities.sort((a, b) => {
-        //   let munA: string;
-        //   let munB: string;
-        
-        //   return Promise.all([
-        //     this.filterMethods.getMunicipalityFromTerrAPI(sortBy, a["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-        //       featureCollection.features.forEach(feature => {
-        //         munA = feature.properties.nom;
-        //         console.log("munAAA", munA);
-        //       });
-        //     }),
-        //     this.filterMethods.getMunicipalityFromTerrAPI(sortBy, b["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-        //       featureCollection.features.forEach(feature => {
-        //         munB = feature.properties.nom;
-        //         console.log("munBBB", munB);
-        //       });
-        //     })
-        //   ]).then(() => {
-        //     console.log("munA ", munA, " munB ", munB);
-        //     return munA > munB ? 1 : munA < munB ? -1 : 0;
-        //   });
-        // });
-        
-
-
-
-      // for (let i = 0; i < entities.length - 1; i++) {
-      //   await this.filterMethods.getMunicipalityFromTerrAPI(sortBy, entities[i]["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-      //     featureCollection.features.forEach(feature => {
-      //       munA = feature.properties.nom;
-      //       console.log("munAAA ", munA);
-      //     });
-      //   });
-      //   for(let j = 1; j < entities.length; j++) {
-      //     await this.filterMethods.getMunicipalityFromTerrAPI(sortBy, entities[i+1]["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-      //       featureCollection.features.forEach(feature => {
-      //         munB = feature.properties.nom;
-      //         console.log("munBBB ", munB);
-      //       });
-      //     });
-      //     if(munA > munB){
-      //       //perform swap
-      //       let temp = entities[i];
-      //       entities[i] = entities[j];
-      //       entities[j] = temp;
-      //     }
-      //   }
-      // }
-
-
-        // entities.sort((a, b) => (munA > munB) ? 1 :
-        // ((munB > munA) ? -1 : 0));
-        // return  munA > munB ? 1 : munA < munB ? -1 : 0;
-
-      // }
-      // entities.sort((a, b) => {
-      //   let munA: string; // Declare munA without assigning a value
-      //   await this.filterMethods.getMunicipalityFromTerrAPI(sortBy, a["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-      //     featureCollection.features.forEach(feature => {
-      //       munA = feature.properties.nom; // Assign the value to munA
-      //     });
-      //   });
-      //   let munB: string; // Declare munA without assigning a value
-
-      //   this.filterMethods.getMunicipalityFromTerrAPI(sortBy, b["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-      //     featureCollection.features.forEach(feature => {
-      //       munB = feature.properties.nom; // Assign the value to munA
-      //     });
-        // });
-        // this.filterMethods.getMunicipalityFromTerrAPI(sortBy, b["properties"]["coordonnees"]).then((featureCollection: FeatureCollection) => {
-        //   featureCollection.features.forEach(feature => { munB = feature.properties.nom })});
-
-    //     console.log("munA ", munA, " munB ", munB);
-    //   });
-    }else{
-        entities.sort((a, b) => {
-        return a['properties'][sortBy] > b['properties'][sortBy] ? 1 : a['properties'][sortBy] < b['properties'][sortBy] ? -1 : 0;
-      });
-    }
-    // console.log("list after ", entities);
   }
 
   /**
@@ -489,7 +361,17 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         }
         newAttribute = this.checkAttributeFormatting(entity.properties[attribute.attributeName]);
       }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
-        newAttribute = this.additionalProperties.get(entity.properties["id"]).get(attribute.attributeName);
+        // console.log("ATTR1 ", this.additionalProperties);
+        // console.log("ATTR2 ", this.additionalProperties.get(entity["properties"]["id"]));
+        // console.log("ATTR3.1 ", entity);
+        let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
+        // console.log("coords type ", typeof coords)
+        // console.log("coords ", coords)
+        // console.log("ATTR3.2 ", entity["properties"]["id"])
+        // console.log("ATTR4 ", attribute.attributeName);
+        // console.log("ATTR5 ", this.additionalProperties.get(entity["properties"]["id"]).get(attribute.attributeName));
+        
+        newAttribute = this.additionalProperties.get(coords).get(attribute.attributeName);
       }
     }
     return newAttribute;
@@ -594,28 +476,13 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    * @param entity
    */
   selectEntity(entity: Feature) {
-    // console.log("selectEntity");
-    // this.entitiesList$.next([entity]);
-    // this.entityIsSelected = true;
-
-    // // update the store and emit the entity to parent
-    // this.entityStore.state.updateAll({selected: false});
-    // this.entityStore.state.update(entity, {selected: true}, true);
-    // let entityCollection: {added: Array<Feature>} = {added: []};
-    // entityCollection.added.push(entity);
-    // this.listSelection.emit(entityCollection);
-  }
-
-  /**
-   * @description Fired when the user unselects the entity in the list
-   */
-  unselectEntity(entity: Feature) {
-    // console.log("unselectEntity");
-    // show all entities
-    // this.entitiesList$.next(this.entitiesAll);
-    // this.entityIsSelected = false;
-    // this.currentPageNumber$.next(this.currentPageNumber$.getValue());
-    // this.entityStore.state.updateAll({selected: false});
+    // update the store and emit the entity to parent
+    this.entityStore.state.updateAll({selected: false});
+    this.entityStore.state.update(entity, {selected: true}, true);
+    let entityCollection: {added: Array<Feature>} = {added: []};
+    entityCollection.added.push(entity);
+    // console.log("entityCollection ", entityCollection);
+    this.listSelection.emit(entityCollection);
   }
 
   /**
@@ -631,10 +498,10 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    * @description Filter entities according to non null filter values
    * @param currentNonNullFiltersValue An array of objects containing the non null filter values
    */
-  filterEntities(): Array<Object> {
+  filterEntities(): Array<Feature> {
     //code for active filters map
     //set up a list of all entities that can be displayed and start shrinking it down when filters do not have at least one filter from all filter categories (assuming there are is a filter selected in this category)
-    let filteredEntities = this.entitiesAll;
+    let filteredEntities = this.entitiesAll as Array<Feature>;
     this.activeFilters.forEach((options, filter) => {
       //if options list is not empty, we must sift through our list
       if(options.length){
@@ -642,11 +509,11 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         //if the type is included in terrAPI (and has been added to additionalProperties map)
         if(this.additionalTypes.includes(filter)){
 
-          let filteredAdditionalProperties: Array<[number, string]> = [];
+          let filteredAdditionalProperties: Array<[string, string]> = [];
 
           for(let entry of this.additionalProperties){
            if(entry[1].has(filter)){
-            let id: number = entry[0];
+            let id: string = entry[0];
             let mun: string = entry[1].get(filter);
 
             options.forEach(option => {
@@ -659,7 +526,8 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
           }
 
           filteredEntities = filteredEntities.filter(element => filteredAdditionalProperties.some((property) => {
-            return property[0] === element["properties"]["id"];
+            let coords: string = element["geometry"]["coordinates"][0] + "," + element["geometry"]["coordinates"][1];
+            return property[0] === coords;
           }));
 
         }
@@ -673,20 +541,9 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       }
     });
 
+    this.filteredEntitiesService.emitEvent(filteredEntities);
+    console.log("filteredEntities ", filteredEntities);
     return filteredEntities;
-  }
-
-  /**
-   *
-   * @param id unique id of the entity in the entitieslist
-   * @returns the entity associated to the unique id
-   */
-  public getEntityById(id: number) {
-    for(let entity of this.entitiesAll){
-      if(entity["properties"]["id"] === id){
-        return entity;
-      }
-    }
   }
 
   /**

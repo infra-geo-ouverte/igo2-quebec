@@ -1,3 +1,4 @@
+import { EntitiesAllService } from './../list/listServices/entities-all.service';
 import {
   Component,
   OnInit,
@@ -6,8 +7,9 @@ import {
   ElementRef,
   Input
 } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest } from 'rxjs';
+import { Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
@@ -17,6 +19,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ObjectUtils } from '@igo2/utils';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import type { default as OlGeometry } from 'ol/geom/Geometry';
+import olFeature from 'ol/Feature';
+
+
 
 import {
   MediaService,
@@ -67,7 +74,18 @@ import {
   VectorLayer,
   MapExtent,
   IgoMap,
-  DataSourceService
+  DataSourceService,
+  QuerySearchSource,
+  SearchSource,
+  featureToSearchResult,
+  QueryService,
+  featureFromOl,
+  moveToOlFeatures,
+  FeatureMotion,
+  WMSDataSource,
+  OgcFilterWriter,
+  IgoOgcFilterObject,
+  MapViewOptions
   } from '@igo2/geo';
 
 import {
@@ -87,6 +105,12 @@ import {
 } from './portal.animation';
 
 import { Option } from '../filters/simple-filters.interface';
+import { FiltersActiveFiltersService } from '../filters/filterServices/filters-active-filters.service';
+import { FilteredEntitiesService } from '../list/listServices/filtered-entities.service';
+import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
+import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
+import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-portal',
@@ -101,7 +125,7 @@ import { Option } from '../filters/simple-filters.interface';
 
 export class PortalComponent implements OnInit, OnDestroy {
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
-  // public entitiesAll: Array<Object>;  //all entities
+  public entitiesAll: Array<Object>;  //all entities
   public entitiesList: Array<Object>  //filtered entities
   // public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
   // public activeFilters$: BehaviorSubject<Map<string, Option[]>> = new BehaviorSubject<Map<string, Option[]>>(new Map()));
@@ -180,6 +204,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   public homeExtent: MapExtent;
   public homeCenter: [number, number];
   public homeZoom: number;
+  public additionalProperties: Map<string, Map<string, string>> = new Map();
+  public additionalTypes: Array<string> = []
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 
@@ -282,7 +308,18 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.workspaceState.store;
   }
 
+  get queryStore(): EntityStore<SearchResult> {
+    return this.queryState.store;
+  }
+
   constructor(
+    private entitiesAllService: EntitiesAllService,
+    private entitiesListService: ListEntitiesService,
+    private additionalPropertiesService: FiltersAdditionalPropertiesService,
+    private additionalTypesService: FiltersAdditionalTypesService,
+    private activeFilterService: FiltersActiveFiltersService,
+    private filteredEntitiesService: FilteredEntitiesService,
+    private queryService: QueryService,
     private route: ActivatedRoute,
     public workspaceState: WorkspaceState,
     public authService: AuthService,
@@ -345,6 +382,12 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.map.status$.subscribe(value => {
+      if(value === 1 && this.showSimpleFeatureList && typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId') === 'string'){
+        this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+        this.expansionPanelExpanded = true;
+      }
+    });
     window['IGO'] = this;
     this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
       this.configService.getConfig('hasGeolocateButton');
@@ -354,6 +397,8 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (this.configService.getConfig('geolocate.activateDefault') !== undefined) {
         this.map.geolocationController.tracking = this.configService.getConfig('geolocate.activateDefault');
       }
+      // this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+      // this.expansionPanelExpanded = true;
 
     });
 
@@ -389,6 +434,29 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.contextMenuStore.load(contextActions);
 
+  //   this.queryStore.count$
+  //   .pipe(pairwise())
+  //   .subscribe(([prevCnt, currentCnt]) => {
+  //     this.map.viewController.padding[2] = currentCnt ? 280 : 0;
+  //     // on mobile. Close the toast if workspace is opened, on new query
+  //     if (
+  //       prevCnt === 0 &&
+  //       currentCnt !== prevCnt &&
+  //       this.isMobile() &&
+  //       this.hasExpansionPanel &&
+  //       this.expansionPanelExpanded &&
+  //       this.toastPanelOpened
+  //     ) {
+  //       this.toastPanelOpened = false;
+  //     }
+  //   });
+  // this.map.ol.once('rendercomplete', () => {
+  //   this.readQueryParams();
+  //   if (this.configService.getConfig('geolocate.activateDefault') !== undefined) {
+  //     this.map.geolocationController.tracking = this.configService.getConfig('geolocate.activateDefault');
+  //   }
+  // });
+
     this.onSettingsChange$.subscribe(() => {
       this.searchState.setSearchSettingsChange();
     });
@@ -400,7 +468,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
 
     this.workspaceState.workspaceEnabled$.next(this.hasExpansionPanel);
+    //wwwwwwwwwww
     this.workspaceState.store.empty$.subscribe((workspaceEmpty) => {
+      console.log("ssssssss3")
+
       if (!this.hasExpansionPanel) {
         return;
       }
@@ -419,9 +490,27 @@ export class PortalComponent implements OnInit, OnDestroy {
     //   this.workspaceMaximize$.subscribe(() => this.updateMapBrowserClass())
     // );
 
+
+    this.map.layers$.subscribe( layerList => {
+      console.log("layerList ", layerList);
+      for(let layer of layerList){
+        if(layer.options.id === this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId')){
+          console.log("FOUND")
+          this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+          this.expansionPanelExpanded = true;
+          break;
+        }
+      }
+    });
+
+    //wwwwwwwwww
     this.workspaceState.workspace$.subscribe((activeWks: WfsWorkspace | FeatureWorkspace | EditionWorkspace) => {
       // console.log("workspacestate")
       // console.log(activeWks)
+      console.log("ssssssss1")
+      console.log("TEST1 ", this.map.status$);
+      console.log("TEST2 ", this.contextLoaded);
+
       if (activeWks) {
         // console.log("wks 5 (active wks)");
         this.selectedWorkspace$.next(activeWks);
@@ -447,21 +536,42 @@ export class PortalComponent implements OnInit, OnDestroy {
     // console.log("typeof: ", typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
     // console.log("id: ", this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
     if (this.showSimpleFeatureList && typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId') === 'string') {
+      // this.workspaceFunction();
       // console.log("if entered")
-      setTimeout(() => {
-        this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-        // console.log(this.workspaceState.workspace$.getValue())
-        this.expansionPanelExpanded = true;
-        if(this.workspace){
-          // console.log("workspace exists")
-        }else{
-          // console.log("workspace doesnt exist")
-        }
-      }, 5000);
+
+      // this.workspaceState.workspace$.subscribe(ws => {
+      //   if(ws !== undefined){
+      //       console.log("WS SUBSCRIBE ", ws);
+      //       this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+      //       this.expansionPanelExpanded = true;
+      //     }
+      // });
+
+      // console.log("outside TIMEOUT!!!")
+      // setTimeout(() => {
+      //   console.log("inside TIMEOUT!!!")
+      //   // this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+      //   // this.expansionPanelExpanded = true;
+      // }, 5000);
+
+      // setTimeout(() => {
+      //   console.log("WSStore ", this.workspaceStore);
+      //   console.log("WSS ", this.workspaceState)
+      //   this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+      //   // console.log(this.workspaceState.workspace$.getValue())
+      //   this.expansionPanelExpanded = true;
+      //   if(this.workspace){
+      //     console.log("workspace exists")
+      //   }else{
+      //     console.log("workspace doesnt exist")
+      //   }
+      // }, 5000);
     }
 
+    //wwwwwwwwwwww
     this.activeWidget$$ = this.workspaceState.activeWorkspaceWidget$.subscribe(
       (widget: Widget) => {
+        console.log("ssssssss2")
         if (widget !== undefined) {
           this.openToastPanelForExpansion();
           this.showToastPanelForExpansionToggle = true;
@@ -469,6 +579,7 @@ export class PortalComponent implements OnInit, OnDestroy {
           this.closeToastPanelForExpansion();
           this.showToastPanelForExpansionToggle = false;
         }
+        console.log(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'))
       }
     );
 
@@ -481,6 +592,13 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.activeFilterService.onEvent().subscribe(activeFilters => {
+      console.log("afService ", activeFilters);
+      this.applyFilters(activeFilters);
+      // this.fitFeatures();
+    });
+    
+
     this.sidenavMediaAndOrientation$$ =
       combineLatest([
         this.sidenavOpened$,
@@ -492,11 +610,27 @@ export class PortalComponent implements OnInit, OnDestroy {
         this.computeToastPanelOffsetX();
       });
 
+    this.additionalPropertiesService.onEvent().subscribe(additionalProperties => this.additionalProperties = additionalProperties);
+    this.additionalTypesService.onEvent().subscribe(additionalTypes => this.additionalTypes = additionalTypes);
+    this.entitiesAllService.onEvent().subscribe(entitiesAll => this.entitiesAll = entitiesAll);
+    this.entitiesListService.onEvent().subscribe(entitiesList => {
+      this.entitiesList = entitiesList;
+      // this.fitFeatures();
+      console.log("EL SERVICE ", this.entitiesList);
+    });
+
+
+
     // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
       this.breakpointChanged()
     );
   }
+
+  // public async workspaceFunction(){
+  //   await this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
+  //   this.expansionPanelExpanded = true;
+  // }
 
   public breakpointChanged() {
     if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
@@ -538,6 +672,69 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.workspaceEntitySortChange$.next(true);
   }
 
+  entitySelectChange(result: { added: Feature[] }) {
+    console.log("selectedworkspace ", this.selectedWorkspace$.value);
+    console.log("ESC ", result);
+    const baseQuerySearchSource = this.getQuerySearchSource();
+    const querySearchSourceArray: QuerySearchSource[] = [];
+
+    // console.log("ESC")
+
+    // console.log("wks 2")
+    if (this.selectedWorkspace$.value instanceof WfsWorkspace || this.selectedWorkspace$.value instanceof FeatureWorkspace) {
+      // console.log("wks 3")
+      console.log("ESC1")
+
+      if (!this.selectedWorkspace$.value.getLayerWksOptionTabQuery()) {
+        // console.log("wks 4")
+        console.log("ESC2")
+
+        return;}
+    }
+    console.log("ESC9")
+
+    if (result && result.added) {
+      console.log("ESC3")
+
+      const results = result.added.map((res) => {
+        if (res?.ol?.getProperties()._featureStore.layer?.visible) {
+          console.log("ESC4")
+
+          const ol = res.ol as olFeature<OlGeometry>;
+          const featureStoreLayer = res.ol.getProperties()._featureStore.layer;
+          const feature = featureFromOl(ol, featureStoreLayer.map.projection, featureStoreLayer.ol);
+          feature.meta.alias = this.queryService.getAllowedFieldsAndAlias(featureStoreLayer);
+          feature.meta.title = this.queryService.getQueryTitle(feature, featureStoreLayer) || feature.meta.title;
+          let querySearchSource = querySearchSourceArray.find((s) => s.title === feature.meta.sourceTitle);
+          if (!querySearchSource) {
+            console.log("ESC5")
+
+            querySearchSource = new QuerySearchSource({title: feature.meta.sourceTitle});
+            querySearchSourceArray.push(querySearchSource);
+          }
+          return featureToSearchResult(feature, querySearchSource);
+        }
+      });
+
+      console.log("ESC6")
+
+      const research = {
+        request: of(results),
+        reverse: false,
+        source: baseQuerySearchSource
+      };
+
+      console.log("ESC7")
+
+      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+        this.queryStore.load(queryResults);
+      });
+
+      console.log("ESC8")
+
+    }
+  }
+
   ngOnDestroy() {
     this.context$$.unsubscribe();
     this.activeWidget$$.unsubscribe();
@@ -573,6 +770,91 @@ export class PortalComponent implements OnInit, OnDestroy {
   openToastPanelForExpansion() {
     this.toastPanelForExpansionOpened = true;
   }
+
+  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    // console.log("onmapquery")
+    // the event.features array contains duplicates (if you change the zoom on the map and click on a feature that is already in the list, it adds a new one - since some specific identifyer is different every time the zoom changes)
+    // therefore, this part is to remove duplicates...
+    console.log("onmapquery event.features before ", event.features);
+    event.features = event.features.reduce((unique, item) => {
+      const hasDuplicate = unique.some((existingItem) => {
+        console.log("item ", JSON.stringify(item["properties"]));
+        console.log("existingItem ", JSON.stringify(existingItem["properties"]));
+        console.log(JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]));
+        return JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]);
+      });
+    
+      if (!hasDuplicate) {
+        unique.push(item);
+      }
+    
+      return unique;
+    }, []);
+    console.log("onmapquery event.features after ", event.features);
+    // this.clickedEntities$.next(event.features);
+    if(event.features.length > 0) this.clickedEntities$.next(event.features);
+    const baseQuerySearchSource = this.getQuerySearchSource();
+    const querySearchSourceArray: QuerySearchSource[] = [];
+    const results = event.features.map((feature: Feature) => {
+      let querySearchSource = querySearchSourceArray.find(
+        (s) => s.title === feature.meta.sourceTitle
+      );
+      if (this.getFeatureIsSameActiveWks(feature)) {
+        if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+          return;
+        }
+      }
+      if (!querySearchSource) {
+        querySearchSource = new QuerySearchSource({
+          title: feature.meta.sourceTitle
+        });
+        querySearchSourceArray.push(querySearchSource);
+      }
+      return featureToSearchResult(feature, querySearchSource);
+    });
+    const filteredResults = results.filter(x => x !== undefined);
+    const research = {
+      request: of(filteredResults),
+      reverse: false,
+      source: baseQuerySearchSource
+    };
+    research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+      this.queryStore.load(queryResults);
+    });
+  }
+
+  private getQuerySearchSource(): SearchSource {
+    return this.searchSourceService
+      .getSources()
+      .find(
+        (searchSource: SearchSource) =>
+          searchSource instanceof QuerySearchSource
+      );
+  }
+
+  private getFeatureIsSameActiveWks(feature: Feature): boolean {
+    if (this.workspace) {
+      const featureTitle = feature.meta.sourceTitle;
+      const wksTitle = this.workspace.title;
+      if (wksTitle === featureTitle) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  private getWksActiveOpenInResolution(): boolean {
+    if(this.workspace) {
+      const activeWks = this.workspace as WfsWorkspace;
+      if(activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
+        // console.log("ws4")
+        return true;
+      }
+    }
+    return false;
+   }
 
   onSearchTermChange(term?: string) {
     if (this.routeParams?.search && term !== this.routeParams.search) {
@@ -640,6 +922,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private computeHomeExtentValues(context: DetailedContext) {
+    console.log("computeHomeExtentValues context ", context)
     if (context?.map?.view?.homeExtent) {
       this.homeExtent = context.map.view.homeExtent.extent;
       this.homeCenter = context.map.view.homeExtent.center;
@@ -850,6 +1133,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private computeZoomToExtent() {
+    console.log("computeZoomToExtent")
     if (this.routeParams['zoomExtent']) {
       const extentParams = this.routeParams['zoomExtent'].split(',');
       const olExtent = olProj.transformExtent(
@@ -1143,6 +1427,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     visibility: boolean = true,
     zIndex: number
   ) {
+    console.log("addLayerFromUrl url ", url, " name ", name, " type ", type, " version ", version, " visibility ", visibility, " zIndex ", zIndex);
     if (!this.contextLoaded) {
       return;
     }
@@ -1231,7 +1516,189 @@ export class PortalComponent implements OnInit, OnDestroy {
   //   // this.activeFilters$.next(event);
   // }
 
+  zoomToSelectedFeature(features: any) {
+    console.log("zoomToSelectedFeatureWks ", features);
+    const featuresSelected: Array<Feature> = features["added"];
+    let format = new olFormatGeoJSON();
+    // console.log("ws5")
+    // const featuresSelected = this.workspaceState.workspaceSelection.map(rec => (rec.entity as Feature));
+    // if (featuresSelected.length === 0) {
+    //   return;
+    // }
+    console.log("featuresSelected: ", featuresSelected);
+    const olFeaturesSelected = [];
+    for (const feat of featuresSelected) {
+      console.log("feat.projection",  feat.projection);
+      console.log("this.map.projection ", this.map.projection)
+      let localOlFeature = format.readFeature(feat,
+        {
+          dataProjection: feat.projection,
+          featureProjection: this.map.projection
+        });
+        olFeaturesSelected.push(localOlFeature);
+    }
+    console.log("OLFS ", olFeaturesSelected);
+    const totalExtent = computeOlFeaturesExtent(this.map, olFeaturesSelected);
+    this.map.viewController.zoomToExtent(totalExtent);
+
+    // moveToOlFeatures(this.map, olFeaturesSelected, FeatureMotion.Zoom);
+  }
+
   onEntitiesListUpdate(event: Array<Object>) {
+    // console.log("EL UPDATE");
     this.entitiesList = event;
+  }
+
+  public filterByOgc(wmsDatasource: WMSDataSource, filterString: string) {
+    // console.log("wmsDatasource ", wmsDatasource);
+    const appliedFilter = new OgcFilterWriter().formatProcessedOgcFilter(filterString, wmsDatasource.options.params.LAYERS);
+    // console.log("filterByOgc2 appliedFilter ", appliedFilter);
+    wmsDatasource.ol.updateParams({ FILTER: appliedFilter });
+  }
+
+  public applyFilters(activeFilters: Map<string,Option[]> ) {
+    // console.log("additionalProperties ", this.additionalProperties);
+    // console.log("applyFilters activeFilters ", activeFilters);
+    const conditions = [];
+    let idArray: Array<string> = [];
+    for(let category of activeFilters){
+      const bundleConditions = [];
+      for(let filter of category[1]){
+
+        // If the type is from terrapi, we will find it in the additionaltypes
+        // The id will be given to the condition instead of the terrAPI type, so that it can be found with filterByOgc()
+        // console.log("AF filter ", filter);
+        // console.log("AF additionalTypes ", this.additionalTypes);
+        if(this.additionalTypes.includes(filter.type)){
+          let combinedFeatures: Array<Feature> = [];
+          // console.log("AF additionalProperties", this.additionalProperties)
+          for(let entry of this.additionalProperties){
+            for(let type of entry[1]){
+              // console.log("type[0] ", type[0], " filter.type ", filter.type, " type[1] ", type[1], " filter.nom ", filter.nom)
+              if(type[0] === filter.type && type[1] === filter.nom){
+                // console.log("entry found ", entry)
+                if(!idArray.includes(entry[0])) idArray.push(entry[0]);
+              }
+            }
+          }
+          
+          // bundleConditions.push({expression: entry[0], operator: "PropertyIsEqualTo", propertyName: additionalType});
+          // console.log("idArray ", idArray);
+          let features: Array<Object> = this.entitiesAll.filter(element => idArray.includes(element["geometry"]["coordinates"][0] + "," + element["geometry"]["coordinates"][1]));
+          // console.log("FEATURES ", features);
+          // console.log("entitiesList ", this.entitiesList);
+          for(let element of features){
+            // console.log("ELEMENTT ", element);
+            // console.log("PROPERTIES ", element["properties"]);
+            Object.keys(element["properties"]).forEach(key => {
+              //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work, but in the future I will add all fields and not just the one
+              //it should add ALL properties and not just the following ones checked in the condition... just there is no guarantee that there will not be any typos in the other properties
+              if(key === "id"){
+                let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
+                // console.log("conditionnn ", condition);
+                bundleConditions.push(condition);
+              }
+            });
+          }
+          
+          // console.log("bundleConditions ", bundleConditions)
+        }else{
+          let condition = {expression: filter.nom, operator: "PropertyIsEqualTo", propertyName: filter.type};
+          // console.log("conditionnn ", condition);
+          bundleConditions.push(condition);
+
+        }
+        // console.log("ActiveFilters filter ", filter);
+      }
+      // console.log("build bundle ", bundleConditions);
+      if(bundleConditions.length >= 1){
+        if (bundleConditions.length === 1) {
+          conditions.push(bundleConditions[0]);
+        } else {
+          conditions.push({logical: "OR", filters: bundleConditions});
+        }
+      }
+    }
+    let filterQueryString = "";
+    let ogcFilterWriter: OgcFilterWriter = new OgcFilterWriter();
+    // console.log("conditions ", conditions);
+    if (conditions.length >= 1) {
+      filterQueryString = ogcFilterWriter
+        .buildFilter(conditions.length === 1 ?
+          conditions[0] : {logical: 'AND', filters: conditions } as IgoOgcFilterObject);
+    }
+    // console.log("filterQueryString ", filterQueryString);
+  
+    this.filterByOgc(this.map.getLayerById('dq2').dataSource as WMSDataSource, filterQueryString);
+  }
+
+  async fitFeatures() {
+    console.log("FFEntitiesList ", this.entitiesList);
+    if(!this.entitiesList){
+      return -1;
+    }
+    let e = -90
+    let w = 90;
+    let n = -90;
+    let s = 90;
+
+    let minX: number;
+    let minY: number;
+    let maxX: number;
+    let maxY: number;
+    let centerX: number;
+    let centerY: number;
+
+    for(let feature of this.entitiesList){
+
+      const longitude = feature["geometry"]["coordinates"][0];  //E-W
+      const latitude = feature["geometry"]["coordinates"][1];   //N-S
+
+      w = Math.min(longitude, w);
+      s = Math.min(latitude, s);
+      e = Math.max(longitude, e);
+      n = Math.max(latitude, n);
+    }
+
+    // [minx, miny, maxx, maxy]
+
+    await this.terrAPICoordReformat(w + "," + s, this.map.projection).then((coords: number[]) => {
+      if(coords){
+			  minX = coords[0];
+        minY = coords[1];
+      }
+		});
+    await this.terrAPICoordReformat(e + "," + n, this.map.projection).then((coords: number[]) => {
+      if(coords){
+			  maxX = coords[0];
+        maxY = coords[1];
+      }
+    });
+
+    await this.terrAPICoordReformat((e + w)/2 + "," + (n + s)/2, this.map.projection).then((coords: number[]) => {
+      if(coords){
+			  centerX = coords[0];
+        centerY = coords[1];
+      }
+    });
+
+    let mapExtent: MapExtent = [minX, minY, maxX, maxY];
+    let mapCenter: [number, number] = [centerX, centerY];
+    console.log("current center ", this.map.getCenter());
+    console.log("center ", mapCenter)
+    // console.log("current extent " , this.map.getExtent());
+    // console.log("new extent ", mapExtent);
+    let options: MapViewOptions = {center: mapCenter};
+    // console.log("options ", options);
+    this.map.updateView(options);
+  }
+
+  public async terrAPICoordReformat(coord: string, projection: string): Promise<number[]> {
+    let url: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/geospatial/project?loc=" + coord + "&to=" + projection;
+
+    const response = await this.http.get<any>(url).toPromise();
+    const coordinates = response.coordinates;
+
+    return coordinates;
   }
 }

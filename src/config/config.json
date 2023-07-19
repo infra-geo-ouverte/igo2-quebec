@@ -2,22 +2,22 @@
   "theme": "qcca-theme",
   "showSearchBar": false,
   "useEmbeddedVersion": {
-    "coordonnees": "coordonnees",
     "simpleFilters": [
       {"type": "id", "description": "Numéro de bureau"},
       {"type": "region", "description": "Région"},
       {"type": "responsable", "description": "Responsable"},
       {"type": "municipalites", "description": "Municipalité"},
       {"type": "mrc", "description": "MRC"},
-      {"type": "bs", "description": "bs"}
+      {"type": "bs", "description": "this is a test"},
+      {"type": "province", "description": "Province"}
     ],
     "simpleFeatureList": {
       "layerId": "dq2",
       "attributeOrder": [
-        {"attributeName": "bureau", "personalizedFormatting": "Bureau [id]", "header": "title"},
-        {"attributeName": "adressebur", "header": "standard"},
+        {"attributeName": "adressebur", "header": "small"},
+        {"attributeName": "label", "header": "title"},
         {"attributeName": "region", "description": "Région", "header": "standard"},
-        {"attributeName": "mrc", "description": "MRC"},
+        {"attributeName": "mrc", "description": "MRC", "header": "standard"},
         {"attributeName": "municipalites", "description": "Municipalité"},
         {"attributeName": "responsable", "description": "Responsable"},
         {"attributeName": "telephonebur", "description": "Téléphone"},

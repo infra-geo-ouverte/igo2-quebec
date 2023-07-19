@@ -6,8 +6,7 @@
       [entityStore]="workspace.entityStore"
       class="simple-filters"
       [isMobile] = "mobile"
-      (filterSelection)="onFilterSelection($event)"
-      (activeFiltersUpdate)="onActiveFiltersUpdate($event)">
+      (filterSelection)="onFilterSelection($event)">
     </app-simple-filters>
 
     <mat-sidenav-container *ngIf="showMap && !hasToolbox" class="sidenav">
@@ -53,19 +52,31 @@
           </app-sideresult>
         </div>
 
-        <igo-map-browser      
-          igoMapOffline
-          igoWorkspaceUpdator
-          [workspaceStore]="workspaceStore"
-          #mapBrowser
-          igoMapContext
-          igoLayerContext
-          igoDropGeoFile
-          [contextUri]="contextUri"
-          [map]="map"
-          igoHoverFeature
-          [igoHoverFeatureEnabled]="true"
-          [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+        <igo-map-browser
+        igoMapOffline
+        igoWorkspaceUpdator
+        [workspaceStore]="workspaceStore"
+        igoLongPress
+        igoSearchPointerSummary
+        [igoSearchPointerSummaryDelay]="500"
+        [igoSearchPointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
+        igoHoverFeature
+        [igoHoverFeatureDelay]="250"
+        [igoHoverFeatureEnabled]="true"
+        #mapBrowser
+        igoQuery
+        [waitForAllQueries]="true"
+        [queryFeatures]="true"
+        [queryFeaturesHitTolerance]="15"
+        igoMapContext
+        igoLayerContext
+        igoDropGeoFile
+        [contextUri]="contextUri"
+        (query)="onMapQuery($event)"
+        [map]="map"
+        [igoContextMenu]=contextMenu
+        (menuPosition)="onContextMenuOpen($event)"
+        [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
             
           <igo-baselayers-switcher
             [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
@@ -108,8 +119,12 @@
     (listSelection)="entitySelectChange($event)"></app-simple-feature-list> -->
     <app-simple-feature-list *ngIf="selectedWorkspace$ | async as workspace"
     [entityStore]="workspace.entityStore"
+    [clickedEntities]="clickedEntities$ | async"
     [entitiesList]="entitiesList"
     [simpleFiltersValue]="simpleFiltersValue$ | async"
-    (listSelection)="entitySelectChange($event)"></app-simple-feature-list>
+    (listSelection)="zoomToSelectedFeature($event); entitySelectChange($event)"
+    ></app-simple-feature-list>
+
+    <!-- (listSelection)="entitySelectChange($event)"></app-simple-feature-list> -->
   </div>
 </div>

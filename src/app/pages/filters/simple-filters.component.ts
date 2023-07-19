@@ -1,3 +1,4 @@
+import { SortBy } from './../list/simple-feature-list.interface';
 import { FiltersAdditionalTypesService } from './filterServices/filters-additional-types.service';
 import { FiltersActiveFiltersService } from './filterServices/filters-active-filters.service';
 import { FiltersSharedMethodsService } from './filterServices/filters-shared-methods.service';
@@ -14,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { FiltersOptionService } from './filterServices/filters-option-service.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
 import { FiltersTypesService } from './filterServices/filters-types.service';
+import { FilteredEntitiesService } from '../list/listServices/filtered-entities.service';
 
 @Component({
   selector: 'app-simple-filters',
@@ -43,12 +45,13 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public entitiesAll: Array<Object>;  //entities
   public entitiesList: Array<Object>;   //entities list provided by the service
   public additionalTypes: Array<string> = [];  //list of all additional filter types (corresponding to the keys of the map in additional properties)
-  public additionalProperties: Map<number, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
+  // public additionalProperties: Map<number, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
+  public additionalProperties: Map<string, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
   public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "id", "nom", etc.)
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
   public filterTypes: Array<string> = [];
 
-  constructor(private filterTypesService: FiltersTypesService, private additionalTypesService: FiltersAdditionalTypesService, private cdRef: ChangeDetectorRef, private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private filterMethods: FiltersSharedMethodsService, private additionalPropertiesService: FiltersAdditionalPropertiesService, private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder, private filterOptionService: FiltersOptionService) {
+  constructor(private filteredEntitiesService: FilteredEntitiesService, private filterTypesService: FiltersTypesService, private additionalTypesService: FiltersAdditionalTypesService, private cdRef: ChangeDetectorRef, private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private filterMethods: FiltersSharedMethodsService, private additionalPropertiesService: FiltersAdditionalPropertiesService, private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder, private filterOptionService: FiltersOptionService) {
 
   }
 
@@ -207,7 +210,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
 		// // if type is not included in terrAPI...
   	// } else
 
-    console.log("propertyMap ", this.propertiesMap);
+    // console.log("propertyMap ", this.propertiesMap);
 
     if (this.propertiesMap.has(filter.type)){
       this.filterTypes.push(filter.type);
@@ -227,7 +230,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       this.filterTypes.push(filter.type);
       let options: Array<Option> = [];
       for(let entity of this.entitiesAll) {
-        console.log("entity ", entity);
+        // console.log("entity ", entity);
         let longitude = entity["geometry"]["coordinates"][0];
         let latitude = entity["geometry"]["coordinates"][1];
         let coords: string = longitude + "," + latitude;
@@ -240,21 +243,23 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
           if(typeof locationData === "string"){
             let op: Option = {type: filter.type, code: feature.properties.code, nom: feature.properties.nom};
             // console.log("option ", op);
-            if(!this.additionalProperties.get(entity["properties"]["id"])){
+            // console.log("ENTITYYY ", entity)
+            let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
+            if(!this.additionalProperties.get(coords)){
               let newTypeMap: Map<string, string> = new Map();
               newTypeMap.set(filter.type, locationData)
-              this.additionalProperties.set(entity["properties"]["id"], new Map(newTypeMap));
+              this.additionalProperties.set(coords, new Map(newTypeMap));
             }
             else{
-              let oldMap = this.additionalProperties.get(entity["properties"]["id"]);
+              let oldMap = this.additionalProperties.get(coords);
               let newMap: Map<string, string> = new Map();
               newMap.set(filter.type, locationData)
 
               //combine the 2 maps
               const combinedMap = new Map([...oldMap, ...newMap]);
-              this.additionalProperties.set(entity["properties"]["id"], new Map(combinedMap));
+              this.additionalProperties.set(coords, new Map(combinedMap));
 
-              console.log("combinedMap ", combinedMap);
+              // console.log("combinedMap ", combinedMap);
             }
             if(!this.additionalTypes.includes(filter.type)){
               this.additionalTypes.push(filter.type);
@@ -273,7 +278,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       typeOptions = {type: filter.type, description: filter.description, options: options};
       // console.log("entities do not contain ", filter.type);
     }
-    console.log("additionalProperties end ", this.additionalProperties);
+    // console.log("additionalProperties end ", this.additionalProperties);
 		return typeOptions;
 	}
 
@@ -375,7 +380,8 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return filteredOptions;
+    //sort alphabetically
+    return filteredOptions.sort((a,b) => a["nom"] > b["nom"] ? 1 : a["nom"] < b["nom"] ? -1 : 0);
   }
 
   /**
@@ -409,6 +415,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
         element.code !== selectedOption.code || element.nom !== selectedOption.nom || element.type !== selectedOption.type);
       this.activeFilters.set(selectedOption.type, temp);
     }
+    // console.log("emitting AF")
     this.activeFilterService.emitEvent(this.activeFilters);
     // this.activeFiltersUpdate.emit(this.activeFilters);
 
@@ -563,10 +570,10 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   }
 
   public updateCount() {
-    console.log("updatecount entitiesList ", this.entitiesList);
-    console.log("alltypesOptions before: ", this.filteredTypesOptions)
+    // console.log("updatecount entitiesList ", this.entitiesList);
+    // console.log("alltypesOptions before: ", this.filteredTypesOptions)
     for(let filter of this.filteredTypesOptions){
-      console.log("AAAAAA", filter.type, "AAAAA");
+      // console.log("AAAAAA", filter.type, "AAAAA");
       let type: string = filter.type;
 
       //determine if we need to use additional properties or if it is contained in the entities list by default
@@ -579,8 +586,8 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
               if(additionalProperty[0] === type){
                 if(additionalProperty[1] === option.nom) {
                   for(let entity of this.entitiesList){
-
-                    if(entity["properties"]["id"] === id){
+                    let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
+                    if(coords === id){
                       option.count++;
                     }
                   }
@@ -592,7 +599,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
           }
           // console.log("entry ", entry);
         }
-        console.log("additionalProperties ", this.additionalProperties);
+        // console.log("additionalProperties ", this.additionalProperties);
       }else{
         for(let option of filter.options){
           option.count = 0;
@@ -608,7 +615,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
     }
     this.cdRef.detectChanges();
-    console.log("alltypesOptions after: ", this.filteredTypesOptions)
+    // console.log("alltypesOptions after: ", this.filteredTypesOptions)
 
   }
 

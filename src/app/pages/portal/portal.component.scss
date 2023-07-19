@@ -1,3 +1,34 @@
+//additions from the DocForElement.txt
+@use '@angular/material' as mat;
+
+@import '../../../../node_modules/@igo2/core/style/all.theming.scss';
+@import '../../../../node_modules/@igo2/core/style/core.theming.scss';
+@import '../../../../node_modules/@igo2/core/style/foreground.scss';
+@import '../../../../node_modules/@igo2/core/style/index.theming.scss';
+@import '../../../../node_modules/@igo2/core/style/material.font.scss';
+@import '../../../../node_modules/@igo2/core/style/setup.scss';
+@import '../../../../node_modules/@igo2/core/style/theming.scss';
+@import '../../../../node_modules/@igo2/core/style/typography.scss';
+@import '../../../../node_modules/@igo2/core/style/partial/core.variables.scss';
+@import '../../../../node_modules/@igo2/core/style/partial/media.scss';
+
+@import '../../../../node_modules/@igo2/core/style/themes/blue.theme.scss';
+@import './portal.variables';
+
+.igo-panel-header {
+  height: auto !important;
+}
+
+igo-actionbar {
+  padding-top: 0px !important;
+  padding-left: 0px !important;
+}
+
+.overlay-container {
+  visibility: hidden;
+}
+
+//the rest of everything...
 @import './portal.variables';
 
 /*** Main ***/
