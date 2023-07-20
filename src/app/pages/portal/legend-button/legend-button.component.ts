@@ -1,60 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogState } from '@angular/material/dialog';
-import { IgoMap, Layer } from '@igo2/geo';
-import { MapState } from '@igo2/integration';
-import { Observable } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { LanguageService } from '@igo2/core';
+import { LegendDialogComponent } from '../legend-dialog/legend-dialog.component';
 
 @Component({
   selector: 'app-legend-button',
   templateUrl: './legend-button.component.html',
   styleUrls: ['./legend-button.component.scss']
 })
-
 export class LegendButtonComponent {
 
   public dialogRef = null;
 
-  constructor(public dialog: MatDialog) {}
+  public legendButtonTooltip = this.languageService.translate.instant('legend.open');
 
-  toggleDialog() {
-    const dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
+  @Output() toggleLegend = new EventEmitter<boolean>();
+
+  @Input() tooltipDisabled: boolean;
+
+  @Input() legendInPanel: boolean;
+
+  @Input() mobile: boolean;
+
+  constructor(public dialog: MatDialog, protected languageService: LanguageService) { }
+
+  toggleLegendButton(): void {
+    if (!this.legendInPanel && !this.mobile){
+      const dialogOpened = this.dialog.getDialogById('legend-dialog-container');
       if (!dialogOpened) {
-        this.dialogRef = this.dialog.open(LegendButtonDialogComponent, {
-          id: 'legend-button-dialog-container',
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
+        this.dialogRef = this.dialog.open(LegendDialogComponent, {
+          id: 'legend-dialog-container',
           hasBackdrop: false,
           closeOnNavigation: true
         });
       } else {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
         this.dialogRef.close();
       }
-  }
-}
-
-@Component({
-  selector: 'app-legend-button-dialog',
-  templateUrl: 'legend-button-dialog.component.html'
-})
-export class LegendButtonDialogComponent implements OnInit {
-
-  public getState: MatDialogState;
-
-  get map(): IgoMap {
-    return this.mapState.map;
-  }
-
-  get layers$(): Observable<Layer[]> {
-    return this.map.layers$;
-  }
-
-  public mapLayersShownInLegend: Layer[];
-
-  constructor(
-    private mapState: MapState
-  ) {}
-
-  ngOnInit() {
-    this.mapLayersShownInLegend = this.map.layers.filter(layer => (
-      layer.showInLayerList !== false
-    ));
+    }
+      this.toggleLegend.emit();
   }
 }

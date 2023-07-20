@@ -8,17 +8,12 @@ import {
   SearchSourceOptions,
   CommonVectorStyleOptions
 } from '@igo2/geo';
+import { AppOptions } from './environnement.interface';
 
 interface Environment {
   production: boolean;
   igo: {
-    app: {
-      forceCoordsNA: boolean;
-      pwa?: {
-        enabled?: boolean;
-        promote?: boolean;
-      }
-    };
+    app: AppOptions;
     language?: LanguageOptions;
     projections?: Projection[];
     searchSources?: { [key: string]: SearchSourceOptions };
@@ -40,13 +35,16 @@ export const environment: Environment = {
   igo: {
     app: {
       forceCoordsNA: true,
-      pwa: {
+      install: {
         enabled: false,
         promote: false
+      },
+      pwa: {
+        enabled: false
       }
     },
     language: {
-      prefix: ['./locale/', './particular/locale/']
+      prefix: ['./locale/']
     },
     projections: [
       {
@@ -67,6 +65,10 @@ export const environment: Environment = {
       }
     ],
     searchSources: {
+      workspace: {
+        available: false,
+        enabled: false
+      },
       nominatim: {
         available: false
       },
@@ -93,6 +95,7 @@ export const environment: Environment = {
         enabled: true
       },
       ilayer: {
+        enabled: false,
         searchUrl: '/apis/icherche/layers',
         order: 4,
         params: {

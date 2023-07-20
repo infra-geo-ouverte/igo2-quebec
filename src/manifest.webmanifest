@@ -1,7 +1,8 @@
 {
-  "name": "IGO2 - PWA APP",
-  "short_name": "IGO",
-  "description": "IGO2 as a Progressive Web App",
+  "id": "igo2QuebecDemoPWA",
+  "name": "IGO2-Québec - APP",
+  "short_name": "IGO2-Québec",
+  "description": "IGO2-Québec installable app",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

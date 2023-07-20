@@ -1,6 +1,5 @@
 {
   "theme": "qcca-theme",
-  "showRotationButtonIfNoRotation": false,
   "title": "IGO",
   "header": {
     "hasHeader": true,
@@ -10,14 +9,19 @@
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
+  "legendInPanel": true,
+  "showRotationButtonIfNoRotation": true,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
     "followPosition": false,
     "activateDefault": false
   },
+  "hasFeatureEmphasisOnSelection": true,
+  "addFeaturetoLayer": false,
   "useStaticIcon": false,
-  "hasExpansionPanel": false,
+  "customFeatureTitle": false,
+  "customFeatureDetails": false,
   "searchBar": {
     "showSearchBar": true,
     "showSearchButton": true
@@ -25,10 +29,8 @@
   "importExport": {
     "url": "/apis/ogre"
   },
-  "showMenuButton": false,
-  "hasToolbox": false,
   "mobileBreakPoint": "'(min-width: 768px)'",
   "language": {
-    "prefix": ["./locale/", "./particular/locale/"]
+    "prefix": ["./locale/"]
     }
 }

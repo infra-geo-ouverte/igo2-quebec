@@ -1,7 +1,5 @@
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { zip } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
@@ -20,6 +18,7 @@ export class AppComponent {
   private themeClass = 'qcca-theme';
   public hasHeader: boolean = true;
   public hasFooter: boolean = true;
+  private promptEvent: any;
   public hasMenu: boolean = false;
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
@@ -34,9 +33,6 @@ export class AppComponent {
     private messageService: MessageService,
     private pwaService: PwaService
   ) {
-    this.pwaService.checkForUpdates();
-    this.languageService.translate.getTranslation(this.languageService.getLanguage()).subscribe();
-
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
@@ -51,6 +47,10 @@ export class AppComponent {
 
     this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
       this.configService.getConfig('hasMenu');
+
+    this.setManifest();
+    this.installPrompt();
+    this.pwaService.checkForUpdates();
   }
 
   private readTitleConfig() {
@@ -60,6 +60,32 @@ export class AppComponent {
         this.metaService.addTag({ name: 'title', content: title });
       }
     });
+  }
+
+  private setManifest() {
+    const appConfig = this.configService.getConfig('app');
+    if (appConfig?.install?.enabled) {
+      const manifestPath = appConfig.install.manifestPath || 'manifest.webmanifest';
+      document.querySelector('#igoManifestByConfig').setAttribute('href', manifestPath);
+    }
+  }
+
+  private installPrompt() {
+    const appConfig = this.configService.getConfig('app');
+    if (appConfig?.install?.enabled && appConfig?.install?.promote) {
+      if (userAgent.getOSName() !== 'iOS') {
+        window.addEventListener('beforeinstallprompt', (event: any) => {
+          event.preventDefault();
+          this.promptEvent = event;
+          window.addEventListener('click', () => {
+            setTimeout(() => {
+              this.promptEvent.prompt();
+              this.promptEvent = undefined;
+            }, 750);
+          }, { once: true });
+        }, { once: true });
+      }
+    }
   }
 
   private readThemeConfig() {
@@ -85,21 +111,9 @@ export class AppComponent {
     });
 
     if (oldBrowser) {
-      const translate = this.languageService.translate;
-      const title$ = translate.get('oldBrowser.title');
-      const message$ = translate.get('oldBrowser.message');
-      zip(title$, message$)
-        .pipe(
-          map(([title, message]) => ({
-            title,
-            message
-          }))
-        )
-        .subscribe((rep) =>
-          this.messageService.alert(rep.message, rep.title, {
-            timeOut: 15000
-          })
-        );
+      this.messageService.alert('oldBrowser.message', 'oldBrowser.title', {
+        timeOut: 15000
+      });
     }
   }
 }
