@@ -15,7 +15,7 @@ import { NetworkService, ConnectionState, LanguageService, MessageService } from
 import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
-import { LegacyTooltipPosition as TooltipPosition } from '@angular/material/legacy-tooltip';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { getEntityTitle } from '@igo2/common';
 
 @Component({

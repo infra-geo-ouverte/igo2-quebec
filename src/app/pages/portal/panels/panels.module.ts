@@ -1,12 +1,12 @@
 import { IgoAppSearchModule } from '@igo2/integration';
 import { IgoAppSearchResultsToolModule } from './search-results-tool/search-results-tool.module';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatCardModule } from '@angular/material/card';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion'; // mobile
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoMessageModule } from '@igo2/core';

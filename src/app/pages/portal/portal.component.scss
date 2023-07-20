@@ -39,6 +39,7 @@ mat-icon.disabled {
   ::ng-deep .button-group {
     transform: scale(0.9);
   }
+  /*TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
   ::ng-deep .qcca-theme mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-label-content {
     font-size: 12px;
   }
@@ -142,14 +143,17 @@ igo-search-bar svg {
   background: #4E5662;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-outline-end,  ::ng-deep igo-search-bar .mat-form-field-outline-start {
   border-color: #4E5662;
   height: $igo-icon-size!important;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-outline {
   top: 0;
 }
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-wrapper, ::ng-deep .search-bar-buttons {
   margin-top: 0;
 }
@@ -158,6 +162,7 @@ igo-search-bar svg {
   height: $igo-icon-size!important; // anomaly
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-infix input {
   line-height: $igo-icon-size;
   vertical-align: middle;
@@ -166,17 +171,20 @@ igo-search-bar svg {
   margin-top: 0;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-infix {
   padding: 0;
   border-top: 0!important;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-wrapper, .search-bar-buttons, ::ng-deep igo-search-bar .mat-form-field-outline-end,  ::ng-deep igo-search-bar .mat-form-field-outline-start {
   height: $igo-icon-size;
   padding: 0;
   margin-top:0;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-appearance-outline .mat-form-field-flex {
   padding: 0 8px 0 8px;
   margin-top: 0!important;
@@ -187,10 +195,12 @@ igo-search-bar svg {
   padding: 0!important;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-outline-start {
   border-radius: 0 !important;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep igo-search-bar .mat-form-field-outline-end {
   border-radius: 0 !important;
 }
@@ -349,6 +359,7 @@ igo-map-browser.toast-offset-attribution
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 ::ng-deep app-legend-button button .mat-button-focus-overlay { // trick to prevent the button to stay focused when legend closes form sidepanel
   opacity: 0 !important;
 }

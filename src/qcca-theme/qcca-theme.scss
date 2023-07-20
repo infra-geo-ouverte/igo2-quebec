@@ -208,16 +208,16 @@ app-search-results-tool ul{
     margin-left: 1rem;
   }
 
-::ng-deep .mat-stroked-button {
+::ng-deep .mat-mdc-outlined-button {
     border: 2px solid currentColor;
 }
 
-::ng-deep .mat-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, mat-button-base,
+::ng-deep .mat-mdc-button, .mat-mdc-icon-button, .mat-mdc-outlined-button, .mat-mdc-unelevated-button, mat-button-base,
 mat-stroked-button .mat-primary, .qcca-theme .mat-button, .qcca-theme .mat-icon-button, .qcca-theme .mat-stroked-button {
     border-radius: 0 !important;
 }
 
-.mat-raised-button {
+.mat-mdc-raised-button {
     color: #095797 !important;
     border-color: #095797 !important;
 }
@@ -475,10 +475,12 @@ h6 {
     background-color: #223654!important;
     }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-outline-start {
 border-radius: 0 !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-outline-end {
 border-radius: 0 !important;
 }
@@ -492,11 +494,12 @@ border-radius: 0 !important;
     background: #095797!important;
     }
     
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .qcca-theme .mat-form-field-appearance-outline .mat-form-field-outline-thick {
     border-color: #095797!important;
     }
 
-    .qcca-theme input.mat-input-element {
+    .qcca-theme input.mat-mdc-input-element {
     color: #647287;
     font-family: 'Open Sans', sans-serif;
 }
@@ -608,14 +611,17 @@ igo-list [igolistitem][color=accent].igo-list-item-selected > mat-list-item {
 
 // input fields
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-outline-end,  ::ng-deep .mat-form-field-outline-start {
     border-color: #4E5662;
     height: $igo-icon-size!important;
   }
   
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
 top: 0!important;
 }
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper, ::ng-deep .search-bar-buttons {
 margin-top: 0;
 }
@@ -624,6 +630,7 @@ margin-top: 0;
 height: $igo-icon-size!important; // anomaly
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix input {
 line-height: $igo-icon-size;
 vertical-align: middle;
@@ -632,17 +639,20 @@ padding: 0;
 margin-top: 0;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
 padding: 0;
 border-top: 0!important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper, .search-bar-buttons, ::ng-deep .mat-form-field-outline-end,  ::ng-deep .mat-form-field-outline-start {
 height: $igo-icon-size;
 padding: 0;
 margin-top:0;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
 padding: 0 8px 0 8px;
 margin-top: 0!important;
@@ -653,10 +663,12 @@ height: $igo-icon-size;
 padding: 0!important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-outline-start {
 border-radius: 0 !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 ::ng-deep .mat-form-field-outline-end {
 border-radius: 0 !important;
 }

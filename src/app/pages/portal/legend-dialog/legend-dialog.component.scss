@@ -54,19 +54,19 @@
 
   max-height: calc(100% - 24px) !important;
   height: inherit;
-
-  .mat-list-base .mat-list-item .mat-list-item-content {
+  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+  .mat-mdc-list-base .mat-mdc-list-item .mat-list-item-content {
     padding: 0 !important;
   }
 
   // TITLES
 
-  .mat-dialog-title {
+  .mat-mdc-dialog-title {
     margin: 0;
     display: block;
   }
 
-  .mat-dialog-title:after {
+  .mat-mdc-dialog-title:after {
     content: "";
     display: block;
     width: 2.8rem;
@@ -74,7 +74,7 @@
     margin-bottom: 0.8rem;
   }
 
-  .mat-list-item:after {
+  .mat-mdc-list-item:after {
     content: "";
     display: block;
     width: 1.8rem;
@@ -91,7 +91,7 @@
 // CLOSE BUTTON
 
 ::ng-deep app-legend-dialog {
-  .mat-icon, mat-button-wrapper, .mat-icon-button .mat-icon, .mat-icon-button {
+  .mat-icon, mat-button-wrapper, .mat-mdc-icon-button .mat-icon, .mat-icon-button {
     line-height: 26px;
     height: 24px;
     width: 24px;
@@ -100,11 +100,11 @@
     height: 20px;
     width: 20px;
   }
-  div.mat-dialog-content.legend > img {
+  div.mat-mdc-dialog-content.legend > img {
     max-height: 100%;
     max-width: 100%;
   }
-  div.mat-dialog-actions {
+  div.mat-mdc-dialog-actions {
     float: right;
     padding: 0;
     min-height: auto;

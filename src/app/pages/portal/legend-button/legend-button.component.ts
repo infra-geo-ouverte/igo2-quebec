@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { LanguageService } from '@igo2/core';
 import { LegendDialogComponent } from '../legend-dialog/legend-dialog.component';
 
