@@ -9,9 +9,9 @@ import {
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription, BehaviorSubject, of, skip } from 'rxjs';
 import { debounceTime, take, skipWhile, distinctUntilChanged, tap } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import * as olProj from 'ol/proj';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { AuthOptions, AuthService } from '@igo2/auth';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import olFormatGeoJSON from 'ol/format/GeoJSON';

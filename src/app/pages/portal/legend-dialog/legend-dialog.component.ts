@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogState } from '@angular/material/dialog';
+import { MatLegacyDialogState as MatDialogState } from '@angular/material/legacy-dialog';
 import { IgoMap, Layer } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 import { Observable } from 'rxjs';
