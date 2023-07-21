@@ -535,7 +535,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   zoomToFeatureExtent() {
-    console.log("zoomToFeatureExtent")
+    // console.log("zoomToFeatureExtent")
     if (this.feature.geometry) {
       const localOlFeature = this.format.readFeature(this.feature, {
         dataProjection: this.feature.projection,

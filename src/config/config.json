@@ -33,9 +33,9 @@
         "showFirstLastPageButtons": true,
         "showPreviousNextPageButtons": true
       }
-    },
-    "showMap": true
+    }
   },
+  "showMap": true,
   "searchSources": {
     "cadastre": {
       "available": false

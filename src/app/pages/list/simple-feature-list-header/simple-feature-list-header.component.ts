@@ -37,26 +37,18 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
     this.defaultSortOption = this.sortOptions[0][1];
     this.defaultSortCode = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.attributeName');
 
-    // console.log("defaultSortCode ", this.defaultSortCode);
-
     this.filterTypeService.onEvent().subscribe( filterTypes => {
-      // console.log("filterTypes event ", filterTypes);
       let filter: [string, string];
       for(let sortOption of filterTypes) {
         for(let option of this.sortOptions) {
-          // console.log("option[0] ", option[0], " sortOption ", sortOption);
           if(option[0] === sortOption){
             filter = option;
           }
         }
-        // let filter = this.sortOptions.find(filter => filter[0] === sortOption);
-        // console.log("filterrrr ", filter);
         if(filter && !this.possibleSortOptions.includes(filter)){
           this.possibleSortOptions.push(filter);
         }
       }
-
-      // console.log("possibleSortOptions ", this.possibleSortOptions);
 
       if(this.defaultSortCode === undefined) {
         this.defaultSortCode = this.sortOptions[0][0]
@@ -74,26 +66,20 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
 
       let set = false;
       for(let possibleSortOption of this.possibleSortOptions){
-        // console.log("possibleSortOption ", possibleSortOption);
         if(possibleSortOption[0] === this.defaultSortCode){
-          // console.log("matched ", this.defaultSortCode);
           this.defaultSortOption = possibleSortOption[1];
           this.defaultSortCode = possibleSortOption[0];
           this.sortBySelected.emit(this.defaultSortCode);
           set = true;
         }
       }
-      // console.log("set ", set);
-      // console.log("defaultcode ", this.defaultSortCode);
       if(!set) {
         this.sortBySelected.emit(this.defaultSortCode);
       }
     });
 
     let paginator = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator')
-    // this.defaultPageOption = this.pageOptions[0];
     this.defaultPageOption = paginator.pageSize !== undefined ? paginator.pageSize : this.pageOptions[0];
-
 
     // get the total number of entities
     this.entitiesLength = this.entitiesList.length;
@@ -113,7 +99,6 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
   }
 
   removeFilter(option: Option) {
-    console.log("removeFilter ", option);
     this.filterOptionService.emitEvent(option);
   }
 
@@ -121,12 +106,10 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
     let sort = sortOptions.find(element => element[1] === sortBy);
     this.filterSortService.emitEvent(sort[0]);
     this.sortBySelected.emit(sort[0]);
-    console.log("onSortSelected ", sort[0]);
   }
 
   onPageSelected(size: number) {
     this.filterPageService.emitEvent(size);
     this.pageSizeSelected.emit(size);
-    console.log("onPageSelected ", size);
   }
 }

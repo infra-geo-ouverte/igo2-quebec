@@ -1,130 +1,101 @@
-<div [ngClass]="mobile ? 'portal-mobile' : (showSimpleFeatureList? 'portal-desktop-flex' : 'portal-desktop')">
+<mat-sidenav-container *ngIf="showMap && !hasToolbox" class="sidenav">
+  <mat-sidenav-content position="end">
 
-  <div id="list-scroll" class="left-filter-and-map-div">
-    <app-simple-filters *ngIf="showSimpleFilters && selectedWorkspace$ | async as workspace"
-      [propertiesMap]="propertiesMap"
-      [entityStore]="workspace.entityStore"
-      class="simple-filters"
-      [isMobile] = "mobile"
-      (filterSelection)="onFilterSelection($event)">
-    </app-simple-filters>
+    <igo-backdrop
+      [shown]="false"
+      (click)="onBackdropClick()">
+    </igo-backdrop>
+  
+    <div id="scaleLine"></div>
+  
+    <div id="searchDesktop" *ngIf=!mobile>
+      <igo-menu-button *ngIf="showMenuButton"
+        [sidenavOpened]="sidenavOpened"
+        (openSidenav)="onToggleSidenavClick()">
+      </igo-menu-button>
 
-    <mat-sidenav-container *ngIf="showMap && !hasToolbox" class="sidenav">
-      <mat-sidenav-content position="end">
+      <igo-search-bar *ngIf="showSearchBar"
+        #searchbar
+        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
+        appearance="outline"
+        searchIcon ="magnify"
+        [matTooltip]="'search-bar' | translate"
+        matTooltipShowDelay="500"
+        tooltip-position="after"
+        [searchSettings]="false"
+        color="primary"
+        [store]="searchStore"
+        [termSplitter]="termSplitter"
+        (searchTermChange)="onSearchTermChange($event)"
+        (search)="onSearch($event)"
+        (clearFeature)="removeFeatureFromMap()"
+        (searchSettingsChange)="onSearchSettingsChange()">
+      </igo-search-bar>
 
-        <igo-backdrop
-          [shown]="false"
-          (click)="onBackdropClick()">
-        </igo-backdrop>
-      
-        <div id="scaleLine"></div>
-      
-        <div id="searchDesktop" *ngIf=!mobile>
-          <igo-menu-button *ngIf="showMenuButton"
-            [sidenavOpened]="sidenavOpened"
-            (openSidenav)="onToggleSidenavClick()">
-          </igo-menu-button>
+      <div *ngIf="!mobile" id="scaleLine"></div>
 
-          <igo-search-bar *ngIf="showSearchBar"
-            #searchbar
-            (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
-            appearance="outline"
-            searchIcon ="magnify"
-            [matTooltip]="'search-bar' | translate"
-            matTooltipShowDelay="500"
-            tooltip-position="after"
-            [searchSettings]="false"
-            color="primary"
-            [store]="searchStore"
-            [termSplitter]="termSplitter"
-            (searchTermChange)="onSearchTermChange($event)"
-            (search)="onSearch($event)"
-            (clearFeature)="removeFeatureFromMap()"
-            (searchSettingsChange)="onSearchSettingsChange()">
-          </igo-search-bar>
-
-          <div *ngIf="!mobile" id="scaleLine"></div>
-
-          <app-sideresult
-            [map]="map"
-            [(opened)]="sidenavOpened"
-            (toolChange)="toolChanged($event)">
-          </app-sideresult>
-        </div>
-
-        <igo-map-browser
-        igoMapOffline
-        igoWorkspaceUpdator
-        [workspaceStore]="workspaceStore"
-        igoLongPress
-        igoSearchPointerSummary
-        [igoSearchPointerSummaryDelay]="500"
-        [igoSearchPointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
-        igoHoverFeature
-        [igoHoverFeatureDelay]="250"
-        [igoHoverFeatureEnabled]="true"
-        #mapBrowser
-        igoQuery
-        [waitForAllQueries]="true"
-        [queryFeatures]="true"
-        [queryFeaturesHitTolerance]="15"
-        igoMapContext
-        igoLayerContext
-        igoDropGeoFile
-        [contextUri]="contextUri"
-        (query)="onMapQuery($event)"
+      <app-sideresult
         [map]="map"
-        [igoContextMenu]=contextMenu
-        (menuPosition)="onContextMenuOpen($event)"
-        [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
-            
-          <igo-baselayers-switcher
-            [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
-            [map]="map"
-            [useStaticIcon]="getBaseLayersUseStaticIcon()">
-          </igo-baselayers-switcher>
+        [(opened)]="sidenavOpened"
+        (toolChange)="toolChanged($event)">
+      </app-sideresult>
+    </div>
+
+    <igo-map-browser
+    igoMapOffline
+    igoWorkspaceUpdator
+    [workspaceStore]="workspaceStore"
+    igoLongPress
+    igoSearchPointerSummary
+    [igoSearchPointerSummaryDelay]="500"
+    [igoSearchPointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
+    igoHoverFeature
+    [igoHoverFeatureDelay]="250"
+    [igoHoverFeatureEnabled]="true"
+    #mapBrowser
+    igoQuery
+    [waitForAllQueries]="true"
+    [queryFeatures]="true"
+    [queryFeaturesHitTolerance]="15"
+    igoMapContext
+    igoLayerContext
+    igoDropGeoFile
+    [contextUri]="contextUri"
+    (query)="onMapQuery($event)"
+    [map]="map"
+    [igoContextMenu]=contextMenu
+    (menuPosition)="onContextMenuOpen($event)"
+    [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
         
-          <div id="map-buttons"
-          [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
-            <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
-            <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
-            <igo-rotation-button *ngIf="!useEmbeddedVersion" [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-            <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
-          </div>
+      <igo-baselayers-switcher
+        [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
+        [map]="map"
+        [useStaticIcon]="getBaseLayersUseStaticIcon()">
+      </igo-baselayers-switcher>
+    
+      <div id="map-buttons"
+      [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
+        <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
+        <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
+        <igo-rotation-button *ngIf="!useEmbeddedVersion" [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+        <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
+      </div>
 
-            <app-bottomresult
-              *ngIf="mobile && !useEmbeddedVersion"
-              [map]="map">
-            </app-bottomresult>
-        </igo-map-browser>
+        <app-bottomresult
+          *ngIf="mobile && !useEmbeddedVersion"
+          [map]="map">
+        </app-bottomresult>
+    </igo-map-browser>
 
-        <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
+    <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
 
-        <app-map-overlay
-        [@controlStateY]="getControlsOffsetY()"
-        [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
-                                sidenavOpened ? 'right' : 'left'">
-        </app-map-overlay>
+    <app-map-overlay
+    [@controlStateY]="getControlsOffsetY()"
+    [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
+                            sidenavOpened ? 'right' : 'left'">
+    </app-map-overlay>
 
-      </mat-sidenav-content>
+  </mat-sidenav-content>
 
-      
-    </mat-sidenav-container>
-  </div>
-  <div class="right-list-div" *ngIf="showSimpleFeatureList">
-    <!-- <app-simple-feature-list *ngIf="showSimpleFeatureList && selectedWorkspace$ | async as workspace"
-    [entityStore]="workspace.entityStore"
-    [clickedEntities]="clickedEntities$ | async"
-    [simpleFiltersValue]="simpleFiltersValue$ | async"
-    (listSelection)="entitySelectChange($event)"></app-simple-feature-list> -->
-    <app-simple-feature-list *ngIf="selectedWorkspace$ | async as workspace"
-    [entityStore]="workspace.entityStore"
-    [clickedEntities]="clickedEntities$ | async"
-    [entitiesList]="entitiesList"
-    [simpleFiltersValue]="simpleFiltersValue$ | async"
-    (listSelection)="zoomToSelectedFeature($event); entitySelectChange($event)"
-    ></app-simple-feature-list>
-
-    <!-- (listSelection)="entitySelectChange($event)"></app-simple-feature-list> -->
-  </div>
-</div>
+  
+</mat-sidenav-container>

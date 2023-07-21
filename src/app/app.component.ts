@@ -4,12 +4,18 @@ import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
   ConfigService,
-  MessageService
+  MessageService,
+  StorageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
 import { PwaService } from './services/pwa.service';
 import { Option } from './pages/filters/simple-filters.interface';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Workspace } from '@igo2/common';
+import { MatPaginator } from '@angular/material/paginator';
+import { Subscription } from 'rxjs';
+import { MapState, WorkspaceState } from '@igo2/integration';
+import { EditionWorkspace, Feature, FeatureWorkspace, WfsWorkspace } from '@igo2/geo';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -19,14 +25,14 @@ export class AppComponent {
   @HostListener('window:resize', ['$event'])
 	onResize() {
   		this.isMobile = window.innerWidth >= 768 ? false : true;
-      // console.log("isMobile: ", this.isMobile);
 	}
 
-  // public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
-  // public entitiesAll: Array<Object>;  //all entities
-  // public entitiesList: Array<Object>  //filtered entities
-  // public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
+  public features: any = null;  //object: {added: Feature[]}
+  public clickedEntities: Feature[] = [];
 
+  public showSimpleFilters: boolean = false;
+  public showSimpleFeatureList: boolean = false;
+  public useEmbeddedVersion: boolean = false;
   public isMobile: boolean = window.innerWidth >= 768 ? false : true; //boolean to determine screen width for layout
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
@@ -34,6 +40,9 @@ export class AppComponent {
   public hasFooter: boolean = true;
   private promptEvent: any;
   public hasMenu: boolean = false;
+  public workspace = undefined;
+  public mobileAndHeaderState: number = -1
+
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
@@ -45,17 +54,21 @@ export class AppComponent {
     private titleService: Title,
     private metaService: Meta,
     private messageService: MessageService,
-    private pwaService: PwaService
+    private pwaService: PwaService,
+    private storageService: StorageService,
+    public workspaceState: WorkspaceState,
+    private mapState: MapState,
   ) {
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
-
+    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : true;
+    this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
+    this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
     this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
       this.configService.getConfig('header.hasHeader') : false;
-    // console.log("hasHeader: ", this.hasHeader);
 
     this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
       this.configService.getConfig('hasFooter');
@@ -131,4 +144,17 @@ export class AppComponent {
       });
     }
   }
+
+  setSelectedWorkspace(workspace: Workspace) {
+    this.workspace = workspace;
+  }
+
+  setClickedEntities(features: Feature[]) {
+    this.clickedEntities = features;
+  }
+
+  onListSelection(event){
+    this.features = event;
+  }
+
 }

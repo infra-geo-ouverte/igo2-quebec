@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Feature } from '@igo2/geo';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -6,9 +7,9 @@ import { Subject } from 'rxjs';
 })
 export class ListEntitiesService {
 
-  private eventSubject = new Subject<Array<Object>>();
+  private eventSubject = new Subject<Array<Feature>>();
 
-  emitEvent(entitiesList: Array<Object>) {
+  emitEvent(entitiesList: Array<Feature>) {
     this.eventSubject.next(entitiesList);
   }
 

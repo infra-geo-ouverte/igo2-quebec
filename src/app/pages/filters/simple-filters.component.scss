@@ -124,6 +124,7 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+	background-color: #f2f1f1;
 }
 
 .filters-icon {
@@ -142,6 +143,10 @@
 .filter-info {
 	font-size: 14.4px;
 	cursor: text;
+}
+
+.filters {
+	background-color: #f2f1f1;
 }
 
 mat-divider {

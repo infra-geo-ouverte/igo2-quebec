@@ -3,7 +3,7 @@ import { FiltersAdditionalTypesService } from './filterServices/filters-addition
 import { FiltersActiveFiltersService } from './filterServices/filters-active-filters.service';
 import { FiltersSharedMethodsService } from './filterServices/filters-shared-methods.service';
 import { FiltersAdditionalPropertiesService } from './filterServices/filters-additional-properties.service';
-import { Feature, FeatureCollection } from 'geojson';
+import { FeatureCollection } from 'geojson';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { SimpleFilter, TypeOptions, Option } from './simple-filters.interface';
@@ -16,6 +16,7 @@ import { FiltersOptionService } from './filterServices/filters-option-service.se
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
 import { FiltersTypesService } from './filterServices/filters-types.service';
 import { FilteredEntitiesService } from '../list/listServices/filtered-entities.service';
+import { Feature } from '@igo2/geo';
 
 @Component({
   selector: 'app-simple-filters',
@@ -24,10 +25,8 @@ import { FilteredEntitiesService } from '../list/listServices/filtered-entities.
 })
 export class SimpleFiltersComponent implements OnInit, OnDestroy {
   @Input() isMobile: boolean;
-  // @Input() propertiesMap: Map<string, Array<Option>>;
   @Input() entityStore;
   @Output() filterSelection: EventEmitter<object> = new EventEmitter();
-  @Output() activeFiltersUpdate: EventEmitter<Map<string, Option[]>> = new EventEmitter();
   @ViewChild(MatAutocompleteTrigger) panelTrigger: MatAutocompleteTrigger;
 
 
@@ -42,10 +41,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public filtersFormGroupValueChange$$: Subscription; // subscription to form group value changes
   public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
   public filtersShown: boolean = false; //default status of filters in mobile mode
-  public entitiesAll: Array<Object>;  //entities
-  public entitiesList: Array<Object>;   //entities list provided by the service
+  public entitiesAll: Array<Feature>;  //entities
+  public entitiesList: Array<Feature>;   //entities list provided by the service
   public additionalTypes: Array<string> = [];  //list of all additional filter types (corresponding to the keys of the map in additional properties)
-  // public additionalProperties: Map<number, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
   public additionalProperties: Map<string, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
   public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "id", "nom", etc.)
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
@@ -65,12 +63,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
 
     let properties = Object.keys(this.entitiesAll[0]["properties"]);
-    // console.log("properties ", properties);
     for(let property of properties){
       let values: Array<Option> = [];
       for(let entry of this.entitiesAll){
-        // console.log("entry ", entry, "property ", property)
-        // console.log(entry["properties"][property]);
         let option: Option = {nom: entry["properties"][property], type: property};
         !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
       }
@@ -95,26 +90,22 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     for (let filter of this.simpleFiltersConfig) {
       //check that only the types in terrapi and the entities list will be used
       if (filter.type && (this.terrAPITypes.includes(filter.type) || this.propertiesMap.get(filter.type) !== undefined)) {
-        // console.log("TYPE ", filter.type)
-        // ...get the options from terrAPI and push them in the array containing all the options and add a control in the form group
+
+        // get the options from terrAPI and push them in the array containing all the options and add a control in the form group
         // typeoptions from terrAPI will have the optional list of options and those not from terrapi (from entitiesAll) will need to get the optionsList prior to this function being called
-        // console.log("terrapi types", this.terrAPITypes);
         await this.getOptionsOfFilter(filter).then((typeOptions: TypeOptions) => {
           let temp: Array<Option> = [];
           if(typeOptions && typeOptions.options){
             let last: Option = undefined;
-            // console.log("tytyty ", typeOptions)
             for(let element of typeOptions.options){
-              // console.log("element ", element)
-              // console.log("last ", last)
               if(!last || element.nom !== last.nom){
-                // console.log("pushing")
                 temp.push(element);
                 last = element;
               }
             }
             typeOptions.options = temp;
           }
+
           //if no options are returned, don't add to the list of all types options (e.g. terrapi sometimes is unable to find the info based on the type provided)
           if(typeOptions.options.length !== 0){
             this.allTypesOptions.push(typeOptions);
@@ -124,32 +115,24 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
     }
     // deep-copy the array containing all the options to the one that will contain the filtered options (same at the start)
-    // console.log("BEFORE2: ", this.filteredTypesOptions);
     this.filteredTypesOptions = JSON.parse(JSON.stringify(this.allTypesOptions));
-    // console.log("AFTER2: ", this.filteredTypesOptions);
 
     // set previous value of the form group (each control value is an empty string at the start)
     this.previousFiltersFormGroupValue = this.filtersFormGroup.value;
 
     // when the user types in a field, filter the options of the filter and emit the value of the filters
     this.filtersFormGroupValueChange$$ = this.filtersFormGroup.valueChanges.subscribe((spatialFiltersFormCurrentValue: object) => {
-      // console.log("FILTERSFORMGROUPVALUECHANGE");
       this.filterOptions(spatialFiltersFormCurrentValue);
 			this.filterSelection.emit(this.filtersFormGroup.value);
     });
 
     this.filterOptionService.onEvent().subscribe(event => {
-      // Handle the emitted event
-      // console.log('Event received:', event);
-      // console.log("event type: ", typeof event)
       this.onSelection(event);
     });
 
     this.listEntitiesService.onEvent().subscribe(entitiesList => {
-      // Handle the emitted event
       this.entitiesList = entitiesList;
       this.updateCount();
-      console.log('entitieslist received:', entitiesList);
     });
 
     this.updateCount();
@@ -175,46 +158,12 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @returns The options for the given filter in the TypeOptions format
    */
   private async getOptionsOfFilter(filter: SimpleFilter): Promise<TypeOptions> {
-    // console.log("getOptionsOfFilter");
     let typeOptions: TypeOptions;
 
-		// if type is included in terrAPI...
-		// if (this.terrAPITypes.includes(filter.type)) {
-    //   console.log("terrapi contains ", filter.type);
-		// 	// ...get options from terrAPI
-    //   if(this.propertiesMap.get(filter.type) === undefined){
-    //     console.log("filter type", filter.type)
-    //     await this.getOptionsFromTerrAPI(true, filter.type).then((featureCollection: FeatureCollection) => {
-    //       let options: Array<Option> = [];
-    //       featureCollection.features.forEach(feature => {
-    //         // ...push type, code and name of each option
-    //         console.log("feature ", feature)
-    //         if(filter.type === "municipalites"){
-    //           console.log("Municipality feature ", feature)
-    //           for(let property of this.propertiesMap){
-    //             console.log("property[1] ", property[1])
-    //             console.log("feature.properties[nom] ", feature.properties["nom"]);
-    //             for(let entry of property[1]){
-    //               if(typeof entry.nom === "string" && entry.nom.includes(feature.properties["nom"])){
-    //                 options.push({type: filter.type, code: feature.properties.code, nom: feature.properties.nom});
-    //                 console.log("length ", options.length)
-    //               }
-    //             }
-    //           }
-    //         }
-    //       });
-    //       typeOptions = {type: filter.type, description: filter.description, options: options};
-    //     });
-    //   }
-    // 	// when options (feature collection) are returned...
-		// // if type is not included in terrAPI...
-  	// } else
-
-    // console.log("propertyMap ", this.propertiesMap);
-
+		// if type is included in the feature properties
     if (this.propertiesMap.has(filter.type)){
       this.filterTypes.push(filter.type);
-    // console.log("terrapi does not contain ", filter.type);
+
     // Add the options from the entitiesAll, not from the terrAPI call
       let ops: Array<Option> = [];
       for(let property of this.propertiesMap.get(filter.type)){
@@ -225,25 +174,22 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
       typeOptions = {type: filter.type, description: filter.description, options: ops};
     }
+
     //need to also check if it is one of the location types that are accepted for the location terrapi call... can worry about this later
     else if (this.terrAPITypes.includes(filter.type)){
       this.filterTypes.push(filter.type);
       let options: Array<Option> = [];
       for(let entity of this.entitiesAll) {
-        // console.log("entity ", entity);
         let longitude = entity["geometry"]["coordinates"][0];
         let latitude = entity["geometry"]["coordinates"][1];
         let coords: string = longitude + "," + latitude;
         await this.filterMethods.getLocationDataFromTerrAPI(filter.type, coords).then((featureCollection: FeatureCollection) => {
           featureCollection.features.forEach(feature => {
           // ...push type, code and name of each option
-          // console.log("feature ", feature);
           let locationData = feature.properties.nom;
 
           if(typeof locationData === "string"){
             let op: Option = {type: filter.type, code: feature.properties.code, nom: feature.properties.nom};
-            // console.log("option ", op);
-            // console.log("ENTITYYY ", entity)
             let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
             if(!this.additionalProperties.get(coords)){
               let newTypeMap: Map<string, string> = new Map();
@@ -259,7 +205,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
               const combinedMap = new Map([...oldMap, ...newMap]);
               this.additionalProperties.set(coords, new Map(combinedMap));
 
-              // console.log("combinedMap ", combinedMap);
             }
             if(!this.additionalTypes.includes(filter.type)){
               this.additionalTypes.push(filter.type);
@@ -267,7 +212,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
 
             // the checks for duplicates is performed elsewhere so there is no need to re-check it here. it is assumed that there sould be no duplicate elements
             options.push(op);
-              // console.log("optionsArray ", options)
           }
           });
         });
@@ -276,9 +220,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       this.additionalTypesService.emitEvent(this.additionalTypes);
       this.filterTypesService.emitEvent(this.filterTypes);
       typeOptions = {type: filter.type, description: filter.description, options: options};
-      // console.log("entities do not contain ", filter.type);
     }
-    // console.log("additionalProperties end ", this.additionalProperties);
 		return typeOptions;
 	}
 
@@ -316,8 +258,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     const params: HttpParams = new HttpParams().set('sort', 'nom');
     let response: FeatureCollection;
 
-    // console.log("url ", url, {params});
-
     // make the call to terrAPI and return the feature collection (options)
     await this.http.get<FeatureCollection>(url, {params}).pipe(map((featureCollection: FeatureCollection) => {
       response = featureCollection;
@@ -326,18 +266,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
 
     return response;
   }
-
-  // private async getMunicipalityFromTerrAPI(locationType: string, coordinates: "string"): Promise<FeatureCollection> {
-  //   const url: string = this.terrAPIBaseURL + "locate?type=" + locationType + "&loc=" + coordinates;
-
-  //   let response: FeatureCollection;
-
-  //   await this.http.get<FeatureCollection>(url).pipe(map((featureCollection: FeatureCollection) => {
-  //     response = featureCollection;
-  //     return featureCollection;
-  //   })).toPromise();
-  //   return response;
-  // }
 
   /**
    * @description Get the label of a given field
@@ -355,10 +283,8 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @returns An array representing the options
    */
   public getOptions(formControlName: string): Array<Option> {
-    // console.log("BEFORE3: ", this.filteredTypesOptions);
     let filteredOptions: Array<Option> = this.filteredTypesOptions.find(typeOptions => typeOptions.type === formControlName)?.options;
 
-    // console.log("filteredoptions ", filteredOptions);
     //Case where the options are not fetched from TerrAPI and need to be fetched from the entities
     if(filteredOptions === undefined && this.propertiesMap.has(formControlName)) {
       filteredOptions = this.propertiesMap.get(formControlName);
@@ -373,8 +299,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       for(let element of filteredOptions) {
         for(let activeElement of activeFilteredOptions) {
           if(element.nom === activeElement.nom && element.type === activeElement.type){
-            // console.log("TYPE ", element.type);
-            // console.log("CODE ", element.code);
             element.selected = activeElement.selected;
           };
         }
@@ -392,11 +316,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     //return autocomplete form to prior state
     this.filtersFormGroup.reset();
 
-    // extract selected option from event
-    // console.log("onSelection received")
-    // const selectedOption: Option = event.option.value;
-    // console.log("selectedOption: ",selectedOption);
-
     //Every time we select an option we toggle its selected status
     selectedOption.selected = !selectedOption.selected;
 
@@ -405,54 +324,15 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     let matchingOptions = this.activeFilters.get(selectedOption.type).filter(element =>
       element.code === selectedOption.code && element.nom === selectedOption.nom && element.type === selectedOption.type);
     if(matchingOptions.length === 0) {
-      // console.log("adding element")
       this.activeFilters.get(selectedOption.type).push(selectedOption);
     }else {
-      // console.log("removing element")
       //remove element from activeFilters
       let temp = this.activeFilters.get(selectedOption.type);
       temp = temp.filter(element =>
         element.code !== selectedOption.code || element.nom !== selectedOption.nom || element.type !== selectedOption.type);
       this.activeFilters.set(selectedOption.type, temp);
     }
-    // console.log("emitting AF")
     this.activeFilterService.emitEvent(this.activeFilters);
-    // this.activeFiltersUpdate.emit(this.activeFilters);
-
-
-
-    // // for every type of filter...
-    // console.log("IMPORTANT POINT: ", this.filteredTypesOptions);
-    // for (let typeOptions of this.filteredTypesOptions) {
-    //   // console.log("selectedOption.type: ", selectedOption.type, " typeOptions.type: ", typeOptions.type, " typeoptions.options: ", typeOptions.type)
-    //   if (selectedOption.type !== typeOptions.type && typeOptions.options) {
-    //     console.log("INSIDE IF selectedOption.type: ", selectedOption.type, " typeOptions.type: ", typeOptions.type, " typeoptions.options: ", typeOptions.type)
-    //     // extract types and code
-    //     const sourceType: string = selectedOption.type;
-    //     const sourceCode: string = selectedOption.code;
-    //     const targetType: string = typeOptions.type;
-
-    //     // get options from terrAPI
-    //     await this.getOptionsFromTerrAPI(false, sourceType, sourceCode, targetType).then((featureCollection: FeatureCollection) => {
-		// 			let options: Array<Option> = [];
-
-    //       // ...push new options in arrays and replace old options
-    //       featureCollection.features.forEach(feature => {
-    //         let element = {type: targetType, code: feature.properties.code, nom: feature.properties.nom};
-    //         console.log("element: ", element);
-    //         options.push(element);
-    //       });
-
-    //       console.log("options returned: ", options)
-    //       typeOptions.options = options;
-		// 		});
-    //   }
-    // }
-    // console.log("BEFORE1: ", this.filteredTypesOptions);
-    // this.allTypesOptions = JSON.parse(JSON.stringify(this.filteredTypesOptions));
-    // console.log("AFTER1: ", this.filteredTypesOptions);
-
-    // console.log("allTypesOptions: ", this.allTypesOptions);
   }
 
   /**
@@ -479,9 +359,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             }
           }
 					);
-          // console.log("BEFORE4: ", this.filteredTypesOptions);
         	this.filteredTypesOptions.find((typeOptions: TypeOptions) => typeOptions.type === control).options = filteredOptions;
-          // console.log("AFTER5: ", this.filteredTypesOptions);
 				}
       }
     }
@@ -517,27 +395,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     //reset active filters
     this.emptyActiveFilters();
 
-    // // reset all of the options for every filter
-    // for (let filter of this.simpleFiltersConfig) {
-    //   if (filter.type) {
-    //     // ...get the options from terrAPI and replace them in the array containing all the options
-    //     await this.getOptionsOfFilter(filter).then((typeOptions: TypeOptions) => {
-    //       this.allTypesOptions.find((typeOptions: TypeOptions) => typeOptions.type === filter.type).options = typeOptions.options;
-    //     });
-    //   }
-    // }
-
     // deep-copy the array containing all the options
-    // console.log("BEFORE5: ", this.filteredTypesOptions);
     this.filteredTypesOptions = JSON.parse(JSON.stringify(this.allTypesOptions));
     this.updateCount();
-    // console.log("AFTER5: ", this.filteredTypesOptions);
-
-    //remove the selected status from the rest of the filters
-    // for(let type of this.activeFilters){
-    //   console.log
-    // }
-
   }
 
     /**
@@ -570,10 +430,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   }
 
   public updateCount() {
-    // console.log("updatecount entitiesList ", this.entitiesList);
-    // console.log("alltypesOptions before: ", this.filteredTypesOptions)
     for(let filter of this.filteredTypesOptions){
-      // console.log("AAAAAA", filter.type, "AAAAA");
       let type: string = filter.type;
 
       //determine if we need to use additional properties or if it is contained in the entities list by default
@@ -591,22 +448,15 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
                       option.count++;
                     }
                   }
-                  // console.log("FOUND ", option);
-                  // option.count++;
                 }
               }
             }
           }
-          // console.log("entry ", entry);
         }
-        // console.log("additionalProperties ", this.additionalProperties);
       }else{
         for(let option of filter.options){
           option.count = 0;
           for(let entity of this.entitiesList){
-            // console.log("type ", type)
-            // console.log("entity['properties'][type] ", entity["properties"][type]);
-            // console.log("option.nom ", option.nom);
             if(entity["properties"][type] === option.nom){
               option.count++;
             }
@@ -615,8 +465,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
     }
     this.cdRef.detectChanges();
-    // console.log("alltypesOptions after: ", this.filteredTypesOptions)
-
   }
 
 }

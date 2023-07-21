@@ -8,10 +8,29 @@
 
 <my-element></my-element> -->
 
-<app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
+<div *ngIf="!hasMenu && useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
+    <div class="filters-and-map">
 
-<!-- <app-simple-feature-list
-[propertiesMap]="propertiesMap"
-[entitiesList]="entitiesList"
-[simpleFiltersValue]="simpleFiltersValue$ | async">
-</app-simple-feature-list> -->
+        <app-simple-filters *ngIf="showSimpleFilters && workspace"
+        [entityStore]="workspace.entityStore"
+        class="simple-filters"
+        [isMobile]="isMobile"
+        ></app-simple-filters>
+
+        <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
+        (mapQuery)="setClickedEntities($event)"
+        [features]="features"
+        ></app-portal>
+
+    </div>
+    <div class="list">
+        <app-simple-feature-list *ngIf="workspace && workspace"
+        [entityStore]="workspace.entityStore"
+        [clickedEntities]="clickedEntities"
+        (listSelection)="onListSelection($event)"
+        ></app-simple-feature-list>
+    </div>
+</div>
+<div *ngIf="!useEmbeddedVersion">
+    <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
+</div>

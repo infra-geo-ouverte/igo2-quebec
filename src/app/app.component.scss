@@ -5,6 +5,33 @@
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.portal-desktop-embedded {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  gap: 20px;
+  display: flex;
+}
+
+.portal-mobile-embedded {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+// :host {
+//   overflow: auto;
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   gap: 20px;
+// }
+
 /*** Message-center ***/
 igo-message-center ::ng-deep simple-notifications ::ng-deep div.simple-notification-wrapper {
   right: 10px;
@@ -79,3 +106,27 @@ spinner-with-legend-dialog {
   width: 100%;
   height: 50%;
 }
+
+
+//Matthew's changes
+// app-portal {
+//   // height: 100%;
+//   // width: 100%;
+//   // overflow: auto;
+// }
+
+.list {
+  height: fit-content;
+  // min-width: 50%
+}
+
+.filters-and-map {
+  min-width: 400px;
+  // width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 20px;
+  height: fit-content;
+}
+

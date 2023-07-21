@@ -38,6 +38,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
+import { PortalComponent } from './pages/portal/portal.component';
+import { IgoSimpleFiltersModule } from './pages/filters/simple-filters.module';
+import { IgoSimpleFeatureListModule } from './pages/list/simple-feature-list.module';
 
 export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
@@ -50,6 +53,8 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [AppComponent],
   imports: [
+    IgoSimpleFeatureListModule,
+    IgoSimpleFiltersModule,
     CommonModule,
     MatIconModule,
     MatDividerModule,
@@ -76,6 +81,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   providers: [
     provideConfigOptions({
       default: environment.igo,
+      // path: './assets/config/config.json'
       path: './config/config.json'
     }),
     RouteService,
@@ -102,8 +108,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  public injector: Injector;
-  constructor(injector: Injector) {
+  constructor(private injector: Injector) {
     this.injector = injector;
   }
 

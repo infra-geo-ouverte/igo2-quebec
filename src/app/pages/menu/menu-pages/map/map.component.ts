@@ -13,8 +13,6 @@ export class MapComponent {
 
     this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && this.configService.getConfig('header.hasHeader') === undefined ?
       this.configService.getConfig('header.hasHeader') : false;
-
-    // console.log("header: ", this.hasHeader);
    }
 
 }

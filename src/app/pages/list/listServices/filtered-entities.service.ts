@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Feature } from 'geojson';
+import { Feature } from '@igo2/geo';
 import { Subject } from 'rxjs';
 
 @Injectable({

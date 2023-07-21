@@ -5,7 +5,10 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
-  Input
+  Input,
+  EventEmitter,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -124,12 +127,18 @@ import { timeStamp } from 'console';
 })
 
 export class PortalComponent implements OnInit, OnDestroy {
+  @Input() features = {added: []}; //TODO update the type later when I know what it is..
+  @Output() workspaceSelected = new EventEmitter<Workspace>();
+  @Output() mapQuery = new EventEmitter<Feature[]>();
+  // @Output() workspaceSelected = new EventEmitter<BehaviorSubject<Workspace>>();
+
+
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
-  public entitiesAll: Array<Object>;  //all entities
-  public entitiesList: Array<Object>  //filtered entities
+  public entitiesAll: Array<Feature>;  //all entities
+  public entitiesList: Array<Feature>  //filtered entities
   // public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
   // public activeFilters$: BehaviorSubject<Map<string, Option[]>> = new BehaviorSubject<Map<string, Option[]>>(new Map()));
-  public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
+  // public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
   public clickedEntities$: BehaviorSubject<Feature[]> = new BehaviorSubject(undefined);
   public showSimpleFilters: boolean = false;
   public showSimpleFeatureList: boolean = false;
@@ -169,7 +178,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public workspaceSwitchDisabled = false;
   public paginatorOptions: EntityTablePaginatorOptions = {
     pageSize: 50, // Number of items to display on a page.
-    pageSizeOptions: [1, 5, 10, 20, 50, 100, 500] // The set of provided page size options to display to the user.
+    pageSizeOptions: [5, 10, 25, 50, 100, 500] // The set of provided page size options to display to the user.
   };
   public useEmbeddedVersion = false;
   public workspaceMenuClass = 'workspace-menu';
@@ -362,9 +371,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
       this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
       this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
-      this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ? false : this.configService.getConfig('useEmbeddedVersion.showMap');
-
-      console.log("SHOW STATUS ", this.showSimpleFeatureList, " ", this.showSimpleFilters, " ", this.showMap);
+      this.showMap = this.configService.getConfig('showMap') === undefined ? false : this.configService.getConfig('showMap');
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -397,9 +404,6 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (this.configService.getConfig('geolocate.activateDefault') !== undefined) {
         this.map.geolocationController.tracking = this.configService.getConfig('geolocate.activateDefault');
       }
-      // this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-      // this.expansionPanelExpanded = true;
-
     });
 
     this.searchState.searchTermSplitter$.next(this.termSplitter);
@@ -434,29 +438,6 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.contextMenuStore.load(contextActions);
 
-  //   this.queryStore.count$
-  //   .pipe(pairwise())
-  //   .subscribe(([prevCnt, currentCnt]) => {
-  //     this.map.viewController.padding[2] = currentCnt ? 280 : 0;
-  //     // on mobile. Close the toast if workspace is opened, on new query
-  //     if (
-  //       prevCnt === 0 &&
-  //       currentCnt !== prevCnt &&
-  //       this.isMobile() &&
-  //       this.hasExpansionPanel &&
-  //       this.expansionPanelExpanded &&
-  //       this.toastPanelOpened
-  //     ) {
-  //       this.toastPanelOpened = false;
-  //     }
-  //   });
-  // this.map.ol.once('rendercomplete', () => {
-  //   this.readQueryParams();
-  //   if (this.configService.getConfig('geolocate.activateDefault') !== undefined) {
-  //     this.map.geolocationController.tracking = this.configService.getConfig('geolocate.activateDefault');
-  //   }
-  // });
-
     this.onSettingsChange$.subscribe(() => {
       this.searchState.setSearchSettingsChange();
     });
@@ -468,9 +449,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     });
 
     this.workspaceState.workspaceEnabled$.next(this.hasExpansionPanel);
-    //wwwwwwwwwww
     this.workspaceState.store.empty$.subscribe((workspaceEmpty) => {
-      console.log("ssssssss3")
 
       if (!this.hasExpansionPanel) {
         return;
@@ -479,23 +458,11 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (workspaceEmpty) {
         this.expansionPanelExpanded = false;
       }
-      // this.updateMapBrowserClass();
     });
 
-    // this.workspaceMaximize$$.push(this.workspaceState.workspaceMaximize$.subscribe((workspaceMaximize) => {
-    //   this.workspaceMaximize$.next(workspaceMaximize);
-    //   this.updateMapBrowserClass();
-    // }));
-    // this.workspaceMaximize$$.push(
-    //   this.workspaceMaximize$.subscribe(() => this.updateMapBrowserClass())
-    // );
-
-
     this.map.layers$.subscribe( layerList => {
-      console.log("layerList ", layerList);
       for(let layer of layerList){
         if(layer.options.id === this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId')){
-          console.log("FOUND")
           this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
           this.expansionPanelExpanded = true;
           break;
@@ -503,17 +470,11 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    //wwwwwwwwww
     this.workspaceState.workspace$.subscribe((activeWks: WfsWorkspace | FeatureWorkspace | EditionWorkspace) => {
-      // console.log("workspacestate")
-      // console.log(activeWks)
-      console.log("ssssssss1")
-      console.log("TEST1 ", this.map.status$);
-      console.log("TEST2 ", this.contextLoaded);
-
       if (activeWks) {
-        // console.log("wks 5 (active wks)");
         this.selectedWorkspace$.next(activeWks);
+        this.workspaceSelected.emit(this.selectedWorkspace$.getValue());
+
         this.expansionPanelExpanded = true;
 
         if (activeWks.layer.options.workspace?.pageSize && activeWks.layer.options.workspace?.pageSizeOptions) {
@@ -528,50 +489,12 @@ export class PortalComponent implements OnInit, OnDestroy {
           };
         }
       } else {
-        // console.log("no activeWks");
         this.expansionPanelExpanded = false;
       }
     });
 
-    // console.log("typeof: ", typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-    // console.log("id: ", this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-    if (this.showSimpleFeatureList && typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId') === 'string') {
-      // this.workspaceFunction();
-      // console.log("if entered")
-
-      // this.workspaceState.workspace$.subscribe(ws => {
-      //   if(ws !== undefined){
-      //       console.log("WS SUBSCRIBE ", ws);
-      //       this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-      //       this.expansionPanelExpanded = true;
-      //     }
-      // });
-
-      // console.log("outside TIMEOUT!!!")
-      // setTimeout(() => {
-      //   console.log("inside TIMEOUT!!!")
-      //   // this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-      //   // this.expansionPanelExpanded = true;
-      // }, 5000);
-
-      // setTimeout(() => {
-      //   console.log("WSStore ", this.workspaceStore);
-      //   console.log("WSS ", this.workspaceState)
-      //   this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-      //   // console.log(this.workspaceState.workspace$.getValue())
-      //   this.expansionPanelExpanded = true;
-      //   if(this.workspace){
-      //     console.log("workspace exists")
-      //   }else{
-      //     console.log("workspace doesnt exist")
-      //   }
-      // }, 5000);
-    }
-
-    //wwwwwwwwwwww
     this.activeWidget$$ = this.workspaceState.activeWorkspaceWidget$.subscribe(
       (widget: Widget) => {
-        console.log("ssssssss2")
         if (widget !== undefined) {
           this.openToastPanelForExpansion();
           this.showToastPanelForExpansionToggle = true;
@@ -579,7 +502,6 @@ export class PortalComponent implements OnInit, OnDestroy {
           this.closeToastPanelForExpansion();
           this.showToastPanelForExpansionToggle = false;
         }
-        console.log(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'))
       }
     );
 
@@ -593,11 +515,9 @@ export class PortalComponent implements OnInit, OnDestroy {
     );
 
     this.activeFilterService.onEvent().subscribe(activeFilters => {
-      console.log("afService ", activeFilters);
       this.applyFilters(activeFilters);
-      // this.fitFeatures();
     });
-    
+
 
     this.sidenavMediaAndOrientation$$ =
       combineLatest([
@@ -616,7 +536,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.entitiesListService.onEvent().subscribe(entitiesList => {
       this.entitiesList = entitiesList;
       this.fitFeatures();
-      console.log("EL SERVICE ", this.entitiesList);
     });
 
 
@@ -627,19 +546,12 @@ export class PortalComponent implements OnInit, OnDestroy {
     );
   }
 
-  // public async workspaceFunction(){
-  //   await this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
-  //   this.expansionPanelExpanded = true;
-  // }
-
   public breakpointChanged() {
     if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
-      // console.log("mobile ", this.mobile);
     } else {
       this.mobile = true;
-      // console.log("mobile ", this.mobile);
     }
   }
 
@@ -673,32 +585,21 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   entitySelectChange(result: { added: Feature[] }) {
-    console.log("selectedworkspace ", this.selectedWorkspace$.value);
-    console.log("ESC ", result);
+    console.log("entitySelectChange ", result);
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
 
-    // console.log("ESC")
-
-    // console.log("wks 2")
     if (this.selectedWorkspace$.value instanceof WfsWorkspace || this.selectedWorkspace$.value instanceof FeatureWorkspace) {
-      // console.log("wks 3")
-      console.log("ESC1")
 
       if (!this.selectedWorkspace$.value.getLayerWksOptionTabQuery()) {
-        // console.log("wks 4")
-        console.log("ESC2")
 
         return;}
     }
-    console.log("ESC9")
 
     if (result && result.added) {
-      console.log("ESC3")
 
       const results = result.added.map((res) => {
         if (res?.ol?.getProperties()._featureStore.layer?.visible) {
-          console.log("ESC4")
 
           const ol = res.ol as olFeature<OlGeometry>;
           const featureStoreLayer = res.ol.getProperties()._featureStore.layer;
@@ -707,7 +608,6 @@ export class PortalComponent implements OnInit, OnDestroy {
           feature.meta.title = this.queryService.getQueryTitle(feature, featureStoreLayer) || feature.meta.title;
           let querySearchSource = querySearchSourceArray.find((s) => s.title === feature.meta.sourceTitle);
           if (!querySearchSource) {
-            console.log("ESC5")
 
             querySearchSource = new QuerySearchSource({title: feature.meta.sourceTitle});
             querySearchSourceArray.push(querySearchSource);
@@ -716,22 +616,23 @@ export class PortalComponent implements OnInit, OnDestroy {
         }
       });
 
-      console.log("ESC6")
-
       const research = {
         request: of(results),
         reverse: false,
         source: baseQuerySearchSource
       };
 
-      console.log("ESC7")
-
       research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
         this.queryStore.load(queryResults);
       });
 
-      console.log("ESC8")
+    }
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.features && changes.features.currentValue !== null){
+      this.zoomToSelectedFeature(changes.features.currentValue);
+      this.entitySelectChange(changes.features.currentValue);
     }
   }
 
@@ -772,27 +673,20 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    // console.log("onmapquery")
     // the event.features array contains duplicates (if you change the zoom on the map and click on a feature that is already in the list, it adds a new one - since some specific identifyer is different every time the zoom changes)
     // therefore, this part is to remove duplicates...
-    console.log("onmapquery event.features before ", event.features);
     event.features = event.features.reduce((unique, item) => {
       const hasDuplicate = unique.some((existingItem) => {
-        console.log("item ", JSON.stringify(item["properties"]));
-        console.log("existingItem ", JSON.stringify(existingItem["properties"]));
-        console.log(JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]));
         return JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]);
       });
-    
+
       if (!hasDuplicate) {
         unique.push(item);
       }
-    
+
       return unique;
     }, []);
-    console.log("onmapquery event.features after ", event.features);
-    // this.clickedEntities$.next(event.features);
-    if(event.features.length > 0) this.clickedEntities$.next(event.features);
+    if(event.features.length > 0) this.mapQuery.emit(event.features);
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
     const results = event.features.map((feature: Feature) => {
@@ -849,7 +743,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     if(this.workspace) {
       const activeWks = this.workspace as WfsWorkspace;
       if(activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
-        // console.log("ws4")
         return true;
       }
     }
@@ -922,7 +815,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private computeHomeExtentValues(context: DetailedContext) {
-    console.log("computeHomeExtentValues context ", context)
     if (context?.map?.view?.homeExtent) {
       this.homeExtent = context.map.view.homeExtent.extent;
       this.homeCenter = context.map.view.homeExtent.center;
@@ -1133,7 +1025,6 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   private computeZoomToExtent() {
-    console.log("computeZoomToExtent")
     if (this.routeParams['zoomExtent']) {
       const extentParams = this.routeParams['zoomExtent'].split(',');
       const olExtent = olProj.transformExtent(
@@ -1427,7 +1318,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     visibility: boolean = true,
     zIndex: number
   ) {
-    console.log("addLayerFromUrl url ", url, " name ", name, " type ", type, " version ", version, " visibility ", visibility, " zIndex ", zIndex);
     if (!this.contextLoaded) {
       return;
     }
@@ -1505,31 +1395,12 @@ export class PortalComponent implements OnInit, OnDestroy {
     return visible;
   }
 
-  onFilterSelection(event: object) {
-    // console.log("onFilterSelection event: ", event);
-    this.simpleFiltersValue$.next(event);
-  }
-
-  // onActiveFiltersUpdate(event: Map<string, Option[]>) {
-  //   console.log("change af ", event)
-  //   this.activeFilters = event;
-  //   // this.activeFilters$.next(event);
-  // }
-
   zoomToSelectedFeature(features: any) {
-    console.log("zoomToSelectedFeatureWks ", features);
     const featuresSelected: Array<Feature> = features["added"];
     let format = new olFormatGeoJSON();
-    // console.log("ws5")
-    // const featuresSelected = this.workspaceState.workspaceSelection.map(rec => (rec.entity as Feature));
-    // if (featuresSelected.length === 0) {
-    //   return;
-    // }
-    console.log("featuresSelected: ", featuresSelected);
+
     const olFeaturesSelected = [];
     for (const feat of featuresSelected) {
-      console.log("feat.projection",  feat.projection);
-      console.log("this.map.projection ", this.map.projection)
       let localOlFeature = format.readFeature(feat,
         {
           dataProjection: feat.projection,
@@ -1537,28 +1408,21 @@ export class PortalComponent implements OnInit, OnDestroy {
         });
         olFeaturesSelected.push(localOlFeature);
     }
-    console.log("OLFS ", olFeaturesSelected);
     const totalExtent = computeOlFeaturesExtent(this.map, olFeaturesSelected);
     this.map.viewController.zoomToExtent(totalExtent);
-
-    // moveToOlFeatures(this.map, olFeaturesSelected, FeatureMotion.Zoom);
   }
 
-  onEntitiesListUpdate(event: Array<Object>) {
-    // console.log("EL UPDATE");
+  onEntitiesListUpdate(event: Array<Feature>) {
     this.entitiesList = event;
   }
 
   public filterByOgc(wmsDatasource: WMSDataSource, filterString: string) {
-    // console.log("wmsDatasource ", wmsDatasource);
     const appliedFilter = new OgcFilterWriter().formatProcessedOgcFilter(filterString, wmsDatasource.options.params.LAYERS);
-    // console.log("filterByOgc2 appliedFilter ", appliedFilter);
     wmsDatasource.ol.updateParams({ FILTER: appliedFilter });
   }
 
   public applyFilters(activeFilters: Map<string,Option[]> ) {
-    // console.log("additionalProperties ", this.additionalProperties);
-    // console.log("applyFilters activeFilters ", activeFilters);
+    console.log("entitieslist ", this.entitiesList);
     const conditions = [];
     let idArray: Array<string> = [];
     for(let category of activeFilters){
@@ -1567,41 +1431,29 @@ export class PortalComponent implements OnInit, OnDestroy {
 
         // If the type is from terrapi, we will find it in the additionaltypes
         // The id will be given to the condition instead of the terrAPI type, so that it can be found with filterByOgc()
-        // console.log("AF filter ", filter);
-        // console.log("AF additionalTypes ", this.additionalTypes);
         if(this.additionalTypes.includes(filter.type)){
-          let combinedFeatures: Array<Feature> = [];
-          // console.log("AF additionalProperties", this.additionalProperties)
           for(let entry of this.additionalProperties){
             for(let type of entry[1]){
-              // console.log("type[0] ", type[0], " filter.type ", filter.type, " type[1] ", type[1], " filter.nom ", filter.nom)
               if(type[0] === filter.type && type[1] === filter.nom){
-                // console.log("entry found ", entry)
                 if(!idArray.includes(entry[0])) idArray.push(entry[0]);
               }
             }
           }
           
-          // bundleConditions.push({expression: entry[0], operator: "PropertyIsEqualTo", propertyName: additionalType});
-          // console.log("idArray ", idArray);
-          let features: Array<Object> = this.entitiesAll.filter(element => idArray.includes(element["geometry"]["coordinates"][0] + "," + element["geometry"]["coordinates"][1]));
-          // console.log("FEATURES ", features);
-          // console.log("entitiesList ", this.entitiesList);
+          let features: Array<Feature> = this.entitiesAll.filter(element => idArray.includes(element["geometry"]["coordinates"][0] + "," + element["geometry"]["coordinates"][1]));
           for(let element of features){
-            // console.log("ELEMENTT ", element);
-            // console.log("PROPERTIES ", element["properties"]);
+            console.log("ruh roh");
             Object.keys(element["properties"]).forEach(key => {
               //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work, but in the future I will add all fields and not just the one
               //it should add ALL properties and not just the following ones checked in the condition... just there is no guarantee that there will not be any typos in the other properties
               if(key === "id"){
                 let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
-                // console.log("conditionnn ", condition);
+                console.log("conditionnn ", condition);
                 bundleConditions.push(condition);
               }
             });
           }
-          
-          // console.log("bundleConditions ", bundleConditions)
+          console.log("bundleConditions ", bundleConditions);
         }else{
           let condition = {expression: filter.nom, operator: "PropertyIsEqualTo", propertyName: filter.type};
           // console.log("conditionnn ", condition);
@@ -1621,7 +1473,7 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
     let filterQueryString = "";
     let ogcFilterWriter: OgcFilterWriter = new OgcFilterWriter();
-    // console.log("conditions ", conditions);
+    console.log("conditions ", conditions);
     if (conditions.length >= 1) {
       filterQueryString = ogcFilterWriter
         .buildFilter(conditions.length === 1 ?
@@ -1646,8 +1498,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     let minY: number;
     let maxX: number;
     let maxY: number;
-    let centerX: number;
-    let centerY: number;
+    // let centerX: number;
+    // let centerY: number;
 
     for(let feature of this.entitiesList){
 
@@ -1678,23 +1530,20 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    await this.terrAPICoordReformat((e + w)/2 + "," + (n + s)/2, this.map.projection).then((coords: number[]) => {
-      if(coords){
-			  centerX = coords[0];
-        centerY = coords[1];
-      }
-    });
+    // await this.terrAPICoordReformat((e + w)/2 + "," + (n + s)/2, this.map.projection).then((coords: number[]) => {
+    //   if(coords){
+		// 	  centerX = coords[0];
+    //     centerY = coords[1];
+    //   }
+    // });
 
     let mapExtent: MapExtent = [minX, minY, maxX, maxY];
     // let mapCenter: [number, number] = [centerX, centerY];
-    console.log("current center ", this.map.getCenter());
-    // console.log("center ", mapCenter)
     // console.log("current extent " , this.map.getExtent());
     console.log("new extent ", mapExtent);
-    // let options: MapViewOptions = {center: mapCenter};
+    console.log("projection ", this.map.projection);
+    // console.log("zoom ", this.map.viewController.getZoom());
     this.map.viewController.zoomToExtent(mapExtent);
-    // console.log("options ", options);
-    // this.map.updateView(options);
   }
 
   public async terrAPICoordReformat(coord: string, projection: string): Promise<number[]> {

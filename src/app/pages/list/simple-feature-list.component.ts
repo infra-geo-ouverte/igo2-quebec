@@ -1,5 +1,4 @@
 import { Meta } from '@angular/platform-browser';
-import { Feature } from 'geojson';
 import { ConfigService, LanguageService, IgoLanguageModule } from '@igo2/core';
 import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { EntityStore } from './shared/store';
@@ -17,6 +16,7 @@ import { FiltersActiveFiltersService } from '../filters/filterServices/filters-a
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { FiltersTypesService } from '../filters/filterServices/filters-types.service';
 import { EntitiesAllService } from './listServices/entities-all.service';
+import { Feature } from '@igo2/geo';
 
 @Component({
   selector: 'app-simple-feature-list',
@@ -27,18 +27,17 @@ import { EntitiesAllService } from './listServices/entities-all.service';
 export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() entityStore: EntityStore; // a store that contains all the entities
   @Input() clickedEntities: Array<Feature>; // an array that contains the entities clicked in the map
-  @Input() entitiesList: Array<Object>
+  @Input() entitiesList: Array<Feature>
   @Input() simpleFiltersValue: object; // an object containing the value of the filters
   @Output() listSelection = new EventEmitter(); // an event emitter that outputs the entity selected in the list
-  // @Input() activeFilters: Map<string, Option[]>;
 
   public clickedEntitiesUpdated: Array<Feature> = [];
   public filterTypes: string[];
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
-  public entitiesAll: Array<Object>; // an array containing all the entities in the store
-  public entitiesShown: Array<Object>; // an array containing the entities currently shown
-  public entitiesList$: BehaviorSubject<Array<Object>> = new BehaviorSubject([]); // an observable of an array of filtered entities
+  public entitiesAll: Array<Feature>; // an array containing all the entities in the store
+  public entitiesShown: Array<Feature>; // an array containing the entities currently shown
+  public entitiesList$: BehaviorSubject<Array<Feature>> = new BehaviorSubject([]); // an observable of an array of filtered entities
   public entitiesList$$: Subscription; // subscription to filtered list
 
   public simpleFeatureListConfig: SimpleFeatureList; // the simpleFeatureList config input by the user
@@ -70,39 +69,25 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   ngOnInit(): void {
     //set additionalProperties when they get created in the filters component
     this.filterAdditionalPropertiesService.onEvent().subscribe( event => {
-      // console.log("additionalPropertyService: ", event)
       this.additionalProperties = event; });
 
     // get the entities from the layer/store
     this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
     this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
-    console.log("entities test ", this.entitiesAll)
-
-
-    // console.log("entitiesAll ", this.entitiesAll);
 
     this.simpleFeatureListConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList');
-
-    // this.entitiesAll = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
-    // this.entitiesList = this.configService.getConfig('temporaryEntitiesAll') as Array<Object>;
 
     this.listEntitiesService.emitEvent(this.entitiesList);
     this.entitiesAllService.emitEvent(this.entitiesAll);
 
-    // console.log(this.entitiesAll);
-    // console.log(this.entitiesList);
-
     // get the attribute order to use to display the elements in the list
     this.attributeOrder = this.simpleFeatureListConfig.attributeOrder;
-    // console.log("attributeOrder ", this.attributeOrder);
 
     // get the sorting config and sort the entities accordingly (sort ascending by default)
     this.sortBy = this.simpleFeatureListConfig.sortBy;
     if (this.sortBy) {
       this.sortEntities(this.entitiesList, this.sortBy.attributeName);
       this.sortEntities(this.entitiesAll, this.sortBy.attributeName);
-      // this.entitiesList$.next(this.sortEntities(this.entitiesAll, this.sortBy.attributeName));
-      // this.entitiesAll = this.sortEntities(this.entitiesList, this.sortBy.attributeName);
     }
 
     // get the formatting configs for URLs and emails (not formatted by default)
@@ -112,7 +97,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // if it exist, get the paginator config, including the page size, the buttons options and calculate the number of pages to use
     this.paginator = this.simpleFeatureListConfig.paginator;
     if (this.paginator) {
-      // console.log("paginator");
       // elements displayed by default
       this.pageSize = this.paginator.pageSize !== undefined ? this.paginator.pageSize : this.pageOptions[0];
       // buttons shown by default
@@ -121,12 +105,9 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       this.showPreviousNextPageButtons = this.paginator.showPreviousNextPageButtons !== undefined ?
         this.paginator.showPreviousNextPageButtons : true;
       this.entitiesList$.next(this.entitiesList);
-      console.log("entitiesList ", this.entitiesList$);
     // if the paginator config does not exist, all the entities are shown
     } else {
-      // console.log("no paginator");
       this.entitiesShown = this.entitiesList;
-      console.log("entitiesShown 1 ", this.entitiesShown);
     }
 
     // subscribe to the current page number
@@ -138,7 +119,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
       // slice the entities to show the current ones
       this.entitiesShown = this.entitiesList.slice(this.elementsLowerBound - 1, this.elementsUpperBound);
-      // console.log("entitiesShown 2 ", this.entitiesShown);
     });
 
     // subscribe to the current entities list
@@ -151,22 +131,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       this.currentPageNumber$.next(1);
     });
 
-    // this.filterSortService.onEvent().subscribe(sortBy => {
-    //   // Handle the emitted event
-    //   console.log('sort received:', sortBy);
-    //   console.log("event type: ", typeof sortBy)
-    // });
-
-    // this.filterPageService.onEvent().subscribe(pageSize => {
-    //   // Handle the emitted event
-    //   console.log('page received:', pageSize);
-    //   console.log("event type: ", typeof pageSize);
-    //   this.pageSize = pageSize;
-    //   // this.paginator.pageSize = pageSize;
-    // });
-
     this.activeFilterService.onEvent().subscribe(activeFilters => {
-      // console.log("afservice ");
       this.activeFilters = activeFilters;
       this.entitiesList$.next(this.filterEntities());
       this.listEntitiesService.emitEvent(this.entitiesList);
@@ -174,16 +139,12 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
     this.additionalTypesService.onEvent().subscribe( types => {
       this.additionalTypes = types;
-      // console.log("additionalTypes service ", types);
     })
 
     let properties = Object.keys(this.entitiesAll[0]["properties"]);
-    // console.log("properties ", properties);
     for(let property of properties){
       let values: Array<Option> = [];
       for(let entry of this.entitiesAll){
-        // console.log("entry ", entry, "property ", property)
-        // console.log(entry["properties"][property]);
         let option: Option = {nom: entry["properties"][property], type: property};
         !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
       }
@@ -193,41 +154,13 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // console.log("ngOnChanges ", changes);
-    // console.log("activefilters ", this.activeFilters);
     // if the most recent change is a click on entities on the map...
     if (changes.clickedEntities) {
-      // console.log("clickedEntities change! ", changes)
       if (!changes.clickedEntities.firstChange) {
-
-        // console.log("change: ", changes.clickedEntities.currentValue);
-
-        // console.log("clickedEntities not first change");
         // change selected state to false for all entities
         this.entityStore.state.updateAll({selected: false});
         // get array of clicked entities
-        // const clickedEntities: Array<Feature> = changes.clickedEntities.currentValue as Array<Feature>;
         const clickedEntities: Array<Feature> = changes.clickedEntities.currentValue as Array<Feature>;
-
-
-        // console.log("clickedEntitiesUpdated before loop ", this.clickedEntitiesUpdated);
-        // for(let element of this.clickedEntitiesUpdated){
-        //   console.log("element ", element.properties, " clickedEntities ", clickedEntities[0].properties);
-        //   console.log(element.properties === clickedEntities[0].properties);
-        // }
-
-        // if(this.clickedEntitiesUpdated.filter(element => JSON.stringify(element["properties"]) === JSON.stringify(clickedEntities[0]["properties"])).length === 0) {
-        //   console.log("adding")
-        //   this.clickedEntitiesUpdated.push(clickedEntities[0]);
-        // }else{
-        //   console.log("removing")
-        //   this.clickedEntitiesUpdated = this.clickedEntitiesUpdated.filter(element => JSON.stringify(element["properties"]) !== JSON.stringify(clickedEntities[0]["properties"]));
-        // }
-
-        // this.entitiesList$.next(this.clickedEntitiesUpdated);
-
-        // // console.log("clickedEntities ", this.clickedEntities);
-        // console.log("clickedEntitiesUpdated ", this.clickedEntitiesUpdated);
 
         // if an entity or entities have been clicked...
         if (clickedEntities?.length > 0 && clickedEntities !== undefined) {
@@ -239,40 +172,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
           this.entitiesList$.next(this.entitiesAll);
         }
       }
-      // if the most recent change is a filter change...
-    } else if (changes.simpleFiltersValue) {
-      // console.log("simpleFiltersValue changed");
-    //   // if (!changes.simpleFiltersValue.firstChange) {
-    //     // const currentFiltersValue: object = changes.simpleFiltersValue.currentValue;
-    //     // let nonNullFiltersValue: Array<object> = [];
-
-    //     // // for each filter value...
-    //     // for (let filter in currentFiltersValue) {
-    //     //   const currentFilterValue: any = currentFiltersValue[filter];
-    //     //   // ...if the filter value is not null...
-    //     //   if (currentFilterValue !== "" && currentFilterValue !== null) {
-    //     //     // ...push the filter value in an array, then filter the entiites
-    //     //     const filterValue: object = {};
-    //     //     filterValue[filter] = currentFilterValue;
-    //     //     nonNullFiltersValue.push(filterValue);
-    //     //   }
-    //     // }
-
-
-    //     // let filters = Array.from(this.activeFilters.values()).reduce(
-    //     //   (result, arr) => result.concat(arr),
-    //     //   []
-    //     // );
-    //     // console.log("nonNullFiltersValue: ", filters);
-        // this.entitiesList$.next(this.filterEntities());
-        // this.listEntitiesService.emitEvent(this.entitiesList);
-    //   // }
     }
-    // if(changes.activeFilters){
-    //   console.log("ACTIVEFILTERS changed ", this.activeFilters);
-    //   this.entitiesList$.next(this.filterEntities());
-    //   this.listEntitiesService.emitEvent(this.entitiesList);
-    // }
   }
 
   ngOnDestroy() {
@@ -280,9 +180,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     this.entitiesList$$.unsubscribe();
   }
 
-  private sortEntities(entities: Array<Object>, sortBy: string) {
-    // console.log("sortEntities ", sortBy)
-
+  private sortEntities(entities: Array<Feature>, sortBy: string) {
     if(this.additionalTypes && this.additionalTypes.includes(sortBy)) {
       entities.sort((a,b) => {
         let coordsA: string = a["geometry"]["coordinates"][0] + "," + a["geometry"]["coordinates"][1];
@@ -327,28 +225,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    */
   createAttribute(entity: Feature, attribute: any): string {
     let newAttribute: string;
-    // if the attribute has a personnalized attribute input by the user in the config...
-    // if (attribute.personalizedFormatting) {
-    //   if(entity.properties[attribute.attributeName]){
-    //     newAttribute = this.createPersonalizedAttribute(entity, attribute.personalizedFormatting, false);
-    //     console.log("newAttribute1 ", newAttribute);
-    //   }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
-    //     newAttribute = this.createPersonalizedAttribute(entity, attribute.personalizedFormatting, true);
-    //     console.log("newAttribute2 ", newAttribute);
-
-    //   }
-    // // if the attribute is not personnalized...
-    // } else {
-    //   if(entity.properties[attribute.attributeName]){
-    //     newAttribute = this.checkAttributeFormatting(entity.properties[attribute.attributeName]);
-    //     console.log("newAttribute3 ", newAttribute);
-
-    //   }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
-    //     newAttribute = this.additionalProperties.get(entity.properties["id"]).get(attribute.attributeName);
-    //     console.log("newAttribute4 ", newAttribute);
-
-    //   }
-    // }
 
     if (attribute.personalizedFormatting) {
         newAttribute = this.createPersonalizedAttribute(entity, attribute.personalizedFormatting, false);
@@ -357,20 +233,10 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     else {
       if(entity.properties[attribute.attributeName]){
         if (attribute.attributeName === "courriel") {
-          // console.log("attribute ", entity.properties[attribute.attributeName]);
         }
         newAttribute = this.checkAttributeFormatting(entity.properties[attribute.attributeName]);
       }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
-        // console.log("ATTR1 ", this.additionalProperties);
-        // console.log("ATTR2 ", this.additionalProperties.get(entity["properties"]["id"]));
-        // console.log("ATTR3.1 ", entity);
         let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
-        // console.log("coords type ", typeof coords)
-        // console.log("coords ", coords)
-        // console.log("ATTR3.2 ", entity["properties"]["id"])
-        // console.log("ATTR4 ", attribute.attributeName);
-        // console.log("ATTR5 ", this.additionalProperties.get(entity["properties"]["id"]).get(attribute.attributeName));
-        
         newAttribute = this.additionalProperties.get(coords).get(attribute.attributeName);
       }
     }
@@ -428,9 +294,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   isEmail(attribute: any): any {
     let possibleEmail: string = '' + attribute;
     const match: Array<string> = possibleEmail.match(/(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/);
-    // const match: Array<string> = possibleEmail.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/);
-    // console.log("match ", match);
-    // console.log("email ", possibleEmail);
     const message = this.languageService.getLanguage() === "fr" ? "Courriel" : "Email"
     if (match && this.formatEmail) {
       return `<a href="mailto:${match[0]}">${message}</a>`;
@@ -477,11 +340,10 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    */
   selectEntity(entity: Feature) {
     // update the store and emit the entity to parent
-    this.entityStore.state.updateAll({selected: false});
-    this.entityStore.state.update(entity, {selected: true}, true);
+    // this.entityStore.state.updateAll({selected: false});
+    // this.entityStore.state.update(entity, {selected: true}, true);
     let entityCollection: {added: Array<Feature>} = {added: []};
     entityCollection.added.push(entity);
-    // console.log("entityCollection ", entityCollection);
     this.listSelection.emit(entityCollection);
   }
 
@@ -542,7 +404,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     });
 
     this.filteredEntitiesService.emitEvent(filteredEntities);
-    console.log("filteredEntities ", filteredEntities);
     return filteredEntities;
   }
 
@@ -557,18 +418,12 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   public onSortSelection(sortBy: string){
-    // console.log("sort by ", sortBy);
-    // console.log("entities before ", this.entitiesAll);
     this.sortEntities(this.entitiesList, sortBy);
     this.sortEntities(this.entitiesAll, sortBy)
-    // this.entitiesList$.next(this.sortEntities(this.entitiesList, sortBy));
-    // this.entitiesAll = this.sortEntities(this.entitiesAll, sortBy);
-    // console.log("entities after ", this.entitiesAll);
     this.entitiesList$.next(this.entitiesList);
   }
 
   public onPageSizeSelection(pageSize: number) {
-    // console.log("page size ", pageSize);
     this.pageSize = pageSize;
     // refresh entitieslist based on the new page size (refreshing causes the )
     // calculate new number of pages

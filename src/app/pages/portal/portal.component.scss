@@ -69,11 +69,11 @@ $left-min-width : 400px;
   gap: 20px;
 }
 
-.right-list-div {
-  height: fit-content;
-  min-width: $right-min-width;
-  width: 100%;
-}
+// .right-list-div {
+//   height: fit-content;
+//   min-width: $right-min-width;
+//   width: 100%;
+// }
 
 mat-icon.disabled {
   color: rgba(0, 0, 0, 0.38);
@@ -89,7 +89,7 @@ mat-sidenav-container {
 }
 
 mat-sidenav-content {
-  height: 70%;
+  height: 100%;
   @include mobile {
     z-index: auto;
   }
@@ -391,19 +391,9 @@ igo-zoom-button {
   max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px);
 }
 
-//adjustment to filters and map
-.left-filter-and-map-div {
-  background-color: #f2f1f1;
-  min-width: 40%;
-  height: fit-content;
-  // padding: 0px 16px 0px 16px;
-}
-
 .sidenav {
-  background-color: white;
-  border-top: 20px solid white;
-  border-bottom: 20px solid white;
-  display: block;
+  // background-color: white;
+  // display: block;
 }
 
 //map height
