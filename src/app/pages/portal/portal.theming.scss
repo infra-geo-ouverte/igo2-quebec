@@ -1,3 +1,5 @@
-@mixin app-portal-theming($theme) {
-  $primary: map-get($theme, primary);
+@use './panels/panels.theming' as panels;
+
+@mixin themes($theme) {
+  @include panels.themes($theme);
 }

@@ -1,5 +1,6 @@
 @import '../portal/portal.variables.scss';
 
+:host {
   .navbar {
     position: relative;
     display: flex;
@@ -18,7 +19,6 @@
     display: block;
     padding: 0 2rem;
     text-decoration: none;
-    font-family: "Open sans", sans-serif;
     margin-right: 0.4rem;
     padding: 0 0 1.6rem 0;
   }
@@ -28,11 +28,12 @@
     text-decoration: none;
     letter-spacing: 0;
     font-size: 1.1rem;
-    padding: 0 0.5rem 0rem!important;
+    padding: 0 0.5rem 0rem !important;
   }
 
-  a.nav-link:focus, a.nav-link.active {
-    content: "";
+  a.nav-link:focus,
+  a.nav-link.active {
+    content: '';
     display: block;
     margin: 0;
     border-bottom: 4px solid #c5cad2;
@@ -40,7 +41,7 @@
   }
 
   .active {
-    font-weight: 600!important;
+    font-weight: 600 !important;
   }
 
   .main-nav {
@@ -52,43 +53,41 @@
   }
 
   .headline {
-    //background-color: #223654;
+    background-color: #223654;
     padding: 0;
   }
 
-// Responsive menu
+  div.slick-track {
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+  }
 
-div.slick-track {
-  overflow-x: auto;
-  white-space: nowrap;
-  display: flex;
-}
+  .navbar ::-webkit-scrollbar {
+    display: none;
+  }
 
-.navbar ::-webkit-scrollbar {
-  display: none;
-}
+  .nav-arrow {
+    color: #f09686 !important;
+    font-weight: 1000;
+    position: absolute;
+    z-index: 100;
+    background-color: #223654c5;
+    margin: 0;
+    bottom: 5px;
+  }
 
-.nav-arrow {
-  color: #f09686!important;;
-  font-weight: 1000;
-  position: absolute;
-  z-index: 100;
-  background-color: #223654c5;
-  margin: 0;
-  bottom: 5px;
-}
+  .right {
+    right: 0;
+    padding: 5px 5px 5px 15px !important;
+  }
 
-.right {
-  right: 0;
-  padding: 5px 5px 5px 15px!important
-}
+  .left {
+    left: 0;
+    padding: 5px 15px 5px 5px !important;
+  }
 
-.left {
-  left: 0;
-  padding: 5px 15px 5px 5px!important
-}
-
-  @media (min-width: 400px){
+  @media (min-width: 400px) {
     .nav-arrow {
       display: none;
     }
@@ -98,7 +97,7 @@ div.slick-track {
     }
   }
 
-  @media (min-width: 768px){
+  @media (min-width: 768px) {
     .navbar {
       height: $menu-height;
     }
@@ -107,7 +106,9 @@ div.slick-track {
       padding: 1rem 1.2rem !important;
     }
 
-    .navbar a:focus, .navbar a.active {
-      padding-bottom: calc(1rem - 4px)!important;
+    .navbar a:focus,
+    .navbar a.active {
+      padding-bottom: calc(1rem - 4px) !important;
     }
   }
+}

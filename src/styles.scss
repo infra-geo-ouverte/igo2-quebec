@@ -1,7 +1,33 @@
-@import 'style/reset.scss';
-@import 'style/theme.scss';
-@import './qcca-theme/qcca-theme.scss';
+@use '@igo2/core/all-style';
+@use '@igo2/core/layout';
 
-.mat-mdc-tooltip-trigger {
-  touch-action: auto !important;
+@use 'style/reset.scss';
+@use 'theme/theme.scss';
+@use 'variables';
+@use './app/pages/portal/portal.variables' as portal;
+
+.page {
+  overflow-y: auto !important;
+  overflow-x: clip;
+  height: calc(
+    portal.$portal-height-hasMenu-hasHeader - (4 * variables.$igo-margin)
+  );
+  width: 100%;
+}
+
+a {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  cursor: pointer;
+}
+
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+ul,
+ol {
+  padding: 2px 1rem;
 }

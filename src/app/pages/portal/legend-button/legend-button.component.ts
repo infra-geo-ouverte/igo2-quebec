@@ -12,7 +12,7 @@ export class LegendButtonComponent {
 
   public dialogRef = null;
 
-  public legendButtonTooltip = this.languageService.translate.instant('legend.open');
+  public legendButtonTooltip: unknown;
 
   @Output() toggleLegend = new EventEmitter<boolean>();
 
@@ -22,7 +22,9 @@ export class LegendButtonComponent {
 
   @Input() mobile: boolean;
 
-  constructor(public dialog: MatDialog, protected languageService: LanguageService) { }
+  constructor(public dialog: MatDialog, protected languageService: LanguageService) {
+    this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
+  }
 
   toggleLegendButton(): void {
     if (!this.legendInPanel && !this.mobile){

@@ -1,7 +1,7 @@
 <mat-toolbar class = banner role = banner color="primary">
 	<div class="container">
 		<div class="row">
-			<div class="col-6 col-md-10 d-flex flex-wrap align-items-center zone-logo-title">
+			<div class="col-6 col-md-10 flex flex-wrap align-items-center zone-logo-title">
 				<a class="logo" tabindex="5" routerLink="">
                     <img id="header-logo" alt="Logo" src="{{headerLogo}}">
 					
@@ -9,8 +9,8 @@
 				<img id="header-logo-print" alt="Logo" src="{{headerLogoPrint}}" width="199" height="60" />
 				<p lang="fr" id="title-desktop" class="zone-title  d-none d-md-block">{{'header.title' | translate}}</p>
 			</div>
-			<div class="col-6 col-md-2 d-flex justify-content-end zone-links">
-				<ul class="nav flex-column">
+			<div class="col-6 col-md-2 flex justify-content-end zone-links">
+				<ul class="nav flex-col">
 					<!--<li><button class="buttonLanguage" disabled (click)="changeLanguage()">{{'header.language'}}</button></li>-->
 					<li><a rel="noopener noreferrer" alt="('header.contactUsUrl' | translate)" href="{{'header.contactUsUrl' | translate}}" target="_blank">{{'header.contactUs' | translate}}</a></li>
 				</ul>
