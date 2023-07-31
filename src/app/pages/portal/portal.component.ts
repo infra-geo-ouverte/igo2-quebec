@@ -10,7 +10,6 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
@@ -25,8 +24,6 @@ import { ObjectUtils } from '@igo2/utils';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import type { default as OlGeometry } from 'ol/geom/Geometry';
 import olFeature from 'ol/Feature';
-
-
 
 import {
   MediaService,
@@ -83,12 +80,9 @@ import {
   featureToSearchResult,
   QueryService,
   featureFromOl,
-  moveToOlFeatures,
-  FeatureMotion,
   WMSDataSource,
   OgcFilterWriter,
-  IgoOgcFilterObject,
-  MapViewOptions
+  IgoOgcFilterObject
   } from '@igo2/geo';
 
 import {
@@ -113,7 +107,6 @@ import { FilteredEntitiesService } from '../list/listServices/filtered-entities.
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
-import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-portal',
@@ -133,9 +126,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   // @Output() workspaceSelected = new EventEmitter<BehaviorSubject<Workspace>>();
 
 
-  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
-  public entitiesAll: Array<Feature>;  //all entities
-  public entitiesList: Array<Feature>  //filtered entities
+  public entitiesAll: Array<Feature>; //all entities
+  public entitiesList: Array<Feature>; //filtered entities
   // public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
   // public activeFilters$: BehaviorSubject<Map<string, Option[]>> = new BehaviorSubject<Map<string, Option[]>>(new Map()));
   // public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
@@ -214,7 +206,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public homeCenter: [number, number];
   public homeZoom: number;
   public additionalProperties: Map<string, Map<string, string>> = new Map();
-  public additionalTypes: Array<string> = []
+  public additionalTypes: Array<string> = [];
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 
@@ -322,6 +314,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    // public cdRef: ChangeDetectorRef,
     private entitiesAllService: EntitiesAllService,
     private entitiesListService: ListEntitiesService,
     private additionalPropertiesService: FiltersAdditionalPropertiesService,
@@ -358,11 +351,11 @@ export class PortalComponent implements OnInit, OnDestroy {
       // this.entitiesAll = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
-      this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+      this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && !this.useEmbeddedVersion ?
         this.configService.getConfig('hasLegendButton') : false;
       this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
         this.configService.getConfig('hasSideSearch');
-      this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+      this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') !== undefined && !this.useEmbeddedVersion ?
         this.configService.getConfig('searchBar.showSearchBar') : false;
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? true :
         this.configService.getConfig('hasToolbox');
@@ -390,7 +383,8 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.map.status$.subscribe(value => {
-      if(value === 1 && this.showSimpleFeatureList && typeof this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId') === 'string'){
+      const layerId = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId');
+      if(value === 1 && this.showSimpleFeatureList && typeof layerId === 'string'){
         this.workspaceState.setActiveWorkspaceById(this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.layerId'));
         this.expansionPanelExpanded = true;
       }
@@ -535,10 +529,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.entitiesAllService.onEvent().subscribe(entitiesAll => this.entitiesAll = entitiesAll);
     this.entitiesListService.onEvent().subscribe(entitiesList => {
       this.entitiesList = entitiesList;
-      this.fitFeatures();
+      // this.fitFeatures();
     });
-
-
 
     // RESPONSIVE BREAKPOINTS
     this.breakpoint$.subscribe(() =>
@@ -673,8 +665,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    // the event.features array contains duplicates (if you change the zoom on the map and click on a feature that is already in the list, it adds a new one - since some specific identifyer is different every time the zoom changes)
-    // therefore, this part is to remove duplicates...
+    // the event.features array contains duplicates, so they must be removed
     event.features = event.features.reduce((unique, item) => {
       const hasDuplicate = unique.some((existingItem) => {
         return JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]);
@@ -1000,6 +991,32 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.storageService.set('searchPointerSummaryEnabled', value);
     this.igoSearchPointerSummaryEnabled = value;
   }
+
+  // getToastPanelStatus() {
+  //   if (this.isMobile() === true && this.toastPanelOpened === false) {
+  //     if (this.sidenavOpened === false) {
+  //       if (this.expansionPanelExpanded === false) {
+  //         if (this.queryState.store.entities$.value.length > 0) {
+  //           return 'low';
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // get toastPanelOpened(): boolean {
+  //   return this._toastPanelOpened;
+  // }
+  // set toastPanelOpened(value: boolean) {
+  //   if (value !== !this._toastPanelOpened) {
+  //     return;
+  //   }
+  //   this._toastPanelOpened = value;
+  //   this.cdRef.detectChanges();
+  // }
+  // private _toastPanelOpened =
+  //   (this.storageService.get('toastOpened') as boolean) !== false;
+
 
   getControlsOffsetY() {
     return this.expansionPanelExpanded ?
@@ -1417,79 +1434,400 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
 
   public filterByOgc(wmsDatasource: WMSDataSource, filterString: string) {
+    console.log("filterString in method ", filterString);
     const appliedFilter = new OgcFilterWriter().formatProcessedOgcFilter(filterString, wmsDatasource.options.params.LAYERS);
+    console.log("appliedFilter ", appliedFilter);
     wmsDatasource.ol.updateParams({ FILTER: appliedFilter });
   }
 
-  public applyFilters(activeFilters: Map<string,Option[]> ) {
+  public async applyFilters(activeFilters: Map<string,Option[]> ) {
     console.log("entitieslist ", this.entitiesList);
+    console.log("activeFilters ", activeFilters);
     const conditions = [];
-    let idArray: Array<string> = [];
+    let filterQueryString = "";
+    // let idArray: Array<String> = [];
+    let idMap: Map<string, Array<string>> = new Map();
+    let ogcFilterWriter: OgcFilterWriter = new OgcFilterWriter();
+    let filterString: string;
+
+    //initialize id map with all the additional types as keys
+    console.log(this.additionalTypes);
+    for(let type of this.additionalTypes) {
+      idMap.set(type, []);
+    }
+
+
+    // the goal is to use 3 addresses, two of them for one category and 2 of them for another with 1 of them overlapping in both. 
+    // this one entity should be the only one visible on the map at the end
+
     for(let category of activeFilters){
       const bundleConditions = [];
       for(let filter of category[1]){
 
-        // If the type is from terrapi, we will find it in the additionaltypes
-        // The id will be given to the condition instead of the terrAPI type, so that it can be found with filterByOgc()
+        const useEqual = true;
+
+        // if(this.additionalTypes.includes(filter.type)){
+
+        //   if(useEqual){
+        //     let idArray: Array<String> = [];
+        //     //create idArray, where it stores the keys (coords) of all entities which match the requested terrapi filter
+        //     this.additionalProperties.forEach((value, key) => {
+        //       console.log("value ", value);
+        //       console.log("key ", key);
+        //       console.log("returnedval ", value.get(filter.type));
+        //       if(value.get(filter.type).includes(filter.nom)) {
+        //         idArray.push(key);
+        //       }
+        //     });
+  
+        //     let terrapiConditions = [];
+        //     //features representing the coords found in idArray
+        //     let features: Array<Feature> = this.entitiesAll.filter(element => {
+        //       return idArray.includes(element["geometry"]["coordinates"].join(","));
+        //     });
+        //     console.log("features ", features);
+        //     let tempConditions = [];
+        //     for(let element of features){
+        //       Object.keys(element["properties"]).forEach(key => {
+        //         let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
+        //         console.log("pushing condition", condition);
+        //         //add all properties to the array
+        //         if(!terrapiConditions.includes(condition)) terrapiConditions.push(condition);
+        //       });
+  
+        //       //create a big filter using all properties and joining them with logical AND
+        //       tempConditions.push({logical: "AND", filters: terrapiConditions});
+        //       console.log("tempConditions ", tempConditions);
+        //     }
+  
+        //     //string together all entities we want to find
+        //     if(tempConditions.length >= 1){
+        //       // console.log("longBundle ", tempConditions);
+        //       if (tempConditions.length === 1) {
+        //         bundleConditions.push(tempConditions[0]);
+        //       } else {
+        //         bundleConditions.push({logical: "OR", filters: tempConditions});
+        //       }
+        //     }
+        //     // bundleConditions.push({logical: "OR", filters: tempConditions});
+        //     console.log("bundleConditions!!! ", bundleConditions);
+        //   }
+        //   else{
+        //     // If the type is from terrapi, we will find it in the additionaltypes
+        //     // The id will be given to the condition instead of the terrAPI type, so that it can be found with filterByOgc()
+        //     if(this.additionalTypes.includes(filter.type)){
+        //       //if a unique property was set, add the terrapi types based on this. otherwise, keep displaying all entities in the map
+        //       console.log("additionalType ", filter.type);
+        //       for(let entry of this.additionalProperties){
+        //         for(let type of entry[1]){
+        //           if(type[0] === filter.type && type[1] === filter.nom){
+        //             if(!idMap.get(filter.type).includes(entry[0])) {
+        //               console.log("pushing id", entry);
+        //               // idArray.push(entry[0]);
+        //               let temp = idMap.get(filter.type);
+        //               temp.push(entry[0]);
+        //               idMap.set(filter.type, temp);
+        //             }
+        //           }
+        //         }
+        //       }
+        //       console.log("idMap ", idMap);
+
+
+        //       //key: terrapi type
+        //       //val: array of entities that match it (array of coords, which are keys to the additionalProperties map)
+        //       idMap.forEach((idArray, type) => {
+        //         console.log("key / val ", type, " ", idArray);
+        //         let features: Array<Feature> = this.entitiesAll.filter(element => {
+        //           return idArray.includes(element["geometry"]["coordinates"].join(","));
+        //         });
+        //         console.log("features ", features);
+        //         let terrapiConditions = [];
+        //         for(let element of features){
+        //           Object.keys(element["properties"]).forEach(key => {
+        //             let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
+        //             console.log("pushing condition", condition);
+        //             if(!terrapiConditions.includes(condition)) terrapiConditions.push(condition);
+        //           });
+        //         }
+        //         if(terrapiConditions.length >= 1){
+        //           console.log("longBundle ", terrapiConditions);
+        //           if (terrapiConditions.length === 1 && bundleConditions.length === 0) {
+        //             bundleConditions.push(terrapiConditions[0]);
+        //           // } else if (bundleConditions.length === 0) {
+        //           //   bundleConditions.push({filters: terrapiConditions});
+        //           } else {
+        //             bundleConditions.push({logical: "AND", filters: terrapiConditions});
+        //           }
+        //         }
+        //       });
+
+        //       console.log("post-terrapi bundle conditions ", bundleConditions);
+        //     }
+        //   }
+        // }
+
+
+
         if(this.additionalTypes.includes(filter.type)){
-          for(let entry of this.additionalProperties){
-            for(let type of entry[1]){
-              if(type[0] === filter.type && type[1] === filter.nom){
-                if(!idArray.includes(entry[0])) idArray.push(entry[0]);
-              }
+
+          let idArray: Array<String> = [];
+          //create idArray, where it stores the keys (coords) of all entities which match the requested terrapi filter
+          this.additionalProperties.forEach((value, key) => {
+            console.log("value ", value);
+            console.log("key ", key);
+            console.log("returnedval ", value.get(filter.type));
+            if(value.get(filter.type).includes(filter.nom)) {
+              idArray.push(key);
             }
-          }
-          
-          let features: Array<Feature> = this.entitiesAll.filter(element => idArray.includes(element["geometry"]["coordinates"][0] + "," + element["geometry"]["coordinates"][1]));
+          });
+
+          let features = this.entitiesAll.filter(element => {
+            return idArray.includes(element["geometry"]["coordinates"].join(","));
+          });
+          console.log("features ", features);
           for(let element of features){
-            console.log("ruh roh");
             Object.keys(element["properties"]).forEach(key => {
-              //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work, but in the future I will add all fields and not just the one
-              //it should add ALL properties and not just the following ones checked in the condition... just there is no guarantee that there will not be any typos in the other properties
-              if(key === "id"){
+              //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work,
+              //but in the future I will add all fields and not just the one
+              //it should add ALL properties and not just the following ones checked in the condition...
+              //just there is no guarantee that there will not be any typos in the other properties
+              if(key === "adressebur"){
                 let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
-                console.log("conditionnn ", condition);
-                bundleConditions.push(condition);
+                console.log("pushing condition", condition);
+                if(!bundleConditions.includes(condition)) bundleConditions.push(condition);
               }
             });
           }
-          console.log("bundleConditions ", bundleConditions);
-        }else{
-          let condition = {expression: filter.nom, operator: "PropertyIsEqualTo", propertyName: filter.type};
-          // console.log("conditionnn ", condition);
+
+          let coordsArray: Array<number>;
+          let wktGeometry: string;
+
+          await this.getTerrAPIGeojsonToWkt(filter.type, filter.nom, this.map.projection).then((wktGeo: string) => {
+            wktGeometry = wktGeo;
+          });
+
+          // console.log("coordsArray ", coordsArray);
+
+          // // let coordsJoined = coordsArray.join(",");
+          // let coordsJoined: string;
+          // coordsArray.forEach(coord => {
+          //   coordsJoined === undefined ? coordsJoined = coord[0] + " " + coord[1] :
+          //   coordsJoined = coordsJoined = coordsJoined + "," + coord[0] + " " + coord[1];
+          // });
+          // console.log("coordsJoined ", coordsJoined);
+
+          // let gmlCoordinates = "<gml:LinearRing><gml:coordinates>" + coordsJoined + "</gml:coordinates></gml:Polygon>";
+          // let polygonString = "<gml:Polygon><gml:outerBoundaryIs>" +gmlCoordinates+ "</gml:LinearRing></gml:outerBoundaryIs>";
+          // filterString = "filter=<Filter xmlns=\"http://www.opengis.net/ogc\"><Intersects><PropertyName>geometry</PropertyName>" + polygonString + "</Intersects></Filter>"; //missing <Filter></Filter>
+
+          // reprendre "geometry" de default.json
+          // filterString = 'filter=<Filter xmlns="http://www.opengis.net/ogc"><Intersects><PropertyName>geometry</PropertyName><MultiPolygon xmlns="http://www.opengis.net/gml" srsName="EPSG:3857"><polygonMember><Polygon srsName="EPSG:3857"><exterior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8379441.158019895 5844447.897707146 -8379441.158019895 5936172.331649357 -8134842.66750733 5936172.331649357 -8134842.66750733 5844447.897707146 -8379441.158019895 5844447.897707146</posList></LinearRing></exterior><interior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8015003 5942074 -8015003 5780349 -7792364 5780349 -7792364 5942074 -8015003 5942074</posList></LinearRing></interior></Polygon></polygonMember></MultiPolygon></Intersects></Filter>';
+          let condition = {operator: "Intersects", geometryName: "the_geom", wkt_geometry: wktGeometry};
+
+
+          console.log("condition terrapi ", condition);
+
           bundleConditions.push(condition);
 
+          // let features: Array<Feature> = this.entitiesAll.filter(element => {
+          //   return idArray.includes(element["geometry"]["coordinates"].join(","));
+          // });
+          // console.log("features ", features);
+          // for(let element of features){
+          //   Object.keys(element["properties"]).forEach(key => {
+          //     //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work,
+          //     //but in the future I will add all fields and not just the one
+          //     //it should add ALL properties and not just the following ones checked in the condition...
+          //     //just there is no guarantee that there will not be any typos in the other properties
+          //     if(key === "adressebur"){
+          //       let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
+          //       console.log("pushing condition", condition);
+          //       if(!bundleConditions.includes(condition)) bundleConditions.push(condition);
+          //     }
+          //   });
+          // }
         }
-        // console.log("ActiveFilters filter ", filter);
+
+        //below is from friday july 28th (or before)
+
+
+          //the stuff above is what i was working with before friday july 28th (friday)
+
+
+          // let features: Array<Feature> = this.entitiesAll.filter(element => {
+          //   return idArray.includes(element["geometry"]["coordinates"].join(","));
+          // });
+          // console.log("features ", features);
+          // for(let element of features){
+          //   Object.keys(element["properties"]).forEach(key => {
+          //     //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work,
+          //     //but in the future I will add all fields and not just the one
+          //     //it should add ALL properties and not just the following ones checked in the condition...
+          //     //just there is no guarantee that there will not be any typos in the other properties
+          //     if(key === "adressebur"){
+          //       let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
+          //       console.log("pushing condition", condition);
+          //       if(!bundleConditions.includes(condition)) bundleConditions.push(condition);
+          //     }
+          //   });
+          // }
+
+          // let coordsArray: Array<number>;
+          // let wktGeometry: string;
+
+          // await this.getTerrAPIGeojsonToWkt(filter.type, filter.nom, this.map.projection).then((wktGeo: string) => {
+          //   wktGeometry = wktGeo;
+          // });
+
+          // console.log("coordsArray ", coordsArray);
+
+          // // let coordsJoined = coordsArray.join(",");
+          // let coordsJoined: string;
+          // coordsArray.forEach(coord => {
+          //   coordsJoined === undefined ? coordsJoined = coord[0] + " " + coord[1] :
+          //   coordsJoined = coordsJoined = coordsJoined + "," + coord[0] + " " + coord[1];
+          // });
+          // console.log("coordsJoined ", coordsJoined);
+
+          // let gmlCoordinates = "<gml:LinearRing><gml:coordinates>" + coordsJoined + "</gml:coordinates></gml:Polygon>";
+          // let polygonString = "<gml:Polygon><gml:outerBoundaryIs>" +gmlCoordinates+ "</gml:LinearRing></gml:outerBoundaryIs>";
+          // filterString = "filter=<Filter xmlns=\"http://www.opengis.net/ogc\"><Intersects><PropertyName>geometry</PropertyName>" + polygonString + "</Intersects></Filter>"; //missing <Filter></Filter>
+
+          //reprendre "geometry" de default.json
+          // filterString = 'filter=<Filter xmlns="http://www.opengis.net/ogc"><Intersects><PropertyName>geometry</PropertyName><MultiPolygon xmlns="http://www.opengis.net/gml" srsName="EPSG:3857"><polygonMember><Polygon srsName="EPSG:3857"><exterior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8379441.158019895 5844447.897707146 -8379441.158019895 5936172.331649357 -8134842.66750733 5936172.331649357 -8134842.66750733 5844447.897707146 -8379441.158019895 5844447.897707146</posList></LinearRing></exterior><interior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8015003 5942074 -8015003 5780349 -7792364 5780349 -7792364 5942074 -8015003 5942074</posList></LinearRing></interior></Polygon></polygonMember></MultiPolygon></Intersects></Filter>';
+          // let condition = {operator: "Intersects", geometryName: "the_geom", wkt_geometry: wktGeometry};
+
+
+          // console.log("condition terrapi ", condition);
+
+          // bundleConditions.push(condition);
+
+          // let features: Array<Feature> = this.entitiesAll.filter(element => {
+          //   return idArray.includes(element["geometry"]["coordinates"].join(","));
+          // });
+          // console.log("features ", features);
+          // for(let element of features){
+          //   Object.keys(element["properties"]).forEach(key => {
+          //     //remove this line once the spelling mistakes are corrected... for now the faulty accents makes it not work,
+          //     //but in the future I will add all fields and not just the one
+          //     //it should add ALL properties and not just the following ones checked in the condition...
+          //     //just there is no guarantee that there will not be any typos in the other properties
+          //     if(key === "adressebur"){
+          //       let condition = {expression: element["properties"][key], operator: "PropertyIsEqualTo", propertyName: key};
+          //       console.log("pushing condition", condition);
+          //       if(!bundleConditions.includes(condition)) bundleConditions.push(condition);
+          //     }
+          //   });
+          // }
+
+        else {
+          console.log("not additionaltype ", filter.type);
+          let condition = {expression: filter.nom, operator: "PropertyIsEqualTo", propertyName: filter.type};
+          console.log("conditionnn ", condition);
+          bundleConditions.push(condition);
+        }
+        console.log("ActiveFilters filter ", filter);
       }
-      // console.log("build bundle ", bundleConditions);
+      // console.log("bundleConditions ", bundleConditions);
+
       if(bundleConditions.length >= 1){
+        console.log("longBundle ", bundleConditions);
         if (bundleConditions.length === 1) {
           conditions.push(bundleConditions[0]);
         } else {
           conditions.push({logical: "OR", filters: bundleConditions});
         }
       }
+      // console.log("build bundle ", bundleConditions);
     }
-    let filterQueryString = "";
-    let ogcFilterWriter: OgcFilterWriter = new OgcFilterWriter();
+
     console.log("conditions ", conditions);
     if (conditions.length >= 1) {
       filterQueryString = ogcFilterWriter
         .buildFilter(conditions.length === 1 ?
           conditions[0] : {logical: 'AND', filters: conditions } as IgoOgcFilterObject);
     }
-    // console.log("filterQueryString ", filterQueryString);
-  
-    this.filterByOgc(this.map.getLayerById('dq2').dataSource as WMSDataSource, filterQueryString);
+    console.log("filterQueryString ", filterQueryString);
+    //remove hard coded dq2 val
+
+    // filterString = 'filter=<Filter xmlns="http://www.opengis.net/ogc"><Intersects><PropertyName>geometry</PropertyName><MultiPolygon xmlns="http://www.opengis.net/gml" srsName="EPSG:3857"><polygonMember><Polygon srsName="EPSG:3857"><exterior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8379441.158019895 5844447.897707146 -8379441.158019895 5936172.331649357 -8134842.66750733 5936172.331649357 -8134842.66750733 5844447.897707146 -8379441.158019895 5844447.897707146</posList></LinearRing></exterior><interior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8015003 5942074 -8015003 5780349 -7792364 5780349 -7792364 5942074 -8015003 5942074</posList></LinearRing></interior></Polygon></polygonMember></MultiPolygon></Intersects></Filter>';
+    // filterString = 'filter=<Filter xmlns="http://www.opengis.net/ogc"><Or><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><Intersects><PropertyName>geometry</PropertyName><MultiPolygon xmlns="http://www.opengis.net/gml" srsName="EPSG:3857"><polygonMember><Polygon srsName="EPSG:3857"><exterior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8379441.158019895 5844447.897707146 -8379441.158019895 5936172.331649357 -8134842.66750733 5936172.331649357 -8134842.66750733 5844447.897707146 -8379441.158019895 5844447.897707146</posList></LinearRing></exterior><interior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8015003 5942074 -8015003 5780349 -7792364 5780349 -7792364 5942074 -8015003 5942074</posList></LinearRing></interior></Polygon></polygonMember></MultiPolygon></Or></Intersects></Filter>';
+    // filterString = 'filter=<Filter xmlns="http://www.opengis.net/ogc"><Or><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><Intersects><PropertyName>geometry</PropertyName><MultiPolygon xmlns="http://www.opengis.net/gml" srsName="EPSG:3857"><polygonMember><Polygon srsName="EPSG:3857"><exterior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8379441.158019895 5844447.897707146 -8379441.158019895 5936172.331649357 -8134842.66750733 5936172.331649357 -8134842.66750733 5844447.897707146 -8379441.158019895 5844447.897707146</posList></LinearRing></exterior><interior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8015003 5942074 -8015003 5780349 -7792364 5780349 -7792364 5942074 -8015003 5942074</posList></LinearRing></interior></Polygon></polygonMember></MultiPolygon></Intersects></Or></Filter>';
+
+    // filterString = 'filter=<Filter xmlns="http://www.opengis.net/ogc"><Or><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><PropertyIsEqualTo matchCase="true"><PropertyName>nom</PropertyName><Literal>Bureau régional de la sécurité civile et de la sécurité incendie</Literal></PropertyIsEqualTo><Intersects><PropertyName>geometry</PropertyName><MultiPolygon xmlns="http://www.opengis.net/gml" srsName="EPSG:3857"><polygonMember><Polygon srsName="EPSG:3857"><exterior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8379441.158019895 5844447.897707146 -8379441.158019895 5936172.331649357 -8134842.66750733 5936172.331649357 -8134842.66750733 5844447.897707146 -8379441.158019895 5844447.897707146</posList></LinearRing></exterior><interior><LinearRing srsName="EPSG:3857"><posList srsDimension="2">-8015003 5942074 -8015003 5780349 -7792364 5780349 -7792364 5942074 -8015003 5942074</posList></LinearRing></interior></Polygon></polygonMember></MultiPolygon></Intersects></Or></Filter>'
+
+    console.log("filterString ", filterString);
+
+    // if(filterString){
+    //   this.filterByOgc(this.map.getLayerById('dq2').dataSource as WMSDataSource, filterString);
+    // }
+    if(filterQueryString) {
+      this.filterByOgc(this.map.getLayerById('dq2').dataSource as WMSDataSource, filterQueryString);
+    }
+
   }
+
+  private async getTerrAPIGeojsonToWkt(type: string, name: string, projection: string): Promise<string> {
+    // let url: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/geospatial/project?loc=" + coord + "&to=" + projection;
+    let url: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/" + type + "?q=" + name + "&geometry=1&crs=" + projection;
+
+    const response = await this.http.get<any>(url).toPromise();
+    let wktGeometry: string;
+    // console.log("HTTP response ", response);
+    for(let feature of response.features){
+      if(feature.properties.nom === name){
+
+
+        // wktGeometry = "MULTIPOLYGON(((-70.2342 45.2342,-70.2342 60.2342,-85.2342 60.2342,-85.2342 45.2342,-70.2342 45.2342)))";
+
+        wktGeometry = feature.geometry.type.toUpperCase() + "(";
+
+        for(let i = 0; i < feature.geometry.coordinates.length; i++) {
+          for(let j = 0; j < feature.geometry.coordinates[i].length; j++) {
+            if(j === 0 && i !== 0) wktGeometry += ", ";
+            if(j === 0){
+              wktGeometry += "((";
+              for(let k = 0; k < feature.geometry.coordinates[i][j].length ; k++) {
+                let coord = feature.geometry.coordinates[i][j][k];
+                wktGeometry += coord[0] + " " + coord[1];
+                if(k + 1 < feature.geometry.coordinates[i][j].length) wktGeometry += ",";
+              }
+              // wktGeometry += "-83.032313 58.97123";
+              // wktGeometry += "coords extérieurs";
+              wktGeometry += ")";
+            }
+            else{
+              wktGeometry += ", (";
+              for(let k = 0; k < feature.geometry.coordinates[i][j].length ; k++) {
+                let coord = feature.geometry.coordinates[i][j][k];
+                wktGeometry += coord[0] + " " + coord[1];
+                if(k + 1 < feature.geometry.coordinates[i][j].length) wktGeometry += ",";
+              }
+              // wktGeometry += "-83.032313 58.97123";
+              // wktGeometry += "coords intérieurs";
+              wktGeometry += ")";
+            }
+          }
+          wktGeometry += ")";
+        }
+        wktGeometry += ")";
+
+        console.log("wktGeometry ", wktGeometry);
+        return wktGeometry;
+      }
+    }
+    return "";
+  }
+
 
   async fitFeatures() {
     console.log("FFEntitiesList ", this.entitiesList);
+    console.log("entitiesAll ", this.entitiesAll);
     if(!this.entitiesList){
       return -1;
     }
-    let e = -90
+    let e = -90;
     let w = 90;
     let n = -90;
     let s = 90;
@@ -1503,15 +1841,18 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     for(let feature of this.entitiesList){
 
-      const longitude = feature["geometry"]["coordinates"][0];  //E-W
-      const latitude = feature["geometry"]["coordinates"][1];   //N-S
-      console.log("COORD ", feature["geometry"]["coordinates"]);
+      //E-W
+      const longitude = feature["geometry"]["coordinates"][0];
+
+      //N-S
+      const latitude = feature["geometry"]["coordinates"][1];
+      // console.log("COORD ", feature["geometry"]["coordinates"]);
 
       w = Math.min(longitude, w);
       s = Math.min(latitude, s);
       e = Math.max(longitude, e);
       n = Math.max(latitude, n);
-      console.log([n,s,e,w]);
+      // console.log([n,s,e,w]);
 
     }
 
@@ -1540,8 +1881,8 @@ export class PortalComponent implements OnInit, OnDestroy {
     let mapExtent: MapExtent = [minX, minY, maxX, maxY];
     // let mapCenter: [number, number] = [centerX, centerY];
     // console.log("current extent " , this.map.getExtent());
-    console.log("new extent ", mapExtent);
-    console.log("projection ", this.map.projection);
+    // console.log("new extent ", mapExtent);
+    // console.log("projection ", this.map.projection);
     // console.log("zoom ", this.map.viewController.getZoom());
     this.map.viewController.zoomToExtent(mapExtent);
   }
