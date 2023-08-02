@@ -1,5 +1,9 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 @use '../typography';
+@use '../palette';
+
+$color-500: map.get(palette.$palette, 500);
 
 .mdc-button {
   font-size: mat.font-size(typography.$typography, body-1) !important;
@@ -16,6 +20,6 @@
 }
 
 .mat-mdc-raised-button {
-  color: #095797 !important;
-  border-color: #095797 !important;
+  color: $color-500 !important;
+  border-color: $color-500 !important;
 }

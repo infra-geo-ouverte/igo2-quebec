@@ -5,6 +5,7 @@
 @use './typography';
 @use './layout';
 @use './igo-override';
+@use './igo-theme-override';
 @use './material-override/index';
 @use '../app/app.theming' as app;
 
@@ -42,7 +43,7 @@ $theme: map.merge(
 @include mat.all-component-themes($theme);
 
 @include igo.all-component-themes($theme);
-@include igo-override.themes($theme);
+@include igo-theme-override.themes($theme);
 
 @include app.themes($theme);
 

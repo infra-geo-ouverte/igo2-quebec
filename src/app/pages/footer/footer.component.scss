@@ -45,16 +45,10 @@
     order: 1;
   }
 
-  ::ng-deep div.ol-scale-line {
-    position: fixed !important;
-    display: flex;
-    flex-direction: row;
-    top: unset !important;
-    left: 10px !important;
-    bottom: 3px !important;
-    background: unset !important;
-    color: black;
-    z-index: 5 !important;
-    transform: unset !important;
+  ::ng-deep .ol-scale-line {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-left: 12px;
   }
 }

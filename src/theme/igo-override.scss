@@ -3,31 +3,6 @@
 @use 'variables';
 @use './palette';
 
-@mixin themes($theme) {
-  @include search-bar-density($theme);
-}
-
-@mixin search-bar-density($theme) {
-  $density: mat.get-density-config($theme);
-
-  $theme4: map.merge(
-    $theme,
-    (
-      density: $density - 4
-    )
-  );
-
-  $theme2: map.merge(
-    $theme,
-    (
-      density: $density - 2
-    )
-  );
-  igo-search-bar {
-    @include mat.form-field-density($theme4);
-    @include mat.icon-button-density($theme2);
-  }
-}
 
 $color-500: map.get(palette.$palette, 500);
 $color-500-contrast: map.get(palette.$palette, contrast, 500);
@@ -57,7 +32,7 @@ igo-search-results-item {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 36px;
+    max-height: unset !important;
     line-height: 18px !important;
   }
 }
@@ -86,7 +61,11 @@ igo-panel-header button {
   color: $color-500-contrast !important;
 }
 
+igo-rotation-button,
+igo-zoom-button,
+igo-offline-button,
+igo-home-extent-button,
 igo-baselayers-switcher,
 igo-geolocate-button {
-  box-shadow: 0 1px 4px rgb(34 54 84 / 24%);
+  @include mat.elevation(2);
 }

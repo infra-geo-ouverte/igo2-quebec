@@ -1,10 +1,18 @@
 @use '@igo2/core/all-style';
 @use '@igo2/core/layout';
 
-@use 'style/reset.scss';
 @use 'theme/theme.scss';
 @use 'variables';
 @use './app/pages/portal/portal.variables' as portal;
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 .page {
   overflow-y: auto !important;

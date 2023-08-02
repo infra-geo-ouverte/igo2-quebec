@@ -9,7 +9,7 @@
     (keydown.Enter)= "$event.stopPropagation()"
     (click)= "$event.stopPropagation()"
     >
-    <mat-expansion-panel-header>
+    <mat-expansion-panel-header collapsedHeight="56px">
       <igo-search-bar *ngIf= "showSearchBar"
         #searchbar
         (click)= "onSearchBarClick($event)"
