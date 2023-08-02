@@ -45,6 +45,6 @@ $theme: map.merge(
 
 @include app.themes($theme);
 
-@media (min-width: 1200px) {
+@media (max-width: 1200px) {
   @include mat.typography-hierarchy(typography.$typography-mobile);
 }

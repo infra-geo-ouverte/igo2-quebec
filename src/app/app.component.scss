@@ -6,6 +6,10 @@ $header-height-mobile: 72px;
 $footer-height: 29px;
 
 :host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   igo-message-center
     ::ng-deep
     simple-notifications

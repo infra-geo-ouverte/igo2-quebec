@@ -2,6 +2,9 @@
 @use '@angular/material' as mat;
 @use './palette';
 
+// https://design.quebec.ca/bases/polices-caracteres
+// https://design.quebec.ca/bases/niveaux-titres
+// https://material.angular.io/guide/typography
 $typography: mat.define-typography-config(
     $font-family: '"Open Sans", sans-serif',
   $headline-1: mat.define-typography-level(110px, 110px, 500),

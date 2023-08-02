@@ -1,3 +1,5 @@
+@use 'sass:map';
+@use '../../../theme/palette';
 @import '../portal/portal.variables.scss';
 
 :host {
@@ -9,7 +11,6 @@
     flex-direction: row;
     flex-flow: row nowrap;
     justify-content: flex-start;
-    height: $menu-height-mobile;
     width: 100%;
     margin: 0 auto 0 auto;
     padding: 0;
@@ -17,27 +18,20 @@
 
   .nav-link {
     display: block;
-    padding: 0 2rem;
     text-decoration: none;
     margin-right: 0.4rem;
-    padding: 0 0 1.6rem 0;
-  }
-
-  a.nav-link {
-    color: #fff;
-    text-decoration: none;
+    color: palette.$light-primary-text;
     letter-spacing: 0;
     font-size: 1.1rem;
     padding: 0 0.5rem 0rem !important;
   }
 
-  a.nav-link:focus,
-  a.nav-link.active {
-    content: '';
-    display: block;
+  .nav-arrow {
+    color: map.get(palette.$palette, contrast, 900) !important;
+    font-weight: 1000;
+    z-index: 100;
+    background-color: map.get(palette.$palette, 900);
     margin: 0;
-    border-bottom: 4px solid #c5cad2;
-    padding-bottom: calc(0.6rem - 4px);
   }
 
   .active {
@@ -50,6 +44,17 @@
     margin-inline-end: 0px;
     width: 85%;
     margin: 0 auto;
+
+    .nav-link {
+      &:focus,
+      &.active {
+        content: '';
+        display: block;
+        margin: 0;
+        border-bottom: 4px solid #c5cad2;
+        padding-bottom: calc(0.6rem - 4px);
+      }
+    }
   }
 
   .headline {
@@ -65,16 +70,6 @@
 
   .navbar ::-webkit-scrollbar {
     display: none;
-  }
-
-  .nav-arrow {
-    color: #f09686 !important;
-    font-weight: 1000;
-    position: absolute;
-    z-index: 100;
-    background-color: #223654c5;
-    margin: 0;
-    bottom: 5px;
   }
 
   .right {

@@ -2,6 +2,6 @@
 
 <app-header *ngIf="hasHeader" #header></app-header>
 
-<app-menu *ngIf="hasMenu"></app-menu>
+<app-menu *ngIf="hasMenu" class="flex flex-col h-100 overflow-y-hidden"></app-menu>
 
 <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
