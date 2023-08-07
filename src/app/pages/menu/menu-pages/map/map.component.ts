@@ -8,10 +8,13 @@ import { ConfigService } from '@igo2/core';
 })
 export class MapComponent {
   public hasHeader = true;
+  public useEmbeddedVersion = false;
 
   constructor(private configService: ConfigService) {
 
-    this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && this.configService.getConfig('header.hasHeader') === undefined ?
+
+    this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
+    this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && !this.useEmbeddedVersion ?
       this.configService.getConfig('header.hasHeader') : false;
    }
 

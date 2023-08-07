@@ -1,6 +1,38 @@
 @import '../../node_modules/@igo2/core/style/partial/core.variables';
 @import './pages/portal/portal.variables.scss';
 
+//angular elements copy/paste
+// @use '@angular/material' as mat;
+
+// @import '../../../../node_modules/@igo2/core/style/all.theming.scss';
+// @import '../../../../node_modules/@igo2/core/style/core.theming.scss';
+// @import '../../../../node_modules/@igo2/core/style/foreground.scss';
+// @import '../../../../node_modules/@igo2/core/style/index.theming.scss';
+// @import '../../../../node_modules/@igo2/core/style/material.font.scss';
+// @import '../../../../node_modules/@igo2/core/style/setup.scss';
+// @import '../../../../node_modules/@igo2/core/style/theming.scss';
+// @import '../../../../node_modules/@igo2/core/style/typography.scss';
+// @import '../../../../node_modules/@igo2/core/style/partial/core.variables.scss';
+// @import '../../../../node_modules/@igo2/core/style/partial/media.scss';
+
+// @import '../../../../node_modules/@igo2/core/style/themes/blue.theme.scss';
+// @import './portal.variables';
+
+// .igo-panel-header {
+//   height: auto !important;
+// }
+
+// igo-actionbar {
+//   padding-top: 0px !important;
+//   padding-left: 0px !important;
+// }
+
+// .overlay-container {
+//   visibility: hidden;
+// }
+
+//end of angular elements copy/paste
+
 :host {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
@@ -117,16 +149,38 @@ spinner-with-legend-dialog {
 
 .list {
   height: fit-content;
-  // min-width: 50%
+  width: 100%
 }
 
-.filters-and-map {
-  min-width: 400px;
+.filters-and-map-only-desktop {
+  min-width: 100%;
+  display: flex;
   // width: 50%;
+  flex-direction: column;
+  height: 100%;
+  gap: 20px;
+  height: fit-content;
+}
+
+.filters-and-map-desktop {
+  min-width: 400;
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  height: 100%;
+  gap: 20px;
+  height: fit-content;
+}
+
+.filters-and-map-mobile {
   display: flex;
   flex-direction: column;
   height: 100%;
   gap: 20px;
   height: fit-content;
+}
+
+.no-embedded-version {
+  height: 100%;
 }
 

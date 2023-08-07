@@ -11,7 +11,7 @@
         "params": {
           "layers": "MSP_DIRECTION_REG_COG_P_V"
         },
-        "urlWFS": "https://geoegl.msp.gouv.qc.ca/apis/ws/igo_gouvouvert.fcgi",
+        "urlWFS": "https://geoegl.msp.gouv.qc.ca/apis/wss/complet.fcgi",
         "paramsWFS": {
           "featureTypes": "MSP_DIRECTION_REG_COG_P_V",
           "fieldNameGeometry": "geometry",

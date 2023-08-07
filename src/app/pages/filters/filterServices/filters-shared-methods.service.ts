@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FeatureCollection } from 'geojson';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 
@@ -33,10 +33,8 @@ getMunicipality(locationType: string, coordinates: string): Observable<string> {
       map((featureCollection: FeatureCollection) => {
         // Extract the desired string value from the FeatureCollection
         const municipalityName = featureCollection.features[0].properties.nom;
-        
         return municipalityName;
       })
-    )
-    
-}
+    );
+  }
 }

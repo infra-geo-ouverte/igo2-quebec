@@ -1,13 +1,13 @@
-<igo-simple-feature-list-header
+<app-simple-feature-list-header
   (pageSizeSelected)="onPageSizeSelection($event)"
   (sortBySelected)="onSortSelection($event)"
   [activeFilters]="activeFilters"
   [entitiesList]="entitiesList"
   [elementsLowerBound]="elementsLowerBound"
   [elementsUpperBound]="elementsUpperBound"
-  [pageOptions]="pageOptions"
-  [sortOptions]="sortOptions">
-</igo-simple-feature-list-header>
+  [terrAPITypes]="terrAPITypes"
+  [pageOptions]="pageOptions">
+</app-simple-feature-list-header>
 
 <div class="entities-container">
     <!-- <p *ngIf="entitiesShown"> {{entitiesShown.length}} entities exist </p> -->
@@ -17,13 +17,13 @@
           <ng-container>
             <div class="attribute">
               <div>
-                <div class ="description" *ngIf="attribute.description"
+                <div class ="description" *ngIf="attribute.description && createAttribute(entity, attribute)"
                 [ngClass]="attribute.header">
                 {{ attribute.description + " :"}}
                 </div>
               </div>
               <div class="info">
-                <div *ngIf="attribute.header === 'title'"
+                <div *ngIf="attribute.header === 'title' && createAttribute(entity, attribute)"
                 class="title"
                 [matTooltip]="'simpleFeatureList.selectEntity' | translate"
                 tooltip-position="below"
@@ -32,7 +32,7 @@
                 (click)="selectEntity(entity)"
                 [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
-                <div *ngIf="!attribute.header || attribute.header !== 'title'"
+                <div *ngIf="!attribute.header || attribute.header !== 'title' && createAttribute(entity, attribute)"
                 [ngClass]="attribute.header ? attribute.header : 'standard'"
                 [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
@@ -46,10 +46,10 @@
 
   <mat-divider></mat-divider>
 
-<igo-simple-feature-list-paginator *ngIf="simpleFeatureListConfig.paginator"
+<app-simple-feature-list-paginator *ngIf="simpleFeatureListConfig.paginator"
   [pageSize]="pageSize"
   [numberOfPages]="numberOfPages"
   [showFirstLastPageButtons]="showFirstLastPageButtons"
   [showPreviousNextPageButtons]="showPreviousNextPageButtons"
   (pageChange)="onPageChange($event)">
-</igo-simple-feature-list-paginator>
+</app-simple-feature-list-paginator>

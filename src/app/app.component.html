@@ -4,33 +4,49 @@
 
 <app-menu *ngIf="hasMenu"></app-menu>
 
-<!-- <h2>Hello world</h2>
+<div cdkScrollable *ngIf="!hasMenu && useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
+    <div [ngClass]="isMobile ? 'filters-and-map-mobile' : showSimpleFeatureList ? 'filters-and-map-desktop' : 'filters-and-map-only-desktop'">
 
-<my-element></my-element> -->
-
-<div *ngIf="!hasMenu && useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
-    <div class="filters-and-map">
-
-        <app-simple-filters *ngIf="showSimpleFilters && workspace"
+        <!-- <h1>{{showSimpleFilters + " + " + workspace}}</h1> -->
+        <!-- <app-simple-filters *ngIf="showSimpleFilters && workspace"
         [entityStore]="workspace.entityStore"
         class="simple-filters"
         [isMobile]="isMobile"
+        [terrAPITypes]="terrAPITypes"
+        ></app-simple-filters> -->
+        <app-simple-filters *ngIf="showSimpleFilters && workspace"
+        [entitiesAll]="entitiesAll"
+        [entitiesList]="entitiesList"
+        class="simple-filters"
+        [isMobile]="isMobile"
+        [terrAPITypes]="terrAPITypes"
+        [properties]="properties"
+        [additionalProperties]="additionalProperties"
         ></app-simple-filters>
 
         <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
         (mapQuery)="setClickedEntities($event)"
         [features]="features"
+        [additionalProperties]="additionalProperties"
+        [entitiesAll]="entitiesAll"
+        [entitiesList]="entitiesList"
         ></app-portal>
 
     </div>
     <div class="list">
-        <app-simple-feature-list *ngIf="workspace && workspace"
+        <app-simple-feature-list *ngIf="workspace && showSimpleFeatureList"
         [entityStore]="workspace.entityStore"
         [clickedEntities]="clickedEntities"
+        [terrAPITypes]="terrAPITypes"
+        [properties]="properties"
+        [entitiesAll]="entitiesAll"
+        [entitiesList]="entitiesList"
+        [additionalTypes]="additionalTypes"
+        [additionalProperties]="additionalProperties"
         (listSelection)="onListSelection($event)"
         ></app-simple-feature-list>
     </div>
 </div>
-<div *ngIf="!useEmbeddedVersion">
+<div *ngIf="!useEmbeddedVersion" class="no-embedded-version">
     <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
 </div>

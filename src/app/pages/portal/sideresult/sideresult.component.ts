@@ -75,6 +75,7 @@ export class SideResultComponent implements OnInit, OnDestroy {
   public hasSideresultButton: boolean = undefined;
   public store = new ActionStore([]);
   public igoSearchPointerSummaryEnabled: boolean = false;
+  public useEmbeddedVersion: boolean = false;
 
   public termSplitter: string = '|';
 
@@ -112,7 +113,8 @@ export class SideResultComponent implements OnInit, OnDestroy {
       this.mapService.setMap(this.map);
       this.hasToolbox = this.configService.getConfig('hasToolbox') === undefined ? false :
         this.configService.getConfig('hasToolbox');
-      this.hasSideresultButton = this.configService.getConfig('hasSideresultButton') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+      this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
+      this.hasSideresultButton = this.configService.getConfig('hasSideresultButton') !== undefined && this.useEmbeddedVersion === false ?
         this.configService.getConfig('hasSideresultButton') : false;
 
       this.layerService

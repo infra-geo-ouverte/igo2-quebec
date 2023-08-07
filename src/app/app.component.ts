@@ -9,13 +9,15 @@ import {
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
 import { PwaService } from './services/pwa.service';
-import { Option } from './pages/filters/simple-filters.interface';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Workspace } from '@igo2/common';
-import { MatPaginator } from '@angular/material/paginator';
-import { Subscription } from 'rxjs';
 import { MapState, WorkspaceState } from '@igo2/integration';
-import { EditionWorkspace, Feature, FeatureWorkspace, WfsWorkspace } from '@igo2/geo';
+import { Feature } from '@igo2/geo';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { FeatureCollection } from 'geojson';
+import { Option } from './pages/filters/simple-filters.interface';
+import { FiltersAdditionalPropertiesService } from './pages/filters/filterServices/filters-additional-properties.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -27,7 +29,10 @@ export class AppComponent {
   		this.isMobile = window.innerWidth >= 768 ? false : true;
 	}
 
-  public features: any = null;  //object: {added: Feature[]}
+  
+	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
+	public terrAPITypes: Array<string>; // an array of strings containing the types available from terrAPI
+  public features: any = null; //object: {added: Feature[]}
   public clickedEntities: Feature[] = [];
 
   public showSimpleFilters: boolean = false;
@@ -41,13 +46,19 @@ export class AppComponent {
   private promptEvent: any;
   public hasMenu: boolean = false;
   public workspace = undefined;
-  public mobileAndHeaderState: number = -1
-
+  public additionalProperties: Map<string, Map<string,string>> = new Map<string, Map<string, string>>();
+  public additionalTypes: Array<string>;
+  public properties: Array<string>; //array of properties (the keys in the propertiesMap)
+  public entitiesList: Array<Feature>; //list of entities that has been filtered
+  public entitiesAll: Array<Feature>; //all entities
+  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
 
   constructor(
+    private additionalPropertiesService: FiltersAdditionalPropertiesService,
+    private http: HttpClient,
     protected languageService: LanguageService,
     private configService: ConfigService,
     private renderer: Renderer2,
@@ -64,10 +75,10 @@ export class AppComponent {
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
-    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : true;
-    this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
-    this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
-    this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && this.configService.getConfig('useEmbeddedVersion') === undefined ?
+    this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
+    this.showSimpleFilters = this.configService.getConfig('embeddedVersion.simpleFilters') === undefined ? false : true;
+    this.showSimpleFeatureList = this.configService.getConfig('embeddedVersion.simpleFeatureList') === undefined ? false : true;
+    this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && !this.useEmbeddedVersion ?
       this.configService.getConfig('header.hasHeader') : false;
 
     this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
@@ -80,6 +91,32 @@ export class AppComponent {
     this.installPrompt();
     this.pwaService.checkForUpdates();
   }
+
+  public async ngOnInit() {
+    // get all the types from terrAPI
+		await this.getTypesFromTerrAPI().then((terrAPITypes: Array<string>) => {
+			this.terrAPITypes = terrAPITypes;
+		});
+  }
+
+  	/**
+   * @description Get an array containg all the types from terrAPI
+   * @returns An array of strings containing the types of terrAPI
+   */
+	private async getTypesFromTerrAPI(): Promise<Array<string>> {
+		// construct the URL
+		const url: string = this.terrAPIBaseURL + "types";
+
+		let response: Array<string>;
+
+		// make the call to terrAPI and return the the types
+		await this.http.get<Array<string>>(url).pipe(map((terrAPITypes: Array<string>) => {
+			response = terrAPITypes;
+			return terrAPITypes;
+		})).toPromise();
+
+		return response;
+	}
 
   private readTitleConfig() {
     this.languageService.translate.get(this.configService.getConfig('title')).subscribe(title => {
@@ -145,8 +182,31 @@ export class AppComponent {
     }
   }
 
-  setSelectedWorkspace(workspace: Workspace) {
+  async setSelectedWorkspace(workspace: Workspace) {
     this.workspace = workspace;
+    this.entitiesAll = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
+    this.entitiesList = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
+
+    console.log("this.entitiesAll ", this.entitiesAll);
+
+    this.properties = Object.keys(this.entitiesAll[0]["properties"]);
+    for(let property of this.properties){
+      let values: Array<Option> = [];
+      for(let entry of this.entitiesAll){
+        let option: Option = {nom: entry["properties"][property], type: property};
+        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
+      }
+      this.propertiesMap.set(property, values);
+    }
+
+    await this.initializeAdditionalTypes().then((types: Array<string>) => {
+      this.additionalTypes = types;
+      console.log("additionalTypes11 ", this.additionalTypes);
+    });
+
+    this.initializeAdditionalProperties();
+    console.log("additionalProperties11 ", this.additionalProperties);
+
   }
 
   setClickedEntities(features: Feature[]) {
@@ -155,6 +215,102 @@ export class AppComponent {
 
   onListSelection(event){
     this.features = event;
+  }
+
+
+  private async initializeAdditionalTypes() {
+    //the 3 sections where we can define terrAPI types in the config file
+    const listAttributesConfig = this.configService.getConfig('embeddedVersion.simpleFeatureList.attributeOrder');
+    const sortAttributesConfig = this.configService.getConfig('embeddedVersion.simpleFeatureList.sortBy.attributes');
+    const filtersAttributesConfig = this.configService.getConfig('embeddedVersion.simpleFilters.filters');
+
+    let terrAPIAttributes: Array<string> = [];
+    if(sortAttributesConfig){
+      for(let attribute of sortAttributesConfig) {
+        let type = attribute["type"];
+        if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+      }
+    }
+
+    if(listAttributesConfig){
+      for(let entry of listAttributesConfig){
+        if(entry["personalizedFormatting"]){
+          let attributeList: Array<string> = entry["personalizedFormatting"].match(/(?<=\[)(.*?)(?=\])/g);
+          attributeList.forEach(type => {
+            if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+          })
+        }else{
+          let type = entry["attributeName"];
+          if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+        }
+      }
+    }
+
+    if(filtersAttributesConfig){
+      for(let filter of filtersAttributesConfig){
+        let type = filter["type"];
+        if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+      }
+    }
+
+    for(let type of terrAPIAttributes){
+      let geometryType;
+      let url = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/" + type + "?geometry=1&limit=1";
+
+      await this.getGeometryType(url).then((type: Array<Feature>) => {
+        geometryType = type["features"][0]["geometry"]["type"];
+        return geometryType;
+      });
+
+      //remove it if it is neither a polygon or a multipolygon, since these types won't work
+      if(geometryType.toLowerCase() !== "polygon" && geometryType.toLowerCase() !== "multipolygon"){
+        terrAPIAttributes = terrAPIAttributes.filter(attribute => attribute !== type);
+      }
+    }
+
+    return terrAPIAttributes;
+  }
+
+  private async initializeAdditionalProperties() {
+    for(let entity of this.entitiesAll){
+      await this.sleep(500);
+      let coords: string = entity.geometry.coordinates.join(",");
+      let typeMap = new Map<string, string>();
+      for(let type of this.additionalTypes){
+        await this.checkTerrAPI(type, coords).then(response => {
+          if(response.features[0]){
+            const name = response.features[0]["properties"]["nom"];
+            typeMap.set(type, name);
+          }
+        });
+      }
+      this.additionalProperties.set(coords, typeMap);
+    }
+    console.log("additionalProperties initialized ", this.additionalProperties);
+    console.log("properties ", this.properties);
+    // this.additionalTypes = 
+    this.additionalPropertiesService.emitEvent(this.additionalProperties);
+  }
+
+  private sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async checkTerrAPI(attribute: string, coordinates: string){
+    let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
+
+    return await this.http.get<FeatureCollection>(url).toPromise();
+  }
+
+  async getGeometryType(url: string){
+    let response: Array<Feature>;
+
+    await this.http.get<Array<Feature>>(url).pipe(map((features: Array<Feature>) => {
+			response = features;
+			return features;
+		})).toPromise();
+
+		return response;
   }
 
 }

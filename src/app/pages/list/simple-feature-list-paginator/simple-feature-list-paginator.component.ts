@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, OnChanges, OnDestroy, Output, S
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'igo-simple-feature-list-paginator',
+  selector: 'app-simple-feature-list-paginator',
   templateUrl: './simple-feature-list-paginator.component.html',
   styleUrls: ['./simple-feature-list-paginator.component.scss']
 })

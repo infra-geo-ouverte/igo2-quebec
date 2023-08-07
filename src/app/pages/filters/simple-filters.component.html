@@ -7,13 +7,13 @@
   </div>
 
   <div class="filters-container">
-    <div class="filters">
+    <div class="filters" id="click-to-close-mat-select">
       <form [formGroup]="filtersFormGroup">
         <div *ngFor="let control of controls | keyvalue"
           class="filter">
           <div class="filter-description-info">
             <span class="filter-description">{{ getLabel(control.key) }}</span>
-            <span *ngIf="getSelectionCount(control.key) == 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
+            <span *ngIf="getSelectionCount(control.key) === 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
             <span *ngIf="getSelectionCount(control.key) > 1" class="filter-info"> {{getSelectionCount(control.key)}} {{ 'simpleFilters.selecteds' | translate}} </span>
           </div>
           <mat-form-field
@@ -75,7 +75,7 @@
           class="filter">
           <div class="filter-description-info">
             <span class="filter-description">{{ getLabel(control.key) }}</span>
-            <span *ngIf="getSelectionCount(control.key) == 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
+            <span *ngIf="getSelectionCount(control.key) === 1" class="filter-info"> 1 {{ 'simpleFilters.selected' | translate}} </span>
             <span *ngIf="getSelectionCount(control.key) > 1" class="filter-info"> {{getSelectionCount(control.key)}} {{ 'simpleFilters.selecteds' | translate}} </span>
           </div>
           <mat-form-field

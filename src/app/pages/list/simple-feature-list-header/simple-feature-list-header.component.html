@@ -29,13 +29,20 @@
   <div class="order-stations-per-page">
       <div class="horizontal-flex" id="sort-by">
           <p class="option-label"> {{'simpleFeatureList.header.options.sort'| translate}} </p>
-          <mat-form-field id="order-select" appearance="outline">
-              <mat-select (selectionChange)="onSortSelected($event.value, sortOptions)" disableOptionCentering [(value)]="defaultSortOption">
-                  <mat-option *ngFor="let sortOption of possibleSortOptions"
-                      [value]="sortOption[1]">
-                      {{ sortOption[1] }}
-                  </mat-option>
-              </mat-select>
+            <mat-form-field id="order-select" appearance="outline">
+                <!-- <mat-select (selectionChange)="onSortSelected($event.value, sortOptions, $event.index)" disableOptionCentering [(value)]="defaultSortOption">
+                    <mat-option *ngFor="let sortOption of sortOptions; let $index = index"
+                                [value]="sortOption[1] === undefined ? sortOption[0] : sortOption[1]"
+                                [index]="sortOption[1] === undefined ? 0 : 1">
+                    {{ sortOption[1] === undefined ? sortOption[0] : sortOption[1] }}
+                    </mat-option>
+                </mat-select> -->
+                <mat-select (selectionChange)="onSortSelected($event.value, sortOptions)" disableOptionCentering [(value)]="defaultSortOption">
+                    <mat-option *ngFor="let sortOption of sortOptions; let $index = index"
+                                [value]="sortOption[1]">
+                    {{ sortOption[1] }}
+                    </mat-option>
+                </mat-select>
               <mat-icon matSuffix color="primary" svgIcon="chevron-down"></mat-icon>
           </mat-form-field>
       </div>

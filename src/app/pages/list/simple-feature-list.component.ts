@@ -1,6 +1,6 @@
-import { Meta } from '@angular/platform-browser';
-import { ConfigService, LanguageService, IgoLanguageModule } from '@igo2/core';
-import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { PossibleSortOptionsService } from './listServices/possible-sort-options.service';
+import { ConfigService, LanguageService } from '@igo2/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { EntityStore } from './shared/store';
 import { SimpleFeatureList, AttributeOrder, SortBy, Paginator } from './simple-feature-list.interface';
 import { BehaviorSubject, Subscription, map } from 'rxjs';
@@ -8,15 +8,15 @@ import { FiltersPageService } from '../filters/filterServices/filters-page-servi
 import { FiltersSortService } from '../filters/filterServices/filters-sort-service.service';
 import { Option } from '../filters/simple-filters.interface';
 import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { FiltersSharedMethodsService } from '../filters/filterServices/filters-shared-methods.service';
 import { ListEntitiesService } from './listServices/list-entities-services.service';
 import { FilteredEntitiesService } from './listServices/filtered-entities.service';
 import { FiltersActiveFiltersService } from '../filters/filterServices/filters-active-filters.service';
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
-import { FiltersTypesService } from '../filters/filterServices/filters-types.service';
 import { EntitiesAllService } from './listServices/entities-all.service';
 import { Feature } from '@igo2/geo';
+import { SortOptionsService } from './listServices/sort-options.service';
+import { FeatureCollection } from 'geojson';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-simple-feature-list',
@@ -27,15 +27,19 @@ import { Feature } from '@igo2/geo';
 export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() entityStore: EntityStore; // a store that contains all the entities
   @Input() clickedEntities: Array<Feature>; // an array that contains the entities clicked in the map
-  @Input() entitiesList: Array<Feature>
   @Input() simpleFiltersValue: object; // an object containing the value of the filters
+  @Input() terrAPITypes: Array<string>;
+  @Input() additionalTypes: Array<string>;
+  @Input() additionalProperties: Map<string, Map<string, string>>;
+  @Input() entitiesAll: Array<Feature>; // an array containing all the entities in the store
+  @Input() entitiesList: Array<Feature>;
+  @Input() properties: Array<string>;
   @Output() listSelection = new EventEmitter(); // an event emitter that outputs the entity selected in the list
 
   public clickedEntitiesUpdated: Array<Feature> = [];
   public filterTypes: string[];
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
-  public entitiesAll: Array<Feature>; // an array containing all the entities in the store
   public entitiesShown: Array<Feature>; // an array containing the entities currently shown
   public entitiesList$: BehaviorSubject<Array<Feature>> = new BehaviorSubject([]); // an observable of an array of filtered entities
   public entitiesList$$: Subscription; // subscription to filtered list
@@ -58,37 +62,49 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   public elementsUpperBound: number; /// the highest index (+ 1) of an element in the current page
 
   public activeFilters: Map<string, Option[]> = new Map();
-  public additionalProperties: Map<string, Map<string,string>>;
-  public additionalTypes: Array<string>;
-  public pageOptions: Array<number> = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
-  public sortOptions: [string, string][] = this.configService.getConfig('useEmbeddedVersion.simpleFilters') !== undefined ? this.configService.getConfig('useEmbeddedVersion.simpleFilters').map(filter => [filter.type, filter.description] ) : [];
+  public pageOptions: Array<number> = this.configService.getConfig('embeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ?
+  this.configService.getConfig('embeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
+  public sortOptions: [string, string][];
+  public undefinedConfig = "N/A";
+  public firstSort = true;
 
+  constructor(
+    private additionalPropertiesService: FiltersAdditionalPropertiesService,
+    private http: HttpClient,
+    private possibleSortOptionsService: PossibleSortOptionsService,
+    private sortOptionsService: SortOptionsService,
+    private entitiesAllService: EntitiesAllService,
+    private filteredEntitiesService: FilteredEntitiesService,
+    private languageService: LanguageService,
+    private activeFilterService: FiltersActiveFiltersService,
+    private listEntitiesService: ListEntitiesService,
+    private configService: ConfigService,
+    private filterPageService: FiltersPageService,
+    private filterSortService: FiltersSortService) {}
 
-  constructor(private entitiesAllService: EntitiesAllService, private filteredEntitiesService: FilteredEntitiesService, private languageService: LanguageService, private additionalTypesService: FiltersAdditionalTypesService,private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private configService: ConfigService, private filterAdditionalPropertiesService: FiltersAdditionalPropertiesService, private filterPageService: FiltersPageService, private filterSortService: FiltersSortService) {}
+  async ngOnInit() {
+    this.sortBy = this.configService.getConfig('embeddedVersion.simpleFeatureList.sortBy.default');
 
-  ngOnInit(): void {
-    //set additionalProperties when they get created in the filters component
-    this.filterAdditionalPropertiesService.onEvent().subscribe( event => {
-      this.additionalProperties = event; });
+    this.additionalPropertiesService.onEvent().subscribe(properties => {
+      this.additionalProperties = properties;
+      if(this.sortBy){
+        this.sortEntities(this.entitiesAll, this.sortBy.attributeName);
+        this.sortEntities(this.entitiesList, this.sortBy.attributeName);
+        this.entitiesList$.next(this.entitiesList);
+      }
+    });
 
-    // get the entities from the layer/store
-    this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
-    this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
+    this.sortOptionsService.onEvent().subscribe( sortByOptions => {
+      this.sortOptions = sortByOptions;
+    });
 
-    this.simpleFeatureListConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList');
+    this.simpleFeatureListConfig = this.configService.getConfig('embeddedVersion.simpleFeatureList');
 
     this.listEntitiesService.emitEvent(this.entitiesList);
     this.entitiesAllService.emitEvent(this.entitiesAll);
 
     // get the attribute order to use to display the elements in the list
     this.attributeOrder = this.simpleFeatureListConfig.attributeOrder;
-
-    // get the sorting config and sort the entities accordingly (sort ascending by default)
-    this.sortBy = this.simpleFeatureListConfig.sortBy;
-    if (this.sortBy) {
-      this.sortEntities(this.entitiesList, this.sortBy.attributeName);
-      this.sortEntities(this.entitiesAll, this.sortBy.attributeName);
-    }
 
     // get the formatting configs for URLs and emails (not formatted by default)
     this.formatURL = this.simpleFeatureListConfig.formatURL !== undefined ? this.simpleFeatureListConfig.formatURL : false;
@@ -136,21 +152,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       this.entitiesList$.next(this.filterEntities());
       this.listEntitiesService.emitEvent(this.entitiesList);
     });
-
-    this.additionalTypesService.onEvent().subscribe( types => {
-      this.additionalTypes = types;
-    })
-
-    let properties = Object.keys(this.entitiesAll[0]["properties"]);
-    for(let property of properties){
-      let values: Array<Option> = [];
-      for(let entry of this.entitiesAll){
-        let option: Option = {nom: entry["properties"][property], type: property};
-        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
-      }
-      this.propertiesMap.set(property, values);
-    }
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -181,6 +182,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private sortEntities(entities: Array<Feature>, sortBy: string) {
+    //types contained in terrapi
     if(this.additionalTypes && this.additionalTypes.includes(sortBy)) {
       entities.sort((a,b) => {
         let coordsA: string = a["geometry"]["coordinates"][0] + "," + a["geometry"]["coordinates"][1];
@@ -189,13 +191,12 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         let propA: Map<string, string> = this.additionalProperties.get(coordsA);
         let propB: Map<string, string> = this.additionalProperties.get(coordsB);
 
-        let munA = propA.get(sortBy);
-        let munB = propB.get(sortBy);
+        let typeA = propA.get(sortBy);
+        let typeB = propB.get(sortBy);
 
-        return munA > munB ? 1 : munA < munB ? -1 : 0;
+        return typeA > typeB ? 1 : typeA < typeB ? -1 : 0;
       });
     }
-    //types contained in terrapi
     else{
       entities.sort((a, b) => {
         return a['properties'][sortBy] > b['properties'][sortBy] ? 1 : a['properties'][sortBy] < b['properties'][sortBy] ? -1 : 0;
@@ -229,18 +230,37 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     if (attribute.personalizedFormatting) {
         newAttribute = this.createPersonalizedAttribute(entity, attribute.personalizedFormatting, false);
     }
-    // if the attribute is not personnalized, it is assumed the attributeName corresponds to a key that can be used in the entities list or with terrAPI
+    // if the attribute is not personnalized
+    // it is assumed the attributeName corresponds to a key that can be used in the entities list or with terrAPI
     else {
       if(entity.properties[attribute.attributeName]){
-        if (attribute.attributeName === "courriel") {
-        }
         newAttribute = this.checkAttributeFormatting(entity.properties[attribute.attributeName]);
       }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
         let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
-        newAttribute = this.additionalProperties.get(coords).get(attribute.attributeName);
+        let attributeMap = this.additionalProperties.get(coords);
+        attributeMap === undefined ? newAttribute = undefined : newAttribute = attributeMap.get(attribute.attributeName);
+        if(attribute.attributeName === "arrondissements"){
+        }
       }
     }
     return newAttribute;
+  }
+
+  async checkTerrAPI(attribute: string, coordinates: string){
+    let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
+
+    return await this.http.get<FeatureCollection>(url).toPromise();
+  }
+
+  async getGeometryType(url: string){
+    let response: Array<Feature>;
+
+    await this.http.get<Array<Feature>>(url).pipe(map((features: Array<Feature>) => {
+			response = features;
+			return features;
+		})).toPromise();
+
+		return response;
   }
 
   /**
@@ -254,13 +274,35 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     let personalizedAttribute: string = personalizedFormatting;
 
     // get the attributes for the personnalized attribute
-    const attributeList: Array<string> = personalizedFormatting.match(/(?<=\[)(.*?)(?=\])/g);
+    let attributeList: Array<string> = personalizedFormatting.match(/(?<=\[)(.*?)(?=\])/g);
+
+    //TODO idea: add the additionaltypes based on the attribute list, but I think it's better to already have it defined before then and then AFTER, figure this out
+    // for(let attribute of attributeList) {
+    //   if(!this.properties.includes(attribute)){
+    //     let coordinates = "";
+    //     let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
+    //     let response = this.checkTerrAPI(url);
+    //   }
+    // }
+
+    // console.log("attributelist ", attributeList);
+    //TODO add service to pass the attributeList in a service so that the list header can add it to the allowed types
+    // console.log("possibleSortOptionService emitting ", attributeList);
+
+    this.possibleSortOptionsService.emitEvent(attributeList);
 
     // for each attribute in the list...
     attributeList.forEach(attribute => {
+      // console.log("attributeeee ", attribute);
       // ...get the attibute value, format it if needed and replace it in the string
       if(this.additionalTypes && this.additionalTypes.includes(attribute)){
-        personalizedAttribute = personalizedAttribute.replace(attribute, this.additionalProperties.get(entity.properties["id"]).get(attribute));
+        let coords: string = entity.geometry.coordinates.join(",");
+        let nameMap = this.additionalProperties.get(coords);
+        if(nameMap === undefined){
+          personalizedAttribute = personalizedAttribute.replace(attribute, this.undefinedConfig);
+        }else{
+          personalizedAttribute = personalizedAttribute.replace(attribute, nameMap.get(attribute));
+        }
       }else{
         personalizedAttribute = personalizedAttribute.replace(attribute, this.checkAttributeFormatting(entity.properties[attribute]));
       }
@@ -294,7 +336,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   isEmail(attribute: any): any {
     let possibleEmail: string = '' + attribute;
     const match: Array<string> = possibleEmail.match(/(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/);
-    const message = this.languageService.getLanguage() === "fr" ? "Courriel" : "Email"
+    const message = this.languageService.getLanguage() === "fr" ? "Courriel" : "Email";
     if (match && this.formatEmail) {
       return `<a href="mailto:${match[0]}">${message}</a>`;
     } else if (match && !this.formatEmail) {
@@ -325,7 +367,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   isURL(attribute: any): any {
     let possibleURL: string = '' + attribute;
     const match: Array<string> = possibleURL.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-    const message = this.languageService.getLanguage() === "fr" ? "Site Web" : "Website"
+    const message = this.languageService.getLanguage() === "fr" ? "Site Web" : "Website";
     if (match && this.formatURL) {
       return `<a href="${match[0]}" target="_blank">${message}</a>`;
     } else if (match && !this.formatURL) {
@@ -362,7 +404,8 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    */
   filterEntities(): Array<Feature> {
     //code for active filters map
-    //set up a list of all entities that can be displayed and start shrinking it down when filters do not have at least one filter from all filter categories (assuming there are is a filter selected in this category)
+    //set up a list of all entities that can be displayed and start shrinking it down
+    // when filters do not have at least one filter from all filter categories (assuming there are is a filter selected in this category)
     let filteredEntities = this.entitiesAll as Array<Feature>;
     this.activeFilters.forEach((options, filter) => {
       //if options list is not empty, we must sift through our list
@@ -419,7 +462,8 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
   public onSortSelection(sortBy: string){
     this.sortEntities(this.entitiesList, sortBy);
-    this.sortEntities(this.entitiesAll, sortBy)
+    this.sortEntities(this.entitiesAll, sortBy);
+
     this.entitiesList$.next(this.entitiesList);
   }
 
@@ -431,5 +475,9 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // return to first page
     this.currentPageNumber$.next(1);
   }
+
+  // private sleep(ms: number) {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
 }
 

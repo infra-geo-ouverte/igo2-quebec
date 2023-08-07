@@ -92,6 +92,10 @@
     border-radius: 0px !important;
   }
 
+  ::ng-deep .mat-select-arrow-wrapper {
+    visibility: hidden;
+  }
+
   .order-stations-per-page {
     display: flex;
     vertical-align: center;
@@ -110,6 +114,7 @@
 
   #stations-per-page-select {
     width: 100px;
+    // border-radius: 0px !important;
   }
 
   //mat-option coloring (more detailed than simple-filters.component)

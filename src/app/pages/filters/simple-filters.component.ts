@@ -1,4 +1,4 @@
-import { SortBy } from './../list/simple-feature-list.interface';
+import { PropertiesMapService } from './filterServices/properties-map.service';
 import { FiltersAdditionalTypesService } from './filterServices/filters-additional-types.service';
 import { FiltersActiveFiltersService } from './filterServices/filters-active-filters.service';
 import { FiltersSharedMethodsService } from './filterServices/filters-shared-methods.service';
@@ -10,12 +10,11 @@ import { SimpleFilter, TypeOptions, Option } from './simple-filters.interface';
 import { ConfigService } from '@igo2/core';
 import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
 import { FiltersOptionService } from './filterServices/filters-option-service.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
 import { FiltersTypesService } from './filterServices/filters-types.service';
-import { FilteredEntitiesService } from '../list/listServices/filtered-entities.service';
 import { Feature } from '@igo2/geo';
 
 @Component({
@@ -26,12 +25,13 @@ import { Feature } from '@igo2/geo';
 export class SimpleFiltersComponent implements OnInit, OnDestroy {
   @Input() isMobile: boolean;
   @Input() entityStore;
+  @Input() terrAPITypes: Array<string>;
   @Output() filterSelection: EventEmitter<object> = new EventEmitter();
   @ViewChild(MatAutocompleteTrigger) panelTrigger: MatAutocompleteTrigger;
+  @Input() entitiesAll: Array<Feature>; //entities
+  @Input() entitiesList: Array<Feature>; //entities list provided by the service
 
 
-	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
-	public terrAPITypes: Array<string>; // an array of strings containing the types available from terrAPI
   public simpleFiltersConfig: Array<SimpleFilter>; // simpleFilters config input by the user in the config file
   public allTypesOptions: Array<TypeOptions> = []; // array that contains all the options for each filter
   public filteredTypesOptions: Array<TypeOptions> = []; // array that contains the filtered options for each filter
@@ -39,19 +39,30 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public filtersFormGroup: FormGroup; // form group containing the controls (one control per filter)
   public previousFiltersFormGroupValue: object; // object representing the previous value held in each control
   public filtersFormGroupValueChange$$: Subscription; // subscription to form group value changes
-  public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
+  public activeFilters: Map<string, Option[]> = new Map(); //map that contains all active filter options by type
   public filtersShown: boolean = false; //default status of filters in mobile mode
-  public entitiesAll: Array<Feature>;  //entities
-  public entitiesList: Array<Feature>;   //entities list provided by the service
-  public additionalTypes: Array<string> = [];  //list of all additional filter types (corresponding to the keys of the map in additional properties)
+  // public entitiesAll: Array<Feature>; //entities
+  // public entitiesList: Array<Feature>; //entities list provided by the service
+  public additionalTypes: Array<string> = []; //list of all additional filter types (corresponding to the keys of the map in additional properties)
   public additionalProperties: Map<string, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
-  public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "id", "nom", etc.)
+  public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "label", "nom", etc.)
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
   public filterTypes: Array<string> = [];
+  public uniqueKey: string = this.configService.getConfig("embeddedVersion.simpleFilters.uniqueAttribute");
 
-  constructor(private filteredEntitiesService: FilteredEntitiesService, private filterTypesService: FiltersTypesService, private additionalTypesService: FiltersAdditionalTypesService, private cdRef: ChangeDetectorRef, private activeFilterService: FiltersActiveFiltersService, private listEntitiesService: ListEntitiesService, private filterMethods: FiltersSharedMethodsService, private additionalPropertiesService: FiltersAdditionalPropertiesService, private configService: ConfigService, private http: HttpClient, private formBuilder: FormBuilder, private filterOptionService: FiltersOptionService) {
-
-  }
+  constructor(
+    private propertiesMapService: PropertiesMapService,
+    private filterTypeService: FiltersTypesService,
+    private additionalTypesService: FiltersAdditionalTypesService,
+    private cdRef: ChangeDetectorRef,
+    private activeFilterService: FiltersActiveFiltersService,
+    private listEntitiesService: ListEntitiesService,
+    private filterMethods: FiltersSharedMethodsService,
+    private additionalPropertiesService: FiltersAdditionalPropertiesService,
+    private configService: ConfigService,
+    private http: HttpClient,
+    private formBuilder: FormBuilder,
+    private filterOptionService: FiltersOptionService) { };
 
   // getter of the form group controls
   get controls(): {[key: string]: AbstractControl} {
@@ -59,40 +70,28 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
-    this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
 
-    let properties = Object.keys(this.entitiesAll[0]["properties"]);
-    for(let property of properties){
-      let values: Array<Option> = [];
-      for(let entry of this.entitiesAll){
-        let option: Option = {nom: entry["properties"][property], type: property};
-        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
-      }
-      this.propertiesMap.set(property, values);
-    }
+    // this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
+    // this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
+
+    this.initializePropertiesMap();
 
     // get the simpleFilters config input by the user in the config file
-    this.simpleFiltersConfig = this.configService.getConfig('useEmbeddedVersion.simpleFilters');
+    this.simpleFiltersConfig = this.configService.getConfig('embeddedVersion.simpleFilters.filters');
 
     this.emptyActiveFilters();
 
     // create a form group used to hold various controls
     this.filtersFormGroup = this.formBuilder.group({});
 
-		// get all the types from terrAPI
-		await this.getTypesFromTerrAPI().then((terrAPITypes: Array<string>) => {
-			this.terrAPITypes = terrAPITypes;
-		});
-
-
     // for each filter input by the user...
     for (let filter of this.simpleFiltersConfig) {
       //check that only the types in terrapi and the entities list will be used
-      if (filter.type && (this.terrAPITypes.includes(filter.type) || this.propertiesMap.get(filter.type) !== undefined)) {
+      if (filter.type && (this.propertiesMap.get(filter.type) !== undefined || (this.terrAPITypes.includes(filter.type) && this.uniqueKey))) {
 
         // get the options from terrAPI and push them in the array containing all the options and add a control in the form group
-        // typeoptions from terrAPI will have the optional list of options and those not from terrapi (from entitiesAll) will need to get the optionsList prior to this function being called
+        // typeoptions from terrAPI will have the optional list of options and those not from terrapi (from entitiesAll)
+        // will need to get the optionsList prior to this function being called
         await this.getOptionsOfFilter(filter).then((typeOptions: TypeOptions) => {
           let temp: Array<Option> = [];
           if(typeOptions && typeOptions.options){
@@ -106,7 +105,8 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             typeOptions.options = temp;
           }
 
-          //if no options are returned, don't add to the list of all types options (e.g. terrapi sometimes is unable to find the info based on the type provided)
+          //if no options are returned, don't add to the list of all types options
+          //(e.g. terrapi sometimes is unable to find the info based on the type provided)
           if(typeOptions.options.length !== 0){
             this.allTypesOptions.push(typeOptions);
             this.filtersFormGroup.addControl(typeOptions.type, this.formBuilder.control(''));
@@ -168,8 +168,8 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       let ops: Array<Option> = [];
       for(let property of this.propertiesMap.get(filter.type)){
         if(ops.filter( element => element.nom === property.nom && element.type === property.type).length === 0){
-          let op: Option = {nom: property.nom, type: property.type}
-          ops.push(op)
+          let op: Option = {nom: property.nom, type: property.type};
+          ops.push(op);
         }
       }
       typeOptions = {type: filter.type, description: filter.description, options: ops};
@@ -193,13 +193,13 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
             if(!this.additionalProperties.get(coords)){
               let newTypeMap: Map<string, string> = new Map();
-              newTypeMap.set(filter.type, locationData)
+              newTypeMap.set(filter.type, locationData);
               this.additionalProperties.set(coords, new Map(newTypeMap));
             }
             else{
               let oldMap = this.additionalProperties.get(coords);
               let newMap: Map<string, string> = new Map();
-              newMap.set(filter.type, locationData)
+              newMap.set(filter.type, locationData);
 
               //combine the 2 maps
               const combinedMap = new Map([...oldMap, ...newMap]);
@@ -210,7 +210,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
               this.additionalTypes.push(filter.type);
             }
 
-            // the checks for duplicates is performed elsewhere so there is no need to re-check it here. it is assumed that there sould be no duplicate elements
+            // the checks for duplicates is performed elsewhere so there is no need to re-check it here. assumed to be no duplicate elements
             options.push(op);
           }
           });
@@ -218,54 +218,11 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
       this.additionalPropertiesService.emitEvent(this.additionalProperties);
       this.additionalTypesService.emitEvent(this.additionalTypes);
-      this.filterTypesService.emitEvent(this.filterTypes);
+      this.filterTypeService.emitEvent(this.filterTypes);
       typeOptions = {type: filter.type, description: filter.description, options: options};
     }
 		return typeOptions;
 	}
-
-	/**
-   * @description Get an array containg all the types from terrAPI
-   * @returns An array of strings containing the types of terrAPI
-   */
-	private async getTypesFromTerrAPI(): Promise<Array<string>> {
-		// construct the URL
-		const url: string = this.terrAPIBaseURL + "types";
-
-		let response: Array<string>;
-
-		// make the call to terrAPI and return the the types
-		await this.http.get<Array<string>>(url).pipe(map((terrAPITypes: Array<string>) => {
-			response = terrAPITypes;
-			return terrAPITypes;
-		})).toPromise();
-
-		return response;
-	}
-  /**
-   * @description Get all or some options from a call to terrAPI
-   * @param returnAll A boolean representing if the call should return all of the options or if the options should be filtered
-   * @param sType A string representing the source 'type' parameter from terrAPI
-   * @param sCode A string representing the source 'code' parameter from terrAPI
-   * @param tType A string representing the target 'type' parameter from terrAPI
-   * @returns A feature collection from terrAPI
-   */
-  private async getOptionsFromTerrAPI(returnAll: boolean, sType: string, sCode?: string, tType?: string): Promise<FeatureCollection> {
-    // construct the URL
-    const url: string = returnAll ? this.terrAPIBaseURL + sType : this.terrAPIBaseURL + `${sType}/${sCode}/${tType}`;
-
-    // set a sorting parameter to sort features by name in alphabetical order
-    const params: HttpParams = new HttpParams().set('sort', 'nom');
-    let response: FeatureCollection;
-
-    // make the call to terrAPI and return the feature collection (options)
-    await this.http.get<FeatureCollection>(url, {params}).pipe(map((featureCollection: FeatureCollection) => {
-      response = featureCollection;
-      return featureCollection;
-    })).toPromise();
-
-    return response;
-  }
 
   /**
    * @description Get the label of a given field
@@ -284,6 +241,18 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    */
   public getOptions(formControlName: string): Array<Option> {
     let filteredOptions: Array<Option> = this.filteredTypesOptions.find(typeOptions => typeOptions.type === formControlName)?.options;
+
+    //remove duplicates
+    if(filteredOptions){
+      const uniqueOptions = new Set();
+      filteredOptions = filteredOptions.filter( option => {
+        if(!uniqueOptions.has(option.nom)) {
+          uniqueOptions.add(option.nom);
+          return true;
+        }
+        return false;
+      });
+    }
 
     //Case where the options are not fetched from TerrAPI and need to be fetched from the entities
     if(filteredOptions === undefined && this.propertiesMap.has(formControlName)) {
@@ -313,6 +282,8 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @param event The event fired when selecting an option from auto-complete
    */
   public async onSelection(selectedOption: Option) {
+    console.log("onSelection ", selectedOption);
+
     //return autocomplete form to prior state
     this.filtersFormGroup.reset();
 
@@ -333,7 +304,67 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       this.activeFilters.set(selectedOption.type, temp);
     }
     this.activeFilterService.emitEvent(this.activeFilters);
+    this.entitiesList = this.filterEntities();
+    // if(event){
+    //   event.stopPropagation();
+    //   document.getElementById('input-field').click();
+    // }
   }
+
+  test() {
+    console.log("clicked");
+  }
+
+    /**
+   * @description Filter entities according to non null filter values
+   * @param currentNonNullFiltersValue An array of objects containing the non null filter values
+   */
+    filterEntities(): Array<Feature> {
+      //code for active filters map
+      //set up a list of all entities that can be displayed and start shrinking it down
+      // when filters do not have at least one filter from all filter categories (assuming there are is a filter selected in this category)
+      let filteredEntities = this.entitiesAll as Array<Feature>;
+      this.activeFilters.forEach((options, filter) => {
+        //if options list is not empty, we must sift through our list
+        if(options.length){
+
+          //if the type is included in terrAPI (and has been added to additionalProperties map)
+          if(this.additionalTypes.includes(filter)){
+
+            let filteredAdditionalProperties: Array<[string, string]> = [];
+
+            for(let entry of this.additionalProperties){
+             if(entry[1].has(filter)){
+              let id: string = entry[0];
+              let mun: string = entry[1].get(filter);
+
+              options.forEach(option => {
+                if(option.nom === mun) {
+                  filteredAdditionalProperties.push([id, mun]);
+                }
+              });
+
+             }
+            }
+
+            filteredEntities = filteredEntities.filter(element => filteredAdditionalProperties.some((property) => {
+              let coords: string = element["geometry"]["coordinates"][0] + "," + element["geometry"]["coordinates"][1];
+              return property[0] === coords;
+            }));
+
+          }
+          //Otherwise the type is contained in the entities list
+          else{
+            //element["properties"][filter] ==> 802004 for example
+            //options: [{type: id, selected: true, nom: 80437}, ...] - nom depends on the filter selected
+            filteredEntities = filteredEntities.filter(element => options.some((option) =>
+            option.nom === element["properties"][filter]));
+          }
+        }
+      });
+
+      return filteredEntities;
+    }
 
   /**
    * @description Filter options as the user types characters in a field
@@ -355,7 +386,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             if(typeof option.nom === "number"){
               return JSON.stringify(option.nom).includes(currentControlValue);
             }else{
-              return option.nom.toLowerCase().includes(currentControlValue.toLowerCase())
+              return option.nom.toLowerCase().includes(currentControlValue.toLowerCase());
             }
           }
 					);
@@ -406,8 +437,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   closeOpenPanel(isPanelOpen: boolean, event: Event): void {
     if(isPanelOpen) {
       event.stopPropagation();
-      document.getElementById("list-scroll").click();
-      isPanelOpen ? this.panelTrigger.closePanel() : this.panelTrigger.openPanel();
+      document.getElementById("click-to-close-mat-select").click();
     }
   }
 
@@ -423,13 +453,14 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   }
 
     /**
-   * @description returns the length of the
+   * @description returns the length of the selected filter type
    */
   getSelectionCount(type: string): number {
     return this.activeFilters.get(type).length;
   }
 
   public updateCount() {
+    console.log("updating count ", this.entitiesList);
     for(let filter of this.filteredTypesOptions){
       let type: string = filter.type;
 
@@ -465,6 +496,19 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
       }
     }
     this.cdRef.detectChanges();
+  }
+
+  public initializePropertiesMap() {
+    let properties = Object.keys(this.entitiesAll[0]["properties"]);
+    for(let property of properties){
+      let values: Array<Option> = [];
+      for(let entry of this.entitiesAll){
+        let option: Option = {nom: entry["properties"][property], type: property};
+        !values.includes(entry["properties"][property]) ? values.push(option) : undefined;
+      }
+      this.propertiesMap.set(property, values);
+    }
+    this.propertiesMapService.emitEvent(this.propertiesMap);
   }
 
 }

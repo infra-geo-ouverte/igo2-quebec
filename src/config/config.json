@@ -1,8 +1,11 @@
 {
   "theme": "qcca-theme",
   "showSearchBar": false,
-  "useEmbeddedVersion": {
-    "simpleFilters": [
+  "embeddedVersion": {
+    "useEmbeddedVersion": true,
+    "layerId": "dq2",
+    "simpleFilters": {
+      "filters": [
       {"type": "id", "description": "Numéro de bureau"},
       {"type": "region", "description": "Région"},
       {"type": "responsable", "description": "Responsable"},
@@ -11,8 +14,9 @@
       {"type": "bs", "description": "this is a test"},
       {"type": "province", "description": "Province"}
     ],
+    "uniqueAttribute": "adressebur"
+  },
     "simpleFeatureList": {
-      "layerId": "dq2",
       "attributeOrder": [
         {"attributeName": "adressebur", "header": "small"},
         {"attributeName": "label", "header": "title"},
@@ -22,14 +26,32 @@
         {"attributeName": "responsable", "description": "Responsable"},
         {"attributeName": "telephonebur", "description": "Téléphone"},
         {"attributeName": "telecopieurbur", "description": "Télécopieur"},
-        {"attributeName": "courriel"}
+        {"personalizedFormatting": "[nom] de [mrc] (prop + terrapi)"},
+        {"attributeName": "test2", "personalizedFormatting": "[nom] de [region] (prop + prop)"},
+        {"attributeName": "test3", "personalizedFormatting": "[mrc] / [municipalites] (terrapi + terrapi)"},
+        {"attributeName": "test4", "personalizedFormatting": "[mrc] / [randm] (terrapi + wrong)"},
+        {"attributeName": "courriel"},
+        {"attributeName": "lieux.transport.commun", "description": "lieux-transport-commun"},
+        {"attributeName": "arrondissements", "description": "Arrondissements"},
+        {"attributeName": "whatever", "description": "Test"}
       ],
-      "sortBy": {"attributeName": "municipalites"},
+      "sortBy": {
+        "default": {"attributeName": "responsable"},
+        "attributes": [
+          {"type": "region", "description": "Région"},
+          {"type": "responsable", "description": "Responsable"},
+          {"type": "municipalites", "description": "Municipalité"},
+          {"type": "mrc", "description": "MRC"},
+          {"type": "mrc", "description": "MRC2"},
+          {"type": "whatever", "description": "MRC"},
+          {"type": "test", "description": "TEST"}
+        ]
+      },
       "formatURL": true,
       "formatEmail": true,
       "paginator": {
         "pageSizeOptions": [1,5,10,20,50],
-        "pageSize": 5,
+        "pageSize": 10,
         "showFirstLastPageButtons": true,
         "showPreviousNextPageButtons": true
       }

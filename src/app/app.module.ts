@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
+import { PortalComponent } from './pages/portal/portal.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MenuModule } from './pages/menu/menu.module';
 import {
   provideConfigOptions,
@@ -38,7 +40,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
-import { PortalComponent } from './pages/portal/portal.component';
 import { IgoSimpleFiltersModule } from './pages/filters/simple-filters.module';
 import { IgoSimpleFeatureListModule } from './pages/list/simple-feature-list.module';
 
@@ -53,6 +54,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [AppComponent],
   imports: [
+    ScrollingModule,
     IgoSimpleFeatureListModule,
     IgoSimpleFiltersModule,
     CommonModule,
@@ -98,8 +100,15 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       multi: true
     },
     provideStyleListOptions({
+      //angular elements
+      // path: './assets/assets/list-style.json'
       path: './assets/list-style.json'
+
     }),
+    //angular elements
+    // provideConfigOptions({
+    //   path: './assets/config/config.json'
+    // }),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions }
   ],
   entryComponents: [
