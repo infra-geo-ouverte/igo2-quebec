@@ -1,37 +1,56 @@
 @use 'sass:map';
-@use '../../../theme/palette';
+@use '@igo2/core/theming/prebuilt-themes/qcca';
 @import '../portal/portal.variables.scss';
 
 :host {
-  .navbar {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    flex-direction: row;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
-    width: 100%;
-    margin: 0 auto 0 auto;
-    padding: 0;
-  }
+  ::ng-deep {
+    .navbar {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      flex-direction: row;
+      flex-flow: row nowrap;
+      justify-content: flex-start;
+      width: 100%;
+      margin: 0 auto 0 auto;
+      padding: 0;
 
-  .nav-link {
-    display: block;
-    text-decoration: none;
-    margin-right: 0.4rem;
-    color: palette.$light-primary-text;
-    letter-spacing: 0;
-    font-size: 1.1rem;
-    padding: 0 0.5rem 0rem !important;
-  }
+      ::-webkit-scrollbar {
+        display: none;
+      }
 
-  .nav-arrow {
-    color: map.get(palette.$palette, contrast, 900) !important;
-    font-weight: 1000;
-    z-index: 100;
-    background-color: map.get(palette.$palette, 900);
-    margin: 0;
+      @media (min-width: 768px) {
+          height: $menu-height;
+    
+        a {
+          padding: 1rem 1.2rem !important;
+        }
+    
+        a:focus,
+        a.active {
+          padding-bottom: calc(1rem - 4px) !important;
+        }
+      }
+    }
+  
+    .nav-link {
+      display: block;
+      text-decoration: none;
+      margin-right: 0.4rem;
+      color: qcca.$light-primary-text;
+      letter-spacing: 0;
+      font-size: 1.1rem;
+      padding: 0 0.5rem 0rem !important;
+    }
+  
+    .nav-arrow {
+      color: map.get(qcca.$palette, contrast, 900) !important;
+      font-weight: 1000;
+      z-index: 100;
+      background-color: map.get(qcca.$palette, 900);
+      margin: 0;
+    }
   }
 
   .active {
@@ -68,10 +87,6 @@
     display: flex;
   }
 
-  .navbar ::-webkit-scrollbar {
-    display: none;
-  }
-
   .right {
     right: 0;
     padding: 5px 5px 5px 15px !important;
@@ -92,18 +107,5 @@
     }
   }
 
-  @media (min-width: 768px) {
-    .navbar {
-      height: $menu-height;
-    }
-
-    .navbar a {
-      padding: 1rem 1.2rem !important;
-    }
-
-    .navbar a:focus,
-    .navbar a.active {
-      padding-bottom: calc(1rem - 4px) !important;
-    }
-  }
+ 
 }
