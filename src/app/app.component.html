@@ -47,6 +47,5 @@
         ></app-simple-feature-list>
     </div>
 </div>
-<div *ngIf="!useEmbeddedVersion" class="no-embedded-version">
-    <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
-</div>
+
+<app-portal *ngIf="!hasMenu && !useEmbeddedVersion" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>

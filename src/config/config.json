@@ -1,7 +1,7 @@
 {
   "theme": "qcca-theme",
   "showSearchBar": false,
-  "embeddedVersion": {
+  "embeddedVersionA": {
     "useEmbeddedVersion": true,
     "layerId": "dq2",
     "simpleFilters": {
@@ -26,17 +26,17 @@
         {"attributeName": "responsable", "description": "Responsable"},
         {"attributeName": "telephonebur", "description": "Téléphone"},
         {"attributeName": "telecopieurbur", "description": "Télécopieur"},
-        {"personalizedFormatting": "[nom] de [mrc] (prop + terrapi)"},
-        {"attributeName": "test2", "personalizedFormatting": "[nom] de [region] (prop + prop)"},
-        {"attributeName": "test3", "personalizedFormatting": "[mrc] / [municipalites] (terrapi + terrapi)"},
-        {"attributeName": "test4", "personalizedFormatting": "[mrc] / [randm] (terrapi + wrong)"},
+        {"personalizedFormattingA": "[nom] de [mrc] (prop + terrapi)"},
+        {"attributeName": "test2", "personalizedFormattingA": "[nom] de [region] ... prop + prop"},
+        {"attributeName": "test3", "personalizedFormattingA": "[mrc] / [municipalites] ... terrapi + terrapi"},
+        {"attributeName": "test4", "personalizedFormattingA": "[mrc] / [random] ... terrapi + erroné"},
         {"attributeName": "courriel"},
         {"attributeName": "lieux.transport.commun", "description": "lieux-transport-commun"},
         {"attributeName": "arrondissements", "description": "Arrondissements"},
         {"attributeName": "whatever", "description": "Test"}
       ],
       "sortBy": {
-        "default": {"attributeName": "responsable"},
+        "default": {"attributeName": "asdad"},
         "attributes": [
           {"type": "region", "description": "Région"},
           {"type": "responsable", "description": "Responsable"},
@@ -50,8 +50,8 @@
       "formatURL": true,
       "formatEmail": true,
       "paginator": {
-        "pageSizeOptions": [1,5,10,20,50],
-        "pageSize": 10,
+        "pageSizeOptions": [1,5,10,20,50, 100],
+        "pageSize": 5,
         "showFirstLastPageButtons": true,
         "showPreviousNextPageButtons": true
       }

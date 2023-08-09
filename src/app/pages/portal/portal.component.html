@@ -1,4 +1,4 @@
-<mat-sidenav-container *ngIf="showMap && !hasToolbox" class="sidenav">
+<mat-sidenav-container *ngIf="showMap && !hasToolbox">
   <mat-sidenav-content position="end">
 
     <igo-backdrop
@@ -66,7 +66,7 @@
     [igoContextMenu]=contextMenu
     (menuPosition)="onContextMenuOpen($event)"
     [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
-        
+
       <igo-baselayers-switcher
         [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
         [map]="map"

@@ -457,6 +457,7 @@ export class PortalComponent implements OnInit, OnDestroy {
       if (workspaceEmpty) {
         this.expansionPanelExpanded = false;
       }
+      this.updateMapBrowserClass();
     });
 
     this.map.layers$.subscribe( layerList => {
