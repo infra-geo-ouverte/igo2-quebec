@@ -1,3 +1,4 @@
+import { LegendButtonModule } from './legend-button/legend-button.module';
 import { IgoSimpleFiltersModule } from './../filters/simple-filters.module';
 import { IgoSimpleFeatureListModule } from './../list/simple-feature-list.module';
 import { NgModule } from '@angular/core';
@@ -5,9 +6,9 @@ import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LegendDialogModule} from './legend-dialog/legend-dialog.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -31,6 +32,7 @@ import {
   IgoImportExportModule,
   IgoMapModule,
   IgoQueryModule,
+  IgoLayerModule,
   IgoSearchModule
 } from '@igo2/geo';
 import {
@@ -38,14 +40,13 @@ import {
   IgoContextMapButtonModule
 } from '@igo2/context';
 
-import { IgoIntegrationModule } from '@igo2/integration';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { IgoAppSearchBarModule, IgoIntegrationModule } from '@igo2/integration';
 import { MapOverlayModule } from './map-overlay/map-overlay.module';
-import { AppSidenavModule } from './sidenav/sidenav.module';
 
 import { PortalComponent } from './portal.component';
-
-import { LegendButtonModule } from './legend-button/legend-button.module';
-import { AppSideResultModule } from './sideresult/sideresult.module';
+import { FooterModule } from './../footer/footer.module';
+import { AppPanelsModule } from './panels/panels.module';
 
 @NgModule({
   imports: [
@@ -61,30 +62,36 @@ import { AppSideResultModule } from './sideresult/sideresult.module';
     MatSelectModule,
     IgoCoreModule,
     IgoFeatureModule,
-    IgoImportExportModule,
     IgoMapModule,
-    IgoQueryModule.forRoot(),
-    IgoSearchModule.forRoot(),
-    IgoActionModule,
-    IgoWorkspaceModule,
     IgoEntityModule,
-    IgoGeoWorkspaceModule,
-    IgoPanelModule,
-    IgoToolModule,
-    IgoContextMenuModule,
-    IgoBackdropModule,
     IgoFlexibleModule,
     IgoIntegrationModule,
-    AppSidenavModule,
-    AppSideResultModule,
-    MapOverlayModule,
     IgoContextManagerModule,
+    FooterModule,
+    IgoLayerModule,
+    IgoWorkspaceModule,
+    IgoGeoWorkspaceModule,
+    IgoQueryModule.forRoot(),
+    IgoSearchModule.forRoot(),
     IgoContextMapButtonModule,
-    LegendButtonModule,
+    MatDialogModule,
+    IgoActionModule,
+    IgoImportExportModule,
+    MapOverlayModule,
+    AppPanelsModule,
+    IgoPanelModule,
+    IgoBackdropModule,
+    IgoContextMenuModule,
+    IgoToolModule,
     IgoEntityTableModule,
     IgoEntityTablePaginatorModule,
+    LegendDialogModule,
+    MatSidenavModule,
+    IgoAppSearchBarModule,
+    IgoSearchModule,
+    LegendButtonModule
   ],
-    exports: [PortalComponent],
-    declarations: [PortalComponent]
+  exports: [PortalComponent],
+  declarations: [PortalComponent]
 })
 export class PortalModule {}

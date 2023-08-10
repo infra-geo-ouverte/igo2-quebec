@@ -1,5 +1,5 @@
 {
-  "IGO": "IGO",
+  "IGO": "IGO ― Infrastructure géomatique ouverte",
   "oldBrowser": {
     "title": "Too old browser",
     "message": "IGO2 does not fully support your browser. Please update it or use a different one."
@@ -23,11 +23,22 @@
   "icherche": {
     "name": "Search result"
   },
-  "sideresult": {
-    "close": "Close",
-    "open": "Open"
+  "searchBar": "Search",
+  "sidePanel": {
+    "close": "Hide panel",
+    "open": "Open panel"
   },
-  "search-bar": "Search",
+  "feature": {
+    "title" : "Object",
+    "close": "Close panel",
+    "tooltip": "Customise this template as you wish, even by layer using feature.meta.id or other layers metadatas"
+  },
+  "legend": {
+    "title": "Legend",
+    "button": "Legend",
+    "close": "Close legend",
+    "open": "Open legend"
+  },
   "pwa": {
     "new-version-title": "New version available. ",
     "new-version": "Do you want to reload the app?",
@@ -77,5 +88,22 @@
     "selected": "selected",
     "selecteds": "selected"
 
+  },
+  "igo":{
+    "integration": {
+      "searchResultsTool": {
+        "noResults": "No result",
+        "doSearch": "Enter a text in the searchbar",
+        "examples": "<p>You can search for adresses, locations, businesses or coordinates.</p><p>Address searches can be done combining :<ul><li>civic number</li><li>street name</li><li>city</li><li>postal code</li></ul></p><p>Coordinates search example :<ul><li>Decimal degree:<br>-68.165547, 48.644546</li><li>Degrees, Minutes, Seconds:<br>-68 9 56, 48 38 40</li></ul></p>"
+      }
+    },
+    "geo": {
+      "search": {
+        "icherche": {
+          "name": "Search results",
+          "placeholder": "Search for a location"
+        }
+      }
+    }
   }
 }

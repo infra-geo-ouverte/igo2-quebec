@@ -93,12 +93,10 @@ $footer-height: 29px;
 
 }
 
-//* Spinner *//
-
 igo-spinner {
   position: absolute;
-  top: calc(#{$header-height-mobile} + 4px) !important;
-  right: 4px;
+  top: 50% !important;
+  right: 50% ;
   z-index: 100;
 }
 

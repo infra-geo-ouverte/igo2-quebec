@@ -4,7 +4,9 @@ import {
   Input,
   OnInit,
   ElementRef,
-  OnDestroy
+  OnDestroy,
+  HostListener,
+  Output, EventEmitter
 } from '@angular/core';
 import { Observable, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -20,9 +22,7 @@ import { ConfigService } from '@igo2/core';
 import {
   EntityStore,
   ToolComponent,
-  FlexibleState,
   getEntityTitle,
-  FlexibleComponent,
   EntityState
 } from '@igo2/common';
 
@@ -44,7 +44,8 @@ import {
   roundCoordTo
 } from '@igo2/geo';
 
-import { MapState, SearchState, ToolState, DirectionState } from '@igo2/integration';
+import { MapState, ToolState, DirectionState, QueryState } from '@igo2/integration';
+import { SearchState } from './search.state';
 
 /**
  * Tool to browse the search results
@@ -65,13 +66,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
    */
   @Input() showIcons: boolean = true;
 
-  /**
-   * Determine the top panel default state
-   */
-  @Input() topPanelStateDefault: string = 'expanded';
-
-  private hasFeatureEmphasisOnSelection: boolean = false;
-
+  private hasFeatureEmphasisOnSelection: boolean;
   private showResultsGeometries$$: Subscription;
   private getRoute$$: Subscription;
   private shownResultsGeometries: Feature[] = [];
@@ -86,6 +81,8 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   public debouncedEmpty$ :BehaviorSubject<boolean> = new BehaviorSubject(true);
   private debouncedEmpty$$: Subscription;
+  @Output() featureSelected = new EventEmitter<boolean>();
+  public addFeaturetoLayer : boolean; // in the result features list, display an icon "add this feature to a layer"
 
   /**
    * Store holding the search results
@@ -120,24 +117,11 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         )
       );
   }
-
   public feature: Feature;
 
   public term = '';
   private searchTerm$$: Subscription;
-
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
-
-  public topPanelState$ = new BehaviorSubject<FlexibleState>('initial');
-  private topPanelState$$: Subscription;
-
-  @Input()
-  set topPanelState(value: FlexibleState) {
-    this.topPanelState$.next(value);
-  }
-  get topPanelState(): FlexibleState {
-    return this.topPanelState$.value;
-  }
 
   get termSplitter(): string {
     return this.searchState.searchTermSplitter$.value;
@@ -149,20 +133,60 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
+  public initialized: boolean = undefined;
+
+  @Output() searchEvent = new EventEmitter();
+
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
+
+  @Input()
+  get searchInit(): boolean {
+    return this._searchInit;
+  }
+  set searchInit(value: boolean) {
+    this._searchInit = value;
+  }
+  private _searchInit: boolean;
+
+  @Input()
+  get legendPanelOpened(): boolean {
+    return this._legendPanelOpened;
+  }
+  set legendPanelOpened(value: boolean) {
+    this._legendPanelOpened = value;
+  }
+  private _legendPanelOpened: boolean;
+
+  get queryStore(): EntityStore<SearchResult> {
+    return this.queryState.store;
+  }
+
   constructor(
     private mapState: MapState,
     private searchState: SearchState,
     private elRef: ElementRef,
     public toolState: ToolState,
     private directionState: DirectionState,
-    configService: ConfigService
+    configService: ConfigService,
+    private queryState: QueryState
   ) {
     this.hasFeatureEmphasisOnSelection = configService.getConfig(
       'hasFeatureEmphasisOnSelection'
     );
+    this.addFeaturetoLayer = configService.getConfig(
+      'addFeaturetoLayer'
+    );
   }
 
   ngOnInit() {
+    this.initialized = true;
     this.searchTerm$$ = this.searchState.searchTerm$.subscribe(
       (searchTerm: string) => {
         if (searchTerm !== undefined && searchTerm !== null) {
@@ -170,29 +194,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         }
       }
     );
-
-    for (const res of this.store.stateView.all$().value) {
-      if (this.store.state.get(res.entity).selected === true) {
-        this.topPanelState = 'expanded';
-      }
-    }
-
-    this.searchState.searchSettingsChange$.subscribe(() => {
-      this.settingsChange$.next(true);
-    });
-
-    this.topPanelState$$ = this.topPanelState$.subscribe(() => {
-      const igoList = this.computeElementRef()[0];
-      const selected = this.computeElementRef()[1];
-      if (selected) {
-        setTimeout(() => {
-          // To be sure the flexible component has been displayed yet
-          if (!this.isScrolledIntoView(igoList, selected)) {
-            this.adjustTopPanel(igoList, selected);
-          }
-        }, FlexibleComponent.transitionTime + 50);
-      }
-    });
 
     if (this.hasFeatureEmphasisOnSelection) {
       if (!this.searchState.focusedOrResolution$$) {
@@ -368,8 +369,8 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('change')
   ngOnDestroy() {
-    this.topPanelState$$.unsubscribe();
     this.searchTerm$$.unsubscribe();
     if (this.isSelectedResultOutOfView$$) {
       this.isSelectedResultOutOfView$$.unsubscribe();
@@ -405,6 +406,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         return;
       }
       this.map.searchResultsOverlay.addFeature(result.data as Feature, FeatureMotion.None);
+      this.featureSelected.emit();
     }
   }
 
@@ -415,6 +417,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     }
 
     if (this.store.state.get(result).selected === true) {
+      this.featureSelected.emit();
       const feature = this.map.searchResultsOverlay.dataSource.ol.getFeatureById(result.meta.id);
       if (feature) {
         const style = getCommonVectorSelectedStyle(
@@ -437,41 +440,24 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   onResultSelect(result: SearchResult) {
     this.map.searchResultsOverlay.dataSource.ol.clear();
     this.tryAddFeatureToMap(result);
-    //this.searchState.setSelectedResult(result);
-    /*
-    if (this.topPanelState === 'initial') {
-      if (this.topPanelStateDefault !== 'collapsed') {
-        this.topPanelState = 'expanded';
-      } else {
-        this.topPanelState = 'collapsed';
-      }
-    }*/
-    /*
-    if (this.topPanelState === 'expanded') {
-      const igoList = this.computeElementRef()[0];
-      const selected = this.computeElementRef()[1];
-      if (!this.isScrolledIntoView(igoList, selected)) {
-        this.adjustTopPanel(igoList, selected);
-      }
-    }*/
+    this.searchState.setSelectedResult(result);
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    if (this.mapQueryClick = true) { // to clear the mapQuery if a search is initialized
+      this.queryState.store.softClear();
+      this.map.queryResultsOverlay.clear();
+      this.mapQueryClick = false;
+    }
+    this.store.clear();
+    this.searchInit = true;
+    this.legendPanelOpened = false;
     const results = event.results;
-    const newResults = this.store.entities$.value
+    this.searchStore.state.updateAll({ focused: false, selected: false });
+    const newResults = this.searchStore.entities$.value
       .filter((result: SearchResult) => result.source !== event.research.source)
       .concat(results);
-
-    this.store.load(newResults);
-
-    for (const res of this.store.all()) {
-      if (
-        this.store.state.get(res).focused === true &&
-        this.store.state.get(res).selected !== true
-      ) {
-        this.store.state.update(res, { focused: false }, true);
-      }
-    }
+    this.searchStore.updateMany(newResults);
 
     setTimeout(() => {
       const igoList = this.elRef.nativeElement.querySelector('igo-list');
@@ -488,7 +474,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         } else {
           moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
         }
-
         if (
           moreResults !== null &&
           !this.isScrolledIntoView(igoList, moreResults)
@@ -523,14 +508,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         elem.offsetTop +
         elem.children[0].offsetHeight -
         elemSource.clientHeight;
-    }
-  }
-
-  toggleTopPanel() {
-    if (this.topPanelState === 'expanded') {
-      this.topPanelState = 'collapsed';
-    } else {
-      this.topPanelState = 'expanded';
     }
   }
 
@@ -580,7 +557,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
   }
 
   getRoute() {
-    this.toolState.toolbox.activateTool('directions');
+    //this.toolState.toolbox.activateTool('directions');
     this.directionState.stopsStore.clearStops();
     setTimeout(() => {
       let routingCoordLoaded = false;

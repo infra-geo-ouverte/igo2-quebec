@@ -1,101 +1,114 @@
-<mat-sidenav-container *ngIf="showMap && !hasToolbox">
+<mat-sidenav-container *ngIf="showMap">
   <mat-sidenav-content position="end">
 
     <igo-backdrop
       [shown]="false"
       (click)="onBackdropClick()">
     </igo-backdrop>
-  
-    <div id="scaleLine"></div>
-  
+
     <div id="searchDesktop" *ngIf=!mobile>
-      <igo-menu-button *ngIf="showMenuButton"
-        [sidenavOpened]="sidenavOpened"
-        (openSidenav)="onToggleSidenavClick()">
-      </igo-menu-button>
 
       <igo-search-bar *ngIf="showSearchBar"
         #searchbar
         (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
         appearance="outline"
         searchIcon ="magnify"
-        [matTooltip]="'search-bar' | translate"
+        [matTooltip]="'searchBar' | translate"
         matTooltipShowDelay="500"
         tooltip-position="after"
         [searchSettings]="false"
         color="primary"
+        [forceNA]="forceCoordsNA"
+        [term]="searchBarTerm"
         [store]="searchStore"
         [termSplitter]="termSplitter"
         (searchTermChange)="onSearchTermChange($event)"
         (search)="onSearch($event)"
-        (clearFeature)="removeFeatureFromMap()"
-        (searchSettingsChange)="onSearchSettingsChange()">
+        (clearFeature)="clearSearch()">
       </igo-search-bar>
 
-      <div *ngIf="!mobile" id="scaleLine"></div>
+      <div *ngIf="mobile" id="scaleLine"></div>
 
-      <app-sideresult
+      <app-sidepanel
+        #sidepanel
+        class="sidepanel"
         [map]="map"
-        [(opened)]="sidenavOpened"
-        (toolChange)="toolChanged($event)">
-      </app-sideresult>
+        [mobile]="mobile"
+        [(opened)]="panelOpenState"
+        [searchInit]="searchInit"
+        [store]="queryStore"
+        [legendPanelOpened]="legendPanelOpened"
+        [mapQueryClick]="mapQueryClick"
+        [panelOpenState]="panelOpenState"
+        (panelOpened)="panelOpened($event)"
+        (toggleLegend)="togglePanelLegend()"
+        (closeLegend)="closePanelLegend()"
+        (closeQuery)="closePanelOnCloseQuery()"
+        (openLegend)="openPanelLegend()"
+        [layers]="mapLayersShownInLegend">
+      </app-sidepanel>
     </div>
 
-    <igo-map-browser
-    igoMapOffline
-    igoWorkspaceUpdator
-    [workspaceStore]="workspaceStore"
-    igoLongPress
-    igoSearchPointerSummary
-    [igoSearchPointerSummaryDelay]="500"
-    [igoSearchPointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
-    igoHoverFeature
-    [igoHoverFeatureDelay]="250"
-    [igoHoverFeatureEnabled]="true"
-    #mapBrowser
-    igoQuery
-    [waitForAllQueries]="true"
-    [queryFeatures]="true"
-    [queryFeaturesHitTolerance]="15"
-    igoMapContext
-    igoLayerContext
-    igoDropGeoFile
-    [contextUri]="contextUri"
-    (query)="onMapQuery($event)"
-    [map]="map"
-    [igoContextMenu]=contextMenu
-    (menuPosition)="onContextMenuOpen($event)"
-    [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1}">
+    <igo-map-browser      
+      igoMapOffline
+      igoWorkspaceUpdator
+      [workspaceStore]="workspaceStore"
+      igoLongPress
+      igoSearchPointerSummary
+      [igoSearchPointerSummaryDelay]="500"
+      [igoSearchPointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
+      igoHoverFeature
+      [igoHoverFeatureDelay]="250"
+      [igoHoverFeatureEnabled]="true"
+      #mapBrowser
+      igoQuery
+      [waitForAllQueries]="true"
+      [queryFeatures]="true"
+      [queryFeaturesHitTolerance]="15"
+      igoMapContext
+      igoLayerContext
+      igoDropGeoFile
+      igoHoverFeature
+      [igoHoverFeatureEnabled]="true"
+      igoQuery
+      [queryFeatures]="true"
+      (query)="onMapQuery($event)"
+      [igoHoverFeatureDelay]=10
+      [map]="map"
+      [igoContextMenu]=contextMenu
+      (menuPosition)="onContextMenuOpen($event)"
+      [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
 
-      <igo-baselayers-switcher
-        [ngClass]="sidenavOpened? ['baselayers-pushed'] : (mobile? ['igo-baselayers-switcher-mobile'] : ['baselayers'])"
-        [map]="map"
-        [useStaticIcon]="getBaseLayersUseStaticIcon()">
-      </igo-baselayers-switcher>
-    
-      <div id="map-buttons"
-      [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
-        <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
-        <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
-        <igo-rotation-button *ngIf="!useEmbeddedVersion" [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-        <app-legend-button *ngIf="hasLegendButton"></app-legend-button>
-      </div>
+      <div *ngIf="mobile" id="scaleLine"></div>
+
+        <igo-baselayers-switcher
+          [ngClass]="mobile? ['igo-baselayers-switcher-mobile'] : (panelOpenState? ['baselayers-pushed'] : ['baselayers'])"
+          [map]="map"
+          [useStaticIcon]="getBaseLayersUseStaticIcon()">
+        </igo-baselayers-switcher>
+
+        <div id="map-buttons"
+        [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
+          <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
+          <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
+          <igo-rotation-button *ngIf="!useEmbeddedVersion" [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
+          <app-legend-button *ngIf= "hasLegendButton" (toggleLegend)= "toggleLegend()" [legendInPanel]= "legendInPanel" [tooltipDisabled]="mobile" [legendButtonTooltip]="legendButtonTooltip" color= "primary"></app-legend-button>
+        </div>
 
         <app-bottomresult
-          *ngIf="mobile && !useEmbeddedVersion"
+        *ngIf="mobile && !useEmbeddedVersion"
+          *ngIf="mobile"
           [map]="map">
         </app-bottomresult>
     </igo-map-browser>
 
-    <app-footer *ngIf="hasFooter && !mobile" ></app-footer>
+    <app-footer *ngIf="hasFooter && !mobile" [mobile]="mobile"></app-footer>
 
     <app-map-overlay
-    [@controlStateY]="getControlsOffsetY()"
     [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&
-                            sidenavOpened ? 'right' : 'left'">
+                            panelOpenState ? 'right' : 'left'">
     </app-map-overlay>
 
   </mat-sidenav-content>
 
-  
 </mat-sidenav-container>

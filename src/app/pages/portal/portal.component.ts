@@ -2,6 +2,7 @@ import { EntitiesAllService } from './../list/listServices/entities-all.service'
 import {
   Component,
   OnInit,
+  AfterContentInit,
   OnDestroy,
   ViewChild,
   ElementRef,
@@ -11,8 +12,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { debounceTime, take, skipWhile, first, distinctUntilChanged, tap } from 'rxjs/operators';
+import { Subscription, BehaviorSubject, of, skip } from 'rxjs';
+import { debounceTime, take, skipWhile, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,7 +22,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ObjectUtils } from '@igo2/utils';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
 import type { default as OlGeometry } from 'ol/geom/Geometry';
 import olFeature from 'ol/Feature';
 
@@ -32,7 +32,8 @@ import {
   ConfigService,
   LanguageService,
   MessageService,
-  StorageService
+  StorageService,
+  AnalyticsService
   } from '@igo2/core';
 
   import {
@@ -41,9 +42,7 @@ import {
     WorkspaceStore,
     ActionStore,
     EntityStore,
-    Toolbox,
-    Tool,
-    Widget,
+    getEntityTitle,
     EntityTablePaginatorOptions,
     EntityRecord
   } from '@igo2/common';
@@ -65,24 +64,26 @@ import {
   handleFileImportError,
   handleFileImportSuccess,
   WfsWorkspace,
-  FeatureWorkspace,
-  EditionWorkspace,
   generateIdFromSourceOptions,
   computeOlFeaturesExtent,
-  addStopToStore,
   ImageLayer,
   VectorLayer,
   MapExtent,
   IgoMap,
   DataSourceService,
-  QuerySearchSource,
   SearchSource,
+  QuerySearchSource,
   featureToSearchResult,
   QueryService,
+  Layer,
+  MapService,
+  SearchBarComponent,
   featureFromOl,
   WMSDataSource,
   OgcFilterWriter,
-  IgoOgcFilterObject
+  IgoOgcFilterObject,
+  FeatureWorkspace,
+  EditionWorkspace
   } from '@igo2/geo';
 
 import {
@@ -90,10 +91,10 @@ import {
   WorkspaceState,
   QueryState,
   ContextState,
-  SearchState,
-  ToolState,
   DirectionState
 } from '@igo2/integration';
+
+import { SearchState } from './panels/search-results-tool/search.state';
 
 import { PwaService } from '../../services/pwa.service';
 
@@ -119,10 +120,10 @@ import { ListEntitiesService } from '../list/listServices/list-entities-services
   ]
 })
 
-export class PortalComponent implements OnInit, OnDestroy {
+export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   @Input() features = {added: []}; //TODO update the type later when I know what it is..
   @Output() workspaceSelected = new EventEmitter<Workspace>();
-  @Output() mapQuery = new EventEmitter<Feature[]>();
+  @Output() mapQueryEvent = new EventEmitter<Feature[]>();
   @Input() additionalProperties: Map<string, Map<string, string>> = new Map();
   @Input() entitiesAll: Array<Feature>; //all entities
   @Input() entitiesList: Array<Feature>; //filtered entities
@@ -143,7 +144,8 @@ export class PortalComponent implements OnInit, OnDestroy {
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
   public hasGeolocateButton: boolean = true;
-  public hasExpansionPanel: boolean = false;
+  public showMenuButton = true;
+  public hasExpansionPanel: boolean = undefined;
   public hasToolbox: boolean = false;
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -154,20 +156,15 @@ export class PortalComponent implements OnInit, OnDestroy {
   public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(undefined);;
   public hasSideSearch = true;
   public showSearchBar = true;
-  public showMenuButton = true;
-  public sidenavOpened$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
   mapBrowser: ElementRef;
-
-  public term: string;
+  public legendPanelOpened = false;
+  public legendDialogOpened = false;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
   getBaseLayersUseStaticIcon(): Boolean {
     return this.configService.getConfig('useStaticIcon');
   }
-
-  public toastPanelOffsetX$: BehaviorSubject<string> = new BehaviorSubject(undefined);
-  public minSearchTermLength = 2;
   public hasHomeExtentButton = false;
   public hasFeatureEmphasisOnSelection: Boolean = false;
   public workspacePaginator: MatPaginator;
@@ -188,6 +185,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   public termSplitter = '|';
   public termDefinedInUrlTriggered = false;
   private addedLayers$$: Subscription[] = [];
+  private layers$$: Subscription;
   public forceCoordsNA = false;
 
   public contextMenuStore = new ActionStore([]);
@@ -195,14 +193,12 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   private contextLoaded = false;
   private context$$: Subscription;
-  private openSidenav$$: Subscription;
+  private openPanels$$: Subscription;
   private sidenavMediaAndOrientation$$: Subscription;
+  private searchTerm$$: Subscription;
 
   public igoSearchPointerSummaryEnabled: boolean;
 
-  public toastPanelForExpansionOpened = true;
-  private activeWidget$$: Subscription;
-  public showToastPanelForExpansionToggle = false;
   private routeParams: Params;
   public toastPanelHtmlDisplay = false;
   public mobile: boolean;
@@ -212,28 +208,16 @@ export class PortalComponent implements OnInit, OnDestroy {
   // public additionalProperties: Map<string, Map<string, string>> = new Map();
   public additionalTypes: Array<string> = [];
   private layerId: string;
-  @ViewChild('searchBar', { read: ElementRef, static: true })
-  searchBar: ElementRef;
-
+  @ViewChild('searchbar') searchBar: SearchBarComponent;
   public dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
 
   get map(): IgoMap {
     return this.mapState.map;
   }
 
-  get sidenavOpened(): boolean {
-    return this.sidenavOpened$.value;
-  }
-
-  set sidenavOpened(value: boolean) {
-    this.sidenavOpened$.next(value);
-  }
-
   get auth(): AuthOptions {
     return this.configService.getConfig('auth') || [];
   }
-
-  // Responsiveness
 
   isMobile(): boolean {
     return this.mediaService.getMedia() === Media.Mobile;
@@ -258,7 +242,7 @@ export class PortalComponent implements OnInit, OnDestroy {
   get backdropShown(): boolean {
     return (
       ('(min-width: 768px)' &&
-      this.sidenavOpened
+      this.panelOpenState
     ));
   }
 
@@ -267,23 +251,11 @@ export class PortalComponent implements OnInit, OnDestroy {
   }
   set expansionPanelExpanded(value: boolean) {
     this.workspaceState.workspacePanelExpanded = value;
-    if (value === true) {
+    if (value) {
       this.map.viewController.setPadding({bottom: 280});
     } else {
       this.map.viewController.setPadding({bottom: 0});
     }
-  }
-
-  get contextUri(): string {
-    return this.contextState.context$?.getValue() ? this.contextState.context$.getValue().uri : undefined;
-  }
-
-  get toastPanelShown(): boolean {
-    return true;
-  }
-
-  get expansionPanelBackdropShown(): boolean {
-    return this.expansionPanelExpanded && this.toastPanelForExpansionOpened;
   }
 
   get workspace(): Workspace {
@@ -306,17 +278,20 @@ export class PortalComponent implements OnInit, OnDestroy {
     return this.searchState.searchResultsGeometryEnabled$.value;
   }
 
-  get toolbox(): Toolbox {
-    return this.toolState.toolbox;
-  }
-
   get workspaceStore(): WorkspaceStore {
     return this.workspaceState.store;
   }
 
-  get queryStore(): EntityStore<SearchResult> {
+  get queryStore(): EntityStore<SearchResult> { //FeatureInfo
     return this.queryState.store;
   }
+  public panelOpenState = false;
+  public mapQueryClick = false;
+  public searchInit = false;
+
+  public mapLayersShownInLegend: Layer[];
+  public legendInPanel: boolean;
+  public legendButtonTooltip = this.languageService.translate.instant('legend.open');
 
   constructor(
     // public cdRef: ChangeDetectorRef,
@@ -326,7 +301,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     private additionalTypesService: FiltersAdditionalTypesService,
     private activeFilterService: FiltersActiveFiltersService,
     private filteredEntitiesService: FilteredEntitiesService,
-    private queryService: QueryService,
     private route: ActivatedRoute,
     public workspaceState: WorkspaceState,
     public authService: AuthService,
@@ -336,9 +310,9 @@ export class PortalComponent implements OnInit, OnDestroy {
     public capabilitiesService: CapabilitiesService,
     private contextState: ContextState,
     private mapState: MapState,
+    private mapService: MapService,
     private searchState: SearchState,
     private queryState: QueryState,
-    private toolState: ToolState,
     private searchSourceService: SearchSourceService,
     private configService: ConfigService,
     private importService: ImportService,
@@ -349,8 +323,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private directionState: DirectionState,
     public dialog: MatDialog,
+    public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
-    private pwaService: PwaService
+    private pwaService: PwaService,
+    private analyticsService: AnalyticsService
   ) {
       this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
@@ -384,9 +360,13 @@ export class PortalComponent implements OnInit, OnDestroy {
       this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
         this.configService.getConfig('mobileBreakPoint');
       this.layerId = this.configService.getConfig('embeddedVersion.layerId');
+      this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
+      this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
+        this.configService.getConfig('legendInPanel');
   }
 
   ngOnInit() {
+    this.queryService.defaultFeatureCount = 1;
     this.map.status$.subscribe(value => {
       if(value === 1 && (this.showSimpleFeatureList || this.showSimpleFilters) && typeof this.layerId === 'string'){
         console.log("SETTING WORKSPACE");
@@ -437,27 +417,43 @@ export class PortalComponent implements OnInit, OnDestroy {
 
     this.contextMenuStore.load(contextActions);
 
-    this.onSettingsChange$.subscribe(() => {
-      this.searchState.setSearchSettingsChange();
-    });
-
     this.searchState.selectedResult$.subscribe((result) => {
       if (result && this.isMobile()) {
-        this.closeSidenav();
+        this.closePanels();
+      }
+    });
+
+    this.searchTerm$$ = this.searchState.searchTerm$.pipe(skip(1)).subscribe((searchTerm: string) => {
+      if (searchTerm !== undefined && searchTerm !== null) {
+        this.analyticsService.trackSearch(searchTerm, this.searchState.store.count);
+      }
+    });
+
+    this.queryService.defaultFeatureCount = 1;
+
+    this.queryStore.entities$
+    .subscribe(
+      (entities) => {
+      if (entities.length > 0) {
+        this.openPanelonQuery();
       }
     });
 
     this.workspaceState.workspaceEnabled$.next(this.hasExpansionPanel);
     this.workspaceState.store.empty$.subscribe((workspaceEmpty) => {
-
       if (!this.hasExpansionPanel) {
         return;
       }
-      this.workspaceState.workspaceEnabled$.next(workspaceEmpty ? false : true);
-      if (workspaceEmpty) {
-        this.expansionPanelExpanded = false;
+    });
+
+    this.map.layers$.subscribe( layerList => {
+      for(let layer of layerList){
+        if(layer.options.id === this.layerId){
+          this.workspaceState.setActiveWorkspaceById(this.layerId);
+          this.expansionPanelExpanded = true;
+          break;
+        }
       }
-      this.updateMapBrowserClass();
     });
 
     this.map.layers$.subscribe( layerList => {
@@ -493,43 +489,9 @@ export class PortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.activeWidget$$ = this.workspaceState.activeWorkspaceWidget$.subscribe(
-      (widget: Widget) => {
-        if (widget !== undefined) {
-          this.openToastPanelForExpansion();
-          this.showToastPanelForExpansionToggle = true;
-        } else {
-          this.closeToastPanelForExpansion();
-          this.showToastPanelForExpansionToggle = false;
-        }
-      }
-    );
-
-    this.openSidenav$$ = this.toolState.openSidenav$.subscribe(
-      (openSidenav: boolean) => {
-        if (openSidenav) {
-          this.openSidenav();
-          this.toolState.openSidenav$.next(false);
-        }
-      }
-    );
-
     this.activeFilterService.onEvent().subscribe(activeFilters => {
       this.applyFilters(activeFilters);
     });
-
-
-    this.sidenavMediaAndOrientation$$ =
-      combineLatest([
-        this.sidenavOpened$,
-        this.mediaService.media$,
-        this.mediaService.orientation$]
-      ).pipe(
-        debounceTime(50)
-      ).subscribe(() => {
-        this.computeToastPanelOffsetX();
-      });
-
     this.additionalPropertiesService.onEvent().subscribe(additionalProperties => this.additionalProperties = additionalProperties);
     this.additionalTypesService.onEvent().subscribe(additionalTypes => this.additionalTypes = additionalTypes);
     this.entitiesAllService.onEvent().subscribe(entitiesAll => this.entitiesAll = entitiesAll);
@@ -544,8 +506,68 @@ export class PortalComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngAfterContentInit(): void {
+    this.map.viewController.setInitialState();
+  }
+
+  toggleDialogLegend(){
+    if (!this.legendDialogOpened) {
+      this.legendDialogOpened = true;
+    }
+  }
+
+  toggleLegend(){
+    if (this.legendInPanel || this.mobile){
+      if (!this.legendPanelOpened) {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
+        this.openPanelLegend();
+        if (this.searchInit){
+          this.clearSearch();
+          this.openPanels();
+        }
+        if (this.mapQueryClick){
+          this.onClearQuery();
+          this.mapQueryClick = false;
+          this.openPanels();
+        }
+      } else {
+        this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
+        this.closePanelLegend();
+      }
+    }
+    else {
+      if (!this.legendDialogOpened) {
+        this.legendDialogOpened = true;
+      }
+    }
+  }
+
+  panelOpened(event) {
+    this.panelOpenState = event;
+  }
+
+  mapQuery(event) {
+    this.mapQueryClick = event;
+  }
+
+  closePanelLegend(){
+    this.legendPanelOpened = false;
+    this.closePanels();
+    this.map.propertyChange$.unsubscribe;
+  }
+
+  openPanelLegend(){
+    this.legendPanelOpened = true;
+    this.openPanels();
+    this.map.propertyChange$.subscribe(() => {
+      this.mapLayersShownInLegend = this.map.layers.filter(layer => (
+        layer.showInLayerList !== false
+      ));
+    });
+  }
+
   public breakpointChanged() {
-    if(this.breakpointObserver.isMatched('(min-width: 768px)')) { // this.mobileBreakPoint is used before its initialization
+    if(this.breakpointObserver.isMatched('(min-width: 768px)')) {
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
     } else {
@@ -560,13 +582,62 @@ export class PortalComponent implements OnInit, OnDestroy {
     distinctUntilChanged()
   );
 
-  computeToastPanelOffsetX() {
-    if (this.isMobile() || !this.isLandscape()) {
-      Promise.resolve().then(() => this.toastPanelOffsetX$.next(undefined));
-    } else {
-      Promise.resolve().then(() => this.toastPanelOffsetX$.next(this.getToastPanelExtent()));
+  /*
+  private initSW() {
+    const dataDownload = this.configService.getConfig('pwa.dataDownload');
+    if ('serviceWorker' in navigator && dataDownload) {
+      let downloadMessage;
+      let currentVersion;
+      const dataLoadSource = this.storageService.get('dataLoadSource');
+      navigator.serviceWorker.ready.then((registration) => {
+        console.log('Service Worker Ready');
+        this.http.get('ngsw.json').pipe(
+          concatMap((ngsw: any) => {
+            const datas$ = [];
+            let hasDataInDataDir: boolean = false;
+            if (ngsw) {
+              // IF FILE NOT IN THIS LIST... DELETE?
+              currentVersion = ngsw.appData.version;
+              const cachedDataVersion = this.storageService.get('cachedDataVersion');
+              if (currentVersion !== cachedDataVersion && dataLoadSource === 'pending') {
+                this.pwaService.updates.checkForUpdate();
+              }
+              if (dataLoadSource === 'newVersion' || !dataLoadSource) {
+                ((ngsw as any).assetGroups as any).map((assetGroup) => {
+                  if (assetGroup.name === 'contexts') {
+                    const elemToDownload = assetGroup.urls.concat(assetGroup.files).filter(f => f);
+                    elemToDownload.map((url, i) => datas$.push(this.http.get(url).pipe(delay(750))));
+                  }
+                });
+                if (hasDataInDataDir) {
+                  const message = this.languageService.translate.instant('pwa.data-download-start');
+                  downloadMessage = this.messageService
+                    .info(message, undefined, { disableTimeOut: true, progressBar: false, closeButton: true, tapToDismiss: false });
+                  this.storageService.set('cachedDataVersion', currentVersion);
+                }
+                return zip(...datas$);
+              }
+
+            }
+            return zip(...datas$);
+          })
+        )
+          .pipe(delay(1000))
+          .subscribe(() => {
+            if (downloadMessage) {
+              this.messageService.remove((downloadMessage as any).toastId);
+              const message = this.languageService.translate.instant('pwa.data-download-completed');
+              this.messageService.success(message, undefined, { timeOut: 40000 });
+              if (currentVersion) {
+                this.storageService.set('dataLoadSource', 'pending');
+                this.storageService.set('cachedDataVersion', currentVersion);
+              }
+            }
+          });
+
+      });
     }
-  }
+  }*/
 
   createFeatureProperties(layer: ImageLayer | VectorLayer) {
     let properties = {};
@@ -636,82 +707,9 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.context$$.unsubscribe();
-    this.activeWidget$$.unsubscribe();
-    this.openSidenav$$.unsubscribe();
     this.workspaceMaximize$$.map(f => f.unsubscribe());
-    this.sidenavMediaAndOrientation$$.unsubscribe();
-  }
-
-  removeFeatureFromMap() {
-    this.map.searchResultsOverlay.clear();
-  }
-
-  /**
-   * Cancel ongoing add layer, if any
-   */
-   private cancelOngoingAddLayer() {
-    this.addedLayers$$.forEach((sub: Subscription) => sub.unsubscribe());
-    this.addedLayers$$ = [];
-  }
-
-  onBackdropClick() {
-    this.closeSidenav();
-  }
-
-  onToggleSidenavClick() {
-    this.toggleSidenav();
-  }
-
-  closeToastPanelForExpansion() {
-    this.toastPanelForExpansionOpened = false;
-  }
-
-  openToastPanelForExpansion() {
-    this.toastPanelForExpansionOpened = true;
-  }
-
-  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    // the event.features array contains duplicates, so they must be removed
-    event.features = event.features.reduce((unique, item) => {
-      const hasDuplicate = unique.some((existingItem) => {
-        return JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]);
-      });
-
-      if (!hasDuplicate) {
-        unique.push(item);
-      }
-
-      return unique;
-    }, []);
-    if(event.features.length > 0) this.mapQuery.emit(event.features);
-    const baseQuerySearchSource = this.getQuerySearchSource();
-    const querySearchSourceArray: QuerySearchSource[] = [];
-    const results = event.features.map((feature: Feature) => {
-      let querySearchSource = querySearchSourceArray.find(
-        (s) => s.title === feature.meta.sourceTitle
-      );
-      if (this.getFeatureIsSameActiveWks(feature)) {
-        if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
-          return;
-        }
-      }
-      if (!querySearchSource) {
-        querySearchSource = new QuerySearchSource({
-          title: feature.meta.sourceTitle
-        });
-        querySearchSourceArray.push(querySearchSource);
-      }
-      return featureToSearchResult(feature, querySearchSource);
-    });
-    const filteredResults = results.filter(x => x !== undefined);
-    const research = {
-      request: of(filteredResults),
-      reverse: false,
-      source: baseQuerySearchSource
-    };
-    research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
-      this.queryStore.load(queryResults);
-    });
+    this.layers$$?.unsubscribe();
+    this.searchTerm$$.unsubscribe();
   }
 
   private getQuerySearchSource(): SearchSource {
@@ -746,7 +744,121 @@ export class PortalComponent implements OnInit, OnDestroy {
     return false;
    }
 
+  onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    if(this.useEmbeddedVersion) {
+      // the event.features array contains duplicates, so they must be removed
+      event.features = event.features.reduce((unique, item) => {
+        const hasDuplicate = unique.some((existingItem) => {
+          return JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]);
+        });
+
+        if (!hasDuplicate) {
+          unique.push(item);
+        }
+
+        return unique;
+      }, []);
+      if(event.features.length > 0) this.mapQueryEvent.emit(event.features);
+      const baseQuerySearchSource = this.getQuerySearchSource();
+      const querySearchSourceArray: QuerySearchSource[] = [];
+      const results = event.features.map((feature: Feature) => {
+        let querySearchSource = querySearchSourceArray.find(
+          (s) => s.title === feature.meta.sourceTitle
+        );
+        if (this.getFeatureIsSameActiveWks(feature)) {
+          if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+            return;
+          }
+        }
+        if (!querySearchSource) {
+          querySearchSource = new QuerySearchSource({
+            title: feature.meta.sourceTitle
+          });
+          querySearchSourceArray.push(querySearchSource);
+        }
+        return featureToSearchResult(feature, querySearchSource);
+      });
+      const filteredResults = results.filter(x => x !== undefined);
+      const research = {
+        request: of(filteredResults),
+        reverse: false,
+        source: baseQuerySearchSource
+      };
+      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+        this.queryStore.load(queryResults);
+      });
+    }else {
+      if(this.configService.getConfig('queryOnlyOne')){
+        event.features = [event.features[0]];
+        this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+      }
+      const baseQuerySearchSource = this.getQuerySearchSource();
+      const querySearchSourceArray: QuerySearchSource[] = [];
+      if (event.features.length) {
+        if (this.searchInit) {this.clearSearch();}
+        this.clearSearchbarterm('');
+        if (this.mapQueryClick) {
+          this.onClearQuery();
+        }
+        this.openPanelonQuery();
+        const results = event.features.map((feature: Feature) => {
+          let querySearchSource = querySearchSourceArray.find(
+            (s) => s.title === feature.meta.sourceTitle
+          );
+          if (this.getFeatureIsSameActiveWks(feature)) {
+            if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
+              return;
+            }
+          }
+          if (querySearchSource) {
+            this.onClearQuery();
+            this.openPanelonQuery();
+            this.mapQueryClick = true;
+          }
+          if (!querySearchSource) {
+            querySearchSource = new QuerySearchSource({
+              title: feature.meta.sourceTitle
+            });
+            querySearchSourceArray.push(querySearchSource);
+          }
+            return featureToSearchResult(feature, querySearchSource);
+        });
+        const filteredResults = results.filter(x => x !== undefined);
+        const research = {
+          request: of(filteredResults),
+          reverse: false,
+          source: baseQuerySearchSource
+        };
+        research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+          this.queryStore.load(queryResults);
+        });
+      } else {
+        this.mapQueryClick = false;
+        if (!this.searchInit && !this.legendPanelOpened && !this.mobile){ // in desktop keep legend opened if user clicks on the map
+          this.panelOpenState = false;
+        }
+        if (!this.searchInit && this.mobile){ // mobile mode, close legend when user click on the map
+          this.panelOpenState = false;
+        }
+      }
+    }
+  }
+
+  /**
+   * Cancel ongoing add layer, if any
+   */
+   private cancelOngoingAddLayer() {
+    this.addedLayers$$.forEach((sub: Subscription) => sub.unsubscribe());
+    this.addedLayers$$ = [];
+  }
+
+  onBackdropClick() {
+    this.closePanels();
+    this.mapQueryClick = false;
+  }
+
   onSearchTermChange(term?: string) {
+    if(this.mobile) {this.panelOpenState = true;}
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
@@ -754,13 +866,26 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
-      this.onClearSearch();
+      if(this.mobile) {this.panelOpenState = true;}
+      this.clearSearch();
       return;
     }
     this.onBeforeSearch();
   }
 
+  clearSearchbarterm(event){
+    if(!this.mobile){this.searchBar.setTerm('');}
+  }
+
   onSearch(event: { research: Research; results: SearchResult[] }) {
+    this.searchInit = true;
+    this.legendPanelOpened = false;
+    this.panelOpenState = true;
+    if (this.mapQueryClick) {
+      this.onClearQuery();
+      this.mapQueryClick = false;
+      this.panelOpenState = true;
+    }
     const results = event.results;
 
     const isReverseSearch = !sourceCanSearch(event.research.source);
@@ -786,29 +911,14 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchStore.updateMany(newResults);
   }
 
-  onSearchSettingsChange() {
-    this.onSettingsChange$.next(true);
-  }
-
-  private closeSidenav() {
-    this.sidenavOpened = false;
-    this.map.viewController.padding[3] = 0;
-  }
-
-  private openSidenav() {
-    this.sidenavOpened = true;
-    this.map.viewController.padding[3] = this.isMobile() ? 0 : 400;
-  }
-
-  private toggleSidenav() {
-    this.sidenavOpened ? this.closeSidenav() : this.openSidenav();
-    this.computeToastPanelOffsetX();
-  }
-
-  public toolChanged(tool: Tool) {
-    if (tool && tool.name === 'searchResults' && this.searchBar) {
-      this.searchBar.nativeElement.getElementsByTagName('input')[0].focus();
+  private closePanels() {
+    if (!this.mapQueryClick && !this.searchInit && !this.legendPanelOpened){
+      this.panelOpenState = false;
     }
+  }
+
+  private openPanels() {
+    this.panelOpenState = true;
   }
 
   private computeHomeExtentValues(context: DetailedContext) {
@@ -837,53 +947,51 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
 
     this.computeHomeExtentValues(context);
-
     this.route.queryParams.pipe(debounceTime(250)).subscribe((qParams) => {
       if (!qParams['context'] || qParams['context'] === context.uri) {
         this.readLayersQueryParams(qParams);
       }
     });
 
-    if (this.contextLoaded) {
-      const contextManager = this.toolbox.getTool('contextManager');
-      const contextManagerOptions = contextManager
-        ? contextManager.options
-        : {};
-      let toolToOpen = contextManagerOptions.toolToOpenOnContextChange;
-
-      if (!toolToOpen) {
-        const toolOrderToOpen = ['mapTools', 'map', 'mapDetails', 'mapLegend'];
-        for (const toolName of toolOrderToOpen) {
-          if (this.toolbox.getTool(toolName)) {
-            toolToOpen = toolName;
-            break;
-          }
-        }
-      }
-
-      if (toolToOpen) {
-        this.toolbox.activateTool(toolToOpen);
-      }
-    }
-
     this.contextLoaded = true;
   }
 
   private onBeforeSearch() {
-    if (
-      !this.toolbox.activeTool$.value ||
-      this.toolbox.activeTool$.value.name !== 'searchResults'
-    ) {
-      this.toolbox.activateTool('searchResults');
-    }
-    this.openSidenav();
+    this.openPanels();
   }
 
-  public onClearSearch() {
+  clearSearch() {
     this.map.searchResultsOverlay.clear();
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
+    this.searchInit = false;
+    this.searchBarTerm = ''; // the searchbarterm doesn't clear up
+    this.searchState.setSearchTerm('');
+  }
+
+  closePanelOnCloseQuery(){
+    this.mapQueryClick = false;
+    if (this.searchInit || this.legendPanelOpened) {
+      this.openPanels(); // to prevent the panel to close when click searchbar after query
+    }
+  }
+
+  openPanelonQuery(){
+    this.mapQueryClick = true;
+    this.openPanels;
+    this.legendPanelOpened = false;
+    this.clearSearch();
+  }
+
+  onClearQuery(){
+    this.queryState.store.clear(); // clears the info panel
+    this.queryState.store.softClear(); // clears the info panel
+    this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
+  }
+
+  getTitle(result: SearchResult) {
+    return getEntityTitle(result);
   }
 
   onContextMenuOpen(event: { x: number; y: number }) {
@@ -920,120 +1028,15 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchBarTerm = coord.map((c) => c.toFixed(6)).join(', ');
   }
 
-  updateMapBrowserClass() {
-    const header = this.queryState.store.entities$.value.length > 0;
-    if (this.hasExpansionPanel && this.workspaceState.workspaceEnabled$.value) {
-      this.mapBrowser.nativeElement.classList.add('has-expansion-panel');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove('has-expansion-panel');
-    }
-
-    if (this.hasExpansionPanel && this.expansionPanelExpanded) {
-      if (this.workspaceMaximize$.value) {
-        this.mapBrowser.nativeElement.classList.add('expansion-offset-maximized');
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset');
-      } else {
-        this.mapBrowser.nativeElement.classList.add('expansion-offset');
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset-maximized');
-      }
-    } else {
-      if (this.workspaceMaximize$.value) {
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset-maximized');
-      } else {
-        this.mapBrowser.nativeElement.classList.remove('expansion-offset');
-      }
-    }
-
-    if (this.sidenavOpened) {
-      this.mapBrowser.nativeElement.classList.add('sidenav-offset');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove('sidenav-offset');
-    }
-
-    if (this.sidenavOpened && !this.isMobile()) {
-      this.mapBrowser.nativeElement.classList.add('sidenav-offset-baselayers');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove(
-        'sidenav-offset-baselayers'
-      );
-    }
-
-    if (
-      header &&
-      (this.isMobile() || this.isTablet() || this.sidenavOpened) &&
-      !this.expansionPanelExpanded
-    ) {
-      this.mapBrowser.nativeElement.classList.add('toast-offset-attribution');
-    } else {
-      this.mapBrowser.nativeElement.classList.remove(
-        'toast-offset-attribution'
-      );
-    }
-  }
-
-  getToastPanelExtent() {
-    if (!this.sidenavOpened) {
-      if (this.toastPanelHtmlDisplay && this.mediaService.isDesktop()) {
-        return 'htmlDisplay';
-      }
-      if (this.fullExtent) {
-        return 'fullStandard';
-      } else {
-        return 'standard';
-      }
-    } else if (this.sidenavOpened) {
-      if (this.toastPanelHtmlDisplay && this.mediaService.isDesktop()) {
-        return 'htmlDisplayOffsetX';
-      }
-      if (this.fullExtent) {
-        return 'fullOffsetX';
-      } else {
-        return 'standardOffsetX';
-      }
-    }
-  }
-
   onPointerSummaryStatusChange(value) {
     this.storageService.set('searchPointerSummaryEnabled', value);
     this.igoSearchPointerSummaryEnabled = value;
   }
 
-  // getToastPanelStatus() {
-  //   if (this.isMobile() === true && this.toastPanelOpened === false) {
-  //     if (this.sidenavOpened === false) {
-  //       if (this.expansionPanelExpanded === false) {
-  //         if (this.queryState.store.entities$.value.length > 0) {
-  //           return 'low';
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  // get toastPanelOpened(): boolean {
-  //   return this._toastPanelOpened;
-  // }
-  // set toastPanelOpened(value: boolean) {
-  //   if (value !== !this._toastPanelOpened) {
-  //     return;
-  //   }
-  //   this._toastPanelOpened = value;
-  //   this.cdRef.detectChanges();
-  // }
-  // private _toastPanelOpened =
-  //   (this.storageService.get('toastOpened') as boolean) !== false;
-
-
-  getControlsOffsetY() {
-    return this.expansionPanelExpanded ?
-      this.workspaceMaximize$.value ? 'firstRowFromBottom-expanded-maximized' : 'firstRowFromBottom-expanded' :
-      'firstRowFromBottom';
-  }
 
   private readQueryParams() {
     this.route.queryParams.subscribe((params) => {
       this.routeParams = params;
-      this.readToolParams();
       this.readSearchParams();
       this.readFocusFirst();
       this.computeZoomToExtent();
@@ -1057,6 +1060,12 @@ export class PortalComponent implements OnInit, OnDestroy {
       );
       this.map.viewController.zoomToExtent(olExtent as [number, number, number, number]);
     }
+  }
+
+  getControlsOffsetY() {
+    return this.expansionPanelExpanded ?
+      this.workspaceMaximize$.value ? 'firstRowFromBottom-expanded-maximized' : 'firstRowFromBottom-expanded' :
+      'firstRowFromBottom';
   }
 
   private computeFocusFirst() {
@@ -1119,73 +1128,6 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
     if (this.routeParams['searchGeom'] === '1') {
       this.searchState.searchResultsGeometryEnabled$.next(true);
-    }
-  }
-
-  private readToolParams() {
-    if (this.routeParams['tool']) {
-      this.matDialogRef$.pipe(
-        skipWhile(r => r !== undefined),
-        first()
-      ).subscribe(matDialogOpened => {
-        if (!matDialogOpened) {
-          this.toolbox.activateTool(this.routeParams['tool']);
-        }
-      });
-    }
-
-    if (this.routeParams['sidenav'] === '1') {
-      setTimeout(() => {
-        this.openSidenav();
-      }, 250);
-    }
-
-    if (this.routeParams['routing']) {
-      let routingCoordLoaded = false;
-      const stopCoords = this.routeParams['routing'].split(';');
-      const routingOptions = this.routeParams['routingOptions'];
-      let resultSelection: number;
-      if (routingOptions) {
-        resultSelection = parseInt(routingOptions.split('result:')[1], 10);
-      }
-      this.directionState.stopsStore.storeInitialized$
-        .pipe(skipWhile(init => !init), first())
-        .subscribe((init: boolean) => {
-          if (init && !routingCoordLoaded) {
-            routingCoordLoaded = true;
-            stopCoords.map((coord, i) => {
-              if (i > 1) {
-                addStopToStore(this.directionState.stopsStore);
-              }
-            });
-            setTimeout(() => {
-              stopCoords.map((coord, i) => {
-                const stop = this.directionState.stopsStore.all().find(e => e.position === i);
-                stop.text = coord;
-                stop.coordinates = coord.split(',');
-                this.directionState.stopsStore.update(stop);
-              });
-            }, this.directionState.debounceTime * 1.25); // this delay is due to the default component debounce time
-          }
-        });
-      // zoom to active route
-      this.directionState.routesFeatureStore.count$
-        .pipe(skipWhile(c => c < 1), first())
-        .subscribe(c => {
-          if (c >= 1) {
-            this.directionState.zoomToActiveRoute$.next();
-          }
-        });
-      // select the active route by url controls
-      this.directionState.routesFeatureStore.count$
-        .pipe(skipWhile(c => c < 2), first())
-        .subscribe(() => {
-          if (resultSelection) {
-            this.directionState.routesFeatureStore.entities$.value.map(d => d.properties.active = false);
-            this.directionState.routesFeatureStore.entities$.value[resultSelection].properties.active = true;
-            this.directionState.zoomToActiveRoute$.next();
-          }
-        });
     }
   }
 
