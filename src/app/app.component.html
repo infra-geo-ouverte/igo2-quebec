@@ -25,7 +25,7 @@
         ></app-simple-filters>
 
         <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
-        (mapQuery)="setClickedEntities($event)"
+        (mapQueryEvent)="setClickedEntities($event)"
         [features]="features"
         [additionalProperties]="additionalProperties"
         [entitiesAll]="entitiesAll"

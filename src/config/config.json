@@ -1,7 +1,7 @@
 {
   "theme": "qcca-theme",
   "showSearchBar": false,
-  "embeddedVersionA": {
+  "embeddedVersion": {
     "useEmbeddedVersion": true,
     "layerId": "dq2",
     "simpleFilters": {

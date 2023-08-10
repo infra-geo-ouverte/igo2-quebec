@@ -108,6 +108,7 @@ import { FilteredEntitiesService } from '../list/listServices/filtered-entities.
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 
 @Component({
   selector: 'app-portal',
