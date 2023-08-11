@@ -1,3 +1,4 @@
+@use '@igo2/core/theming/prebuilt-themes/qcca';
 @import '../portal/portal.variables.scss';
 
 :host {
@@ -9,61 +10,93 @@
     }
   }
 
-  .banner {
-    display: flex;
-    width: 100%;
-    height: 72px;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-  }
+  header {
+    background-color: qcca.colors-get(blue, normal-piv);
 
-  a {
-    color: #fff;
-    text-decoration: none;
-  }
+    a,
+    p {
+      font-weight: normal;
+      color: #fff;
+    }
 
-  .zone-logo-title {
-    padding: 0.5rem 1.1rem 0.5rem 0;
+    a {
+      font-size: 14px;
+      text-decoration: none;
+
+      &:focus,
+      &:hover,
+      &:visited {
+        text-decoration: underline;
+        color: #fff;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      p {
+        margin-bottom: 12px;
+      }
+    }
   }
 
   .zone-links {
-    padding-left: 1.1rem;
-    max-width: 100%;
-    margin: auto;
-    list-style: none;
-    color: white;
+    @media (min-width: 768px) {
+      align-items: center;
+    }
+
+    ul {
+      text-align: left;
+      flex-wrap: wrap;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      a {
+        &:hover,
+        &:focus {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+
+    @include qcca.media-breakpoint-down(mobile) {
+      margin-top: 12px;
+    }
+
+    @media screen and (min-width: 768px) {
+      .zone-links {
+        flex: 0 0 16.66667%;
+        max-width: 16.66667%;
+      }
+    }
   }
 
-  #header-logo {
-    width: 100%;
-    min-width: 7rem;
-    max-height: 28px;
-  }
-
-  #header-logo-print {
-    display: none;
-  }
-
-  .zone-links ul {
-    text-align: left;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .zone-title {
+    @media (min-width: 768px) {
+      margin: 0 0 0 60px;
+    }
   }
 
   ul li:last-child {
     padding: 0;
   }
 
-  .zone-links ul a:hover,
-  .zone-links ul a:focus {
-    text-decoration: underline;
-    cursor: pointer;
+  .logo {
+    height: 100%;
+    img {
+      width: 200px;
+      max-width: 20rem;
+      max-height: 7.2rem;
+      height: 72px;
+
+      @media (max-width: 575.98px) {
+        max-width: min(100%, 20rem);
+      }
+    }
+  }
+
+  #header-logo-print {
+    display: none;
   }
 
   .buttonLanguage {
@@ -71,63 +104,5 @@
     border-style: none;
     padding: 0;
     color: unset;
-  }
-
-  #title-mobile {
-    margin: auto 0;
-    display: block;
-  }
-
-  #title-desktop {
-    color: #fff;
-    margin: auto 0;
-    padding: 0;
-  }
-
-  @media screen and (min-width: 576px) {
-    .zone-logo-title,
-    .zone-links {
-      -ms-flex: 0 0 50%;
-      flex: 0 0 50%;
-      max-width: 50%;
-    }
-  }
-
-  @media screen and (min-width: 768px) {
-    .col-md-10 {
-      flex: 0 0 83.33333%;
-      max-width: 83.33333%;
-    }
-
-    .zone-links {
-      -ms-flex: 0 0 16.66667%;
-      flex: 0 0 16.66667%;
-      max-width: 16.66667%;
-    }
-  }
-
-  @media screen and (min-width: 824px) {
-    #header-logo {
-      max-height: 39px;
-      padding-right: 3.75rem;
-    }
-
-    .banner {
-      height: 72px;
-    }
-
-    .d-md-block {
-      display: block !important;
-    }
-
-    .d-md-none {
-      display: none !important;
-    }
-
-    .zone-logo-title {
-      -ms-flex: 0 0 83.33333%;
-      flex: 0 0 83.33333%;
-      max-width: 83.33333%;
-    }
   }
 }

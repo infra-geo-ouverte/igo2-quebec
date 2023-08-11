@@ -1,14 +1,43 @@
-<mat-toolbar class="container headline" color="accent">
-  <div class="col-12 align-self-end">
-    <nav class="navbar">
-      <a class="nav-link nav-arrow left" href="#menu-left" routerLinkActive="active">❮</a>
-      <div class="main-nav slick-track">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" id="menu-left" [routerLinkActiveOptions]="{exact:true}">Accueil</a>
-          <a class="nav-link" routerLink="/carte" routerLinkActive="active">Carte</a>
-          <a class="nav-link" routerLink="/en-savoir-plus" id="menu-right" routerLinkActive="active">En savoir plus</a>
+<div class="headline">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 align-self-end">
+        <nav class="navbar navbar-expand slide-nav">
+          <!-- <button mat-icon-button class="nav-arrow nav-arrow__left-button">
+            <mat-icon fontSet="lnr" fontIcon="lnr-chevron-left"></mat-icon>
+          </button> -->
+          <ul class="navbar-nav slick-track">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/"
+                routerLinkActive="active"
+                id="menu-left"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >Accueil</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/carte" routerLinkActive="active"
+                >Carte</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/en-savoir-plus"
+                id="menu-right"
+                routerLinkActive="active"
+                >En savoir plus</a
+              >
+            </li>
+          </ul>
+          <!-- <button mat-icon-button class="nav-arrow nav-arrow__right-button">
+            <mat-icon fontSet="lnr" fontIcon="lnr-chevron-right"></mat-icon>
+          </button> -->
+        </nav>
       </div>
-      <a class="nav-link nav-arrow right" color="accent" href="#menu-right" routerLinkActive="active">❯</a>
-    </nav>
+    </div>
   </div>
-</mat-toolbar>
+</div>
 <router-outlet></router-outlet>

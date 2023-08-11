@@ -1,115 +1,40 @@
-.container {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-}
+// Include parts of Bootstrap
+// https://getbootstrap.com/docs/5.2/customize/sass/
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  width: 100%;
-  padding: 0 16px;
-  margin: auto;
-}
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../node_modules/bootstrap/scss/functions";
 
-.col {
-  &-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  &-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-}
+// 2. Include any default variable overrides here
+$enable-dark-mode: false;
+$grid-gutter-width: 2rem;
+$container-max-widths: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1320px
+);
+$navbar-nav-link-padding-x: 16px;
+$navbar-nav-link-padding-y: 16px;
 
-@media (min-width: 1024px) and (orientation: landscape) {
-  .col-1,
-  .col-2,
-  .col-3,
-  .col-4,
-  .col-5,
-  .col-6,
-  .col-7,
-  .col-8,
-  .col-9,
-  .col-10,
-  .col-11,
-  .col-12,
-  .col,
-  .col-auto,
-  .col-pgu-sm-1,
-  .col-pgu-sm-2,
-  .col-pgu-sm-3,
-  .col-pgu-sm-4,
-  .col-pgu-sm-5,
-  .col-pgu-sm-6,
-  .col-pgu-sm-7,
-  .col-pgu-sm-8,
-  .col-pgu-sm-9,
-  .col-pgu-sm-10,
-  .col-pgu-sm-11,
-  .col-pgu-sm-12,
-  .col-pgu-sm,
-  .col-pgu-sm-auto,
-  .col-sm-1,
-  .col-sm-2,
-  .col-sm-3,
-  .col-sm-4,
-  .col-sm-5,
-  .col-sm-6,
-  .col-sm-7,
-  .col-sm-8,
-  .col-sm-9,
-  .col-sm-10,
-  .col-sm-11,
-  .col-sm-12,
-  .col-sm,
-  .col-sm-auto,
-  .col-md-1,
-  .col-md-2,
-  .col-md-3,
-  .col-md-4,
-  .col-md-5,
-  .col-md-6,
-  .col-md-7,
-  .col-md-8,
-  .col-md-9,
-  .col-md-10,
-  .col-md-11,
-  .col-md-12,
-  .col-md,
-  .col-md-auto,
-  .col-lg-1,
-  .col-lg-2,
-  .col-lg-3,
-  .col-lg-4,
-  .col-lg-5,
-  .col-lg-6,
-  .col-lg-7,
-  .col-lg-8,
-  .col-lg-9,
-  .col-lg-10,
-  .col-lg-11,
-  .col-lg-12,
-  .col-lg,
-  .col-lg-auto,
-  .col-xl-1,
-  .col-xl-2,
-  .col-xl-3,
-  .col-xl-4,
-  .col-xl-5,
-  .col-xl-6,
-  .col-xl-7,
-  .col-xl-8,
-  .col-xl-9,
-  .col-xl-10,
-  .col-xl-11,
-  .col-xl-12,
-  .col-xl,
-  .col-xl-auto {
-    position: relative;
-    width: 100%;
-  }
-}
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../../node_modules/bootstrap/scss/variables";
+
+// 4. Include any default map overrides here
+
+// 5. Include remainder of required parts
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
+
+// 6. Optionally include any other parts as needed
+@import "../../node_modules/bootstrap/scss/utilities";
+@import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/navbar";
+
+// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "../../node_modules/bootstrap/scss/utilities/api";
+
+// 8. Add additional custom code here
+
