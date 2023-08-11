@@ -28,3 +28,9 @@ ul,
 ol {
   padding: 2px 1rem;
 }
+
+// Fit Linearicons with the mat-icon
+mat-icon.lnr {
+  font-size: 18px;
+  line-height: 24px;
+}

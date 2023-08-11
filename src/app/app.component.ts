@@ -8,6 +8,7 @@ import {
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
 import { PwaService } from './services/pwa.service';
+import { MatIconRegistry } from '@angular/material/icon';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -31,8 +32,10 @@ export class AppComponent {
     private titleService: Title,
     private metaService: Meta,
     private messageService: MessageService,
-    private pwaService: PwaService
+    private pwaService: PwaService,
+    iconRegistry: MatIconRegistry,
   ) {
+    iconRegistry.registerFontClassAlias('Linearicons-Free', 'lnr');
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
