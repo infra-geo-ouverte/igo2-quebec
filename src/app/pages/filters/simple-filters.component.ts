@@ -82,8 +82,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     // for each filter input by the user...
     for (let filter of this.simpleFiltersConfig) {
       //check that only the types in terrapi and the entities list will be used
-      if (filter.type && (this.propertiesMap.get(filter.type) !== undefined || (this.terrAPITypes.includes(filter.type) && this.uniqueKey))) {
-
+      if(filter.type && (this.propertiesMap.get(filter.type) !== undefined || (this.terrAPITypes.includes(filter.type) && this.uniqueKey))){
         // get the options from terrAPI and push them in the array containing all the options and add a control in the form group
         // typeoptions from terrAPI will have the optional list of options and those not from terrapi (from entitiesAll)
         // will need to get the optionsList prior to this function being called
@@ -180,7 +179,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
         let coords: string = longitude + "," + latitude;
         await this.filterMethods.getLocationDataFromTerrAPI(filter.type, coords).then((featureCollection: FeatureCollection) => {
           if(featureCollection.features.length === 0){
-            console.log("length 0 ", entity);
             let locationData = this.undefinedConfig;
             let op: Option = {type: filter.type, nom: locationData};
 
@@ -233,7 +231,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             }
 
             // the checks for duplicates is performed elsewhere so there is no need to re-check it here. assumed to be no duplicate elements
-            console.log("option ", op);
             options.push(op);
           }
           });
@@ -325,7 +322,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
         element.code !== selectedOption.code || element.nom !== selectedOption.nom || element.type !== selectedOption.type);
       this.activeFilters.set(selectedOption.type, temp);
     }
-    console.log("activeFilters ", this.activeFilters);
     this.activeFilterService.emitEvent(this.activeFilters);
     this.entitiesList = this.filterEntities();
     this.updateCount();
@@ -461,7 +457,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @description Initialize/reset map so that it contains all required keys but with empty arrays
    */
   emptyActiveFilters(updateCount?: boolean) {
-    console.log("emptyActiveFilters");
     for(let filter of this.simpleFiltersConfig) {
       this.activeFilters.set(filter.type, []);
     }
@@ -481,7 +476,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   }
 
   public updateCount() {
-    console.log("updating count ", this.entitiesList);
     for(let filter of this.filteredTypesOptions){
       let type: string = filter.type;
 

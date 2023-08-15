@@ -3,18 +3,13 @@ import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter, S
 import { EntityStore } from './shared/store';
 import { SimpleFeatureList, AttributeOrder, SortBy, Paginator } from './simple-feature-list.interface';
 import { BehaviorSubject, Subscription, map } from 'rxjs';
-import { FiltersPageService } from '../filters/filterServices/filters-page-service.service';
-import { FiltersSortService } from '../filters/filterServices/filters-sort-service.service';
 import { Option } from '../filters/simple-filters.interface';
-import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
 import { ListEntitiesService } from './listServices/list-entities-services.service';
 import { FilteredEntitiesService } from './listServices/filtered-entities.service';
 import { FiltersActiveFiltersService } from '../filters/filterServices/filters-active-filters.service';
-import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { EntitiesAllService } from './listServices/entities-all.service';
 import { Feature } from '@igo2/geo';
 import { SortOptionsService } from './listServices/sort-options.service';
-import { FeatureCollection } from 'geojson';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -61,14 +56,14 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   public elementsUpperBound: number; /// the highest index (+ 1) of an element in the current page
 
   public activeFilters: Map<string, Option[]> = new Map();
-  public pageOptions: Array<number> = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ?
-  this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
+  public pageOptions: Array<number> =
+    this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ?
+    this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
   public sortOptions: [string, string][];
   public undefinedConfig = this.languageService.translate.instant('simpleFeatureList.undefined');
   public firstSort = true;
 
   constructor(
-    private additionalPropertiesService: FiltersAdditionalPropertiesService,
     private http: HttpClient,
     private sortOptionsService: SortOptionsService,
     private entitiesAllService: EntitiesAllService,
@@ -76,9 +71,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     private languageService: LanguageService,
     private activeFilterService: FiltersActiveFiltersService,
     private entitiesListService: ListEntitiesService,
-    private configService: ConfigService,
-    private filterPageService: FiltersPageService,
-    private filterSortService: FiltersSortService) {}
+    private configService: ConfigService) {}
 
   async ngOnInit() {
     this.sortBy = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.default');
@@ -113,12 +106,10 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // if the paginator config does not exist, all the entities are shown
     } else {
       this.entitiesShown = this.entitiesList;
-      console.log("ES1");
     }
 
     // subscribe to the current page number
     this.currentPageNumber$$ = this.currentPageNumber$.subscribe((currentPageNumber: number) => {
-      console.log("selectedEntities ", this.selectedEntities);
       // calculate the new lower and upper bounds to display
       this.elementsLowerBound = (currentPageNumber - 1) * this.pageSize + 1;
       if(this.selectedEntities){
@@ -126,21 +117,18 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
           currentPageNumber * this.pageSize;
         // slice the entities to show the current ones
         this.entitiesShown = this.selectedEntities.slice(this.elementsLowerBound - 1, this.elementsUpperBound);
-        console.log("ES4");
       }else{
         this.elementsUpperBound = currentPageNumber * this.pageSize > this.entitiesList.length ? this.entitiesList.length :
           currentPageNumber * this.pageSize;
 
         // slice the entities to show the current ones
         this.entitiesShown = this.entitiesList.slice(this.elementsLowerBound - 1, this.elementsUpperBound);
-        console.log("ES2");
       }
     });
 
     // subscribe to the current entities list
     this.entitiesList$$ = this.entitiesList$.subscribe((entitiesList: Array<Feature>) => {
       this.selectedEntities = undefined;
-      console.log("entitiesList!!! ", this.entitiesList)
       // replace the entities list
       this.entitiesList = entitiesList;
       // calculate new number of pages
@@ -157,7 +145,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("CHANGES");
     // if the most recent change is a click on entities on the map...
     if (changes.clickedEntities) {
       if (!changes.clickedEntities.firstChange) {
@@ -166,25 +153,18 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         // get array of clicked entities
         const clickedEntities: Array<Feature> = changes.clickedEntities.currentValue as Array<Feature>;
 
-        console.log("clickedEntities ", clickedEntities);
-
         // if an entity or entities have been clicked...
         if (clickedEntities !== undefined && clickedEntities?.length > 0) {
-          console.log("case1");
           // ...show current entities in list
           this.entityStore.state.updateMany(clickedEntities, {selected: true});
           this.selectedEntities = clickedEntities;
-          console.log("selectedEntities ", this.selectedEntities);
+          //temporarily override the entitiesShown with the selected entities
           this.numberOfPages = Math.ceil(this.selectedEntities.length / this.pageSize);
           this.entitiesShown = this.clickedEntities.slice(0, this.pageSize);
-          console.log("this.entitiesShown ", this.entitiesShown, " lower ", this.elementsLowerBound, " upper ", this.elementsUpperBound);
-          console.log("ES3");
-          console.log("numberOfPages ", this.numberOfPages)
           // return to first page
           this.currentPageNumber$.next(1);
         // ...else show all entities in list
         } else {
-          console.log("case2");
           this.entitiesList$.next(this.entitiesAll);
         }
       }
@@ -243,7 +223,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     if(attribute.personalizedFormatting) {
       let attributeList: Array<string> = attribute.personalizedFormatting.match(/(?<=\[)(.*?)(?=\])/g);
       for(let attributeName of attributeList){
-        // console.log("name ", attributeName , " attribute ", attribute);
         if(this.properties.includes(attributeName) || this.additionalTypes.includes(attributeName)){
           return true;
         }
@@ -272,8 +251,12 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
         let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
         let attributeMap = this.additionalProperties.get(coords);
-        attributeMap && attributeMap.get(attribute.attributeName) ? newAttribute = attributeMap.get(attribute.attributeName) : newAttribute = this.undefinedConfig;
-        // attributeMap === undefined ? newAttribute = undefined : newAttribute = attributeMap.get(attribute.attributeName);
+        if(attributeMap && attributeMap.get(attribute.attributeName)){
+          newAttribute = attributeMap.get(attribute.attributeName);
+        }
+        else{
+          newAttribute = this.undefinedConfig;
+        }
       }
     }
     return newAttribute;
@@ -305,8 +288,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
     // for each attribute in the list...
     attributeList.forEach(attribute => {
-      // console.log("attributeeee ", attribute);
-      // ...get the attibute value, format it if needed and replace it in the string
+      // get the attibute value, format it if needed and replace it in the string
       if(this.additionalTypes && this.additionalTypes.includes(attribute)){
         let coords: string = entity.geometry.coordinates.join(",");
         let nameMap = this.additionalProperties.get(coords);
@@ -426,19 +408,13 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
         //if the type is included in terrAPI (and has been added to additionalProperties map)
         if(this.additionalTypes.includes(filter)){
-          console.log("included ", filter);
 
           let filteredAdditionalProperties: Array<[string, string]> = [];
 
-          console.log("AP! ", this.additionalProperties);
-
           for(let entry of this.additionalProperties){
-            console.log("entry[1] ", entry[1], " filter ", filter);
            if(entry[1].has(filter)){
             let id: string = entry[0];
             let terrAPINom: string = entry[1].get(filter);
-            console.log("id ", id);
-            console.log("mun ", terrAPINom);
 
             options.forEach(option => {
               if(option.nom === terrAPINom) {
@@ -457,8 +433,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         }
         //Otherwise the type is contained in the entities list
         else{
-          //element["properties"][filter] ==> 802004 for example
-          //options: [{type: id, selected: true, nom: 80437}, ...] - nom depends on the filter selected
           filteredEntities = filteredEntities.filter(element => options.some((option) =>
           option.nom === element["properties"][filter]));
         }
@@ -494,9 +468,5 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // return to first page
     this.currentPageNumber$.next(1);
   }
-
-  // private sleep(ms: number) {
-  //   return new Promise(resolve => setTimeout(resolve, ms));
-  // }
 }
 

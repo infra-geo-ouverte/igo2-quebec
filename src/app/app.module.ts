@@ -1,11 +1,10 @@
 import { createCustomElement } from '@angular/elements';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, ApplicationRef, Injector, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { APP_INITIALIZER, ApplicationRef, Injector, NgModule, CUSTOM_ELEMENTS_SCHEMA, DoBootstrap } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
-import { PortalComponent } from './pages/portal/portal.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MenuModule } from './pages/menu/menu.module';
 import {
@@ -135,7 +134,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
+export class AppModule implements DoBootstrap {
   constructor(private injector: Injector) {
     this.injector = injector;
   }

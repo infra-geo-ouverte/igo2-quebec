@@ -45,6 +45,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     SimpleFiltersComponent
   ],
   declarations: [
-    SimpleFiltersComponent  ]
+    SimpleFiltersComponent
+  ]
 })
 export class IgoSimpleFiltersModule {}

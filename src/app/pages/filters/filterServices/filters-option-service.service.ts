@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Option } from '../simple-filters.interface'
+import { Option } from '../simple-filters.interface';
 
 @Injectable({
   providedIn: 'root'

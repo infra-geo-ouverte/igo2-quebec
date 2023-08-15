@@ -9,7 +9,8 @@ import {
   Input,
   EventEmitter,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  OnChanges
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription, BehaviorSubject, of, skip } from 'rxjs';
@@ -76,7 +77,6 @@ import {
   featureToSearchResult,
   QueryService,
   Layer,
-  MapService,
   SearchBarComponent,
   featureFromOl,
   WMSDataSource,
@@ -90,13 +90,10 @@ import {
   MapState,
   WorkspaceState,
   QueryState,
-  ContextState,
-  DirectionState
+  ContextState
 } from '@igo2/integration';
 
 import { SearchState } from './panels/search-results-tool/search.state';
-
-import { PwaService } from '../../services/pwa.service';
 
 import {
   controlsAnimations, controlSlideX, controlSlideY
@@ -104,7 +101,6 @@ import {
 
 import { Option } from '../filters/simple-filters.interface';
 import { FiltersActiveFiltersService } from '../filters/filterServices/filters-active-filters.service';
-import { FilteredEntitiesService } from '../list/listServices/filtered-entities.service';
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
@@ -121,22 +117,14 @@ import { MapBrowserEvent } from 'ol';
   ]
 })
 
-export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
-  @Input() features = {added: []}; //TODO update the type later when I know what it is..
+export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnChanges {
+  @Input() features = {added: []};
   @Output() workspaceSelected = new EventEmitter<Workspace>();
   @Output() mapQueryEvent = new EventEmitter<Feature[]>();
   @Input() additionalProperties: Map<string, Map<string, string>> = new Map();
   @Input() entitiesAll: Array<Feature>; //all entities
   @Input() entitiesList: Array<Feature>; //filtered entities
 
-  // @Output() workspaceSelected = new EventEmitter<BehaviorSubject<Workspace>>();
-
-
-  // public entitiesAll: Array<Feature>; //all entities
-  // public entitiesList: Array<Feature>; //filtered entities
-  // public activeFilters: Map<string, Option[]> = new Map();  //map that contains all active filter options by type
-  // public activeFilters$: BehaviorSubject<Map<string, Option[]>> = new BehaviorSubject<Map<string, Option[]>>(new Map()));
-  // public simpleFiltersValue$: BehaviorSubject<object> = new BehaviorSubject(undefined);
   public clickedEntities$: BehaviorSubject<Feature[]> = new BehaviorSubject(undefined);
   public showSimpleFilters: boolean = false;
   public showSimpleFeatureList: boolean = false;
@@ -206,7 +194,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public homeExtent: MapExtent;
   public homeCenter: [number, number];
   public homeZoom: number;
-  // public additionalProperties: Map<string, Map<string, string>> = new Map();
   public additionalTypes: Array<string> = [];
   private layerId: string;
   @ViewChild('searchbar') searchBar: SearchBarComponent;
@@ -295,13 +282,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public legendButtonTooltip = this.languageService.translate.instant('legend.open');
 
   constructor(
-    // public cdRef: ChangeDetectorRef,
     private entitiesAllService: EntitiesAllService,
     private entitiesListService: ListEntitiesService,
     private additionalPropertiesService: FiltersAdditionalPropertiesService,
     private additionalTypesService: FiltersAdditionalTypesService,
     private activeFilterService: FiltersActiveFiltersService,
-    private filteredEntitiesService: FilteredEntitiesService,
     private route: ActivatedRoute,
     public workspaceState: WorkspaceState,
     public authService: AuthService,
@@ -311,7 +296,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     public capabilitiesService: CapabilitiesService,
     private contextState: ContextState,
     private mapState: MapState,
-    private mapService: MapService,
     private searchState: SearchState,
     private queryState: QueryState,
     private searchSourceService: SearchSourceService,
@@ -322,14 +306,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private messageService: MessageService,
     public dialogWindow: MatDialog,
     private storageService: StorageService,
-    private directionState: DirectionState,
     public dialog: MatDialog,
     public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
-    private pwaService: PwaService,
     private analyticsService: AnalyticsService
   ) {
-      this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : this.configService.getConfig('useEmbeddedVersion');
+      this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
+        false : this.configService.getConfig('useEmbeddedVersion');
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && !this.useEmbeddedVersion ?
@@ -345,7 +328,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
       this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
       this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
-      this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ? false : this.configService.getConfig('useEmbeddedVersion.showMap');
+      this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ?
+        false : this.configService.getConfig('useEmbeddedVersion.showMap');
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -370,7 +354,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.queryService.defaultFeatureCount = 1;
     this.map.status$.subscribe(value => {
       if(value === 1 && (this.showSimpleFeatureList || this.showSimpleFilters) && typeof this.layerId === 'string'){
-        console.log("SETTING WORKSPACE");
         this.workspaceState.setActiveWorkspaceById(this.layerId);
         this.expansionPanelExpanded = true;
       }
@@ -573,63 +556,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     distinctUntilChanged()
   );
 
-  /*
-  private initSW() {
-    const dataDownload = this.configService.getConfig('pwa.dataDownload');
-    if ('serviceWorker' in navigator && dataDownload) {
-      let downloadMessage;
-      let currentVersion;
-      const dataLoadSource = this.storageService.get('dataLoadSource');
-      navigator.serviceWorker.ready.then((registration) => {
-        console.log('Service Worker Ready');
-        this.http.get('ngsw.json').pipe(
-          concatMap((ngsw: any) => {
-            const datas$ = [];
-            let hasDataInDataDir: boolean = false;
-            if (ngsw) {
-              // IF FILE NOT IN THIS LIST... DELETE?
-              currentVersion = ngsw.appData.version;
-              const cachedDataVersion = this.storageService.get('cachedDataVersion');
-              if (currentVersion !== cachedDataVersion && dataLoadSource === 'pending') {
-                this.pwaService.updates.checkForUpdate();
-              }
-              if (dataLoadSource === 'newVersion' || !dataLoadSource) {
-                ((ngsw as any).assetGroups as any).map((assetGroup) => {
-                  if (assetGroup.name === 'contexts') {
-                    const elemToDownload = assetGroup.urls.concat(assetGroup.files).filter(f => f);
-                    elemToDownload.map((url, i) => datas$.push(this.http.get(url).pipe(delay(750))));
-                  }
-                });
-                if (hasDataInDataDir) {
-                  const message = this.languageService.translate.instant('pwa.data-download-start');
-                  downloadMessage = this.messageService
-                    .info(message, undefined, { disableTimeOut: true, progressBar: false, closeButton: true, tapToDismiss: false });
-                  this.storageService.set('cachedDataVersion', currentVersion);
-                }
-                return zip(...datas$);
-              }
-
-            }
-            return zip(...datas$);
-          })
-        )
-          .pipe(delay(1000))
-          .subscribe(() => {
-            if (downloadMessage) {
-              this.messageService.remove((downloadMessage as any).toastId);
-              const message = this.languageService.translate.instant('pwa.data-download-completed');
-              this.messageService.success(message, undefined, { timeOut: 40000 });
-              if (currentVersion) {
-                this.storageService.set('dataLoadSource', 'pending');
-                this.storageService.set('cachedDataVersion', currentVersion);
-              }
-            }
-          });
-
-      });
-    }
-  }*/
-
   createFeatureProperties(layer: ImageLayer | VectorLayer) {
     let properties = {};
     layer.options.sourceOptions.sourceFields.forEach(field => {
@@ -645,7 +571,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   entitySelectChange(result: { added: Feature[] }) {
-    console.log("entitySelectChange ", result);
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
 

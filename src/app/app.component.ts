@@ -1,18 +1,17 @@
-import { Component, ElementRef, Renderer2, ViewChild, HostListener } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild, HostListener, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { userAgent } from '@igo2/utils';
 import {
   LanguageService,
   ConfigService,
-  MessageService,
-  StorageService
+  MessageService
 } from '@igo2/core';
 import { AuthOptions } from '@igo2/auth';
 import { PwaService } from './services/pwa.service';
 import { Workspace } from '@igo2/common';
-import { MapState, WorkspaceState } from '@igo2/integration';
+import { WorkspaceState } from '@igo2/integration';
 import { Feature } from '@igo2/geo';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { FeatureCollection } from 'geojson';
 import { Option } from './pages/filters/simple-filters.interface';
@@ -23,13 +22,13 @@ import { FiltersAdditionalPropertiesService } from './pages/filters/filterServic
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
 	onResize() {
   		this.isMobile = window.innerWidth >= 768 ? false : true;
 	}
 
-  
+
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
 	public terrAPITypes: Array<string>; // an array of strings containing the types available from terrAPI
   public features: any = null; //object: {added: Feature[]}
@@ -68,16 +67,15 @@ export class AppComponent {
     private metaService: Meta,
     private messageService: MessageService,
     private pwaService: PwaService,
-    private storageService: StorageService,
     public workspaceState: WorkspaceState,
-    private mapState: MapState,
   ) {
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
-    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : this.configService.getConfig('useEmbeddedVersion');
+    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
+      false : this.configService.getConfig('useEmbeddedVersion');
     this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
     this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
     this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && !this.useEmbeddedVersion ?
@@ -218,7 +216,7 @@ export class AppComponent {
 
 
   /**
-   *
+   * @description retrieves all non-property types from the config file and adds them to additionalTypes if they are valid terrAPI types
    * @returns additionalTypes array made up of valid TerrAPI types that are not contained in the entities properties
    */
   private async initializeAdditionalTypes() {
@@ -231,7 +229,9 @@ export class AppComponent {
     if(sortAttributesConfig){
       for(let attribute of sortAttributesConfig) {
         let type = attribute["type"];
-        if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+        if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)){
+          terrAPIAttributes.push(type);
+        }
       }
     }
 
@@ -240,11 +240,15 @@ export class AppComponent {
         if(entry["personalizedFormatting"]){
           let attributeList: Array<string> = entry["personalizedFormatting"].match(/(?<=\[)(.*?)(?=\])/g);
           attributeList.forEach(type => {
-            if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
-          })
+            if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)){
+              terrAPIAttributes.push(type);
+            }
+          });
         }else{
           let type = entry["attributeName"];
-          if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+          if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)){
+            terrAPIAttributes.push(type);
+          }
         }
       }
     }
@@ -252,7 +256,9 @@ export class AppComponent {
     if(filtersAttributesConfig){
       for(let filter of filtersAttributesConfig){
         let type = filter["type"];
-        if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)) terrAPIAttributes.push(type);
+        if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)){
+          terrAPIAttributes.push(type);
+        }
       }
     }
 

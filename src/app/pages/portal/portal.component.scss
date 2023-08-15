@@ -1,45 +1,6 @@
-//additions from the DocForElement.txt
-@use '@angular/material' as mat;
-
-@import '../../../../node_modules/@igo2/core/style/all.theming.scss';
-@import '../../../../node_modules/@igo2/core/style/core.theming.scss';
-@import '../../../../node_modules/@igo2/core/style/foreground.scss';
-@import '../../../../node_modules/@igo2/core/style/index.theming.scss';
-@import '../../../../node_modules/@igo2/core/style/material.font.scss';
-@import '../../../../node_modules/@igo2/core/style/setup.scss';
-@import '../../../../node_modules/@igo2/core/style/theming.scss';
-@import '../../../../node_modules/@igo2/core/style/typography.scss';
-@import '../../../../node_modules/@igo2/core/style/partial/core.variables.scss';
-@import '../../../../node_modules/@igo2/core/style/partial/media.scss';
-
-@import '../../../../node_modules/@igo2/core/style/themes/blue.theme.scss';
-@import './portal.variables';
-
-.igo-panel-header {
-  height: auto !important;
-}
-
-igo-actionbar {
-  padding-top: 0px !important;
-  padding-left: 0px !important;
-}
-
-.overlay-container {
-  visibility: hidden;
-}
-
-//the rest of everything...
 @import './portal.variables';
 
 /*** Main ***/
-// :host {
-//   overflow: auto;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   gap: 20px;
-// }
-
 $right-min-width : 400px;
 $map-min-height: 400px;
 $left-min-width : 400px;
@@ -64,16 +25,8 @@ $left-min-width : 400px;
   overflow: auto;
   width: 100%;
   height: 100%;
-  // display: flex;
-  // flex-direction: column;
   gap: 20px;
 }
-
-// .right-list-div {
-//   height: fit-content;
-//   min-width: $right-min-width;
-//   width: 100%;
-// }
 
 mat-icon.disabled {
   color: rgba(0, 0, 0, 0.38);
@@ -455,11 +408,6 @@ igo-zoom-button {
 ::ng-deep #legend-dialog-container, app-legend-dialog {
   top: calc($header-height-mobile + 4px); 
   max-height: calc(100% - $header-height-mobile - $footer-height - 100px);
-}
-
-.sidenav {
-  // background-color: white;
-  // display: block;
 }
 
 ::ng-deep #legend-dialog-container, app-legend-dialog {

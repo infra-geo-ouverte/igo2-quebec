@@ -22,7 +22,6 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
   @Input() elementsUpperBound: number; // the highest index (+ 1) of an element in the current page
   @Input() pageOptions: Array<number>; //array of page size options
   @Input() terrAPITypes: Array<string>;
-  // @Input() selectedEntities: Feature[];
   @Output() pageSizeSelected: EventEmitter<number> = new EventEmitter<number>();
   @Output() sortBySelected: EventEmitter<string> = new EventEmitter<string>();
   @Output() additionalTypesDeclared: EventEmitter<Array<string>> = new EventEmitter<Array<string>>();
@@ -94,9 +93,6 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
         this.findProperties();
       }
     }
-    // else if(changes.selectedEntities){
-    //   console.log("selectedEntities changed ", changes.selectedentitites);
-    // }
   }
 
   //find properties that are included in the entities list (which excludes terrapi types)
