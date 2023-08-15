@@ -61,7 +61,9 @@
     "previousPageLabel": "Previous page"
   },
   "simpleFeatureList": {
+    "undefined": "N/A",
     "email": "Email",
+    "website": "Website",
     "selectEntity": "Zoom on element",
     "unselectEntity": "Unselect element",
     "header": {

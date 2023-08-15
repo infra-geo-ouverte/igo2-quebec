@@ -16,7 +16,9 @@
           "featureTypes": "MSP_DIRECTION_REG_COG_P_V",
           "fieldNameGeometry": "geometry",
           "outputFormat": "geojson"
-        }
+        },
+        "queryable": true,
+        "queryLayerFeatures": true
       },
       "workspace": {
         "enabled": true,

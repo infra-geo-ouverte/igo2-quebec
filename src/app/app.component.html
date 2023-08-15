@@ -7,24 +7,16 @@
 <div cdkScrollable *ngIf="!hasMenu && useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
     <div [ngClass]="isMobile ? 'filters-and-map-mobile' : showSimpleFeatureList ? 'filters-and-map-desktop' : 'filters-and-map-only-desktop'">
 
-        <!-- <h1>{{showSimpleFilters + " + " + workspace}}</h1> -->
-        <!-- <app-simple-filters *ngIf="showSimpleFilters && workspace"
-        [entityStore]="workspace.entityStore"
-        class="simple-filters"
-        [isMobile]="isMobile"
-        [terrAPITypes]="terrAPITypes"
-        ></app-simple-filters> -->
-        <app-simple-filters *ngIf="showSimpleFilters && workspace"
+        <app-simple-filters class="app-simple-filters" *ngIf="showSimpleFilters && workspace"
         [entitiesAll]="entitiesAll"
         [entitiesList]="entitiesList"
-        class="simple-filters"
         [isMobile]="isMobile"
         [terrAPITypes]="terrAPITypes"
         [properties]="properties"
         [additionalProperties]="additionalProperties"
         ></app-simple-filters>
 
-        <app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
+        <app-portal class="app-portal" *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
         (mapQueryEvent)="setClickedEntities($event)"
         [features]="features"
         [additionalProperties]="additionalProperties"

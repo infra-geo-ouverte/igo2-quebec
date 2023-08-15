@@ -4,11 +4,10 @@ import { FiltersActiveFiltersService } from './filterServices/filters-active-fil
 import { FiltersSharedMethodsService } from './filterServices/filters-shared-methods.service';
 import { FiltersAdditionalPropertiesService } from './filterServices/filters-additional-properties.service';
 import { FeatureCollection } from 'geojson';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { SimpleFilter, TypeOptions, Option } from './simple-filters.interface';
-import { ConfigService } from '@igo2/core';
-import { map } from 'rxjs/operators';
+import { ConfigService, LanguageService } from '@igo2/core';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
@@ -35,22 +34,21 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public simpleFiltersConfig: Array<SimpleFilter>; // simpleFilters config input by the user in the config file
   public allTypesOptions: Array<TypeOptions> = []; // array that contains all the options for each filter
   public filteredTypesOptions: Array<TypeOptions> = []; // array that contains the filtered options for each filter
-
   public filtersFormGroup: FormGroup; // form group containing the controls (one control per filter)
   public previousFiltersFormGroupValue: object; // object representing the previous value held in each control
   public filtersFormGroupValueChange$$: Subscription; // subscription to form group value changes
   public activeFilters: Map<string, Option[]> = new Map(); //map that contains all active filter options by type
   public filtersShown: boolean = false; //default status of filters in mobile mode
-  // public entitiesAll: Array<Feature>; //entities
-  // public entitiesList: Array<Feature>; //entities list provided by the service
   public additionalTypes: Array<string> = []; //list of all additional filter types (corresponding to the keys of the map in additional properties)
   public additionalProperties: Map<string, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
   public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "label", "nom", etc.)
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
   public filterTypes: Array<string> = [];
-  public uniqueKey: string = this.configService.getConfig("embeddedVersion.simpleFilters.uniqueAttribute");
+  public uniqueKey: string = this.configService.getConfig("useEmbeddedVersion.simpleFilters.uniqueAttribute");
+  public undefinedConfig = this.languageService.translate.instant('simpleFeatureList.undefined');
 
   constructor(
+    private languageService: LanguageService,
     private propertiesMapService: PropertiesMapService,
     private filterTypeService: FiltersTypesService,
     private additionalTypesService: FiltersAdditionalTypesService,
@@ -71,13 +69,10 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
 
   public async ngOnInit(): Promise<void> {
 
-    // this.entitiesAll = this.entityStore.entities$.getValue() as Array<Feature>;
-    // this.entitiesList = this.entityStore.entities$.getValue() as Array<Feature>;
-
     this.initializePropertiesMap();
 
     // get the simpleFilters config input by the user in the config file
-    this.simpleFiltersConfig = this.configService.getConfig('embeddedVersion.simpleFilters.filters');
+    this.simpleFiltersConfig = this.configService.getConfig('useEmbeddedVersion.simpleFilters.filters');
 
     this.emptyActiveFilters();
 
@@ -184,6 +179,33 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
         let latitude = entity["geometry"]["coordinates"][1];
         let coords: string = longitude + "," + latitude;
         await this.filterMethods.getLocationDataFromTerrAPI(filter.type, coords).then((featureCollection: FeatureCollection) => {
+          if(featureCollection.features.length === 0){
+            console.log("length 0 ", entity);
+            let locationData = this.undefinedConfig;
+            let op: Option = {type: filter.type, nom: locationData};
+
+            let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
+            if(!this.additionalProperties.get(coords)){
+              let newTypeMap: Map<string, string> = new Map();
+              newTypeMap.set(filter.type, locationData);
+              this.additionalProperties.set(coords, new Map(newTypeMap));
+            }
+            else{
+              let oldMap = this.additionalProperties.get(coords);
+              let newMap: Map<string, string> = new Map();
+              newMap.set(filter.type, locationData);
+
+              //combine the 2 maps
+              const combinedMap = new Map([...oldMap, ...newMap]);
+              this.additionalProperties.set(coords, new Map(combinedMap));
+
+            }
+            if(!this.additionalTypes.includes(filter.type)){
+              this.additionalTypes.push(filter.type);
+            }
+
+            options.push(op);
+          }
           featureCollection.features.forEach(feature => {
           // ...push type, code and name of each option
           let locationData = feature.properties.nom;
@@ -211,6 +233,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             }
 
             // the checks for duplicates is performed elsewhere so there is no need to re-check it here. assumed to be no duplicate elements
+            console.log("option ", op);
             options.push(op);
           }
           });
@@ -282,7 +305,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @param event The event fired when selecting an option from auto-complete
    */
   public async onSelection(selectedOption: Option) {
-    console.log("onSelection ", selectedOption);
 
     //return autocomplete form to prior state
     this.filtersFormGroup.reset();
@@ -303,16 +325,10 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
         element.code !== selectedOption.code || element.nom !== selectedOption.nom || element.type !== selectedOption.type);
       this.activeFilters.set(selectedOption.type, temp);
     }
+    console.log("activeFilters ", this.activeFilters);
     this.activeFilterService.emitEvent(this.activeFilters);
     this.entitiesList = this.filterEntities();
-    // if(event){
-    //   event.stopPropagation();
-    //   document.getElementById('input-field').click();
-    // }
-  }
-
-  test() {
-    console.log("clicked");
+    this.updateCount();
   }
 
     /**
@@ -424,7 +440,7 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     this.filtersFormGroup.reset();
 
     //reset active filters
-    this.emptyActiveFilters();
+    this.emptyActiveFilters(true);
 
     // deep-copy the array containing all the options
     this.filteredTypesOptions = JSON.parse(JSON.stringify(this.allTypesOptions));
@@ -444,12 +460,17 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     /**
    * @description Initialize/reset map so that it contains all required keys but with empty arrays
    */
-  emptyActiveFilters() {
+  emptyActiveFilters(updateCount?: boolean) {
+    console.log("emptyActiveFilters");
     for(let filter of this.simpleFiltersConfig) {
       this.activeFilters.set(filter.type, []);
     }
+
     this.activeFilterService.emitEvent(this.activeFilters);
-    // this.activeFiltersUpdate.emit(this.activeFilters);
+    if(updateCount){
+    this.entitiesList = this.entitiesAll;
+    this.updateCount();
+    }
   }
 
     /**

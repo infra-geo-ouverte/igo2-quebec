@@ -1,4 +1,3 @@
-import { PossibleSortOptionsService } from './listServices/possible-sort-options.service';
 import { ConfigService, LanguageService } from '@igo2/core';
 import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { EntityStore } from './shared/store';
@@ -36,13 +35,13 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   @Input() properties: Array<string>;
   @Output() listSelection = new EventEmitter(); // an event emitter that outputs the entity selected in the list
 
-  public clickedEntitiesUpdated: Array<Feature> = [];
   public filterTypes: string[];
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
   public entitiesShown: Array<Feature>; // an array containing the entities currently shown
   public entitiesList$: BehaviorSubject<Array<Feature>> = new BehaviorSubject([]); // an observable of an array of filtered entities
   public entitiesList$$: Subscription; // subscription to filtered list
+  public selectedEntities: Array<Feature>; //entities selected in the map that will be displayed in the list (if it is defined)
 
   public simpleFeatureListConfig: SimpleFeatureList; // the simpleFeatureList config input by the user
   public attributeOrder: AttributeOrder; // the attribute order specified in the simpleFeatureList config
@@ -62,45 +61,35 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   public elementsUpperBound: number; /// the highest index (+ 1) of an element in the current page
 
   public activeFilters: Map<string, Option[]> = new Map();
-  public pageOptions: Array<number> = this.configService.getConfig('embeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ?
-  this.configService.getConfig('embeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
+  public pageOptions: Array<number> = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') !== undefined ?
+  this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator.pageSizeOptions') : [1,2,5,10,25];
   public sortOptions: [string, string][];
-  public undefinedConfig = "N/A";
+  public undefinedConfig = this.languageService.translate.instant('simpleFeatureList.undefined');
   public firstSort = true;
 
   constructor(
     private additionalPropertiesService: FiltersAdditionalPropertiesService,
     private http: HttpClient,
-    private possibleSortOptionsService: PossibleSortOptionsService,
     private sortOptionsService: SortOptionsService,
     private entitiesAllService: EntitiesAllService,
     private filteredEntitiesService: FilteredEntitiesService,
     private languageService: LanguageService,
     private activeFilterService: FiltersActiveFiltersService,
-    private listEntitiesService: ListEntitiesService,
+    private entitiesListService: ListEntitiesService,
     private configService: ConfigService,
     private filterPageService: FiltersPageService,
     private filterSortService: FiltersSortService) {}
 
   async ngOnInit() {
-    this.sortBy = this.configService.getConfig('embeddedVersion.simpleFeatureList.sortBy.default');
-
-    this.additionalPropertiesService.onEvent().subscribe(properties => {
-      this.additionalProperties = properties;
-      if(this.sortBy){
-        this.sortEntities(this.entitiesAll, this.sortBy.attributeName);
-        this.sortEntities(this.entitiesList, this.sortBy.attributeName);
-        this.entitiesList$.next(this.entitiesList);
-      }
-    });
+    this.sortBy = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.default');
 
     this.sortOptionsService.onEvent().subscribe( sortByOptions => {
       this.sortOptions = sortByOptions;
     });
 
-    this.simpleFeatureListConfig = this.configService.getConfig('embeddedVersion.simpleFeatureList');
+    this.simpleFeatureListConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList');
 
-    this.listEntitiesService.emitEvent(this.entitiesList);
+    this.entitiesListService.emitEvent(this.entitiesList);
     this.entitiesAllService.emitEvent(this.entitiesAll);
 
     // get the attribute order to use to display the elements in the list
@@ -124,21 +113,34 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // if the paginator config does not exist, all the entities are shown
     } else {
       this.entitiesShown = this.entitiesList;
+      console.log("ES1");
     }
 
     // subscribe to the current page number
     this.currentPageNumber$$ = this.currentPageNumber$.subscribe((currentPageNumber: number) => {
+      console.log("selectedEntities ", this.selectedEntities);
       // calculate the new lower and upper bounds to display
       this.elementsLowerBound = (currentPageNumber - 1) * this.pageSize + 1;
-      this.elementsUpperBound = currentPageNumber * this.pageSize > this.entitiesList.length ? this.entitiesList.length :
-        currentPageNumber * this.pageSize;
+      if(this.selectedEntities){
+        this.elementsUpperBound = currentPageNumber * this.pageSize > this.selectedEntities.length ? this.selectedEntities.length :
+          currentPageNumber * this.pageSize;
+        // slice the entities to show the current ones
+        this.entitiesShown = this.selectedEntities.slice(this.elementsLowerBound - 1, this.elementsUpperBound);
+        console.log("ES4");
+      }else{
+        this.elementsUpperBound = currentPageNumber * this.pageSize > this.entitiesList.length ? this.entitiesList.length :
+          currentPageNumber * this.pageSize;
 
-      // slice the entities to show the current ones
-      this.entitiesShown = this.entitiesList.slice(this.elementsLowerBound - 1, this.elementsUpperBound);
+        // slice the entities to show the current ones
+        this.entitiesShown = this.entitiesList.slice(this.elementsLowerBound - 1, this.elementsUpperBound);
+        console.log("ES2");
+      }
     });
 
     // subscribe to the current entities list
     this.entitiesList$$ = this.entitiesList$.subscribe((entitiesList: Array<Feature>) => {
+      this.selectedEntities = undefined;
+      console.log("entitiesList!!! ", this.entitiesList)
       // replace the entities list
       this.entitiesList = entitiesList;
       // calculate new number of pages
@@ -150,11 +152,12 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     this.activeFilterService.onEvent().subscribe(activeFilters => {
       this.activeFilters = activeFilters;
       this.entitiesList$.next(this.filterEntities());
-      this.listEntitiesService.emitEvent(this.entitiesList);
+      this.entitiesListService.emitEvent(this.entitiesList);
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log("CHANGES");
     // if the most recent change is a click on entities on the map...
     if (changes.clickedEntities) {
       if (!changes.clickedEntities.firstChange) {
@@ -163,13 +166,25 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
         // get array of clicked entities
         const clickedEntities: Array<Feature> = changes.clickedEntities.currentValue as Array<Feature>;
 
+        console.log("clickedEntities ", clickedEntities);
+
         // if an entity or entities have been clicked...
-        if (clickedEntities?.length > 0 && clickedEntities !== undefined) {
+        if (clickedEntities !== undefined && clickedEntities?.length > 0) {
+          console.log("case1");
           // ...show current entities in list
           this.entityStore.state.updateMany(clickedEntities, {selected: true});
-          this.entitiesList$.next(clickedEntities);
+          this.selectedEntities = clickedEntities;
+          console.log("selectedEntities ", this.selectedEntities);
+          this.numberOfPages = Math.ceil(this.selectedEntities.length / this.pageSize);
+          this.entitiesShown = this.clickedEntities.slice(0, this.pageSize);
+          console.log("this.entitiesShown ", this.entitiesShown, " lower ", this.elementsLowerBound, " upper ", this.elementsUpperBound);
+          console.log("ES3");
+          console.log("numberOfPages ", this.numberOfPages)
+          // return to first page
+          this.currentPageNumber$.next(1);
         // ...else show all entities in list
         } else {
+          console.log("case2");
           this.entitiesList$.next(this.entitiesAll);
         }
       }
@@ -215,7 +230,26 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     attribute = this.isURL(attribute);
     attribute = this.isEmail(attribute);
 
-    return attribute;
+    return attribute ? attribute : this.undefinedConfig;
+  }
+
+  /**
+   * @description Check if it is a valid attribute: if the attribute is part of the recognized types, it is valid,
+   * and if it's a personalizedAttribute that contains at least one recognized type, it also is valid.
+   * @param attribute The attribute to check
+   * @returns A boolean indicating if the attribute should be displayed in the list
+   */
+  validAttribute(attribute: any): boolean {
+    if(attribute.personalizedFormatting) {
+      let attributeList: Array<string> = attribute.personalizedFormatting.match(/(?<=\[)(.*?)(?=\])/g);
+      for(let attributeName of attributeList){
+        // console.log("name ", attributeName , " attribute ", attribute);
+        if(this.properties.includes(attributeName) || this.additionalTypes.includes(attributeName)){
+          return true;
+        }
+      }
+    }
+    return this.properties.includes(attribute.attributeName) || this.additionalTypes.includes(attribute.attributeName);
   }
 
   /**
@@ -228,7 +262,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     let newAttribute: string;
 
     if (attribute.personalizedFormatting) {
-        newAttribute = this.createPersonalizedAttribute(entity, attribute.personalizedFormatting, false);
+      newAttribute = this.createPersonalizedAttribute(entity, attribute.personalizedFormatting);
     }
     // if the attribute is not personnalized
     // it is assumed the attributeName corresponds to a key that can be used in the entities list or with terrAPI
@@ -238,18 +272,11 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       }else if(this.additionalTypes && this.additionalTypes.includes(attribute.attributeName)){
         let coords: string = entity["geometry"]["coordinates"][0] + "," + entity["geometry"]["coordinates"][1];
         let attributeMap = this.additionalProperties.get(coords);
-        attributeMap === undefined ? newAttribute = undefined : newAttribute = attributeMap.get(attribute.attributeName);
-        if(attribute.attributeName === "arrondissements"){
-        }
+        attributeMap && attributeMap.get(attribute.attributeName) ? newAttribute = attributeMap.get(attribute.attributeName) : newAttribute = this.undefinedConfig;
+        // attributeMap === undefined ? newAttribute = undefined : newAttribute = attributeMap.get(attribute.attributeName);
       }
     }
     return newAttribute;
-  }
-
-  async checkTerrAPI(attribute: string, coordinates: string){
-    let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
-
-    return await this.http.get<FeatureCollection>(url).toPromise();
   }
 
   async getGeometryType(url: string){
@@ -270,26 +297,11 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    * @param personalizedFormatting The personnalized formatting specified by the user in the config
    * @returns A personnalized attribute
    */
-  createPersonalizedAttribute(entity: Feature, personalizedFormatting: string, terrAPIAttribute: boolean): string {
+  createPersonalizedAttribute(entity: Feature, personalizedFormatting: string): string {
     let personalizedAttribute: string = personalizedFormatting;
 
     // get the attributes for the personnalized attribute
     let attributeList: Array<string> = personalizedFormatting.match(/(?<=\[)(.*?)(?=\])/g);
-
-    //TODO idea: add the additionaltypes based on the attribute list, but I think it's better to already have it defined before then and then AFTER, figure this out
-    // for(let attribute of attributeList) {
-    //   if(!this.properties.includes(attribute)){
-    //     let coordinates = "";
-    //     let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
-    //     let response = this.checkTerrAPI(url);
-    //   }
-    // }
-
-    // console.log("attributelist ", attributeList);
-    //TODO add service to pass the attributeList in a service so that the list header can add it to the allowed types
-    // console.log("possibleSortOptionService emitting ", attributeList);
-
-    this.possibleSortOptionsService.emitEvent(attributeList);
 
     // for each attribute in the list...
     attributeList.forEach(attribute => {
@@ -298,11 +310,13 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
       if(this.additionalTypes && this.additionalTypes.includes(attribute)){
         let coords: string = entity.geometry.coordinates.join(",");
         let nameMap = this.additionalProperties.get(coords);
-        if(nameMap === undefined){
-          personalizedAttribute = personalizedAttribute.replace(attribute, this.undefinedConfig);
-        }else{
+        if(nameMap && nameMap.get(attribute)){
           personalizedAttribute = personalizedAttribute.replace(attribute, nameMap.get(attribute));
+        }else{
+          personalizedAttribute = personalizedAttribute.replace(attribute, this.undefinedConfig);
         }
+      }else if(this.properties.includes(attribute)) {
+        personalizedAttribute = personalizedAttribute.replace(attribute, this.checkAttributeFormatting(entity.properties[attribute]));
       }else{
         personalizedAttribute = personalizedAttribute.replace(attribute, this.checkAttributeFormatting(entity.properties[attribute]));
       }
@@ -310,7 +324,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     // remove the square brackets surrounding the attributes
     personalizedAttribute = personalizedAttribute.replace(/[\[\]]/g, '');
     personalizedAttribute = personalizedAttribute.replace(/^([^A-zÀ-ÿ0-9])*|([^A-zÀ-ÿ0-9])*$/g, '');
-
     return personalizedAttribute;
   }
 
@@ -336,7 +349,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   isEmail(attribute: any): any {
     let possibleEmail: string = '' + attribute;
     const match: Array<string> = possibleEmail.match(/(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/);
-    const message = this.languageService.getLanguage() === "fr" ? "Courriel" : "Email";
+    const message = this.languageService.translate.instant('simpleFeatureList.email');
     if (match && this.formatEmail) {
       return `<a href="mailto:${match[0]}">${message}</a>`;
     } else if (match && !this.formatEmail) {
@@ -367,7 +380,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
   isURL(attribute: any): any {
     let possibleURL: string = '' + attribute;
     const match: Array<string> = possibleURL.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-    const message = this.languageService.getLanguage() === "fr" ? "Site Web" : "Website";
+    const message = this.languageService.translate.instant('simpleFeatureList.website');
     if (match && this.formatURL) {
       return `<a href="${match[0]}" target="_blank">${message}</a>`;
     } else if (match && !this.formatURL) {
@@ -413,17 +426,23 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
         //if the type is included in terrAPI (and has been added to additionalProperties map)
         if(this.additionalTypes.includes(filter)){
+          console.log("included ", filter);
 
           let filteredAdditionalProperties: Array<[string, string]> = [];
 
+          console.log("AP! ", this.additionalProperties);
+
           for(let entry of this.additionalProperties){
+            console.log("entry[1] ", entry[1], " filter ", filter);
            if(entry[1].has(filter)){
             let id: string = entry[0];
-            let mun: string = entry[1].get(filter);
+            let terrAPINom: string = entry[1].get(filter);
+            console.log("id ", id);
+            console.log("mun ", terrAPINom);
 
             options.forEach(option => {
-              if(option.nom === mun) {
-                filteredAdditionalProperties.push([id, mun]);
+              if(option.nom === terrAPINom) {
+                filteredAdditionalProperties.push([id, terrAPINom]);
               }
             });
 

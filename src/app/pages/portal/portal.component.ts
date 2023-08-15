@@ -108,7 +108,7 @@ import { FilteredEntitiesService } from '../list/listServices/filtered-entities.
 import { FiltersAdditionalTypesService } from '../filters/filterServices/filters-additional-types.service';
 import { FiltersAdditionalPropertiesService } from '../filters/filterServices/filters-additional-properties.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
-import MapBrowserEvent from 'ol/MapBrowserEvent';
+import { MapBrowserEvent } from 'ol';
 
 @Component({
   selector: 'app-portal',
@@ -329,7 +329,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private pwaService: PwaService,
     private analyticsService: AnalyticsService
   ) {
-      this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
+      this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : this.configService.getConfig('useEmbeddedVersion');
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && !this.useEmbeddedVersion ?
@@ -343,9 +343,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.showMenuButton = this.configService.getConfig('showMenuButton') === undefined ? true :
       this.configService.getConfig('showMenuButton');
       this.hasExpansionPanel = this.configService.getConfig('hasExpansionPanel');
-      this.showSimpleFilters = this.configService.getConfig('embeddedVersion.simpleFilters') === undefined ? false : true;
-      this.showSimpleFeatureList = this.configService.getConfig('embeddedVersion.simpleFeatureList') === undefined ? false : true;
-      this.showMap = this.configService.getConfig('showMap') === undefined ? false : this.configService.getConfig('showMap');
+      this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
+      this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
+      this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ? false : this.configService.getConfig('useEmbeddedVersion.showMap');
       this.hasHomeExtentButton =
         this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
@@ -360,7 +360,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
         this.configService.getConfig('mobileBreakPoint');
-      this.layerId = this.configService.getConfig('embeddedVersion.layerId');
+      this.layerId = this.configService.getConfig('useEmbeddedVersion.layerId');
       this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
         this.configService.getConfig('legendInPanel');
@@ -444,16 +444,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.workspaceState.store.empty$.subscribe((workspaceEmpty) => {
       if (!this.hasExpansionPanel) {
         return;
-      }
-    });
-
-    this.map.layers$.subscribe( layerList => {
-      for(let layer of layerList){
-        if(layer.options.id === this.layerId){
-          this.workspaceState.setActiveWorkspaceById(this.layerId);
-          this.expansionPanelExpanded = true;
-          break;
-        }
       }
     });
 
@@ -746,48 +736,27 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
    }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
+    // console.log("event ", event);
+    // console.log("entitiesListttt ", this.entitiesList);
     if(this.useEmbeddedVersion) {
-      // the event.features array contains duplicates, so they must be removed
-      event.features = event.features.reduce((unique, item) => {
-        const hasDuplicate = unique.some((existingItem) => {
-          return JSON.stringify(existingItem["properties"]) === JSON.stringify(item["properties"]);
-        });
-
-        if (!hasDuplicate) {
-          unique.push(item);
-        }
-
-        return unique;
-      }, []);
-      if(event.features.length > 0) this.mapQueryEvent.emit(event.features);
-      const baseQuerySearchSource = this.getQuerySearchSource();
-      const querySearchSourceArray: QuerySearchSource[] = [];
-      const results = event.features.map((feature: Feature) => {
-        let querySearchSource = querySearchSourceArray.find(
-          (s) => s.title === feature.meta.sourceTitle
-        );
-        if (this.getFeatureIsSameActiveWks(feature)) {
-          if (this.getWksActiveOpenInResolution() && !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()) {
-            return;
+      if (event.features.length === 0) return;
+      //all entities that appear in entitiesList will be returned
+      let entities: Array<Feature> = [];
+      // console.log("event.features[0] ", event.features[0]);
+      for(let entity of event.features){
+        // console.log("entity ", entity)
+        let id = entity.ol.getId();
+        // console.log("coords ", id);
+        for(let entityEntry of this.entitiesList){
+          // console.log("entityEntry ", entityEntry)
+          if(entityEntry.meta.id === id){
+            // console.log("FOUND ", entityEntry);
+            entities.push(entity);
           }
         }
-        if (!querySearchSource) {
-          querySearchSource = new QuerySearchSource({
-            title: feature.meta.sourceTitle
-          });
-          querySearchSourceArray.push(querySearchSource);
-        }
-        return featureToSearchResult(feature, querySearchSource);
-      });
-      const filteredResults = results.filter(x => x !== undefined);
-      const research = {
-        request: of(filteredResults),
-        reverse: false,
-        source: baseQuerySearchSource
-      };
-      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
-        this.queryStore.load(queryResults);
-      });
+      }
+      // this.mapQueryEvent.emit(event.features);
+      if (entities.length > 0) this.mapQueryEvent.emit(entities);
     }else {
       if(this.configService.getConfig('queryOnlyOne')){
         event.features = [event.features[0]];
@@ -1361,6 +1330,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return visible;
   }
 
+  /**
+   * @description zooms to the selected feature on the map
+   * @param features the feature to zoom to
+   */
   zoomToSelectedFeature(features: any) {
     const featuresSelected: Array<Feature> = features["added"];
     let format = new olFormatGeoJSON();
@@ -1378,35 +1351,31 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.map.viewController.zoomToExtent(totalExtent);
   }
 
-  onEntitiesListUpdate(event: Array<Feature>) {
-    this.entitiesList = event;
-  }
-
+  /**
+   * @description Uses the filter string to filter entities in the map
+   * @param wmsDatasource to access the wms layer and apply the filters
+   * @param filterString the string to apply the filters (see https://www.mapserver.org/ogc/filter_encoding.html#tests)
+   */
   public filterByOgc(wmsDatasource: WMSDataSource, filterString: string) {
-    // console.log("filterString in method ", filterString);
     const appliedFilter = new OgcFilterWriter().formatProcessedOgcFilter(filterString, wmsDatasource.options.params.LAYERS);
-    // console.log("appliedFilter ", appliedFilter);
     wmsDatasource.ol.updateParams({ FILTER: appliedFilter });
   }
 
+  /**
+   * @description Creates the filter string to filter entities in the map based on the selected filters
+   * @param activeFilters the map containing all filters to be applied
+   */
   public async applyFilters(activeFilters: Map<string,Option[]> ) {
     const conditions = [];
     let filterQueryString = "";
-    // let idArray: Array<String> = [];
     let idMap: Map<string, Array<string>> = new Map();
     let ogcFilterWriter: OgcFilterWriter = new OgcFilterWriter();
-    let filterString: string;
-    let uniqueKey = this.configService.getConfig("embeddedVersion.simpleFilters.uniqueAttribute");
+    let uniqueKey = this.configService.getConfig("useEmbeddedVersion.simpleFilters.uniqueAttribute");
 
     //initialize id map with all the additional types as keys
     for(let type of this.additionalTypes) {
       idMap.set(type, []);
     }
-
-    // the goal is to use 3 addresses, two of them for one category and 2 of them for another with 1 of them overlapping in both. 
-    // this one entity should be the only one visible on the map at the end
-
-    console.log("entitiesAll AF ", this.entitiesAll);
 
     for(let category of activeFilters){
       const bundleConditions = [];
@@ -1415,10 +1384,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         if(this.additionalTypes.includes(filter.type) && uniqueKey){
           //create idMap, where it stores the keys (coords) of all entities which match the requested terrapi filter
           this.additionalProperties.forEach((value, key) => {
-            // console.log("value ", value);
-            // console.log("key ", key);
-            // console.log("returnedval ", value.get(filter.type));
-            if(value.get(filter.type).includes(filter.nom)) {
+            if(value.get(filter.type) && value.get(filter.type).includes(filter.nom)) {
               let temp = idMap.get(filter.type);
               if(!temp.includes(key)){
                 temp.push(key);
@@ -1426,42 +1392,32 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
               }
             }
           });
-  
-          let terrapiConditions = [];
+
           //features representing the coords found in idArray
           let features: Array<Feature> = this.entitiesAll.filter(element => {
             return idMap.get(filter.type).includes(element["geometry"]["coordinates"].join(","));
-            // return idArray.includes(element["geometry"]["coordinates"].join(","));
           });
-          // console.log("features ", features);
           let tempConditions = [];
           for(let element of features){
-            //adding only one property
             let condition = {expression: element["properties"][uniqueKey], operator: "PropertyIsEqualTo", propertyName: uniqueKey};
             if(!tempConditions.includes(condition)) tempConditions.push(condition);
           }
-  
+
           //string together all entities we want to find
           if(tempConditions.length >= 1){
-            // console.log("longBundle ", tempConditions);
             if (tempConditions.length === 1) {
               bundleConditions.push(tempConditions[0]);
             } else {
               bundleConditions.push({logical: "OR", filters: tempConditions});
             }
           }
-          // bundleConditions.push({logical: "OR", filters: tempConditions});
         }
         else {
-          // console.log("not additionaltype ", filter.type);
           let condition = {expression: filter.nom, operator: "PropertyIsEqualTo", propertyName: filter.type};
-          // console.log("conditionnn ", condition);
           bundleConditions.push(condition);
         }
-        // console.log("ActiveFilters filter ", filter);
       }
       if(bundleConditions.length >= 1){
-        // console.log("longBundle ", bundleConditions);
         if (bundleConditions.length === 1) {
           conditions.push(bundleConditions[0]);
         } else {
@@ -1470,79 +1426,18 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     }
 
-    // console.log("conditions ", conditions);
-    //the only problem
     if (conditions.length >= 1) {
       filterQueryString = ogcFilterWriter
         .buildFilter(conditions.length === 1 ?
           conditions[0] : {logical: 'AND', filters: conditions } as IgoOgcFilterObject);
     }
-    // else{
-    //   //create a condition that all entities will satisfy if there are no other conditions
-    //   conditions.push({expression: "00000000", operator: "PropertyIsNotEqualTo", propertyName: uniqueKey});
-    //   filterQueryString = ogcFilterWriter
-    //   .buildFilter(conditions[0] as IgoOgcFilterObject);
-    // }
-    // console.log("filterString ", filterString);
-    if(filterQueryString) {
-      this.filterByOgc(this.map.getLayerById(this.layerId).dataSource as WMSDataSource, filterQueryString);
-    }
-
+    //if the filterQueryString is empty, it will reset to the initial status (with all entities shown on the map)
+    this.filterByOgc(this.map.getLayerById(this.layerId).dataSource as WMSDataSource, filterQueryString);
   }
 
-  // private async getTerrAPIGeojsonToWkt(type: string, name: string, projection: string): Promise<string> {
-  //   // let url: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/geospatial/project?loc=" + coord + "&to=" + projection;
-  //   let url: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/" + type + "?q=" + name + "&geometry=1&crs=" + projection;
-
-  //   const response = await this.http.get<any>(url).toPromise();
-  //   let wktGeometry: string;
-  //   // console.log("HTTP response ", response);
-  //   for(let feature of response.features){
-  //     if(feature.properties.nom === name){
-
-
-  //       // wktGeometry = "MULTIPOLYGON(((-70.2342 45.2342,-70.2342 60.2342,-85.2342 60.2342,-85.2342 45.2342,-70.2342 45.2342)))";
-
-  //       wktGeometry = feature.geometry.type.toUpperCase() + "(";
-
-  //       for(let i = 0; i < feature.geometry.coordinates.length; i++) {
-  //         for(let j = 0; j < feature.geometry.coordinates[i].length; j++) {
-  //           if(j === 0 && i !== 0) wktGeometry += ", ";
-  //           if(j === 0){
-  //             wktGeometry += "((";
-  //             for(let k = 0; k < feature.geometry.coordinates[i][j].length ; k++) {
-  //               let coord = feature.geometry.coordinates[i][j][k];
-  //               wktGeometry += coord[0] + " " + coord[1];
-  //               if(k + 1 < feature.geometry.coordinates[i][j].length) wktGeometry += ",";
-  //             }
-  //             // wktGeometry += "-83.032313 58.97123";
-  //             // wktGeometry += "coords extérieurs";
-  //             wktGeometry += ")";
-  //           }
-  //           else{
-  //             wktGeometry += ", (";
-  //             for(let k = 0; k < feature.geometry.coordinates[i][j].length ; k++) {
-  //               let coord = feature.geometry.coordinates[i][j][k];
-  //               wktGeometry += coord[0] + " " + coord[1];
-  //               if(k + 1 < feature.geometry.coordinates[i][j].length) wktGeometry += ",";
-  //             }
-  //             // wktGeometry += "-83.032313 58.97123";
-  //             // wktGeometry += "coords intérieurs";
-  //             wktGeometry += ")";
-  //           }
-  //         }
-  //         wktGeometry += ")";
-  //       }
-  //       wktGeometry += ")";
-
-  //       console.log("wktGeometry ", wktGeometry);
-  //       return wktGeometry;
-  //     }
-  //   }
-  //   return "";
-  // }
-
-
+  /**
+   * @description used to fit the entities inside the map (by modifying the zoom level based on the extent of the entities)
+   */
   async fitFeatures() {
     if(!this.entitiesList){
       return -1;
@@ -1556,8 +1451,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     let minY: number;
     let maxX: number;
     let maxY: number;
-    // let centerX: number;
-    // let centerY: number;
 
     for(let feature of this.entitiesList){
 
@@ -1566,18 +1459,14 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
       //N-S
       const latitude = feature["geometry"]["coordinates"][1];
-      // console.log("COORD ", feature["geometry"]["coordinates"]);
 
       w = Math.min(longitude, w);
       s = Math.min(latitude, s);
       e = Math.max(longitude, e);
       n = Math.max(latitude, n);
-      // console.log([n,s,e,w]);
-
     }
 
     // [minx, miny, maxx, maxy]
-
     await this.terrAPICoordReformat(w + "," + s, this.map.projection).then((coords: number[]) => {
       if(coords){
 			  minX = coords[0];
@@ -1591,22 +1480,16 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     });
 
-    // await this.terrAPICoordReformat((e + w)/2 + "," + (n + s)/2, this.map.projection).then((coords: number[]) => {
-    //   if(coords){
-		// 	  centerX = coords[0];
-    //     centerY = coords[1];
-    //   }
-    // });
-
     let mapExtent: MapExtent = [minX, minY, maxX, maxY];
-    // let mapCenter: [number, number] = [centerX, centerY];
-    // console.log("current extent " , this.map.getExtent());
-    // console.log("new extent ", mapExtent);
-    // console.log("projection ", this.map.projection);
-    // console.log("zoom ", this.map.viewController.getZoom());
     this.map.viewController.zoomToExtent(mapExtent);
   }
 
+  /**
+   *
+   * @param coord the coordinate in string format in EPSG:4326, comma-separated ("longitude,latitude")
+   * @param projection the desired projection for the returned coordinates
+   * @returns Promise for the coordinate array ([longitude, latitude]) in the new projection
+   */
   public async terrAPICoordReformat(coord: string, projection: string): Promise<number[]> {
     let url: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/geospatial/project?loc=" + coord + "&to=" + projection;
 

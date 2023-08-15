@@ -2,28 +2,28 @@
   (pageSizeSelected)="onPageSizeSelection($event)"
   (sortBySelected)="onSortSelection($event)"
   [activeFilters]="activeFilters"
-  [entitiesList]="entitiesList"
+  [entitiesList]="selectedEntities ? selectedEntities : entitiesList"
   [elementsLowerBound]="elementsLowerBound"
   [elementsUpperBound]="elementsUpperBound"
   [terrAPITypes]="terrAPITypes"
   [pageOptions]="pageOptions">
 </app-simple-feature-list-header>
 
-<div class="entities-container">
+<div class="entities-container" *ngIf="additionalTypes">
     <!-- <p *ngIf="entitiesShown"> {{entitiesShown.length}} entities exist </p> -->
     <div *ngFor="let entity of entitiesShown; let i = index" #entity class="entity">
       <div class="attributes">
         <ng-container *ngFor="let attribute of attributeOrder">
-          <ng-container>
+          <ng-container *ngIf="validAttribute(attribute)">
             <div class="attribute">
               <div>
-                <div class ="description" *ngIf="attribute.description && createAttribute(entity, attribute)"
+                <div class ="description" *ngIf="attribute.description"
                 [ngClass]="attribute.header">
                 {{ attribute.description + " :"}}
                 </div>
               </div>
               <div class="info">
-                <div *ngIf="attribute.header === 'title' && createAttribute(entity, attribute)"
+                <div *ngIf="attribute.header === 'title'"
                 class="title"
                 [matTooltip]="'simpleFeatureList.selectEntity' | translate"
                 tooltip-position="below"
@@ -32,7 +32,7 @@
                 (click)="selectEntity(entity)"
                 [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>
-                <div *ngIf="!attribute.header || attribute.header !== 'title' && createAttribute(entity, attribute)"
+                <div *ngIf="(!attribute.header || attribute.header !== 'title')"
                 [ngClass]="attribute.header ? attribute.header : 'standard'"
                 [innerHTML]="createAttribute(entity, attribute) | translate">
                 </div>

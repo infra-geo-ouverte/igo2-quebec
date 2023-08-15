@@ -52,6 +52,8 @@ export class AppComponent {
   public entitiesList: Array<Feature>; //list of entities that has been filtered
   public entitiesAll: Array<Feature>; //all entities
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
+  public dataInitialized: boolean = false;
+  public undefinedConfig = this.languageService.translate.instant('simpleFeatureList.undefined');
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
@@ -75,9 +77,9 @@ export class AppComponent {
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
-    this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
-    this.showSimpleFilters = this.configService.getConfig('embeddedVersion.simpleFilters') === undefined ? false : true;
-    this.showSimpleFeatureList = this.configService.getConfig('embeddedVersion.simpleFeatureList') === undefined ? false : true;
+    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : this.configService.getConfig('useEmbeddedVersion');
+    this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
+    this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
     this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && !this.useEmbeddedVersion ?
       this.configService.getConfig('header.hasHeader') : false;
 
@@ -183,11 +185,10 @@ export class AppComponent {
   }
 
   async setSelectedWorkspace(workspace: Workspace) {
+    if(this.dataInitialized) return;
     this.workspace = workspace;
     this.entitiesAll = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
     this.entitiesList = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
-
-    console.log("this.entitiesAll ", this.entitiesAll);
 
     this.properties = Object.keys(this.entitiesAll[0]["properties"]);
     for(let property of this.properties){
@@ -201,12 +202,10 @@ export class AppComponent {
 
     await this.initializeAdditionalTypes().then((types: Array<string>) => {
       this.additionalTypes = types;
-      console.log("additionalTypes11 ", this.additionalTypes);
     });
 
     this.initializeAdditionalProperties();
-    console.log("additionalProperties11 ", this.additionalProperties);
-
+    this.dataInitialized = true;
   }
 
   setClickedEntities(features: Feature[]) {
@@ -218,11 +217,15 @@ export class AppComponent {
   }
 
 
+  /**
+   *
+   * @returns additionalTypes array made up of valid TerrAPI types that are not contained in the entities properties
+   */
   private async initializeAdditionalTypes() {
     //the 3 sections where we can define terrAPI types in the config file
-    const listAttributesConfig = this.configService.getConfig('embeddedVersion.simpleFeatureList.attributeOrder');
-    const sortAttributesConfig = this.configService.getConfig('embeddedVersion.simpleFeatureList.sortBy.attributes');
-    const filtersAttributesConfig = this.configService.getConfig('embeddedVersion.simpleFilters.filters');
+    const listAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.attributeOrder');
+    const sortAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.attributes');
+    const filtersAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFilters.filters');
 
     let terrAPIAttributes: Array<string> = [];
     if(sortAttributesConfig){
@@ -271,6 +274,9 @@ export class AppComponent {
     return terrAPIAttributes;
   }
 
+  /**
+   * @description initializes additionalProperties by querying terrAPI based on the coordinates and the desired terrAPI type
+   */
   private async initializeAdditionalProperties() {
     for(let entity of this.entitiesAll){
       await this.sleep(500);
@@ -281,27 +287,40 @@ export class AppComponent {
           if(response.features[0]){
             const name = response.features[0]["properties"]["nom"];
             typeMap.set(type, name);
+          }else{
+            typeMap.set(type, this.undefinedConfig);
           }
         });
       }
       this.additionalProperties.set(coords, typeMap);
     }
-    console.log("additionalProperties initialized ", this.additionalProperties);
-    console.log("properties ", this.properties);
-    // this.additionalTypes = 
     this.additionalPropertiesService.emitEvent(this.additionalProperties);
   }
 
+  /**
+   * @description sleeps for a given amount of time so as not to sent too many terrAPI queries
+   * @param ms time to sleep (in ms)
+   */
   private sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  /**
+   * @param attribute the terrAPI type to search for
+   * @param coordinates the coordinates to search for with terrAPI
+   * @returns the response containing the geographic location of the desired attribute and coordinates
+   */
   async checkTerrAPI(attribute: string, coordinates: string){
     let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
 
     return await this.http.get<FeatureCollection>(url).toPromise();
   }
 
+  /**
+   * @description sends a terrAPI requests and returns the response (used for obtaining the geometry type of a feature)
+   * @param url the url that will be checked
+   * @returns FeatureCollection containing geometryType
+   */
   async getGeometryType(url: string){
     let response: Array<Feature>;
 

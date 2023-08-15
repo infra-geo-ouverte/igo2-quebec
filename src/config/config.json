@@ -1,9 +1,9 @@
 {
   "theme": "qcca-theme",
   "showSearchBar": false,
-  "embeddedVersion": {
-    "useEmbeddedVersion": true,
+  "useEmbeddedVersion": {
     "layerId": "dq2",
+    "showMap": true,
     "simpleFilters": {
       "filters": [
       {"type": "id", "description": "Numéro de bureau"},
@@ -12,7 +12,8 @@
       {"type": "municipalites", "description": "Municipalité"},
       {"type": "mrc", "description": "MRC"},
       {"type": "bs", "description": "this is a test"},
-      {"type": "province", "description": "Province"}
+      {"type": "province", "description": "Province"},
+      {"type": "arrondissements", "description": "Arrondissements"}
     ],
     "uniqueAttribute": "adressebur"
   },
@@ -26,17 +27,19 @@
         {"attributeName": "responsable", "description": "Responsable"},
         {"attributeName": "telephonebur", "description": "Téléphone"},
         {"attributeName": "telecopieurbur", "description": "Télécopieur"},
-        {"personalizedFormattingA": "[nom] de [mrc] (prop + terrapi)"},
-        {"attributeName": "test2", "personalizedFormattingA": "[nom] de [region] ... prop + prop"},
-        {"attributeName": "test3", "personalizedFormattingA": "[mrc] / [municipalites] ... terrapi + terrapi"},
-        {"attributeName": "test4", "personalizedFormattingA": "[mrc] / [random] ... terrapi + erroné"},
+        {"personalizedFormatting": "[nom] de [mrc] (prop + terrapi)"},
+        {"attributeName": "test2", "personalizedFormatting": "[nom] de [region] ... prop + prop"},
+        {"attributeName": "test3", "personalizedFormatting": "[mrc] / [municipalites] ... terrapi + terrapi"},
+        {"attributeName": "test4", "personalizedFormatting": "[mrc] / [random] ... terrapi + erroné"},
+        {"attributeName": "test5", "personalizedFormatting": "[broken] / [random] ... erroné + erroné"},
+        {"attributeName": "test6", "personalizedFormatting": "[broken] / [arrondissements] ... erroné + conditionel"},
         {"attributeName": "courriel"},
         {"attributeName": "lieux.transport.commun", "description": "lieux-transport-commun"},
         {"attributeName": "arrondissements", "description": "Arrondissements"},
         {"attributeName": "whatever", "description": "Test"}
       ],
       "sortBy": {
-        "default": {"attributeName": "asdad"},
+        "default": {"attributeName": "asd"},
         "attributes": [
           {"type": "region", "description": "Région"},
           {"type": "responsable", "description": "Responsable"},
@@ -50,14 +53,13 @@
       "formatURL": true,
       "formatEmail": true,
       "paginator": {
-        "pageSizeOptions": [1,5,10,20,50, 100],
+        "pageSizeOptions": [1,5,10,20,50],
         "pageSize": 5,
         "showFirstLastPageButtons": true,
         "showPreviousNextPageButtons": true
       }
     }
   },
-  "showMap": true,
   "searchSources": {
     "cadastre": {
       "available": false
@@ -70,7 +72,7 @@
     "logoPrint": "assets/images/signature-PIV.svg"
   },
   "hasMenu": false,
-  "hasFooter": true,
+  "hasFooter": false,
   "hasLegendButton": true,
   "legendInPanel": true,
   "showRotationButtonIfNoRotation": true,

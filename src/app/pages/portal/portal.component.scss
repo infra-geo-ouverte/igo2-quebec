@@ -480,3 +480,10 @@ igo-zoom-button {
 .mat-drawer-content {
   overflow: hidden;
 }
+
+.map-invisible {
+  visibility: hidden;
+  display: block;
+  height: 1px;
+  width: 1px;
+}

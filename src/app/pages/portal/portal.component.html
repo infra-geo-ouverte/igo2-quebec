@@ -1,4 +1,4 @@
-<mat-sidenav-container *ngIf="showMap">
+<mat-sidenav-container [ngClass]="showMap ? 'map-visible' : 'map-invisible'">
   <mat-sidenav-content position="end">
 
     <igo-backdrop
@@ -8,7 +8,7 @@
 
     <div id="searchDesktop" *ngIf=!mobile>
 
-      <igo-search-bar *ngIf="showSearchBar"
+      <igo-search-bar *ngIf="showSearchBar && !useEmbeddedVersion"
         #searchbar
         (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
         appearance="outline"
@@ -29,7 +29,7 @@
 
       <div *ngIf="mobile" id="scaleLine"></div>
 
-      <app-sidepanel
+      <app-sidepanel *ngIf="!useEmbeddedVersion"
         #sidepanel
         class="sidepanel"
         [map]="map"
@@ -49,7 +49,7 @@
       </app-sidepanel>
     </div>
 
-    <igo-map-browser      
+    <!-- <igo-map-browser      
       igoMapOffline
       igoWorkspaceUpdator
       [workspaceStore]="workspaceStore"
@@ -70,14 +70,31 @@
       igoDropGeoFile
       igoHoverFeature
       [igoHoverFeatureEnabled]="true"
-      igoQuery
-      [queryFeatures]="true"
       (query)="onMapQuery($event)"
       [igoHoverFeatureDelay]=10
       [map]="map"
       [igoContextMenu]=contextMenu
       (menuPosition)="onContextMenuOpen($event)"
+      [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}"> -->
+
+      <igo-map-browser
+      igoMapOffline
+      igoWorkspaceUpdator
+      [workspaceStore]="workspaceStore"
+      #mapBrowser
+      igoMapContext
+      igoLayerContext
+      igoDropGeoFile
+      igoHoverFeature
+      [igoHoverFeatureEnabled]="true"
+      igoQuery
+      [queryFeatures]="true"
+      (query)="onMapQuery($event)"
+      [igoHoverFeatureDelay]=10
+      [map]="map"
+      (menuPosition)="onContextMenuOpen($event)"
       [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}">
+
 
       <div *ngIf="mobile" id="scaleLine"></div>
 
@@ -95,13 +112,25 @@
           <app-legend-button *ngIf= "hasLegendButton" (toggleLegend)= "toggleLegend()" [legendInPanel]= "legendInPanel" [tooltipDisabled]="mobile" [legendButtonTooltip]="legendButtonTooltip" color= "primary"></app-legend-button>
         </div>
 
-        <app-bottomresult
-        *ngIf="mobile && !useEmbeddedVersion"
-          [map]="map">
-        </app-bottomresult>
+        <app-bottompanel
+          *ngIf= "mobile && !useEmbeddedVersion"
+          [mobile]= "mobile"
+          [store]= "searchStore"
+          [searchInit]= "searchInit"
+          [mapQueryClick]= "mapQueryClick"
+          [legendPanelOpened]= "legendPanelOpened"
+          [panelOpenState]= "panelOpenState"
+          (panelOpened)= "panelOpened($event)"
+          (mapQuery)= "mapQuery($event)"
+          (closeQuery)= "closePanelOnCloseQuery()"
+          (closeLegend)= "closePanelLegend()"
+          (openLegend)= "openPanelLegend()"
+          (toggleLegend)= "togglePanelLegend()"
+          [layers]= "mapLayersShownInLegend">
+        </app-bottompanel>
     </igo-map-browser>
 
-    <app-footer *ngIf="hasFooter && !mobile" [mobile]="mobile"></app-footer>
+    <app-footer *ngIf="hasFooter && !mobile && !useEmbeddedVersion" [mobile]="mobile"></app-footer>
 
     <app-map-overlay
     [@controlStateX]="(mediaService.media$ | async) !== 'mobile' &&

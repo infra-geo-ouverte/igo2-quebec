@@ -13,7 +13,7 @@ export class MapComponent {
   constructor(private configService: ConfigService) {
 
 
-    this.useEmbeddedVersion = this.configService.getConfig('embeddedVersion.useEmbeddedVersion') === undefined ? false : this.configService.getConfig('embeddedVersion.useEmbeddedVersion');
+    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ? false : this.configService.getConfig('useEmbeddedVersion');
     this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && !this.useEmbeddedVersion ?
       this.configService.getConfig('header.hasHeader') : false;
    }

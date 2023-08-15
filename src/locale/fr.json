@@ -60,7 +60,9 @@
     "previousPageLabel": "Page précédente"
   },
   "simpleFeatureList": {
-    "email": "Email",
+    "undefined": "N/D",
+    "email": "Courriel",
+    "website": "Site Web",
     "selectEntity": "Cadrer sur l'élément",
     "unselectEntity": "Désélectionner l'élément",
     "header": {
