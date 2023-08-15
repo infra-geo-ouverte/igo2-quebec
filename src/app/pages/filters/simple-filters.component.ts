@@ -82,7 +82,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     // for each filter input by the user...
     for (let filter of this.simpleFiltersConfig) {
       //check that only the types in terrapi and the entities list will be used
-      if(filter.type && (this.propertiesMap.get(filter.type) !== undefined || (this.terrAPITypes.includes(filter.type) && this.uniqueKey))){
+      let terrAPICond = this.terrAPITypes.includes(filter.type) && this.uniqueKey && this.propertiesMap.get(this.uniqueKey) !== undefined;
+      let propertiesCondition: boolean = this.propertiesMap.get(filter.type) !== undefined;
+      if(filter.type && (propertiesCondition|| terrAPICond)){
         // get the options from terrAPI and push them in the array containing all the options and add a control in the form group
         // typeoptions from terrAPI will have the optional list of options and those not from terrapi (from entitiesAll)
         // will need to get the optionsList prior to this function being called
