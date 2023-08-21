@@ -4,12 +4,10 @@ import { FiltersActiveFiltersService } from './filterServices/filters-active-fil
 import { FiltersSharedMethodsService } from './filterServices/filters-shared-methods.service';
 import { FiltersAdditionalPropertiesService } from './filterServices/filters-additional-properties.service';
 import { FeatureCollection } from 'geojson';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
 import { SimpleFilter, TypeOptions, Option } from './simple-filters.interface';
-import { ConfigService, LanguageService } from '@igo2/core';
+import { ConfigService, LanguageService, MessageService } from '@igo2/core';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
 import { FiltersOptionService } from './filterServices/filters-option-service.service';
 import { ListEntitiesService } from '../list/listServices/list-entities-services.service';
@@ -26,10 +24,10 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   @Input() entityStore;
   @Input() terrAPITypes: Array<string>;
   @Output() filterSelection: EventEmitter<object> = new EventEmitter();
-  @ViewChild(MatAutocompleteTrigger) panelTrigger: MatAutocompleteTrigger;
   @Input() entitiesAll: Array<Feature>; //entities
   @Input() entitiesList: Array<Feature>; //entities list provided by the service
-
+  @Input() properties: Array<string>; //string value of all properties that exist in the entities (e.g. "label", "nom", etc.)
+  @Input() dataInitialized: boolean; //check for if additionalProperties has been
 
   public simpleFiltersConfig: Array<SimpleFilter>; // simpleFilters config input by the user in the config file
   public allTypesOptions: Array<TypeOptions> = []; // array that contains all the options for each filter
@@ -41,10 +39,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
   public filtersShown: boolean = false; //default status of filters in mobile mode
   public additionalTypes: Array<string> = []; //list of all additional filter types (corresponding to the keys of the map in additional properties)
   public additionalProperties: Map<string, Map<string, string>> = new Map(); //map of all additional properties by entity id e.g. {80029: {municipalite: Trois-Rivières}, {mrc: ...}}
-  public properties: Array<string>; //string value of all properties that exist in the entities (e.g. "label", "nom", etc.)
   public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
   public filterTypes: Array<string> = [];
-  public uniqueKey: string = this.configService.getConfig("useEmbeddedVersion.simpleFilters.uniqueAttribute");
+  public uniqueKey: string = this.configService.getConfig("useEmbeddedVersion.simpleFilters.uniqueType");
   public undefinedConfig = this.languageService.translate.instant('simpleFeatureList.undefined');
 
   constructor(
@@ -58,9 +55,9 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     private filterMethods: FiltersSharedMethodsService,
     private additionalPropertiesService: FiltersAdditionalPropertiesService,
     private configService: ConfigService,
-    private http: HttpClient,
     private formBuilder: FormBuilder,
-    private filterOptionService: FiltersOptionService) { };
+    private filterOptionService: FiltersOptionService,
+    private messageService: MessageService) { };
 
   // getter of the form group controls
   get controls(): {[key: string]: AbstractControl} {
@@ -304,7 +301,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
    * @param event The event fired when selecting an option from auto-complete
    */
   public async onSelection(selectedOption: Option) {
-
     //return autocomplete form to prior state
     this.filtersFormGroup.reset();
 
@@ -351,13 +347,11 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
              if(entry[1].has(filter)){
               let id: string = entry[0];
               let mun: string = entry[1].get(filter);
-
-              options.forEach(option => {
+              for(let option of options){
                 if(option.nom === mun) {
                   filteredAdditionalProperties.push([id, mun]);
                 }
-              });
-
+              }
              }
             }
 
@@ -367,16 +361,13 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
             }));
 
           }
-          //Otherwise the type is contained in the entities list
-          else{
-            //element["properties"][filter] ==> 802004 for example
-            //options: [{type: id, selected: true, nom: 80437}, ...] - nom depends on the filter selected
+          //check if the type is contained in the properties of features
+          else if(this.properties.includes(filter)){
             filteredEntities = filteredEntities.filter(element => options.some((option) =>
             option.nom === element["properties"][filter]));
           }
         }
       });
-
       return filteredEntities;
     }
 

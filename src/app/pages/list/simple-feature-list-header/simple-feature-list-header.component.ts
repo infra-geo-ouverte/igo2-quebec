@@ -4,10 +4,9 @@ import { TypeOptions, Option } from '../../filters/simple-filters.interface';
 import { FiltersSortService } from '../../filters/filterServices/filters-sort-service.service';
 import { FiltersPageService } from '../../filters/filterServices/filters-page-service.service';
 import { FiltersOptionService } from '../../filters/filterServices/filters-option-service.service';
-import { FiltersTypesService } from '../../filters/filterServices/filters-types.service';
 import { ConfigService } from '@igo2/core';
 import { SortOptionsService } from '../listServices/sort-options.service';
-import { HttpClient } from '@angular/common/http';
+import { SortBy } from '../simple-feature-list.interface';
 
 
 @Component({
@@ -31,15 +30,14 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
 
   public sortOptions: [string, string][];
   public defaultSortOption: string;
-  public defaultSortCode: string = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.default.attributeName');
+  public sortBy: SortBy = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy');
+  public defaultSortCode: string = this.sortBy.defaultType;
   public defaultPageOption: number;
   public possibleSortOptions: [string, string][] = [];
   public additionalTypes: Array<string> = []; //array of all additional terrapi types that can be used
 
   constructor(
-    private http: HttpClient,
     private sortOptionsService: SortOptionsService,
-    private filterTypeService: FiltersTypesService,
     private filterOptionService: FiltersOptionService,
     private filterSortService: FiltersSortService,
     private filterPageService: FiltersPageService,
@@ -79,7 +77,11 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
     this.sortBySelected.emit(this.defaultSortCode);
 
     let paginator = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.paginator');
-    this.defaultPageOption = paginator.pageSize !== undefined ? paginator.pageSize : this.pageOptions[0];
+    if(this.pageOptions.includes(paginator.pageSize)){
+      this.defaultPageOption = paginator.pageSize;
+    }else{
+      this.defaultPageOption = this.pageOptions[0];
+    }
 
     // get the total number of entities
     this.entitiesLength = this.entitiesList.length;
@@ -101,23 +103,23 @@ export class SimpleFeatureListHeaderComponent implements OnInit, OnChanges {
   }
 
   public findSortOptions(): [string, string][] {
-    let attributes = this.configService.getConfig("useEmbeddedVersion.simpleFeatureList.sortBy.attributes");
-    if(attributes === undefined) return [];
+    let possibilities = this.sortBy.sortOptions;
+    if(possibilities === undefined) return [];
 
     let sortArray = [];
 
     //if there are elements in the attributeOrder config
-    for(let i = 0; i < attributes.length; i++){
-      let type: string = attributes[i]["type"];
-      let description: string = attributes[i]["description"];
-      let attribute = [type, description];
+    for(let i = 0; i < possibilities.length; i++){
+      let type: string = possibilities[i].type;
+      let description: string = possibilities[i].description;
+      let sortOption = [type, description];
 
       //check that the type does not already exist in another tuple in the sortArray
       if(type !== undefined && !sortArray.some((tuple) => tuple[0] === type)) {
         if(this.properties.includes(type)){
-          sortArray.push(attribute);
+          sortArray.push(sortOption);
         }else if(this.terrAPITypes.includes(type)){
-          sortArray.push(attribute);
+          sortArray.push(sortOption);
         }
       }
     }

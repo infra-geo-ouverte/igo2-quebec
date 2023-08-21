@@ -124,6 +124,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
   @Input() additionalProperties: Map<string, Map<string, string>> = new Map();
   @Input() entitiesAll: Array<Feature>; //all entities
   @Input() entitiesList: Array<Feature>; //filtered entities
+  @Input() dataInitialized: boolean;
 
   public clickedEntities$: BehaviorSubject<Feature[]> = new BehaviorSubject(undefined);
   public showSimpleFilters: boolean = false;
@@ -311,8 +312,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
     private breakpointObserver: BreakpointObserver,
     private analyticsService: AnalyticsService
   ) {
-      this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
-        false : this.configService.getConfig('useEmbeddedVersion');
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') !== undefined && !this.useEmbeddedVersion ?
@@ -348,6 +347,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
       this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
       this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
         this.configService.getConfig('legendInPanel');
+      this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
+        false : this.showMap || this.showSimpleFeatureList || this.showSimpleFilters;
   }
 
   ngOnInit() {
@@ -471,7 +472,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
     this.entitiesAllService.onEvent().subscribe(entitiesAll => this.entitiesAll = entitiesAll);
     this.entitiesListService.onEvent().subscribe(entitiesList => {
       this.entitiesList = entitiesList;
-      // this.fitFeatures();
+      this.fitFeatures();
     });
 
     // RESPONSIVE BREAKPOINTS
@@ -521,6 +522,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
   }
 
   mapQuery(event) {
+    console.log("mapquery ", event);
     this.mapQueryClick = event;
   }
 
@@ -661,10 +663,14 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
    }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    // console.log("event ", event);
+    console.log("event ", event);
     // console.log("entitiesListttt ", this.entitiesList);
     if(this.useEmbeddedVersion) {
       if (event.features.length === 0) return;
+      if (!this.dataInitialized) {
+        this.messageService.error('simpleFeatureList.awaitInitialization');
+        return;
+      }
       //all entities that appear in entitiesList will be returned
       let entities: Array<Feature> = [];
       // console.log("event.features[0] ", event.features[0]);
@@ -953,6 +959,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
         'EPSG:4326',
         this.map.projection
       );
+      console.log("computezoomtoextent extent1 ", olExtent);
       this.map.viewController.zoomToExtent(olExtent as [number, number, number, number]);
     }
   }
@@ -1016,6 +1023,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
                 })
               );
             const totalExtent = computeOlFeaturesExtent(this.map, searchResultsOlFeatures);
+            console.log("readSearchParams extent2 ", totalExtent);
             this.map.viewController.zoomToExtent(totalExtent);
           });
       }
@@ -1273,6 +1281,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
         olFeaturesSelected.push(localOlFeature);
     }
     const totalExtent = computeOlFeaturesExtent(this.map, olFeaturesSelected);
+    console.log("zoomToSelectedFeature extent3 ", totalExtent);
     this.map.viewController.zoomToExtent(totalExtent);
   }
 
@@ -1283,6 +1292,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
    */
   public filterByOgc(wmsDatasource: WMSDataSource, filterString: string) {
     const appliedFilter = new OgcFilterWriter().formatProcessedOgcFilter(filterString, wmsDatasource.options.params.LAYERS);
+    if(appliedFilter) console.log("length ", appliedFilter.length, ": ", appliedFilter);
     wmsDatasource.ol.updateParams({ FILTER: appliedFilter });
   }
 
@@ -1295,7 +1305,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
     let filterQueryString = "";
     let idMap: Map<string, Array<string>> = new Map();
     let ogcFilterWriter: OgcFilterWriter = new OgcFilterWriter();
-    let uniqueKey = this.configService.getConfig("useEmbeddedVersion.simpleFilters.uniqueAttribute");
+    let uniqueKey = this.configService.getConfig("useEmbeddedVersion.simpleFilters.uniqueType");
 
     //initialize id map with all the additional types as keys
     for(let type of this.additionalTypes) {
@@ -1303,9 +1313,11 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
     }
 
     for(let category of activeFilters){
-      const bundleConditions = [];
+      if (category[0] === undefined) return;
+      let bundleConditions = [];
+      let lastFilterType = category[0];
+      console.log("lastfiltertype ", lastFilterType);
       for(let filter of category[1]){
-
         if(this.additionalTypes.includes(filter.type) && uniqueKey){
           //create idMap, where it stores the keys (coords) of all entities which match the requested terrapi filter
           this.additionalProperties.forEach((value, key) => {
@@ -1331,9 +1343,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
           //string together all entities we want to find
           if(tempConditions.length >= 1){
             if (tempConditions.length === 1) {
-              bundleConditions.push(tempConditions[0]);
+                bundleConditions.push(tempConditions[0]);
             } else {
-              bundleConditions.push({logical: "OR", filters: tempConditions});
+              if(filter.type === lastFilterType){
+                //remove the previous condition, so as not to create dupicates and increase the filter string length exponentially
+                bundleConditions.pop();
+                bundleConditions.push({logical: "OR", filters: tempConditions});
+              }else{
+                bundleConditions.push({logical: "OR", filters: tempConditions});
+              }
             }
           }
         }
@@ -1341,6 +1359,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
           let condition = {expression: filter.nom, operator: "PropertyIsEqualTo", propertyName: filter.type};
           bundleConditions.push(condition);
         }
+        lastFilterType = filter.type;
       }
       if(bundleConditions.length >= 1){
         if (bundleConditions.length === 1) {
@@ -1406,6 +1425,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
     });
 
     let mapExtent: MapExtent = [minX, minY, maxX, maxY];
+    console.log("fitFeatures extent4 ", mapExtent);
     this.map.viewController.zoomToExtent(mapExtent);
   }
 

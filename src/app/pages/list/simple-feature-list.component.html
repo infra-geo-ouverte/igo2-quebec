@@ -10,7 +10,7 @@
 </app-simple-feature-list-header>
 
 <div class="entities-container" *ngIf="additionalTypes">
-    <!-- <p *ngIf="entitiesShown"> {{entitiesShown.length}} entities exist </p> -->
+  <p *ngIf="entitiesShown.length === 0" class="no-element">{{'simpleFeatureList.noElement' | translate}}</p>
     <div *ngFor="let entity of entitiesShown; let i = index" #entity class="entity">
       <div class="attributes">
         <ng-container *ngFor="let attribute of attributeOrder">
@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <mat-divider></mat-divider>
+  <mat-divider *ngIf="entitiesShown.length > 0"></mat-divider>
 
 <app-simple-feature-list-paginator *ngIf="simpleFeatureListConfig.paginator"
   [pageSize]="pageSize"

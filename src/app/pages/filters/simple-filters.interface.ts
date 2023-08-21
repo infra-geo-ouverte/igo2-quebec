@@ -1,6 +1,6 @@
 export interface SimpleFilter {
-	type: string;
-	description: string;
+	type: string; //the type that will be found from terrAPI or the entitiy properties
+	description: string; //the description that will be displayed in the application
 }
 
 export interface TypeOptions {

@@ -1,4 +1,4 @@
-<mat-sidenav-container [ngClass]="showMap ? 'map-visible' : 'map-invisible'">
+<mat-sidenav-container [ngClass]="{'map-visible' : showMap && useEmbeddedVersion, 'map-invisible': !showMap && useEmbeddedVersion}">
   <mat-sidenav-content position="end">
 
     <igo-backdrop
@@ -48,34 +48,6 @@
         [layers]="mapLayersShownInLegend">
       </app-sidepanel>
     </div>
-
-    <!-- <igo-map-browser      
-      igoMapOffline
-      igoWorkspaceUpdator
-      [workspaceStore]="workspaceStore"
-      igoLongPress
-      igoSearchPointerSummary
-      [igoSearchPointerSummaryDelay]="500"
-      [igoSearchPointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
-      igoHoverFeature
-      [igoHoverFeatureDelay]="250"
-      [igoHoverFeatureEnabled]="true"
-      #mapBrowser
-      igoQuery
-      [waitForAllQueries]="true"
-      [queryFeatures]="true"
-      [queryFeaturesHitTolerance]="15"
-      igoMapContext
-      igoLayerContext
-      igoDropGeoFile
-      igoHoverFeature
-      [igoHoverFeatureEnabled]="true"
-      (query)="onMapQuery($event)"
-      [igoHoverFeatureDelay]=10
-      [map]="map"
-      [igoContextMenu]=contextMenu
-      (menuPosition)="onContextMenuOpen($event)"
-      [ngClass]="{'igo-attribution-offset': map.getBaseLayers().length > 1, 'map-hasfooter': hasFooter}"> -->
 
       <igo-map-browser
       igoMapOffline

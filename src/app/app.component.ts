@@ -10,12 +10,14 @@ import { AuthOptions } from '@igo2/auth';
 import { PwaService } from './services/pwa.service';
 import { Workspace } from '@igo2/common';
 import { WorkspaceState } from '@igo2/integration';
-import { Feature } from '@igo2/geo';
+import { Feature, LayerService, WMSDataSource } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { FeatureCollection } from 'geojson';
 import { Option } from './pages/filters/simple-filters.interface';
 import { FiltersAdditionalPropertiesService } from './pages/filters/filterServices/filters-additional-properties.service';
+import { ContextService, DetailedContext } from '@igo2/context';
+
 
 @Component({
   selector: 'app-root',
@@ -37,6 +39,8 @@ export class AppComponent implements OnInit {
   public showSimpleFilters: boolean = false;
   public showSimpleFeatureList: boolean = false;
   public useEmbeddedVersion: boolean = false;
+  public showMap: boolean = false;
+  public layerId: string;
   public isMobile: boolean = window.innerWidth >= 768 ? false : true; //boolean to determine screen width for layout
   public authConfig: AuthOptions;
   private themeClass = 'qcca-theme';
@@ -45,6 +49,7 @@ export class AppComponent implements OnInit {
   private promptEvent: any;
   public hasMenu: boolean = false;
   public workspace = undefined;
+  public workspaceEnabled = false;
   public additionalProperties: Map<string, Map<string,string>> = new Map<string, Map<string, string>>();
   public additionalTypes: Array<string>;
   public properties: Array<string>; //array of properties (the keys in the propertiesMap)
@@ -58,6 +63,7 @@ export class AppComponent implements OnInit {
   searchBar: ElementRef;
 
   constructor(
+    public layerService: LayerService,
     private additionalPropertiesService: FiltersAdditionalPropertiesService,
     private http: HttpClient,
     protected languageService: LanguageService,
@@ -68,14 +74,14 @@ export class AppComponent implements OnInit {
     private messageService: MessageService,
     private pwaService: PwaService,
     public workspaceState: WorkspaceState,
+    public contextService: ContextService,
   ) {
     this.readTitleConfig();
     this.readThemeConfig();
     this.readDescriptionConfig();
 
     this.detectOldBrowser();
-    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
-      false : this.configService.getConfig('useEmbeddedVersion');
+
     this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
     this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
     this.hasHeader = this.configService.getConfig('header.hasHeader') !== undefined && !this.useEmbeddedVersion ?
@@ -86,6 +92,30 @@ export class AppComponent implements OnInit {
 
     this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
       this.configService.getConfig('hasMenu');
+
+    this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') !== undefined ? this.configService.getConfig('useEmbeddedVersion.showMap') : false;
+
+    this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
+      false : this.showMap || this.showSimpleFeatureList || this.showSimpleFilters;
+
+    this.layerId = this.configService.getConfig('useEmbeddedVersion.layerId');
+
+    this.workspaceEnabled = this.configService.getConfig('layers.workspace');
+    console.log("workspaceEnabled ", this.workspaceEnabled);
+    this.contextService.contexts$.subscribe( context => {
+      console.log("context ", context);
+      context.ours.forEach(c => {
+        console.log("id ", c.id);
+      })
+    })
+
+    // this.contextService.showContext("_default").subscribe(c => console.log("c ", c));
+    // this.contextService.getDefault().subscribe( c => console.log("c ", c));
+    // this.contextService.getById(this.layerId).forEach(context => {
+    //   console.log("context ", context);
+    // })
+
+    console.log("useEmbeddedVersion ", this.useEmbeddedVersion);
 
     this.setManifest();
     this.installPrompt();
@@ -188,6 +218,8 @@ export class AppComponent implements OnInit {
     this.entitiesAll = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
     this.entitiesList = this.workspace.entityStore.entities$.getValue() as Array<Feature>;
 
+    console.log("entitiesAll ", this.entitiesAll);
+
     this.properties = Object.keys(this.entitiesAll[0]["properties"]);
     for(let property of this.properties){
       let values: Array<Option> = [];
@@ -202,11 +234,12 @@ export class AppComponent implements OnInit {
       this.additionalTypes = types;
     });
 
-    this.initializeAdditionalProperties();
+    await this.initializeAdditionalProperties();
     this.dataInitialized = true;
   }
 
   setClickedEntities(features: Feature[]) {
+    console.log("clicked entities");
     this.clickedEntities = features;
   }
 
@@ -222,7 +255,7 @@ export class AppComponent implements OnInit {
   private async initializeAdditionalTypes() {
     //the 3 sections where we can define terrAPI types in the config file
     const listAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.attributeOrder');
-    const sortAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.attributes');
+    const sortAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList.sortBy.sortOptions');
     const filtersAttributesConfig = this.configService.getConfig('useEmbeddedVersion.simpleFilters.filters');
 
     let terrAPIAttributes: Array<string> = [];
@@ -245,7 +278,7 @@ export class AppComponent implements OnInit {
             }
           });
         }else{
-          let type = entry["attributeName"];
+          let type = entry["type"];
           if(type && !this.properties.includes(type) && !terrAPIAttributes.includes(type) && this.terrAPITypes.includes(type)){
             terrAPIAttributes.push(type);
           }

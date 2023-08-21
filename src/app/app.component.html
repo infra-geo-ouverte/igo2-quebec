@@ -1,11 +1,11 @@
 <igo-spinner igoSpinnerActivity></igo-spinner>
 
-<app-header *ngIf="hasHeader" #header></app-header>
+<app-header *ngIf="hasHeader && !useEmbeddedVersion" #header></app-header>
 
-<app-menu *ngIf="hasMenu"></app-menu>
+<app-menu *ngIf="hasMenu && !useEmbeddedVersion"></app-menu>
 
-<div cdkScrollable *ngIf="!hasMenu && useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
-    <div [ngClass]="isMobile ? 'filters-and-map-mobile' : showSimpleFeatureList ? 'filters-and-map-desktop' : 'filters-and-map-only-desktop'">
+<div cdkScrollable *ngIf="useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
+    <div [ngClass]="isMobile ? 'filters-and-map-mobile' : showSimpleFeatureList ? (showMap || showSimpleFilters ? 'filters-and-map-desktop' : 'filters-and-map-mobile') : 'filters-and-map-only-desktop'">
 
         <app-simple-filters class="app-simple-filters" *ngIf="showSimpleFilters && workspace"
         [entitiesAll]="entitiesAll"
@@ -14,14 +14,16 @@
         [terrAPITypes]="terrAPITypes"
         [properties]="properties"
         [additionalProperties]="additionalProperties"
+        [dataInitialized]="dataInitialized"
         ></app-simple-filters>
 
-        <app-portal class="app-portal" *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
+        <app-portal class="app-portal" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
         (mapQueryEvent)="setClickedEntities($event)"
         [features]="features"
         [additionalProperties]="additionalProperties"
         [entitiesAll]="entitiesAll"
         [entitiesList]="entitiesList"
+        [dataInitialized]="dataInitialized"
         ></app-portal>
 
     </div>

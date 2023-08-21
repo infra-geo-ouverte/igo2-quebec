@@ -47,7 +47,6 @@
 
   },
   "paginator": {
-    "noElements": "No element",
     "elementLowercase": "element",
     "elementsLowercase": "elements",
     "elementUpperCase": "Element",
@@ -66,20 +65,18 @@
     "website": "Website",
     "selectEntity": "Zoom on element",
     "unselectEntity": "Unselect element",
+    "selectOverridden": "The selected entities have been overridden",
+    "noElement": "No element",
+    "awaitInitialization": "Data is not yet initialized. Please try again",
     "header": {
       "options": {
         "filters": "Filters",
         "sort": "Sort by",
-        "numberOfStations": "Number per page",
-        "filterTitles": {
-          "regadmin": "Administrative region",
-          "mrc": "MRC",
-          "municipality": "Municipality"
-        }
+        "numberOfStations": "Number per page"
       }
     }
   },
-    "simpleFilters": {
+  "simpleFilters": {
     "filtersTitle": "Filters",
     "placeholder": "Show filters",
     "resetFilters": "Erase filters",
@@ -88,8 +85,8 @@
     "closePanel": "Close panel",
     "removeFilter": "Remove filter",
     "selected": "selected",
-    "selecteds": "selected"
-
+    "selecteds": "selected",
+    "loadingFilters": "Loading filters..."
   },
   "igo":{
     "integration": {

@@ -1,7 +1,7 @@
 <div class="elements">
   <span *ngIf="entitiesLength > 1" class="numberOfElements">{{ entitiesLength }} {{ 'paginator.elementsLowercase' | translate }}</span>
   <span *ngIf="entitiesLength === 1" class="numberOfElements">{{ entitiesLength }} {{ 'paginator.elementLowercase' | translate }}</span>
-  <span *ngIf="entitiesLength === 0" class="numberOfElements">{{ 'paginator.noElements' | translate }}</span>
+  <span *ngIf="entitiesLength === 0" class="numberOfElements">{{ 'simpleFeatureList.noElement' | translate }}</span>
   <span *ngIf="elementsUpperBound !== 0" class="currentElements">{{ 'paginator.elementsUppercase' | translate }}  {{ elementsLowerBound }} {{ 'paginator.to' | translate }} {{ elementsUpperBound }}</span>
 </div>
 

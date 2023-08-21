@@ -1,4 +1,4 @@
-<div *ngIf="!isMobile" class="filters">
+<div *ngIf="!isMobile && dataInitialized" class="filters">
   <div class="header">
     <p class="filters-title"> {{ 'simpleFilters.filtersTitle' | translate }} </p>
     <p class="filters-reset"
@@ -26,17 +26,16 @@
               [formControlName]="control.key"
               [matAutocomplete]="auto"
               [placeholder]="'simpleFilters.placeholder' | translate">
-            <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
+            <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName">
               <mat-option *ngFor="let option of getOptions(control.key)" [value]="option"
-              [ngClass]="option.count === 0 ? 'disabled' : 'enabled'">
+              [ngClass]="option.count === 0 ? 'disabled' : 'enabled'"
+              (click)="onSelection(option)">
                 <mat-checkbox
-                  [checked]="option.selected">
-                  <!-- {{ option.nom }} -->
+                  [checked]="option.selected"
+                  (change)="onSelection(option)"
+                  (click)="$event.stopPropagation()">
                   {{ option.nom + " (" + option.count + ")"}}
                 </mat-checkbox>
-                <!-- <mat-checkbox *ngIf="!option.nom">
-                  {{ option }}
-                </mat-checkbox> -->
               </mat-option>
             </mat-autocomplete>
             <mat-icon *ngIf="getOptions(control.key)"
@@ -57,7 +56,7 @@
 </div>
 
 
-<div *ngIf="isMobile" class="filters">
+<div *ngIf="isMobile && dataInitialized" class="filters">
   <div class="header-mobile header" (click)="filtersShown = !filtersShown">
 		<p class="header-label header-label-mobile">{{ 'simpleFilters.filtersTitle' | translate }}</p>
 		<mat-icon
@@ -68,7 +67,7 @@
   <mat-divider *ngIf="filtersShown"></mat-divider>
   <p *ngIf="filtersShown"class="filters-reset header" (click)="onResetFilters()"> {{ 'simpleFilters.resetFilters' | translate }} </p>
 
-  <div *ngIf="filtersShown" class="filters-container">
+  <div *ngIf="filtersShown" class="filters-container" id="click-to-close-mat-select">
     <div class="filters">
       <form [formGroup]="filtersFormGroup">
         <div *ngFor="let control of controls | keyvalue"
@@ -88,11 +87,14 @@
               [formControlName]="control.key"
               [matAutocomplete]="auto"
               [placeholder]="'simpleFilters.placeholder' | translate">
-            <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName" (optionSelected)="onSelection($event.option.value)">
+            <mat-autocomplete class="fixed-dropdown-autocomplete" #auto="matAutocomplete" [displayWith]="displayName">
               <mat-option *ngFor="let option of getOptions(control.key)" [value]="option"
-              [ngClass]="option.count === 0 ? 'disabled' : 'enabled'">
+              [ngClass]="option.count === 0 ? 'disabled' : 'enabled'"
+              (click)="onSelection(option)">
                 <mat-checkbox
-                  [checked]="option.selected">
+                  [checked]="option.selected"
+                  (change)="onSelection(option)"
+                  (click)="$event.stopPropagation()">
                   {{ option.nom + " (" + option.count + ")"}}
                 </mat-checkbox>
               </mat-option>
@@ -113,3 +115,5 @@
     </div>
   </div>
 </div>
+
+<p *ngIf="!dataInitialized" class="filters-loading">{{'simpleFilters.loadingFilters' | translate}}</p>

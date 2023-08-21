@@ -6,55 +6,38 @@
     "showMap": true,
     "simpleFilters": {
       "filters": [
-      {"type": "id", "description": "Numéro de bureau"},
       {"type": "region", "description": "Région"},
-      {"type": "responsable", "description": "Responsable"},
-      {"type": "municipalites", "description": "Municipalité"},
       {"type": "mrc", "description": "MRC"},
-      {"type": "bs", "description": "this is a test"},
-      {"type": "province", "description": "Province"},
-      {"type": "arrondissements", "description": "Arrondissements"}
+      {"type": "responsable", "description": "Responsable"},
+      {"type": "arrondissements", "description": "Arrondissement"}
     ],
-    "uniqueAttribute": "adressebur"
+    "uniqueType": "adressebur"
   },
     "simpleFeatureList": {
       "attributeOrder": [
-        {"attributeName": "adressebur", "header": "small"},
-        {"attributeName": "label", "header": "title"},
-        {"attributeName": "region", "description": "Région", "header": "standard"},
-        {"attributeName": "mrc", "description": "MRC", "header": "standard"},
-        {"attributeName": "municipalites", "description": "Municipalité"},
-        {"attributeName": "responsable", "description": "Responsable"},
-        {"attributeName": "telephonebur", "description": "Téléphone"},
-        {"attributeName": "telecopieurbur", "description": "Télécopieur"},
-        {"personalizedFormatting": "[nom] de [mrc] (prop + terrapi)"},
-        {"attributeName": "test2", "personalizedFormatting": "[nom] de [region] ... prop + prop"},
-        {"attributeName": "test3", "personalizedFormatting": "[mrc] / [municipalites] ... terrapi + terrapi"},
-        {"attributeName": "test4", "personalizedFormatting": "[mrc] / [random] ... terrapi + erroné"},
-        {"attributeName": "test5", "personalizedFormatting": "[broken] / [random] ... erroné + erroné"},
-        {"attributeName": "test6", "personalizedFormatting": "[broken] / [arrondissements] ... erroné + conditionel"},
-        {"attributeName": "courriel"},
-        {"attributeName": "lieux.transport.commun", "description": "lieux-transport-commun"},
-        {"attributeName": "arrondissements", "description": "Arrondissements"},
-        {"attributeName": "whatever", "description": "Test"}
+        {"type": "adressebur", "header": "small"},
+        {"personalizedFormatting": "[label] à [municipalites]", "header": "title"},
+        {"type": "region", "description": "Région", "header": "standard"},
+        {"type": "mrc", "description": "MRC", "header": "standard"},
+        {"type": "responsable", "description": "Responsable"},
+        {"type": "telephonebur", "description": "Téléphone"},
+        {"type": "telecopieurbur", "description": "Télécopieur"},
+        {"type": "courriel"},
+        {"type": "arrondissements", "description": "Arrondissement"}
       ],
       "sortBy": {
-        "default": {"attributeName": "asd"},
-        "attributes": [
+        "defaultType": "region",
+        "sortOptions": [
           {"type": "region", "description": "Région"},
           {"type": "responsable", "description": "Responsable"},
-          {"type": "municipalites", "description": "Municipalité"},
-          {"type": "mrc", "description": "MRC"},
-          {"type": "mrc", "description": "MRC2"},
-          {"type": "whatever", "description": "MRC"},
-          {"type": "test", "description": "TEST"}
+          {"type": "municipalites", "description": "Municipalité"}
         ]
       },
       "formatURL": true,
       "formatEmail": true,
       "paginator": {
         "pageSizeOptions": [1,5,10,20,50],
-        "pageSize": 5,
+        "pageSize": 10,
         "showFirstLastPageButtons": true,
         "showPreviousNextPageButtons": true
       }
@@ -72,7 +55,7 @@
     "logoPrint": "assets/images/signature-PIV.svg"
   },
   "hasMenu": false,
-  "hasFooter": false,
+  "hasFooter": true,
   "hasLegendButton": true,
   "legendInPanel": true,
   "showRotationButtonIfNoRotation": true,

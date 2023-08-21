@@ -66,3 +66,26 @@
 .info {
     font-weight: 700;
 }
+
+
+::ng-deep .mat-autocomplete-panel {
+	border-radius: 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+	border-radius: 0px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start {
+	border-radius: 0px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
+	border-radius: 0px !important;
+}
+
+.no-element {
+    background-color: #dae6f0;
+    padding: 24px 32px;
+    font-size: 16px;
+}

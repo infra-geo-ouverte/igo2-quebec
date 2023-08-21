@@ -21,11 +21,7 @@
         "queryLayerFeatures": true
       },
       "workspace": {
-        "enabled": true,
-        "queryOptions": {
-          "mapQueryOnOpenTab": false,
-          "tabQuery": false
-        }
+        "enabled": true
       }
     }
   ]

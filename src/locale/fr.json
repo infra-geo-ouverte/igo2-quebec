@@ -46,7 +46,6 @@
     "data-download-completed": "Téléchargement des données hors-ligne terminé"
   },
   "paginator": {
-    "noElements": "Aucun élément",
     "elementLowercase": "élément",
     "elementsLowercase": "éléments",
     "elementUpperCase": "Élément",
@@ -65,16 +64,14 @@
     "website": "Site Web",
     "selectEntity": "Cadrer sur l'élément",
     "unselectEntity": "Désélectionner l'élément",
+    "selectOverridden": "Les entités sélectionnées ont été remplacées",
+    "noElement": "Aucun élément",
+    "awaitInitialization": "Les données ne sont pas encore initializées. Veuillez essayer à nouveau",
     "header": {
       "options": {
         "filters": "Filtres",
         "sort": "Trier par",
-        "numberOfStations": "Nombre par page",
-        "filterTitles": {
-          "regadmin": "Région administrative",
-          "mrc": "MRC",
-          "municipality": "Municipalité"
-        }
+        "numberOfStations": "Nombre par page"
       }
     }
   },
@@ -87,8 +84,8 @@
     "closePanel": "Fermer le paneau",
     "removeFilter": "Enlever le filtre",
     "selected": "sélection",
-    "selecteds": "sélections"
-
+    "selecteds": "sélections",
+    "loadingFilters": "Chargement des filtres..."
   },
   "igo":{
     "integration": {

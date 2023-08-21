@@ -69,11 +69,11 @@
 	position: absolute;
 	max-height: 200px; /* Adjust the max-height to fit your needs */
 	overflow-y: auto;
-  }
+}
 
-  ::ng-deep .mat-autocomplete-panel {
+::ng-deep .mat-autocomplete-panel {
 	border-radius: 0 !important;
-  }
+}
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
 	border-radius: 0px;
@@ -153,6 +153,9 @@ mat-divider {
 	margin: 0px 16px;
 }
 
-// ::ng-deep .mat-form-field-wrapper {
-// 	padding-bottom: 24px !important;
-// }
+.filters-loading {
+	background-color: #f2f1f1;
+    padding: 24px 32px;
+    font-size: 16px;
+	margin-bottom: 0px;
+}
