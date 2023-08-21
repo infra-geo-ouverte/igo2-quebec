@@ -54,7 +54,7 @@
     "logo": "assets/images/signature-PIV.svg",
     "logoPrint": "assets/images/signature-PIV.svg"
   },
-  "hasMenu": false,
+  "hasMenu": true,
   "hasFooter": true,
   "hasLegendButton": true,
   "legendInPanel": true,

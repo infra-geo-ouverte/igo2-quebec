@@ -1,6 +1,12 @@
 @import './portal.variables';
 
 /*** Main ***/
+:host {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 $right-min-width : 400px;
 $map-min-height: 400px;
 $left-min-width : 400px;

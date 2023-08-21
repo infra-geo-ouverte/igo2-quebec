@@ -190,12 +190,8 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
           let propA: Map<string, string> = this.additionalProperties.get(coordsA);
           let propB: Map<string, string> = this.additionalProperties.get(coordsB);
 
-          console.log("propA ", propA, " propB ", propB);
-
           let typeA = propA.get(sortBy);
           let typeB = propB.get(sortBy);
-
-          console.log("typeA ", typeA, " typeB ", typeB);
 
           return typeA > typeB ? 1 : typeA < typeB ? -1 : 0;
         } catch (error){

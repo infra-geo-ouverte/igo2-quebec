@@ -15,7 +15,8 @@ export class MapComponent {
 
   constructor(private configService: ConfigService) {
 
-    this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ? false : this.configService.getConfig('useEmbeddedVersion.showMap');
+    this.showMap = this.configService.getConfig('useEmbeddedVersion.showMap') === undefined ?
+      false : this.configService.getConfig('useEmbeddedVersion.showMap');
     this.showSimpleFilters = this.configService.getConfig('useEmbeddedVersion.simpleFilters') === undefined ? false : true;
     this.showSimpleFeatureList = this.configService.getConfig('useEmbeddedVersion.simpleFeatureList') === undefined ? false : true;
 
