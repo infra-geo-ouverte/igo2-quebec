@@ -1,5 +1,6 @@
+import { createCustomElement } from '@angular/elements';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, ApplicationRef, Injector, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ApplicationRef, Injector, NgModule, CUSTOM_ELEMENTS_SCHEMA, DoBootstrap } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
@@ -57,6 +58,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
 };
 
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [AppComponent],
   imports: [
     ScrollingModule,
@@ -115,14 +117,32 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       multi: true
     },
     provideStyleListOptions({
+      //angular elements
+      // path: './assets/assets/list-style.json'
       path: './assets/list-style.json'
 
     }),
+    //angular elements
+    // provideConfigOptions({
+    //   path: './assets/config/config.json'
+    // }),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions }
+  ],
+  entryComponents: [
+    AppComponent
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule implements DoBootstrap {
+  constructor(private injector: Injector) {
+    this.injector = injector;
+  }
+
+  ngDoBootstrap() {
+    const el = createCustomElement(AppComponent, {injector: this.injector});
+    customElements.define("igo2-quebec-integrable", el);
+  }
+}
 
 function appInitializerFactory(
   injector: Injector,
