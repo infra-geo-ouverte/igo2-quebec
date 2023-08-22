@@ -483,7 +483,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
 
   public clickedEntitiesOverridden(){
     this.messageService.alert("simpleFeatureList.selectOverridden");
-
     this.selectedEntitiesList = false;
   }
 
