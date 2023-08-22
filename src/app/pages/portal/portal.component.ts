@@ -349,8 +349,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
         this.configService.getConfig('legendInPanel');
       this.useEmbeddedVersion = this.configService.getConfig('useEmbeddedVersion') === undefined ?
         false : this.showMap || this.showSimpleFeatureList || this.showSimpleFilters;
-
-      console.log("condition ", this.hasFooter && !this.mobile && !this.useEmbeddedVersion);
   }
 
   ngOnInit() {

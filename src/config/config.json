@@ -18,12 +18,12 @@
         {"type": "adressebur", "header": "small"},
         {"personalizedFormatting": "[label] à [municipalites]", "header": "title"},
         {"type": "region", "description": "Région", "header": "standard"},
-        {"type": "mrc", "description": "MRC", "header": "standard"},
         {"type": "responsable", "description": "Responsable"},
         {"type": "telephonebur", "description": "Téléphone"},
         {"type": "telecopieurbur", "description": "Télécopieur"},
         {"type": "courriel"},
-        {"type": "arrondissements", "description": "Arrondissement"}
+        {"type": "arrondissements", "description": "Arrondissement"},
+        {"type": "mrc", "description": "MRC"}
       ],
       "sortBy": {
         "defaultType": "region",

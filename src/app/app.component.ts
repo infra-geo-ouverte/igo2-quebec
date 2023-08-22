@@ -13,7 +13,6 @@ import { WorkspaceState } from '@igo2/integration';
 import { Feature, LayerService } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { FeatureCollection } from 'geojson';
 import { Option } from './pages/filters/simple-filters.interface';
 import { FiltersAdditionalPropertiesService } from './pages/filters/filterServices/filters-additional-properties.service';
 import { ContextService } from '@igo2/context';
@@ -297,17 +296,36 @@ export class AppComponent implements OnInit {
    * @description initializes additionalProperties by querying terrAPI based on the coordinates and the desired terrAPI type
    */
   private async initializeAdditionalProperties() {
+    if(this.additionalTypes.length === 0){
+      //emit the empty map
+      this.additionalPropertiesService.emitEvent(this.additionalProperties);
+      return;
+    }
+    let i = 0;
+    await this.sleep(1000);
     for(let entity of this.entitiesAll){
-      await this.sleep(500);
       let coords: string = entity.geometry.coordinates.join(",");
       let typeMap = new Map<string, string>();
       for(let type of this.additionalTypes){
+        i+= 1;
+        if(i % 25 === 0){
+          await this.sleep(1000);
+        }
         await this.checkTerrAPI(type, coords).then(response => {
-          if(response.features[0]){
-            const name = response.features[0]["properties"]["nom"];
-            typeMap.set(type, name);
+          if(response["type"] === "FeatureCollection"){
+            if(response["features"][0]){
+              const name = response["features"][0]["properties"]["nom"];
+              typeMap.set(type, name);
+            }else{
+              typeMap.set(type, this.undefinedConfig);
+            }
           }else{
-            typeMap.set(type, this.undefinedConfig);
+            //there has been an error (likely status 429 for too many requests sent)
+            this.messageService.error('simpleFilters.terrAPIError');
+            this.additionalTypes = [];
+            this.additionalProperties = new Map<string, Map<string, string>>();
+            this.additionalPropertiesService.emitEvent(this.additionalProperties);
+            return;
           }
         });
       }
@@ -332,7 +350,13 @@ export class AppComponent implements OnInit {
   async checkTerrAPI(attribute: string, coordinates: string){
     let url: string = this.terrAPIBaseURL + "locate?type=" + attribute + "&loc=" + coordinates;
 
-    return await this.http.get<FeatureCollection>(url).toPromise();
+    try{
+      let response = await this.http.get(url).toPromise();
+      return response;
+    }catch(error){
+      return error;
+    }
+
   }
 
   /**

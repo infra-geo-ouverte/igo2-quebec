@@ -86,7 +86,8 @@
     "removeFilter": "Remove filter",
     "selected": "selected",
     "selecteds": "selected",
-    "loadingFilters": "Loading filters..."
+    "loadingFilters": "Loading filters...",
+    "terrAPIError": "terrAPI error. No terrAPI type will be used"
   },
   "igo":{
     "integration": {
