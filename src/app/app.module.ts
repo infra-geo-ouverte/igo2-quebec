@@ -90,7 +90,6 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   providers: [
     provideConfigOptions({
       default: environment.igo,
-      // path: './assets/config/config.json'
       path: './config/config.json'
     }),
     provideCoordinatesReverseSearchSource(),
