@@ -178,7 +178,6 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
     this.entitiesList$$.unsubscribe();
   }
 
-  //TODO
   private sortEntities(entities: Array<Feature>, sortBy: string) {
     if(this.selectedEntitiesList) this.clickedEntitiesOverridden();
     //types contained in terrapi
@@ -385,11 +384,7 @@ export class SimpleFeatureListComponent implements OnInit, OnChanges, OnDestroy 
    */
   selectEntity(entity: Feature) {
     // update the store and emit the entity to parent
-    // this.entityStore.state.updateAll({selected: false});
-    // this.entityStore.state.update(entity, {selected: true}, true);
-    let entityCollection: {added: Array<Feature>} = {added: []};
-    entityCollection.added.push(entity);
-    this.listSelection.emit(entityCollection);
+    this.listSelection.emit(entity);
   }
 
   /**

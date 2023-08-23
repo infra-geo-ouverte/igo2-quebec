@@ -118,7 +118,7 @@ import { MapBrowserEvent } from 'ol';
 })
 
 export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnChanges {
-  @Input() features = {added: []};
+  @Input() feature: Feature;
   @Output() workspaceSelected = new EventEmitter<Workspace>();
   @Output() mapQueryEvent = new EventEmitter<Feature[]>();
   @Input() additionalProperties: Map<string, Map<string, string>> = new Map();
@@ -616,9 +616,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.features && changes.features.currentValue !== null){
-      this.zoomToSelectedFeature(changes.features.currentValue);
-      this.entitySelectChange(changes.features.currentValue);
+    if(changes.feature && changes.feature.currentValue !== null){
+      let selectedFeature = changes.feature.currentValue;
+      this.zoomToSelectedFeature([selectedFeature]);
+      this.entitySelectChange({added: [selectedFeature]});
     }
   }
 
@@ -1256,8 +1257,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy, OnC
    * @description zooms to the selected feature on the map
    * @param features the feature to zoom to
    */
-  zoomToSelectedFeature(features: any) {
-    const featuresSelected: Array<Feature> = features["added"];
+  zoomToSelectedFeature(featuresSelected: Feature[]) {
     let format = new olFormatGeoJSON();
 
     const olFeaturesSelected = [];

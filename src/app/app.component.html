@@ -19,7 +19,7 @@
 
         <app-portal class="app-portal" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
         (mapQueryEvent)="setClickedEntities($event)"
-        [features]="features"
+        [feature]="feature"
         [additionalProperties]="additionalProperties"
         [entitiesAll]="entitiesAll"
         [entitiesList]="entitiesList"

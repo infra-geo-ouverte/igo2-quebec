@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
 	public terrAPITypes: Array<string>; // an array of strings containing the types available from terrAPI
-  public features: any = null; //object: {added: Feature[]}
+  public feature: Feature = null; // selected feature in the list
   public clickedEntities: Feature[] = [];
 
   public showSimpleFilters: boolean = false;
@@ -228,9 +228,8 @@ export class AppComponent implements OnInit {
   }
 
   onListSelection(event){
-    this.features = event;
+    this.feature = event;
   }
-
 
   /**
    * @description retrieves all non-property types from the config file and adds them to additionalTypes if they are valid terrAPI types
