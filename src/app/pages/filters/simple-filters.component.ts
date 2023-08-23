@@ -461,9 +461,6 @@ export class SimpleFiltersComponent implements OnInit, OnDestroy {
     }
   }
 
-    /**
-   * @description returns the length of the selected filter type
-   */
   getSelectionCount(type: string): number {
     return this.activeFilters.get(type).length;
   }

@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 
 	public terrAPIBaseURL: string = "https://geoegl.msp.gouv.qc.ca/apis/terrapi/"; // base URL of the terrAPI API
 	public terrAPITypes: Array<string>; // an array of strings containing the types available from terrAPI
-  public features: any = null; //object: {added: Feature[]}
+  public feature: Feature = null; // selected feature in the list
   public clickedEntities: Feature[] = [];
 
   public showSimpleFilters: boolean = false;
@@ -48,13 +48,14 @@ export class AppComponent implements OnInit {
   private promptEvent: any;
   public hasMenu: boolean = false;
   public workspace = undefined;
+  //map of all additional types and values based on the coordinates associated e.g. {"-74.0068,45.7767": {"mrc": "La Rivière-du-Nord"}}
   public additionalProperties: Map<string, Map<string,string>> = new Map<string, Map<string, string>>();
-  public additionalTypes: Array<string>;
-  public properties: Array<string>; //array of properties (the keys in the propertiesMap)
+  public additionalTypes: Array<string>; //array of all additional types (which are used in additionalProperties)
+  public properties: Array<string>; //array of all entity properties (the keys in the propertiesMap)
   public entitiesList: Array<Feature>; //list of entities that has been filtered
   public entitiesAll: Array<Feature>; //all entities
-  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all properties (keys) and all values associated with this property
-  public dataInitialized: boolean = false;
+  public propertiesMap: Map<string, Array<Option>> = new Map(); //string of all entity properties (keys) and all values associated with this property
+  public dataInitialized: boolean = false; //boolean to track if the additionalProperties map has been initialized
   public undefinedConfig = this.languageService.translate.instant('simpleFeatureList.undefined');
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
@@ -194,6 +195,10 @@ export class AppComponent implements OnInit {
     }
   }
 
+  /**
+   * @description sets selected workspace and initializes all terrAPI types (additionalTypes and additionalProperties)
+   * @param workspace the workspace to use
+   */
   async setSelectedWorkspace(workspace: Workspace) {
     if(this.dataInitialized) return;
     this.workspace = workspace;
@@ -223,9 +228,8 @@ export class AppComponent implements OnInit {
   }
 
   onListSelection(event){
-    this.features = event;
+    this.feature = event;
   }
-
 
   /**
    * @description retrieves all non-property types from the config file and adds them to additionalTypes if they are valid terrAPI types
