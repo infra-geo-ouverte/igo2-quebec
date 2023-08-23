@@ -131,7 +131,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   entryComponents: [
     AppComponent
   ],
-  bootstrap: [AppComponent]
+  // bootstrap: [AppComponent]
 })
 export class AppModule implements DoBootstrap {
   constructor(private injector: Injector) {
