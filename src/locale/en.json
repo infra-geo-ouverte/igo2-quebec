@@ -46,6 +46,49 @@
     "data-download-completed": "Offline data download completed"
 
   },
+  "paginator": {
+    "elementLowercase": "element",
+    "elementsLowercase": "elements",
+    "elementUpperCase": "Element",
+    "elementsUppercase": "Elements",
+    "of": "of",
+    "no": "No",
+    "to": "to",
+    "firstPageLabel": "First page",
+    "lastPageLabel": "Last page",
+    "nextPageLabel": "Next page",
+    "previousPageLabel": "Previous page"
+  },
+  "simpleFeatureList": {
+    "undefined": "N/A",
+    "email": "Email",
+    "website": "Website",
+    "selectEntity": "Zoom on element",
+    "unselectEntity": "Unselect element",
+    "selectOverridden": "The selected entities have been overridden",
+    "noElement": "No element",
+    "awaitInitialization": "Data is not yet initialized. Please try again",
+    "header": {
+      "options": {
+        "filters": "Filters",
+        "sort": "Sort by",
+        "numberOfStations": "Number per page"
+      }
+    }
+  },
+  "simpleFilters": {
+    "filtersTitle": "Filters",
+    "placeholder": "Show filters",
+    "resetFilters": "Erase filters",
+    "submit": "Filter",
+    "openPanel": "Open panel",
+    "closePanel": "Close panel",
+    "removeFilter": "Remove filter",
+    "selected": "selected",
+    "selecteds": "selected",
+    "loadingFilters": "Loading filters...",
+    "terrAPIError": "terrAPI error. No terrAPI type will be used"
+  },
   "igo":{
     "integration": {
       "searchResultsTool": {

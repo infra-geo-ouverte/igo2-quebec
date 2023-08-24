@@ -1,0 +1,161 @@
+@media (max-width: 768px) {
+	.header-label-mobile {
+		font-size: 20px;
+		line-height: 28px;
+	}
+}
+
+@media (min-width: 768px) {
+	.header-label {
+		font-size: 24px;
+		line-height: 36px;
+	}
+}
+
+.filters-container {
+	background-color: #f2f1f1;
+	padding: 0px 16px 16px 16px;
+	cursor: default;
+}
+
+.filters-container:hover {
+	cursor: default;
+}
+
+.filters-title {
+	font-family: Roboto,sans-serif;
+    font-weight: 500;
+	font-size: 24px;
+    line-height: 36px;
+}
+
+.filters-reset {
+	color: #095797;
+    font-size: 16px;
+    font-weight: 700;
+    width: fit-content;
+    cursor: pointer;
+}
+
+.filters-reset:hover{
+	text-decoration: underline;
+}
+
+.filter-description {
+	font-family: "Open Sans", sans-serif;
+	font-weight: 600;
+	font-size: 16px;
+	cursor: text;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+	background-color: white;
+	border-radius: 5px;
+}
+
+::ng-deep .mat-select-arrow {
+	opacity: 0;
+}
+
+.filter-field {
+	width: 100%;
+}
+
+.dropdown-icon {
+	cursor: pointer;
+}
+
+.fixed-dropdown-autocomplete {
+	position: absolute;
+	max-height: 200px; /* Adjust the max-height to fit your needs */
+	overflow-y: auto;
+}
+
+::ng-deep .mat-autocomplete-panel {
+	border-radius: 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+	border-radius: 0px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start {
+	border-radius: 0px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
+	border-radius: 0px !important;
+}
+
+::ng-deep .mat-form-field-outline {
+	color: #808a9d !important;
+}
+
+//color when hovering all mat-options
+::ng-deep .qcca-theme .mat-option:hover:not(.mat-option-disabled) {
+	background: #DAE6F0;
+}
+
+.header-mobile, .more-filters-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #f2f1f1;
+}
+
+.header-mobile, .header-label-mobile {
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+.header-label, .header-label-mobile {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 500;
+}
+
+.header-label-mobile {
+	cursor: pointer;
+}
+
+.header {
+	padding-left: 16px;
+	padding-right: 16px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #f2f1f1;
+}
+
+.filters-icon {
+	transform: scale(1.25);
+}
+
+.filter-description-info {
+	display:flex;
+	justify-content: space-between;
+}
+
+.disabled {
+	color: gray !important;
+}
+
+.filter-info {
+	font-size: 14.4px;
+	cursor: text;
+}
+
+.filters {
+	background-color: #f2f1f1;
+}
+
+mat-divider {
+	margin: 0px 16px;
+}
+
+.filters-loading {
+	background-color: #f2f1f1;
+    padding: 24px 32px;
+    font-size: 16px;
+	margin-bottom: 0px;
+}

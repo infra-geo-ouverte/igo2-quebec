@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderModule } from './pages/header/header.module';
 import { FooterModule } from './pages/footer/footer.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MenuModule } from './pages/menu/menu.module';
 import {
   provideConfigOptions,
@@ -38,7 +39,15 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { concatMap, first } from 'rxjs';
+import { IgoSimpleFiltersModule } from './pages/filters/simple-filters.module';
+import { IgoSimpleFeatureListModule } from './pages/list/simple-feature-list.module';
 
 export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
@@ -50,6 +59,15 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    ScrollingModule,
+    IgoSimpleFeatureListModule,
+    IgoSimpleFiltersModule,
+    CommonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatPaginatorModule,
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
@@ -98,6 +116,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     },
     provideStyleListOptions({
       path: './assets/list-style.json'
+
     }),
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions }
   ],

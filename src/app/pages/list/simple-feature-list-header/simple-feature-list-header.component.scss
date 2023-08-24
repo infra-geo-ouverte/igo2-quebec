@@ -1,0 +1,139 @@
+.elements {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #343A40;
+}
+
+.numberOfElements, .currentElements {
+    margin: 0px;
+    margin-bottom: 4px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.header {
+    // background-color: #223654;
+    height: 54px;
+}
+
+.remove-icon {
+    transform: scale(0.67);
+    color: #095797;
+  }
+
+  .chips-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-container {
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+
+  .selected-options {
+    display: flex;
+    align-items: center;
+  }
+
+  .option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #DAE6F0;
+    border: 1px solid #DAE6F0;
+    transition: border-color 0.25s linear;
+    padding: 9.6px 8px;
+    margin: 4px;
+    cursor: pointer;
+  }
+
+  .option:hover {
+    border: 1px solid #6991D1;
+  }
+
+  .option-label, .option-value {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .option-label {
+    font-weight: bold;
+    margin: 0 28.8px 0 0;
+  }
+
+  .option-value  {
+    color: #095797;
+    font-weight: 600;
+  }
+
+  .horizontal-flex {
+    display: flex;
+    align-items: center;
+  }
+
+  #sort-by .option-label, #number-page .option-label {
+    margin-right: 16px;
+  }
+
+  .filters-result-options {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #C5CAD2;
+  }
+
+  ::ng-deep .filters-result-options .mat-form-field-wrapper {
+    padding: 0px;
+  }
+
+  // mat select panels for page size and sort by
+  ::ng-deep .mat-select-panel {
+    border-radius: 0px !important;
+  }
+
+  ::ng-deep .mat-select-arrow-wrapper {
+    visibility: hidden;
+  }
+
+  .order-stations-per-page {
+    display: flex;
+    vertical-align: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  ::ng-deep .order-stations-per-page .mat-form-field-flex {
+    align-items: center;
+    height: 40px;
+  }
+
+  #order-select {
+    width: auto;
+  }
+
+  #stations-per-page-select {
+    width: 100px;
+    // border-radius: 0px !important;
+  }
+
+  //mat-option coloring (more detailed than simple-filters.component)
+  //selected color
+  ::ng-deep .mat-primary .mat-option.mat-selected, .select div:hover {
+    background: #1479CC !important;
+    color: white !important;
+  }
+
+  //color when hovering over
+  ::ng-deep .mat-select-panel .mat-option:hover:not(.mat-option-multiple):not(.mat-selected) {
+    background-color: #dae6f0 !important;
+  }
+
+  //default background color when not hovering or selected
+  ::ng-deep .mat-option.mat-active {
+    background: white !important;
+  }
+
+  ::ng-deep .qcca-theme .filters-result-options .mat-form-field-infix {
+    border-top: 0.44375em solid transparent;
+  }

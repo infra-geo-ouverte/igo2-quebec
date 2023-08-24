@@ -1,0 +1,55 @@
+<div class="elements">
+  <span *ngIf="entitiesLength > 1" class="numberOfElements">{{ entitiesLength }} {{ 'paginator.elementsLowercase' | translate }}</span>
+  <span *ngIf="entitiesLength === 1" class="numberOfElements">{{ entitiesLength }} {{ 'paginator.elementLowercase' | translate }}</span>
+  <span *ngIf="entitiesLength === 0" class="numberOfElements">{{ 'simpleFeatureList.noElement' | translate }}</span>
+  <span *ngIf="elementsUpperBound !== 0" class="currentElements">{{ 'paginator.elementsUppercase' | translate }}  {{ elementsLowerBound }} {{ 'paginator.to' | translate }} {{ elementsUpperBound }}</span>
+</div>
+
+<div class="filters-result-options">
+  <div class="horizontal-flex">
+      <p class="option-label" *ngIf="getNumActiveFilters() > 0"> {{ 'simpleFeatureList.header.options.filters' | translate }}</p>
+      <div class="selected-options">
+          <div class="chips-container">
+              <ng-container *ngFor="let filter of activeFilters | keyvalue">
+                  <div class="filter-container">
+                      <div *ngFor="let value of filter.value">
+                          <div class="option"
+                          [matTooltip]="'simpleFilters.removeFilter' | translate"
+                          tooltip-position="below" matTooltipShowDelay="500"  matTooltipClass="material-tooltip"
+                          (click)="removeFilter(value)">
+                          <p class="option-value">{{ value.nom }}</p>
+                          <mat-icon class="remove-icon" svgIcon="close"></mat-icon>
+                          </div>
+                      </div>
+                  </div>
+              </ng-container>
+          </div>
+      </div>
+  </div>
+  <div class="order-stations-per-page">
+      <div *ngIf="sortOptions.length > 0" class="horizontal-flex" id="sort-by">
+          <p class="option-label"> {{'simpleFeatureList.header.options.sort'| translate}} </p>
+            <mat-form-field id="order-select" appearance="outline">
+                <mat-select (selectionChange)="onSortSelected($event.value, sortOptions)" disableOptionCentering [(value)]="defaultSortOption">
+                    <mat-option *ngFor="let sortOption of sortOptions"
+                                [value]="sortOption[1]">
+                    {{ sortOption[1] }}
+                    </mat-option>
+                </mat-select>
+              <mat-icon matSuffix color="primary" svgIcon="chevron-down"></mat-icon>
+          </mat-form-field>
+      </div>
+      <div class="horizontal-flex" id="number-page">
+          <p class="option-label"> {{'simpleFeatureList.header.options.numberOfStations'| translate}} </p>
+          <mat-form-field id="stations-per-page-select" appearance="outline">
+              <mat-select (selectionChange)="onPageSelected($event.value)" [(value)]="defaultPageOption">
+                  <mat-option *ngFor="let numberOfStationsPerPageOption of pageOptions"
+                      [value]="numberOfStationsPerPageOption">
+                      {{ numberOfStationsPerPageOption }}
+                  </mat-option>
+              </mat-select>
+              <mat-icon matSuffix color="primary" svgIcon="chevron-down"></mat-icon>
+          </mat-form-field>
+      </div>
+  </div>
+</div>

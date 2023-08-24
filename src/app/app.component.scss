@@ -5,6 +5,25 @@
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.portal-desktop-embedded {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  gap: 20px;
+  display: flex;
+}
+
+.portal-mobile-embedded {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
 /*** Message-center ***/
 igo-message-center ::ng-deep simple-notifications ::ng-deep div.simple-notification-wrapper {
   right: 10px;
@@ -49,3 +68,65 @@ igo-spinner {
     height: -webkit-fill-available !important;
   }
 }
+
+spinner-with-legend-dialog {
+  position: absolute;
+  top: calc(#{$header-height-mobile} + 4px) !important;
+  right: 345px;
+  z-index: 100;
+}
+
+@media (min-width: 768px){
+  igo-spinner {
+    top: calc(#{$header-height} + 4px)!important;
+    right: 4px;
+    z-index: 100;
+  }
+
+  spinner-with-legend-dialog {
+    top: calc(#{$header-height} + 4px)!important;
+    right: 345px!important;
+    z-index: 100;
+  }
+}
+
+.list {
+  height: fit-content;
+  width: 100%
+}
+
+.filters-and-map-only-desktop {
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 20px;
+}
+
+.filters-and-map-only-desktop .app-portal {
+  width: 100%;
+}
+
+.filters-and-map-only-desktop .app-simple-filters {
+  min-width: 300px;
+  width: 30%;
+}
+
+.filters-and-map-desktop {
+  min-width: 400;
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  height: 100%;
+  gap: 20px;
+  height: fit-content;
+}
+
+.filters-and-map-mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 20px;
+  height: fit-content;
+}
+
+

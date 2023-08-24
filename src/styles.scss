@@ -5,3 +5,16 @@
 .mat-tooltip-trigger {
   touch-action: auto !important;
 }
+
+//warning messages conformes au guide de design - les couleurs de warning et de succès ne se conformaient pas
+.ngx-toastr {
+  border-radius: 0px !important;
+}
+
+.toast-warning{
+  background-color: #E0AD03 !important;
+}
+
+.toast-success{
+  background-color: #4F813D !important;
+}

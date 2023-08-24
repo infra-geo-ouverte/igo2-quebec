@@ -98,6 +98,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
    */
   get map(): IgoMap {
     return this.mapState.map;
+
   }
 
   get featureTitle(): string {

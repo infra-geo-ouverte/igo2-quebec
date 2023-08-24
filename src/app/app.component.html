@@ -1,7 +1,45 @@
 <igo-spinner igoSpinnerActivity></igo-spinner>
 
-<app-header *ngIf="hasHeader" #header></app-header>
+<app-header *ngIf="hasHeader && !useEmbeddedVersion" #header></app-header>
 
-<app-menu *ngIf="hasMenu"></app-menu>
+<app-menu *ngIf="hasMenu && !useEmbeddedVersion"></app-menu>
 
-<app-portal *ngIf="!hasMenu" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>
+<div cdkScrollable *ngIf="useEmbeddedVersion" [ngClass]="isMobile ? 'portal-mobile-embedded': 'portal-desktop-embedded'">
+    <div [ngClass]="isMobile ? 'filters-and-map-mobile' : showSimpleFeatureList ? (showMap || showSimpleFilters ? 'filters-and-map-desktop' : 'filters-and-map-mobile') : 'filters-and-map-only-desktop'">
+
+        <app-simple-filters class="app-simple-filters" *ngIf="showSimpleFilters && workspace"
+        [entitiesAll]="entitiesAll"
+        [entitiesList]="entitiesList"
+        [isMobile]="isMobile"
+        [terrAPITypes]="terrAPITypes"
+        [properties]="properties"
+        [additionalProperties]="additionalProperties"
+        [dataInitialized]="dataInitialized"
+        ></app-simple-filters>
+
+        <app-portal class="app-portal" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'" (workspaceSelected)="setSelectedWorkspace($event)"
+        (mapQueryEvent)="setClickedEntities($event)"
+        [feature]="feature"
+        [additionalProperties]="additionalProperties"
+        [entitiesAll]="entitiesAll"
+        [entitiesList]="entitiesList"
+        [dataInitialized]="dataInitialized"
+        ></app-portal>
+
+    </div>
+    <div class="list">
+        <app-simple-feature-list *ngIf="workspace && showSimpleFeatureList"
+        [entityStore]="workspace.entityStore"
+        [clickedEntities]="clickedEntities"
+        [terrAPITypes]="terrAPITypes"
+        [properties]="properties"
+        [entitiesAll]="entitiesAll"
+        [entitiesList]="entitiesList"
+        [additionalTypes]="additionalTypes"
+        [additionalProperties]="additionalProperties"
+        (listSelection)="onListSelection($event)"
+        ></app-simple-feature-list>
+    </div>
+</div>
+
+<app-portal *ngIf="!hasMenu && !useEmbeddedVersion" [ngClass]="hasHeader? 'portal-hasHeader': 'portal'"></app-portal>

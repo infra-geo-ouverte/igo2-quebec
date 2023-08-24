@@ -1,0 +1,55 @@
+<app-simple-feature-list-header
+  (pageSizeSelected)="onPageSizeSelection($event)"
+  (sortBySelected)="onSortSelection($event)"
+  [activeFilters]="activeFilters"
+  [entitiesList]="selectedEntities ? selectedEntities : entitiesList"
+  [elementsLowerBound]="elementsLowerBound"
+  [elementsUpperBound]="elementsUpperBound"
+  [terrAPITypes]="terrAPITypes"
+  [pageOptions]="pageOptions">
+</app-simple-feature-list-header>
+
+<div class="entities-container" *ngIf="additionalTypes">
+  <p *ngIf="entitiesShown.length === 0" class="no-element">{{'simpleFeatureList.noElement' | translate}}</p>
+    <div *ngFor="let entity of entitiesShown; let i = index" #entity class="entity">
+      <div class="attributes">
+        <ng-container *ngFor="let attribute of attributeOrder">
+          <ng-container *ngIf="validAttribute(attribute)">
+            <div class="attribute">
+              <div>
+                <div class ="description" *ngIf="attribute.description"
+                [ngClass]="attribute.header">
+                {{ attribute.description + " :"}}
+                </div>
+              </div>
+              <div class="info">
+                <div *ngIf="attribute.header === 'title'"
+                class="title"
+                [matTooltip]="'simpleFeatureList.selectEntity' | translate"
+                tooltip-position="below"
+                matTooltipShowDelay="500"
+                [ngClass]="attribute.header"
+                (click)="selectEntity(entity)"
+                [innerHTML]="createAttribute(entity, attribute) | translate">
+                </div>
+                <div *ngIf="(!attribute.header || attribute.header !== 'title')"
+                [ngClass]="attribute.header ? attribute.header : 'standard'"
+                [innerHTML]="createAttribute(entity, attribute) | translate">
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider *ngIf="entitiesShown.length > 0"></mat-divider>
+
+<app-simple-feature-list-paginator *ngIf="simpleFeatureListConfig.paginator"
+  [pageSize]="pageSize"
+  [numberOfPages]="numberOfPages"
+  [showFirstLastPageButtons]="showFirstLastPageButtons"
+  [showPreviousNextPageButtons]="showPreviousNextPageButtons"
+  (pageChange)="onPageChange($event)">
+</app-simple-feature-list-paginator>

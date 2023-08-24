@@ -1,0 +1,81 @@
+.entity, .selectedEntity {
+    border-bottom: 1px solid #C5CAD2;
+    padding: 20px 0px 20px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.selectedEntity {
+    background-color: #f2f1f1;
+}
+
+
+.title {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 5px 0px 5px 0px;
+    color: #095797;
+    margin: 1px 0px 1px 0px;
+    cursor: pointer;
+}
+
+.title:hover {
+    text-decoration: underline;
+}
+
+.standard {
+    font-size: 16px;
+}
+
+.small {
+    font-weight: 100;
+    font-size: 13px;
+}
+
+.attribute, .description {
+    font-family: "Open Sans", sans-serif;
+}
+
+.selectButton, .unselectButton {
+    padding: 0px 16px;
+}
+
+.attributes .attribute {
+    display: flex !important;
+    flex-direction: row;
+    padding: 1.5px 0px 1.5px 0px;
+}
+
+.description {
+    margin-right: 6px;
+    font-weight: 100;
+    width: max-content; //don't let the colon fall onto another line
+}
+
+.info {
+    font-weight: 700;
+}
+
+
+::ng-deep .mat-autocomplete-panel {
+	border-radius: 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+	border-radius: 0px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start {
+	border-radius: 0px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
+	border-radius: 0px !important;
+}
+
+.no-element {
+    background-color: #dae6f0;
+    padding: 24px 32px;
+    font-size: 16px;
+}

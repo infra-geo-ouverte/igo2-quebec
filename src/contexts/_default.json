@@ -3,39 +3,25 @@
   "base": "_base",
   "layers": [
     {
-      "id": "flor",
-      "title": "Habitats floristiques",
-      "showInLayerList": true,
-      "visible": true,
-      "baseLayer": false,
+      "title": "WFS",
+      "id": "dq2",
       "sourceOptions": {
         "type": "wms",
-        "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/environnement.fcgi",
+        "url": "https://geoegl.msp.gouv.qc.ca/apis/wss/complet.fcgi",
         "params": {
-          "layers": "HABITATS_FLORISTIQUES_V",
-          "version": "1.3.0"
+          "layers": "MSP_DIRECTION_REG_COG_P_V"
+        },
+        "urlWFS": "https://geoegl.msp.gouv.qc.ca/apis/wss/complet.fcgi",
+        "paramsWFS": {
+          "featureTypes": "MSP_DIRECTION_REG_COG_P_V",
+          "fieldNameGeometry": "geometry",
+          "outputFormat": "geojson"
         },
         "queryable": true,
-        "queryLayerFeatures": true,
-        "queryTitle": "Habitats floristiques"
-      }
-    },
-    {
-      "id": "mtq",
-      "title": "Établissements MTQ",
-      "showInLayerList": true,
-      "visible": true,
-      "baseLayer": false,
-      "sourceOptions": {
-        "type": "wms",
-        "url": "https://ws.mapserver.transports.gouv.qc.ca/swtq",
-        "params": {
-          "layers": "etablissement_mtq",
-          "version": "1.3.0"
-        },
-        "queryable": true,
-        "queryLayerFeatures": true,
-        "queryTitle": "Établissements MTQ"
+        "queryLayerFeatures": true
+      },
+      "workspace": {
+        "enabled": true
       }
     }
   ]

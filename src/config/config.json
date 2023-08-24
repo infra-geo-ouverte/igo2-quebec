@@ -1,16 +1,65 @@
 {
   "theme": "qcca-theme",
+  "showSearchBar": false,
+  "useEmbeddedVersion": {
+    "layerId": "dq2",
+    "showMap": true,
+    "simpleFilters": {
+      "filters": [
+        {"type": "region", "description": "Région"},
+        {"type": "mrc", "description": "MRC"},
+        {"type": "responsable", "description": "Responsable"},
+        {"type": "arrondissements", "description": "Arrondissement"}
+      ],
+      "uniqueType": "adressebur"
+    },
+    "simpleFeatureList": {
+      "attributeOrder": [
+        {"type": "adressebur", "header": "small"},
+        {"personalizedFormatting": "[label] à [municipalites]", "header": "title"},
+        {"type": "region", "description": "Région", "header": "standard"},
+        {"type": "responsable", "description": "Responsable"},
+        {"type": "telephonebur", "description": "Téléphone"},
+        {"type": "telecopieurbur", "description": "Télécopieur"},
+        {"type": "courriel"},
+        {"type": "arrondissements", "description": "Arrondissement"},
+        {"type": "mrc", "description": "MRC"}
+      ],
+      "sortBy": {
+        "defaultType": "region",
+        "sortOptions": [
+          {"type": "region", "description": "Région"},
+          {"type": "responsable", "description": "Responsable"},
+          {"type": "municipalites", "description": "Municipalité"}
+        ]
+      },
+      "formatURL": true,
+      "formatEmail": true,
+      "paginator": {
+        "pageSizeOptions": [1,5,10,20,50],
+        "pageSize": 10,
+        "showFirstLastPageButtons": true,
+        "showPreviousNextPageButtons": true
+      }
+    }
+  },
+  "searchSources": {
+    "cadastre": {
+      "available": false
+    }
+  },
   "title": "IGO",
   "header": {
     "hasHeader": true,
     "logo": "assets/images/signature-PIV.svg",
     "logoPrint": "assets/images/signature-PIV.svg"
   },
-  "hasMenu": false,
+  "hasMenu": true,
   "hasFooter": true,
   "hasLegendButton": true,
   "legendInPanel": true,
   "showRotationButtonIfNoRotation": true,
+  "hasSideresultButton": true,
   "hasGeolocateButton": true,
   "geolocate": {
     "basic": true,
