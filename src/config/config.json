@@ -6,13 +6,13 @@
     "showMap": true,
     "simpleFilters": {
       "filters": [
-      {"type": "region", "description": "Région"},
-      {"type": "mrc", "description": "MRC"},
-      {"type": "responsable", "description": "Responsable"},
-      {"type": "arrondissements", "description": "Arrondissement"}
-    ],
-    "uniqueType": "adressebur"
-  },
+        {"type": "region", "description": "Région"},
+        {"type": "mrc", "description": "MRC"},
+        {"type": "responsable", "description": "Responsable"},
+        {"type": "arrondissements", "description": "Arrondissement"}
+      ],
+      "uniqueType": "adressebur"
+    },
     "simpleFeatureList": {
       "attributeOrder": [
         {"type": "adressebur", "header": "small"},
