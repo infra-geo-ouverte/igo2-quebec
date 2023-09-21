@@ -43,6 +43,10 @@
       align-items: center;
     }
 
+    @media (max-width: 768px) {
+      align-items: center;
+    }
+
     ul {
       text-align: left;
       flex-wrap: wrap;
@@ -56,11 +60,8 @@
           text-decoration: underline;
           cursor: pointer;
         }
+        font-family: 'Roboto', sans-serif;
       }
-    }
-
-    @include qcca.media-breakpoint-down(mobile) {
-      margin-top: 12px;
     }
 
     @media screen and (min-width: 768px) {
@@ -75,7 +76,10 @@
     @media (min-width: 768px) {
       margin: 0 0 0 60px;
     }
+    font-family: 'Roboto', sans-serif;
   }
+
+
 
   ul li:last-child {
     padding: 0;
