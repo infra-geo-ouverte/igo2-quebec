@@ -1,5 +1,11 @@
-<div mat-dialog-actions><button mat-button mat-icon-button mat-dialog-close class="close"><mat-icon svgIcon = "close"></mat-icon></button></div>
-<h4 mat-dialog-title>{{"legend.title" | translate}}</h4>
+<div class="title-close">
+  <h4 mat-dialog-title>{{ "legend.title" | translate }}</h4>
+  <div mat-dialog-actions>
+    <button mat-icon-button mat-dialog-close class="close" color="primary">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  </div>
+</div>
 
 <igo-layer-legend-list
   [layers]="mapLayersShownInLegend"

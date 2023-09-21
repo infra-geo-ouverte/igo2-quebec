@@ -501,7 +501,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     }
     const myOlFeature = featureToOl(result.data, this.map.projection);
     const olGeometry = myOlFeature.getGeometry();
-    if (featuresAreTooDeepInView(this.map, olGeometry.getExtent() as [number, number, number, number], 0.0025)) {
+    if (featuresAreTooDeepInView(this.map.viewController, olGeometry.getExtent() as [number, number, number, number], 0.0025)) {
       const extent = olGeometry.getExtent();
       const x = extent[0] + (extent[2] - extent[0]) / 2;
       const y = extent[1] + (extent[3] - extent[1]) / 2;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { EntityRecord, EntityStore, EntityStoreFilterCustomFuncStrategy, EntityStoreStrategyFuncOptions } from '@igo2/common';
+import { EntityRecord, EntityStoreFilterCustomFuncStrategy, EntityStoreStrategyFuncOptions, EntityStoreWithStrategy } from '@igo2/common';
 import { ConfigService, StorageService } from '@igo2/core';
 import { SearchResult, SearchSourceService, SearchSource, CommonVectorStyleOptions } from '@igo2/geo';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -34,7 +34,7 @@ export class SearchState {
   /**
    * Store that holds the search results
    */
-  readonly store: EntityStore<SearchResult> = new EntityStore<SearchResult>([]);
+  readonly store: EntityStoreWithStrategy<SearchResult> = new EntityStoreWithStrategy<SearchResult>([]);
 
   /**
    * Search types currently enabled in the search source service

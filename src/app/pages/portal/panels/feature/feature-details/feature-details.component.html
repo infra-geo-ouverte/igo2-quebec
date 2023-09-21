@@ -1,52 +1,47 @@
 
 <div class="flextable" role="table" class="igo-striped table-container" *ngIf="ready && feature && feature.properties">
-  
-
-    <div *ngFor="let property of filterFeatureProperties(feature) | keyvalue" title={{property.key}}>
-
-      <div class="table-row">
-        <div *ngIf="feature.properties.target === '_blank' && property.key === 'url'" class="key flex-row" role="rowheader">
-          <mat-icon mat-list-avatar svgIcon="{{icon}}"></mat-icon>
-        </div>
+  <div *ngFor="let property of filterFeatureProperties(feature) | keyvalue" title="{{ property.key }}">
+    <div class="table-row">
+      <div *ngIf="feature.properties.target === '_blank' && property.key === 'url'" class="key flex-row" role="rowheader">
+        <mat-icon mat-list-avatar svgIcon="{{ icon }}"></mat-icon>
+      </div>
       
-        <div *ngIf="feature.properties.target === '_blank' && property.key === 'url'" class="key flex-row" role="rowheader">
-          <a href="{{property.value}}" target='_blank' rel="noopener noreferrer"> {{ 'igo.geo.targetHtmlUrl' | translate }} {{title}}</a>
+      <div *ngIf="feature.properties.target === '_blank' && property.key === 'url'" class="key flex-row" role="rowheader">
+        <a href="{{ property.value }}" target='_blank' rel="noopener noreferrer"> {{ 'igo.geo.targetHtmlUrl' | translate }} {{ title }}</a>
           <button class="copyClipboard" mat-icon-button (click)="copyTextToClipboard(property.value)">
             <mat-icon svgIcon="content-copy"></mat-icon>
           </button>
-        </div>
-
-        <div id="keyValue" *ngIf="feature.properties.target === undefined" class="key flex-row" role="rowheader">
-          {{property.key}}
-        </div>
-
-        <div *ngIf="feature.properties.target === undefined && !isObject(property.value) && !isUrl(property.value) && !isEmbeddedLink(property.value)" [innerHTML]="property.value"
-          class="value flex-row" role="cell">
-        </div>
-
-        <div *ngIf="feature.properties.target === undefined && isEmbeddedLink(property.value)"
-          class="value flex-row" role="cell">
-          <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ getEmbeddedLinkText(property.value) }}</u>
-        </div>
-
-        <div *ngIf="feature.properties.target === undefined && !isObject(property.value) && (isDoc(property.value) || isUrl(property.value)) && !isImg(property.value)"
-          class="value flex-row" role="cell">
-          <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ 'igo.geo.targetHtmlUrl' | translate }}</u>
-          <button class="copyClipboard" mat-icon-button (click)="copyTextToClipboard(property.value)">
-            <mat-icon svgIcon="content-copy"></mat-icon>
-          </button>
-        </div>
-
-        <div *ngIf="feature.properties.target === undefined && !isObject(property.value) && isUrl(property.value) && isImg(property.value)"
-          class="value flex-row" role="cell">
-          <a href="{{property.value}}" target='_blank' (click)="openSecureUrl(property.value)" rel="noopener noreferrer">
-            <img igoImageError src="{{(property.value | secureImage) | async}}" width="225" height="auto">
-          </a>
-        </div>
-
-        <div *ngIf="feature.properties.target === undefined && isObject(property.value)" [innerHTML]="property.value | json" class="value flex-row" role="cell">
-        </div>
       </div>
 
+      <div id="keyValue" *ngIf="feature.properties.target === undefined" class="key flex-row" role="rowheader">
+        {{ property.key }}
+      </div>
+
+      <div *ngIf="feature.properties.target === undefined && !isObject(property.value) && !isUrl(property.value) && !isEmbeddedLink(property.value)" [innerHTML]="property.value"
+        class="value flex-row" role="cell">
+      </div>
+
+      <div *ngIf="feature.properties.target === undefined && isEmbeddedLink(property.value)"
+        class="value flex-row" role="cell">
+        <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ getEmbeddedLinkText(property.value) }}</u>
+      </div>
+
+      <div *ngIf="feature.properties.target === undefined && !isObject(property.value) && (isDoc(property.value) || isUrl(property.value)) && !isImg(property.value)"
+        class="value flex-row" role="cell">
+        <u [ngStyle]="{'cursor': 'pointer', 'color': 'blue'}" (click)="openSecureUrl(property.value)">{{ 'igo.geo.targetHtmlUrl' | translate }}</u>
+        <button class="copyClipboard" mat-icon-button (click)="copyTextToClipboard(property.value)">
+          <mat-icon svgIcon="content-copy"></mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="feature.properties.target === undefined && !isObject(property.value) && isUrl(property.value) && isImg(property.value)"
+        class="value flex-row" role="cell">
+        <a href="{{ property.value }}" target='_blank' (click)="openSecureUrl(property.value)" rel="noopener noreferrer">
+          <img igoImageError src="{{ (property.value | secureImage) | async }}" width="225" height="auto">
+        </a>
+      </div>
+
+      <div *ngIf="feature.properties.target === undefined && isObject(property.value)" [innerHTML]="property.value | json" class="value flex-row" role="cell"></div>
     </div>
   </div>
+</div>

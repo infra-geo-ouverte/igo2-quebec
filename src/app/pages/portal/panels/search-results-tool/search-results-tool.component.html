@@ -1,13 +1,11 @@
-<igo-flexible
-  *ngIf="store && (store.stateView.empty$ | async)===false"
-  #topPanel
+<igo-flexible *ngIf="store && (store.stateView.empty$ | async) === false" #topPanel
   initial="100%"
   initialMobile="100%"
   collapsed="calc(100% - 58px)"
   collapsedMobile="calc(100% - 58px)"
   expanded="60%"
   expandedMobile="60%"
-  [state]="(feature$ | async) ? topPanelState : 'initial'">
+  [state]="(feature$ | async) ? topPanelState : 'initial'">
 
   <div class="igo-content">
     <igo-search-results
@@ -24,13 +22,11 @@
       (resultMouseleave)="onResultUnfocus($event)"
       (moreResults)="onSearch($event)">
       <ng-template #igoSearchItemToolbar let-result="result">
-        <igo-search-add-button
-          *ngIf(addFeaturetoLayer)
+        <igo-search-add-button *ngIf(addFeaturetoLayer)
           [map]="map"
           [layer]="result">
         </igo-search-add-button>
       </ng-template>
     </igo-search-results>
   </div>
-
 </igo-flexible>

@@ -277,11 +277,11 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
             selectedResult.data,
             this.map.projection
           );
-          const selectedOlFeatureExtent = computeOlFeaturesExtent(this.map, [
+          const selectedOlFeatureExtent = computeOlFeaturesExtent([
             selectedOlFeature
-          ]);
+          ], this.map.viewProjection);
           this.isSelectedResultOutOfView$.next(
-            featuresAreOutOfView(this.map, selectedOlFeatureExtent)
+            featuresAreOutOfView(this.map.getExtent(), selectedOlFeatureExtent)
           );
         }
       });
@@ -299,7 +299,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
     }
     const myOlFeature = featureToOl(result.data, this.map.projection);
     const olGeometry = myOlFeature.getGeometry();
-    if (featuresAreTooDeepInView(this.map, olGeometry.getExtent() as [number, number, number, number], 0.0025)) {
+    if (featuresAreTooDeepInView(this.map.viewController, olGeometry.getExtent() as [number, number, number, number], 0.0025)) {
       const extent = olGeometry.getExtent();
       const x = extent[0] + (extent[2] - extent[0]) / 2;
       const y = extent[1] + (extent[3] - extent[1]) / 2;
@@ -415,7 +415,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.store.state.get(result).selected === true) {
+    if (this.store.state.get(result).selected) {
       this.featureSelected.emit();
       const feature = this.map.searchResultsOverlay.dataSource.ol.getFeatureById(result.meta.id);
       if (feature) {
@@ -516,7 +516,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
         dataProjection: this.feature.projection,
         featureProjection: this.map.projection
       });
-      moveToOlFeatures(this.map, [localOlFeature], FeatureMotion.Zoom);
+      moveToOlFeatures(this.map.viewController, [localOlFeature], FeatureMotion.Zoom);
     }
   }
 

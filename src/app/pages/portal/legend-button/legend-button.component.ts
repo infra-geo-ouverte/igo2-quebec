@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LanguageService } from '@igo2/core';
 import { LegendDialogComponent } from '../legend-dialog/legend-dialog.component';
@@ -8,25 +8,22 @@ import { LegendDialogComponent } from '../legend-dialog/legend-dialog.component'
   templateUrl: './legend-button.component.html',
   styleUrls: ['./legend-button.component.scss']
 })
-export class LegendButtonComponent {
-
-  public dialogRef = null;
-
-  public legendButtonTooltip: unknown;
-
-  @Output() toggleLegend = new EventEmitter<boolean>();
-
+export class LegendButtonComponent implements OnInit {
+  @Output() legendToggled = new EventEmitter<boolean>();
   @Input() tooltipDisabled: boolean;
-
   @Input() legendInPanel: boolean;
-
   @Input() mobile: boolean;
 
-  constructor(public dialog: MatDialog, protected languageService: LanguageService) {
+  public dialogRef = null;
+  public legendButtonTooltip: unknown;
+
+  constructor(public dialog: MatDialog, protected languageService: LanguageService) {}
+
+  ngOnInit() {
     this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
   }
 
-  toggleLegendButton(): void {
+  toggleLegend(): void {
     if (!this.legendInPanel && !this.mobile){
       const dialogOpened = this.dialog.getDialogById('legend-dialog-container');
       if (!dialogOpened) {
@@ -41,6 +38,6 @@ export class LegendButtonComponent {
         this.dialogRef.close();
       }
     }
-      this.toggleLegend.emit();
+      this.legendToggled.emit();
   }
 }

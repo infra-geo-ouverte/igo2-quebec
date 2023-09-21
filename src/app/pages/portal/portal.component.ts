@@ -890,7 +890,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
                   featureProjection: this.map.projection
                 })
               );
-            const totalExtent = computeOlFeaturesExtent(this.map, searchResultsOlFeatures);
+            const totalExtent = computeOlFeaturesExtent(searchResultsOlFeatures, this.map.viewProjection);
             this.map.viewController.zoomToExtent(totalExtent);
           });
       }
