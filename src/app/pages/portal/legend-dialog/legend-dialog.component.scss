@@ -44,12 +44,6 @@
       width: max-content !important;
     }
 
-    @media (min-width: 768px) {
-      max-height: calc(
-        100% - #{$header-height} - #{$footer-height} - 180px
-      ) !important; //TODO : Inject the dialog in the portal then add config hasHeader, hasMenu and hasFooter
-      height: fit-content;
-    }
   }
 
   ::ng-deep app-legend-dialog {
@@ -107,5 +101,14 @@
       padding: 0;
       min-height: auto;
     }
+  }
+
+  .title-close {
+    h4 {
+      margin-top: 8px!important;
+    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

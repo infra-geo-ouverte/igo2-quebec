@@ -10,20 +10,12 @@
 
 .title {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 
-.title h4{
-    display: block;
-    text-align: center;
-}
-
-.title button {
-  float: right;
-  width: 24px;
-  height: 24px;
-  margin-left: auto;
+h4 {
+  margin-top: 8px!important;
 }
 
 app-feature-details {

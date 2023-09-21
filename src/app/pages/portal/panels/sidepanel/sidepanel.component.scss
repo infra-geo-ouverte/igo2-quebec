@@ -10,10 +10,6 @@
     height: $app-sidenav-height;
     width: $app-sidenav-width;
 
-    @include mobile {
-      width: $app-sidenav-width-mobile;
-      max-width: 400px;
-    }
     overflow: visible;
   }
 
@@ -24,25 +20,6 @@
   .app-content,
   igo-panel {
     height: 100%;
-  }
-
-  app-sidepanel {
-    width: $app-sidenav-width;
-
-    ::ng-deep .mat-drawer-inner-container {
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-      &::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px #dae6f0;
-        border-radius: 10px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: #095797;
-        border-radius: 10px;
-        cursor: pointer; // I wish it worked out
-      }
-    }
   }
 
   igo-search-results {
@@ -135,5 +112,13 @@
     border-style: solid !important;
     border-color: transparent transparent transparent white !important;
     transform: rotate(180deg);
+  }
+
+  .legend-container {
+    padding: 16px;
+  }
+
+  .title {
+    margin-top: 8px!important;
   }
 }
