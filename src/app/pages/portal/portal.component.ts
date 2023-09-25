@@ -165,7 +165,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public homeZoom: number;
   @ViewChild('searchbar') searchBar: SearchBarComponent;
 
-  public dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
+  public dialogOpened = this.dialog.getDialogById('legendDialog');
 
   get map(): IgoMap {
     return this.mapState.map;

@@ -26,11 +26,11 @@ export class LegendButtonComponent {
 
   toggleLegendButton(): void {
     if (!this.legendInPanel && !this.mobile){
-      const dialogOpened = this.dialog.getDialogById('legend-dialog-container');
+      const dialogOpened = this.dialog.getDialogById('legendDialog');
       if (!dialogOpened) {
         this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
         this.dialogRef = this.dialog.open(LegendDialogComponent, {
-          id: 'legend-dialog-container',
+          id: 'legendDialog',
           hasBackdrop: false,
           closeOnNavigation: true
         });
