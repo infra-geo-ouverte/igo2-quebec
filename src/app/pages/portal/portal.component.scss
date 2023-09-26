@@ -386,8 +386,8 @@ igo-zoom-button {
 @media (min-width: 768px){
 
   ::ng-deep #legendDialog {
-    top: $top-legend-dialog-hasHeader; // see portal variables $top-legend-dialog
-    max-height: calc($portal-height-hasFooter-hasHeader - $map-buttons-height); // see portal variables to replace $map-buttons-height-xxxx
+    top: $top-legend-dialog-hasHeader-hasMenu!important; // see portal variables $top-legend-dialog
+    max-height: calc($portal-height-hasFooter-hasHeader-hasMenu - $map-buttons-height)!important; // see portal variables to replace $map-buttons-height-xxxx
   }
 
 }
