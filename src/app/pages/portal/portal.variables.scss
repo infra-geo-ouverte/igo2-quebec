@@ -9,6 +9,8 @@ $menu-height-mobile: 40px;
 $header-height: 72px;
 $header-height-mobile: 72px;
 $footer-height: 29px;
+$search-bar-height: 60px;
+$map-buttons-height: 188px;
 
 $portal-height-hasHeader-mobile: calc( 100% - #{$header-height-mobile});
 $portal-height-hasFooter-hasHeader-mobile: calc( 100% - #{$footer-height} - #{$header-height-mobile} );
@@ -18,9 +20,15 @@ $portal-height-hasMenu-mobile: calc( 100% - #{$menu-height-mobile});
 $portal-height-hasFooter: calc( 100% - #{$footer-height} );
 $portal-height-hasHeader: calc( 100% - #{$header-height});
 $portal-height-hasMenu: calc( 100% - #{$menu-height});
+$portal-height-hasFooter-hasMenu: calc( 100% - #{$menu-height} - #{$footer-height});
 $portal-height-hasMenu-hasHeader: calc( 100% - #{$header-height} - #{$menu-height} );
 $portal-height-hasFooter-hasHeader: calc( 100% - #{$footer-height} - #{$header-height} );
 $portal-height-hasFooter-hasHeader-hasMenu: calc( 100% - #{$footer-height} - #{$header-height} - #{$menu-height} );
+
+$top-legend-dialog: 4px;
+$top-legend-dialog-hasHeader: calc($header-height + 4px);
+$top-legend-dialog-hasHeader-hasMenu: calc( $header-height + $menu-height + 4px);
+$top-legend-dialog-hasMenu: calc( $menu-height + 4px);
 
 $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
 $search-bar-left: $igo-icon-size;
@@ -35,7 +43,7 @@ $app-footer-height: 48px;
 $app-mobile-min-space-right: 40px;
 
 $app-sidenav-margin-top: 60px;
-$app-sidenav-height: calc(100% - #{$footer-height} - 4px);
+$app-sidenav-height: calc(100% - #{$footer-height});
 $app-sidenav-content-height: calc(100% - #{$app-sidenav-margin-top} - #{$footer-height});
 $app-sidenav-width: 400px;
 $app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});

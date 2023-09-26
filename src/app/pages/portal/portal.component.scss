@@ -11,6 +11,42 @@ mat-icon.disabled {
   color: rgba(0, 0, 0, 0.38);
 }
 
+
+/*** Layer toggle ***/
+.layer-toggle {
+  display: flex;
+  flex-flow: column;
+  position: absolute;
+  z-index: 1002!important;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.layer-toggle-desktop {
+  top: calc(4 * $igo-margin);
+  right: 8px;
+}
+
+.layer-toggle-mobile {
+  top: calc(2 * $igo-margin);
+  right: 50%;
+  transform: translate(50%);
+  ::ng-deep .layer-toggles-title {
+    font-size: 14px;
+  }
+  ::ng-deep .layer-toggle-title {
+    font-size: 14px;
+  }
+  ::ng-deep .button-group {
+    transform: scale(0.9);
+  }
+  ::ng-deep .qcca-theme mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-label-content {
+    font-size: 12px;
+  }
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 8px 8px;
+  }
+}
+
 /*** Sidenav ***/
 mat-sidenav-container {
   height: 100%;
@@ -36,7 +72,7 @@ igo-search-bar {
   background-color: $app-background-color;
   font-size: 16px;
   position: absolute;
-  top: calc(4 * #{$igo-margin});
+  top: calc(4 * $igo-margin);
   z-index: 4;
   height: $igo-icon-size;
   margin: 0 $igo-margin;
@@ -55,8 +91,14 @@ igo-search-bar, igo-search-results igo-list, .baselayers {
   left: $portal-left!important;
 }
 
+::ng-deep .igo-search-bar-container .mat-icon {
+  fill: #FFFFFF;
+}
+
+// Mobile pushed elements
+
 ::ng-deep .baselayers-pushed {
-  left: calc(#{$app-sidenav-width} + 4px)!important;
+  left: calc($app-sidenav-width + 4px)!important;
   animation-duration: 3s;
   visibility: visible;
   opacity: 1;
@@ -66,13 +108,21 @@ igo-search-bar, igo-search-results igo-list, .baselayers {
   animation-fill-mode: forwards;
 }
 
-.igo-baselayers-switcher-mobile {
+.igo-baselayers-switcher-mobile, ::ng-deep .ol-scale-line {
   bottom: 48px!important;
-  left: 4px;
+  z-index: 1;
 }
 
 .igo-baselayers-switcher-mobile {
-  bottom: 48px!important;
+  left: 4px;
+}
+
+::ng-deep .ol-scale-line {
+  left: 88px!important; // baselayers-switcher is 80px width
+}
+
+.igo-baselayers-switcher {
+  z-index: 1;
 }
 
 ::ng-deep igo-search-bar {
@@ -151,11 +201,11 @@ igo-search-bar svg {
 }
 
 /** search bar mobile **/
-app-bottomresult {
+app-bottompanel {
   position: fixed;
   display: block;
   bottom: 0;
-  z-index: 100;
+  z-index: 9999;
 }
 
 
@@ -168,6 +218,7 @@ igo-map-browser {
 }
 
 igo-map-browser ::ng-deep .ol-attribution {
+  display: none;
   left: 50px;
   bottom: $igo-margin;
   text-align: left;
@@ -220,6 +271,7 @@ igo-map-browser.toast-offset-attribution
   ::ng-deep
   .ol-attribution {
   @include mobile {
+    display: none;
     bottom: 50px;
   }
 }
@@ -236,9 +288,6 @@ igo-map-browser.toast-offset-attribution
 ::ng-deep div.ol-scale-line {
   position: absolute!important;
   display: block;
-  top: 20px!important;
-  bottom: unset;
-  left: 10px!important;
   background: unset!important;
   color: black;
   z-index: 5!important;
@@ -283,7 +332,6 @@ igo-map-browser.toast-offset-attribution
 .map-buttons-mobile {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5px;
   z-index: 10;
   position: absolute;
   bottom: 48px!important;
@@ -291,18 +339,18 @@ igo-map-browser.toast-offset-attribution
   right: 4px;
 }
 
-.igo-zoom-button-container, button, app-legend-button, igo-zoom-button, igo-offline-button, igo-geolocate-button, igo-home-extent-button, #app-legend-button-dialog, mat-dialog-container app-legend-button-dialog, app-legend-button-dialog {
+.igo-zoom-button-container, button, app-legend-button, igo-rotation-button, igo-zoom-button, igo-offline-button, igo-geolocate-button, igo-home-extent-button {
   margin-top: 4px !important;
   position: unset !important;
   bottom: unset !important;
   margin-left: auto;
   align-self: flex-end;
   margin-top: auto;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
-// all buttons become raised
-::ng-deep igo-zoom-button {
-  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+::ng-deep app-legend-button button .mat-button-focus-overlay { // trick to prevent the button to stay focused when legend closes form sidepanel
+  opacity: 0 !important;
 }
 
 igo-zoom-button {
@@ -311,21 +359,36 @@ igo-zoom-button {
   }
 }
 
+// info-bulle arrows from panels
+::ng-deep .sidepanel .tooltip-chart::after {
+    content: ''!important;
+    position: absolute!important;
+    top: 18%!important;
+    right: 100%!important;
+    margin-top: -5px!important;
+    border-width: 10px!important;
+    border-style: solid!important;
+    border-color: transparent transparent transparent white!important;
+    transform: rotate(180deg);
+  }
+
+::ng-deep .sidepanel {
+    position: absolute!important;
+    height: 100%;
+  }
+
 //** ADJUSTMENTS TO FOOTER AND HEADER **//
 
 ::ng-deep .map-hasfooter {
-  height: calc( 100% - #{$footer-height} )!important;
-}
-
-::ng-deep #legend-button-dialog-container {
-  top: calc( #{$header-height-mobile} + 4px); 
-  max-height: calc(100% - #{$header-height-mobile} - #{$footer-height} - 100px);
+  height: calc( 100% - $footer-height)!important;
 }
 
 @media (min-width: 768px){
 
-  ::ng-deep #legend-button-dialog-container {
-    top: calc( #{$header-height} + 4px); 
-    max-height: calc(100% - #{$header-height} - #{$footer-height} - 180px);
+  ::ng-deep #legendDialog {
+    top: $top-legend-dialog-hasHeader; // see portal variables $top-legend-dialog
+    max-height: calc($portal-height-hasFooter-hasHeader - $map-buttons-height); // see portal variables to replace $map-buttons-height-xxxx
   }
+
 }
+

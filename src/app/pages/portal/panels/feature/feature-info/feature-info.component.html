@@ -1,0 +1,37 @@
+<ng-container
+  *ngIf= "(store.entities$ | async)"
+  class = "featureInfo"
+  (keydown)= "handleKeyboardEvent($event)">
+  <span class= "title">
+
+    <h4 color="primary" (click)= "onTitleClick()" style="cursor:pointer;">{{title}}</h4>
+
+    <button
+      class="clear-button"
+      mat-icon-button
+      igoStopPropagation
+      (click)= "clearButton()"
+      [matTooltip]= "('feature.close'| translate)"
+      color="primary">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+
+  </span>
+
+
+    <app-feature-details
+      *ngIf= "resultSelected$.value && !customFeatureDetails"
+      [mobile]= "mobile"
+      [feature]= "resultSelected$.value.data"
+      [mapQueryClick]= "mapQueryClick">
+    </app-feature-details>
+
+    <app-feature-details-custom
+      *ngIf= "resultSelected$.value && customFeatureDetails "
+      [mobile]= "mobile"
+      [feature]= "resultSelected$.value.data"
+      (mapQuery) ="mapQueryFromFeatureDetails($event)"
+      [mapQueryClick]= "mapQueryClick">
+    </app-feature-details-custom>
+
+</ng-container>

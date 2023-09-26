@@ -30,8 +30,7 @@
               "src/assets",
               "src/config",
               "src/contexts",
-              "src/locale",
-              "src/particular/locale",
+              "src/locale"
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/common/assets/",
@@ -224,7 +223,7 @@
         }
       }
     },
-    "igo2-e2e": {
+    "igo2-quebec-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {

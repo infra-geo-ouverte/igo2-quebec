@@ -108,12 +108,12 @@ $ npm install
 # changements de code ne sont pas recompilées.
 # Pour corriger ceci, désactiver la cache avec la variable d'environnement NG_BUILD_CACHE = "false"
 $ npm start
-# Ouvrir un navigateur http://localhost:4201/
+# Ouvrir un navigateur http://localhost:4202/
 
 # Build prod
 $ npm run build.prod
 $ npm run serve.prod
-# Ouvrir un navigateur http://localhost:4201/
+# Ouvrir un navigateur http://localhost:4202/
 
 # Générer l'api de documentation
 $ npm run doc
@@ -205,12 +205,12 @@ $ npm install
 # code changes are not recompiled.
 # To fix this, disable the cache with the environment variable NG_BUILD_CACHE = "false"
 $ npm start
-# Open your browser at http://localhost:4201/
+# Open your browser at http://localhost:4202/
 
 # Build prod
 $ npm run build.prod
 $ npm run serve.prod
-# Open your browser at http://localhost:4201/
+# Open your browser at http://localhost:4202/
 
 # Doc API generation
 $ npm run doc

@@ -6,7 +6,7 @@ export class IgoPage {
   }
 
   getNavigatorDiv() {
-    return element(by.css('app-portal'));
+    return element(by.css('app-root'));
   }
 
 }

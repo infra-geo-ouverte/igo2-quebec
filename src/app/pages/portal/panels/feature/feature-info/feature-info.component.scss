@@ -1,0 +1,34 @@
+@import '../../../portal.variables';
+
+:host {
+
+  @include mobile {
+    width: 100%;
+    overflow-x: clip;
+  }
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title h4{
+    display: block;
+    text-align: center;
+}
+
+.title button {
+  float: right;
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+}
+
+app-feature-details {
+  float: left;
+  width: 100%;
+  overflow-x: clip;
+  margin-right: 8px;
+}
