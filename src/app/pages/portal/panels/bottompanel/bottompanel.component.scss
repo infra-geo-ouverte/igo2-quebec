@@ -40,22 +40,6 @@ igo-search-bar {
   overflow-x: clip;
   height: 264px; // expanded panel height
   max-width: 100%;
-  scrollbar-color: #095797 #fff; //firefox
-  scrollbar-width: thin; //firefox
-}
-
-::ng-deep app-bottompanel .mat-expansion-panel-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-::ng-deep app-bottompanel .mat-expansion-panel-content::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px #DAE6F0; 
-  border-radius: 10px;
-}
-
-::ng-deep app-bottompanel .mat-expansion-panel-content::-webkit-scrollbar-thumb {
-  background: #095797; 
-  border-radius: 10px;
 }
 
 ::ng-deep .igo-search-bar-container .mat-icon {
@@ -89,7 +73,7 @@ app-feature-info {
 
 // Legend
 
-.mat-icon, mat-button-wrapper, .mat-icon-button .mat-icon, .mat-icon-button {
+.mat-icon, mat-button-wrapper, .mat-mdc-icon-button .mat-icon, .mat-icon-button {
   line-height: 26px;
   height: 24px;
   width: 24px;

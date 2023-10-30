@@ -158,8 +158,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
           return;
         }
         const selectedOlFeature = featureToOl(selectedResult.data, this.map.projection);
-        const selectedOlFeatureExtent = computeOlFeaturesExtent(this.map, [selectedOlFeature]);
-        this.isSelectedResultOutOfView$.next(featuresAreOutOfView(this.map, selectedOlFeatureExtent));
+        const selectedOlFeatureExtent = computeOlFeaturesExtent([selectedOlFeature], this.map.viewProjection);
+        this.isSelectedResultOutOfView$.next(featuresAreOutOfView(this.map.getExtent(), selectedOlFeatureExtent));
       });
   }
 

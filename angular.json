@@ -30,7 +30,7 @@
               "src/assets",
               "src/config",
               "src/contexts",
-              "src/locale"
+              "src/locale",
               {
                 "glob": "**/*",
                 "input": "./node_modules/@igo2/common/assets/",

@@ -28,11 +28,11 @@
       <stop
          style="stop-color:#ff0000;stop-opacity:1;"
          offset="0"
-         id="stop4495" />
+         id="stop4495"/>
       <stop
          style="stop-color:#ff0000;stop-opacity:0;"
          offset="1"
-         id="stop4497" />
+         id="stop4497"/>
     </linearGradient>
   </defs>
   <sodipodi:namedview
@@ -65,7 +65,7 @@
        type="xygrid"
        id="grid4183"
        originx="-7.2850736"
-       originy="-97.806425" />
+       originy="-97.806425"/>
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -74,7 +74,7 @@
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
         <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
@@ -84,7 +84,7 @@
      id="layer2"
      inkscape:label="layers"
      style="display:inline"
-     transform="translate(-7.2850736,-176.57933)" />
+     transform="translate(-7.2850736,-176.57933)"/>
   <g
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
@@ -111,7 +111,7 @@
                  inkscape:connector-curvature="0"
                  d="m 213.30042,16.216216 c -76.851,0 -139.373997,62.522 -139.373997,139.372004 0,58.794 33.957997,119.799 62.444997,160.622 14.292,20.479 30.477,40.41 45.572,56.114 22.725,23.642 28.994,23.642 31.355,23.642 2.44,0 7.521,0 30.006,-23.671 15.253,-16.058 31.473,-35.962 45.672,-56.05 29.059,-41.106 63.693,-102.347 63.693,-160.657 0.003,-76.850004 -62.519,-139.372004 -139.369,-139.372004 z m 0,240.078004 c -54.037,0 -97.841,-43.805 -97.841,-97.84 0,-54.035 43.804,-97.840004 97.841,-97.840004 54.036,0 97.839,43.805004 97.839,97.840004 0,54.035 -43.803,97.84 -97.839,97.84 z"
                  id="path4148"
-                 style="fill:#006bb6;fill-opacity:1;stroke:none;stroke-opacity:1" />
+                 style="fill:#006bb6;fill-opacity:1;stroke:none;stroke-opacity:1"/>
             </g>
           </g>
         </g>
@@ -119,101 +119,101 @@
     </g>
     <g
        id="g4150"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4152"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4154"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4156"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4158"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4160"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4162"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4164"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4166"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4168"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4170"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4172"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4174"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4176"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4178"
-       transform="translate(29.978611,120.36915)" />
+       transform="translate(29.978611,120.36915)"/>
     <g
        id="g4281"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4283"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4285"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4287"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4289"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4291"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4293"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4295"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4297"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4299"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4301"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4303"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4305"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4307"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <g
        id="g4309"
-       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)" />
+       transform="matrix(22.592454,-2.1853495,18.778802,15.922344,137.24863,107.66636)"/>
     <ellipse
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.82420325;stroke-miterlimit:3.0999999;stroke-dasharray:none;stroke-opacity:1"
        id="path4491"
        cx="369.06311"
        cy="504.27527"
        rx="187.70378"
-       ry="207.35857" />
+       ry="207.35857"/>
   </g>
   <g
      inkscape:groupmode="layer"

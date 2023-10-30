@@ -68,34 +68,34 @@
       <div *ngIf="mobile" id="scaleLine"></div>
 
         <igo-baselayers-switcher
-          [ngClass]="mobile? ['igo-baselayers-switcher-mobile'] : (panelOpenState? ['baselayers-pushed'] : ['baselayers'])"
+          [ngClass]="mobile ? (!hasFooter ? 'igo-baselayers-switcher-mobile footer-mobile-offset' : 'igo-baselayers-switcher-mobile') : (panelOpenState ? 'baselayers-pushed' : 'baselayers')"
           [map]="map"
           [useStaticIcon]="getBaseLayersUseStaticIcon()">
         </igo-baselayers-switcher>
 
         <div id="map-buttons"
-        [ngClass]="mobile? ['map-buttons-mobile'] : ['map-buttons']">
+          [ngClass]="!hasFooter ? (mobile ? 'map-buttons-mobile footer-mobile-offset' : 'map-buttons') : (mobile ? 'map-buttons-mobile' : 'map-buttons')">
           <igo-geolocate-button *ngIf="hasGeolocateButton" [map]="map" color="primary"></igo-geolocate-button>
           <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
           <igo-rotation-button [showIfNoRotation]="showRotationButtonIfNoRotation" [map]="map" color="primary"></igo-rotation-button>
-          <app-legend-button *ngIf= "hasLegendButton" (toggleLegend)= "toggleLegend()" [legendInPanel]= "legendInPanel" [tooltipDisabled]="mobile" [legendButtonTooltip]="legendButtonTooltip" color= "primary"></app-legend-button>
+          <app-legend-button *ngIf="hasLegendButton" (legendToggled)="toggleLegend()" [legendInPanel]="legendInPanel" [tooltipDisabled]="mobile" [legendButtonTooltip]="legendButtonTooltip" color="primary"></app-legend-button>
         </div>
 
         <app-bottompanel
-          *ngIf= "mobile"
-          [mobile]= "mobile"
-          [store]= "searchStore"
-          [searchInit]= "searchInit"
-          [mapQueryClick]= "mapQueryClick"
-          [legendPanelOpened]= "legendPanelOpened"
-          [panelOpenState]= "panelOpenState"
-          (panelOpened)= "panelOpened($event)"
-          (mapQuery)= "mapQuery($event)"
-          (closeQuery)= "closePanelOnCloseQuery()"
-          (closeLegend)= "closePanelLegend()"
-          (openLegend)= "openPanelLegend()"
-          (toggleLegend)= "togglePanelLegend()"
-          [layers]= "mapLayersShownInLegend">
+          *ngIf="mobile"
+          [mobile]="mobile"
+          [store]="searchStore"
+          [searchInit]="searchInit"
+          [mapQueryClick]="mapQueryClick"
+          [legendPanelOpened]="legendPanelOpened"
+          [panelOpenState]="panelOpenState"
+          (panelOpened)="panelOpened($event)"
+          (mapQuery)="mapQuery($event)"
+          (closeQuery)="closePanelOnCloseQuery()"
+          (closeLegend)="closePanelLegend()"
+          (openLegend)="openPanelLegend()"
+          (toggleLegend)="togglePanelLegend()"
+          [layers]="mapLayersShownInLegend">
         </app-bottompanel>
     </igo-map-browser>
 

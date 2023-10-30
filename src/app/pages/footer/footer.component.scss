@@ -1,6 +1,7 @@
 @import '../portal/portal.variables.scss';
 
-.order2 {
+:host {
+  .order2 {
     order: 2;
     margin-right: 0.5%;
     margin-left: 140px;
@@ -10,9 +11,9 @@
     margin-left: 140px;
     text-align: right !important;
     width: 100%;
-}
+  }
 
-.footer-right {
+  .footer-right {
     z-index: 666;
     background: #ffffffa3;
     font-size: 0.7rem;
@@ -20,41 +21,34 @@
     height: $footer-height;
     display: flex;
     margin-left: auto;
-}
+  }
 
-span.footer-text {
+  span.footer-text {
     color: #095797;
     align-self: center;
     margin-left: 0.5rem;
-}
+  }
 
-span.footer-text a{
+  span.footer-text a {
     color: #095797;
     text-decoration: none;
-}
+  }
 
-::ng-deep .map-hasFooter {
-    height: calc( 100% - #{$footer-height} ) !important;
-}
+  ::ng-deep .map-hasFooter {
+    height: calc(100% - #{$footer-height}) !important;
+  }
 
-// scale
-
-::ng-deep .ol-scale-line-inner {
+  ::ng-deep .ol-scale-line-inner {
     border: 1px solid black;
     color: black;
     border-top: none;
     order: 1;
   }
-  
-  ::ng-deep div.ol-scale-line {
-    position: fixed!important;
-    display: flex;
-    flex-direction: row;
-    top: unset!important;
-    left: 10px!important;
-    bottom: 3px!important;
-    background: unset!important;
-    color: black;
-    z-index: 5!important;
-    transform: unset!important;
+
+  ::ng-deep .ol-scale-line {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-left: 12px;
   }
+}

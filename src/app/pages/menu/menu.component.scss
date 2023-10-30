@@ -1,94 +1,134 @@
+@use 'sass:map';
+@use '@igo2/core/theming/prebuilt-themes/qcca';
 @import '../portal/portal.variables.scss';
 
-  .navbar {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    flex-direction: row;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
-    height: $menu-height-mobile;
-    width: 100%;
-    margin: 0 auto 0 auto;
-    padding: 0;
-  }
+:host {
+  ::ng-deep {
+    .navbar {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0;
 
-  .nav-link {
-    display: block;
-    padding: 0 2rem;
-    text-decoration: none;
-    font-family: "Open sans", sans-serif;
-    margin-right: 0.4rem;
-    padding: 0 0 1.6rem 0;
-  }
+      ::-webkit-scrollbar {
+        display: none;
+      }
 
-  a.nav-link {
-    color: #fff;
-    text-decoration: none;
-    letter-spacing: 0;
-    font-size: 1.1rem;
-    padding: 0 0.5rem 0rem!important;
-  }
+      @media (min-width: 768px) {
+        a:focus,
+        a.active {
+          padding-bottom: calc(1rem - 4px) !important;
+        }
+      }
+    }
 
-  a.nav-link:focus, a.nav-link.active {
-    content: "";
-    display: block;
-    margin: 0;
-    border-bottom: 4px solid #c5cad2;
-    padding-bottom: calc(0.6rem - 4px);
-  }
+    .navbar-nav {
+      padding-bottom: 0;
+    }
 
-  .active {
-    font-weight: 600!important;
-  }
+    .nav-item {
+      margin-bottom: 0;
+      line-height: initial;
+      margin-right: 0.4rem;
+    }
 
-  .main-nav {
-    display: block;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    width: 85%;
-    margin: 0 auto;
+    .nav-link {
+      display: block;
+      text-decoration: none;
+      color: qcca.$light-primary-text;
+      letter-spacing: 0;
+      font-size: 18px;
+      line-height: 28px;
+
+      &.active {
+        color: qcca.$light-primary-text !important;
+        font-weight: bold;
+        display: inline-block;
+        margin: 0;
+        border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+        padding-bottom: 12px;
+      }
+
+      @media (max-width: 576px) {
+        font-size: 14px;
+        line-height: 20px;
+        padding: 0 8px 8px 8px !important;
+      }
+    }
+
+    .nav-arrow {
+      z-index: 500;
+      position: absolute;
+      transition: opacity 0.5s ease;
+      // height: 48px;
+      // width: 60px;
+      color: qcca.$accent;
+
+      &__right-button {
+        @media (max-width: 575.98px) {
+          right: 0;
+          margin-right: -16px;
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            qcca.$blue-dark 55%,
+            qcca.$blue-dark 100%
+          );
+        }
+      }
+      // background-color: map.get(qcca.$palette, 900);
+
+      &__left-button {
+        @media (max-width: 575.98px) {
+          left: 0;
+          margin-left: -16px;
+          background: linear-gradient(
+            to left,
+            rgba(255, 255, 255, 0) 0%,
+            qcca.$blue-dark 55%,
+            qcca.$blue-dark 100%
+          );
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        align-items: center;
+        opacity: 1;
+        bottom: 0;
+        padding: 0;
+        pointer-events: auto;
+      }
+    }
   }
 
   .headline {
-    //background-color: #223654;
+    background-color: qcca.colors-get(blue, dark);
     padding: 0;
+
+    .row {
+      min-height: 72px;
+    }
   }
 
-// Responsive menu
+  div.slick-track {
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+  }
 
-div.slick-track {
-  overflow-x: auto;
-  white-space: nowrap;
-  display: flex;
-}
+  .right {
+    right: 0;
+    padding: 5px 5px 5px 15px !important;
+  }
 
-.navbar ::-webkit-scrollbar {
-  display: none;
-}
+  .left {
+    left: 0;
+    padding: 5px 15px 5px 5px !important;
+  }
 
-.nav-arrow {
-  color: #f09686!important;;
-  font-weight: 1000;
-  position: absolute;
-  z-index: 100;
-  background-color: #223654c5;
-  margin: 0;
-  bottom: 5px;
-}
-
-.right {
-  right: 0;
-  padding: 5px 5px 5px 15px!important
-}
-
-.left {
-  left: 0;
-  padding: 5px 15px 5px 5px!important
-}
-
-  @media (min-width: 400px){
+  @media (min-width: 400px) {
     .nav-arrow {
       display: none;
     }
@@ -97,17 +137,4 @@ div.slick-track {
       width: 98%;
     }
   }
-
-  @media (min-width: 768px){
-    .navbar {
-      height: $menu-height;
-    }
-
-    .navbar a {
-      padding: 1rem 1.2rem !important;
-    }
-
-    .navbar a:focus, .navbar a.active {
-      padding-bottom: calc(1rem - 4px)!important;
-    }
-  }
+}

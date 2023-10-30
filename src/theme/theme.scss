@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '@igo2/core/theming/prebuilt-themes/qcca-theme';
+@use '../app/app.theming' as app;
+
+@include app.themes(qcca-theme.$theme);
+
+igo-rotation-button,
+igo-zoom-button button,
+igo-offline-button,
+igo-home-extent-button,
+igo-baselayers-switcher,
+igo-geolocate-button {
+  @include mat.elevation(2);
+}

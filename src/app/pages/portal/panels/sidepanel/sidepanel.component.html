@@ -1,22 +1,27 @@
 <div id="sidepanel" class="sidepanel">
-  <mat-sidenav 
-    #sidenav
+  <mat-sidenav #sidenav
     mode="side"
     [autoFocus]="false"
     [(opened)]="panelOpenState"
-    (closed)= "closePanelLegend()"
+    (closed)="closePanelLegend()"
     (closeLegend)="closePanelLegend()">
-
     <div #content class="app-sidenav-content">
-
-      <div id="legend" *ngIf="legendPanelOpened" [mapQueryClick]="mapQueryClick" [legendPanelOpened]="legendPanelOpened" [panelOpenState]="panelOpenState" >
-        <button
-          mat-icon-button
-          [matTooltip]="'legend.close' | translate"
-          color="primary"
-          (click)="closePanelLegend()"><mat-icon svgIcon="close"></mat-icon>
-        </button>
-        <h4 mat-dialog-title>{{ 'legend.title' | translate }}</h4>
+      <div *ngIf="legendPanelOpened"
+        id="legend"
+        class="legend-container"
+        [mapQueryClick]="mapQueryClick"
+        [legendPanelOpened]="legendPanelOpened"
+        [panelOpenState]="panelOpenState">
+        <div class="flex justify-content-space-between align-items-center">
+          <h4 class="title" mat-dialog-title>{{ 'legend.title' | translate }}</h4>
+          <button
+            mat-icon-button
+            [matTooltip]="'legend.close' | translate"
+            color="primary"
+            (click)="closePanelLegend()">
+            <mat-icon svgIcon="close"></mat-icon>
+          </button>
+        </div>
         <igo-layer-legend-list
           [layers]="mapLayersShownInLegend"
           [excludeBaseLayers]="true"
@@ -27,60 +32,55 @@
         </igo-layer-legend-list>
       </div>
 
-      <div style="margin: 24px;" *ngIf="!searchInit && (queryStore.empty$ | async)===true && !legendPanelOpened">
-        <section class="mat-typography">
-          <h5><strong>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</strong></h5>
-          <h6><strong>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</strong></h6>
+      <div *ngIf="!searchInit && (queryStore.empty$ | async) && !legendPanelOpened"
+        style="margin:24px">
+        <section>
+          <h5>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</h5>
+          <h6>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</h6>
           <p [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"></p>
-      </section>
+        </section>
       </div>
 
-      <div #getInfo *ngIf="mapQueryClick">
-
+      <div *ngIf="mapQueryClick" #getInfo>
         <app-feature-info
           [map]="map"
           [mobile]="mobile"
           [store]="queryStore"
           [mapQueryClick]="mapQueryClick"
           (closeQuery)="closePanelOnCloseQuery()"
-          (clearSearchbarterm)="$event"
-          (panelOpened)= "panelOpenedFromFeature($event)"
-          (mapQuery)= "mapQueryFromFeature($event)"
+          (clearSearchbarterm)="($event)"
+          (panelOpened)="panelOpenedFromFeature($event)"
+          (mapQuery)="mapQueryFromFeature($event)"
           [title]="featureTitle"
           [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
         </app-feature-info>
-
       </div>
 
-      <div #search *ngIf="searchInit">
-        <app-search-results-tool 
-          #searchresults
+      <div *ngIf="searchInit" #search>
+        <app-search-results-tool #searchresults
           [showIcons]="true"
           placeholder="false"
           [mapQueryClick]="mapQueryClick"
           [legendPanelOpened]="legendPanelOpened"
           [panelOpenState]="panelOpenState"
-          [searchInit]="searchInit"
-          >
+          [searchInit]="searchInit">
         </app-search-results-tool>
-    </div></div>
-
+      </div>
+    </div>
   </mat-sidenav>
-  <button
-    [ngClass]="sidenav.opened ? 'sidepanel-opened' : 'sidepanel-closed'"
-    #sidenavbutton
-    mat-raised-button
-    color="primary"
-    id="sidepanel-button"
-    isRoundButton=false
-    isIconButton=true
-    MatDrawerMode="push"
-    [matTooltip]="sidenav.opened ? ('sidePanel.close' | translate) : 'sidePanel.open' | translate"
-    matTooltipPosition="after"
-    (click)="sidenav.toggle()">
-    <mat-icon
-      class="icon"
-      [svgIcon]="sidenav.opened ? 'chevron-left' : 'chevron-right'">
-    </mat-icon>
-  </button>
+  <div
+    class="sidepanel-button-container"
+    [ngClass]="sidenav.opened ? 'sidepanel-opened' : 'sidepanel-closed'">
+    <button
+      mat-mini-fab
+      color="primary"
+      [matTooltip]="sidenav.opened ? ('sidePanel.close' | translate) : ('sidePanel.open' | translate)"
+      matTooltipPosition="after"
+      (click)="sidenav.toggle()">
+      <mat-icon
+        class="icon"
+        [svgIcon]="sidenav.opened ? 'chevron-left' : 'chevron-right'">
+      </mat-icon>
+    </button>
+  </div>
 </div>

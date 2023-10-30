@@ -1,51 +1,43 @@
-@import '../../node_modules/@igo2/core/style/partial/core.variables';
+@import '@igo2/core/style/partial/core.variables';
 @import './pages/portal/portal.variables.scss';
-
-:host {
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-}
-
-/*** Message-center ***/
-igo-message-center ::ng-deep simple-notifications ::ng-deep div.simple-notification-wrapper {
-  right: 10px;
-}
-
-/*** header-menu overlay adjustment ***/
 
 $header-height: 72px;
 $header-height-mobile: 72px;
 $footer-height: 29px;
 
-::ng-deep .portal-hasHeader {
-  height: $portal-height-hasHeader-mobile !important;
-  display: block;
-}
-
-::ng-deep .portal {
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
   height: 100%;
-}
 
-@media (min-width: 768px){
-
+  igo-message-center
+    ::ng-deep
+    simple-notifications
+    ::ng-deep
+    div.simple-notification-wrapper {
+    right: 10px;
+  }
   ::ng-deep .portal-hasHeader {
-    height: $portal-height-hasHeader !important;
+    height: $portal-height-hasHeader-mobile !important;
     display: block;
   }
 
-}
+  ::ng-deep .portal {
+    height: 100%;
+  }
 
-igo-spinner {
-  position: absolute;
-  top: 50% !important;
-  right: 50% ;
-  z-index: 100;
-}
+  @media (min-width: 768px) {
+    ::ng-deep .portal-hasHeader {
+      height: $portal-height-hasHeader !important;
+      display: block;
+    }
+  }
 
-::ng-deep .mat-tooltip-hide { display: none!important; } // temporary fix (https://github.com/angular/components/issues/24614)
-
-::ng-deep .mat-form-field-suffix {
-  ::ng-deep mat-icon  {
-    width: auto !important;
-    height: -webkit-fill-available !important;
+  igo-spinner {
+    position: absolute;
+    top: 50% !important;
+    right: 50%;
+    z-index: 100;
   }
 }

@@ -7,7 +7,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription, BehaviorSubject, of, skip } from 'rxjs';
+import { Subscription, BehaviorSubject, of, skip, Observable } from 'rxjs';
 import { debounceTime, take, skipWhile, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as olProj from 'ol/proj';
@@ -15,7 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { AuthOptions, AuthService } from '@igo2/auth';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { ObjectUtils } from '@igo2/utils';
 
 import {
@@ -69,7 +69,6 @@ import {
   featureToSearchResult,
   QueryService,
   Layer,
-  MapService,
   SearchBarComponent
   } from '@igo2/geo';
 
@@ -78,12 +77,9 @@ import {
   WorkspaceState,
   QueryState,
   ContextState,
-  DirectionState
 } from '@igo2/integration';
 
 import { SearchState } from './panels/search-results-tool/search.state';
-
-import { PwaService } from '../../services/pwa.service';
 
 import {
   controlsAnimations, controlSlideX, controlSlideY
@@ -109,10 +105,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
   public workspaceEntitySortChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private workspaceMaximize$$: Subscription[] = [];
-  readonly workspaceMaximize$: BehaviorSubject<boolean> = new BehaviorSubject(
-    this.storageService.get('workspaceMaximize') as boolean
-  );
-  public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(undefined);;
+  readonly workspaceMaximize$: BehaviorSubject<boolean>;
+  public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(undefined);
   public hasSideSearch = true;
   public showSearchBar = true;
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
@@ -134,7 +128,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   };
   public workspaceMenuClass = 'workspace-menu';
 
-  public fullExtent = this.storageService.get('fullExtent') as boolean;
+  public fullExtent: boolean;
 
   public matDialogRef$ = new BehaviorSubject<MatDialogRef<any>>(undefined);
   public searchBarTerm = '';
@@ -151,8 +145,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private contextLoaded = false;
   private context$$: Subscription;
-  private openPanels$$: Subscription;
-  private sidenavMediaAndOrientation$$: Subscription;
   private searchTerm$$: Subscription;
 
   public igoSearchPointerSummaryEnabled: boolean;
@@ -165,7 +157,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public homeZoom: number;
   @ViewChild('searchbar') searchBar: SearchBarComponent;
 
-  public dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
+  public dialogOpened: MatDialogRef<unknown>;
 
   get map(): IgoMap {
     return this.mapState.map;
@@ -247,7 +239,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   public mapLayersShownInLegend: Layer[];
   public legendInPanel: boolean;
-  public legendButtonTooltip = this.languageService.translate.instant('legend.open');
+  public legendButtonTooltip: unknown;
+
+  readonly breakpoint$: Observable<BreakpointState>;
 
   constructor(
     private route: ActivatedRoute,
@@ -259,7 +253,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     public capabilitiesService: CapabilitiesService,
     private contextState: ContextState,
     private mapState: MapState,
-    private mapService: MapService,
     private searchState: SearchState,
     private queryState: QueryState,
     private searchSourceService: SearchSourceService,
@@ -270,13 +263,23 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private messageService: MessageService,
     public dialogWindow: MatDialog,
     private storageService: StorageService,
-    private directionState: DirectionState,
     public dialog: MatDialog,
     public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
-    private pwaService: PwaService,
     private analyticsService: AnalyticsService
   ) {
+    this.workspaceMaximize$ = new BehaviorSubject(
+      this.storageService.get('workspaceMaximize') as boolean
+    );
+    this.fullExtent = this.storageService.get('fullExtent') as boolean;
+    this.dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
+    this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
+    this.breakpoint$ = this.breakpointObserver
+    .observe(this.mobileBreakPoint)
+    .pipe(
+      tap(() => {}),
+      distinctUntilChanged()
+    );
       this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
         this.configService.getConfig('hasFooter');
       this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
@@ -445,13 +448,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.mobile = true;
     }
   }
-
-  readonly breakpoint$ = this.breakpointObserver
-  .observe(this.mobileBreakPoint)
-  .pipe(
-    tap(() => {}),
-    distinctUntilChanged()
-  );
 
   /*
   private initSW() {
@@ -894,7 +890,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
                   featureProjection: this.map.projection
                 })
               );
-            const totalExtent = computeOlFeaturesExtent(this.map, searchResultsOlFeatures);
+            const totalExtent = computeOlFeaturesExtent(searchResultsOlFeatures, this.map.viewProjection);
             this.map.viewController.zoomToExtent(totalExtent);
           });
       }

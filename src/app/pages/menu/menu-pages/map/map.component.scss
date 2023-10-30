@@ -1,33 +1,6 @@
 @import '../../../portal/portal.variables.scss';
 
-
-/*** header-footer-menu position adjustments ***/
-
-::ng-deep .portal-hasMenu {
-  height: $portal-height-hasMenu-mobile !important;
-}
-
-::ng-deep .portal-hasHeader-hasMenu {
-  height: $portal-height-hasMenu-hasHeader-mobile !important;
-}
-
-::ng-deep #legend-button-dialog-container {
-  top: calc( #{$header-height-mobile} + #{$menu-height-mobile} + 4px)!important; 
-  max-height: calc(100% - #{$header-height-mobile} - #{$menu-height-mobile} - #{$footer-height} - 100px)!important;
-}
-
-@media (min-width: 768px){
-
-  ::ng-deep .portal-hasMenu {
-    height: $portal-height-hasMenu !important;
-  }
-  
-  ::ng-deep .portal-hasHeader-hasMenu {
-    height: $portal-height-hasMenu-hasHeader !important;
-  }
-
-  ::ng-deep #legend-button-dialog-container {
-    top: calc( #{$header-height} + #{$menu-height} + 4px)!important; 
-    max-height: calc(100% - #{$header-height} - #{$menu-height} - #{$footer-height} - 180px)!important;
-  }
+:host {
+  width: 100%;
+  height: 100%;
 }

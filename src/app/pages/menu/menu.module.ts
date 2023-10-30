@@ -5,10 +5,11 @@ import { HomeComponent } from './menu-pages/home/home.component';
 import { MenuRoutingModule } from './menu-routing/menu-routing.module';
 import { AboutComponent } from './menu-pages/about/about.component';
 import { MapComponent } from './menu-pages/map/map.component';
-import { HeaderModule } from '../header/header.module';
 import { FooterModule } from '../footer/footer.module';
 import { PortalModule } from '../portal';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     MenuComponent,
@@ -18,9 +19,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   ],
   imports: [
     CommonModule,
+    MatButtonModule,
+    MatIconModule,
     MenuRoutingModule,
     PortalModule,
-    HeaderModule,
     FooterModule,
     MatToolbarModule
   ],

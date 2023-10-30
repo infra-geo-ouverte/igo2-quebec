@@ -7,17 +7,13 @@ import { ConfigService, LanguageService } from '@igo2/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-
   public headerLogo: string;
   public headerLogoPrint: string;
 
   constructor(
     private configService: ConfigService,
-    protected languageService: LanguageService) {
-      this.computeHeader();
-    }
-
-  computeHeader() {
+    protected languageService: LanguageService
+  ) {
     this.headerLogo = this.configService.getConfig('header.logo');
     this.headerLogoPrint = this.configService.getConfig('header.logoPrint');
   }
@@ -30,5 +26,4 @@ export class HeaderComponent {
       this.languageService.setLanguage('fr');
     }
   }*/
-
 }

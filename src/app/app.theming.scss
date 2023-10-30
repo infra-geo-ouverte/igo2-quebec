@@ -1,3 +1,5 @@
-@mixin app-theming($theme) {
-  @include app-portal-theming($theme);
+@use './pages/portal/portal.theming' as portal;
+
+@mixin themes($theme) {
+  @include portal.themes($theme);
 }

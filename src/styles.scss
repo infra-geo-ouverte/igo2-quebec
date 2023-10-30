@@ -1,7 +1,36 @@
-@import 'style/reset.scss';
-@import 'style/theme.scss';
-@import './qcca-theme/qcca-theme.scss';
+@use '@igo2/core/all-style';
+@use '@igo2/core/layout' as igo-layout;
+@use 'style/layout';
 
-.mat-tooltip-trigger {
-  touch-action: auto !important;
+@use 'theme/theme.scss';
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  cursor: pointer;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+ul,
+ol {
+  padding: 2px 1rem;
+}
+
+// Fit Linearicons with the mat-icon
+mat-icon.lnr {
+  font-size: 18px;
+  line-height: 24px;
 }
