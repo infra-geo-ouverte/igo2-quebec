@@ -164,7 +164,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   get auth(): AuthOptions {
-    return this.configService.getConfig('auth') || [];
+    return this.configService.getConfig('auth');
   }
 
   isMobile(): boolean {
