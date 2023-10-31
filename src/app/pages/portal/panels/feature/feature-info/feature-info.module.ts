@@ -8,6 +8,7 @@ import { IgoLanguageModule } from '@igo2/core';
 import { IgoSearchResultsModule } from '@igo2/geo';
 import { IgoFeatureModule } from '../feature.module';
 import { FeatureInfoComponent } from './feature-info.component';
+import { IgoFeatureModule as IgoFeatureModules } from '@igo2/geo';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { FeatureInfoComponent } from './feature-info.component';
     IgoLanguageModule,
     IgoStopPropagationModule,
     IgoFeatureModule,
-    IgoSearchResultsModule
+    IgoSearchResultsModule,
+    IgoFeatureModules
   ],
   exports: [FeatureInfoComponent],
   declarations: [FeatureInfoComponent]

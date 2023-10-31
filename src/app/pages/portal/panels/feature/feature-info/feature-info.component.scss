@@ -18,9 +18,44 @@ h4 {
   margin-top: 8px!important;
 }
 
-app-feature-details {
+/*app-feature-details {
   float: left;
   width: 100%;
   overflow-x: clip;
   margin-right: 8px;
+}*/
+
+
+igo-feature-details {
+  ::ng-deep table {
+    margin: 2em auto;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    tbody {
+      tr:nth-child(odd) {
+        background-color: #fff !important;
+      }
+      tr {
+        border-bottom: 1px solid #DAE6F0;
+        td {
+          font: normal 16px/24px 'Open Sans', sans-serif;
+          color: #223654;
+          margin-top: 4px;
+          margin-bottom: 4px;
+          text-align: left;
+          width: 62% !important;
+          padding: 0.5em !important;
+        }
+        td:first-child {
+          font-weight: bold;
+          margin-bottom: 8px;
+          width: 38% !important;
+        }
+      }
+      tr:hover {
+        cursor: pointer;
+        background-color: #DAE6F0 !important;
+      }
+    }
+  }
 }

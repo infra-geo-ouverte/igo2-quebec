@@ -15,11 +15,11 @@
     </button>
   </div>
 
-  <app-feature-details *ngIf="resultSelected$.value && !customFeatureDetails"
+  <!--app-feature-details *ngIf="resultSelected$.value && !customFeatureDetails"
     [mobile]="mobile"
     [feature]="resultSelected$.value.data"
     [mapQueryClick]="mapQueryClick">
-  </app-feature-details>
+  </app-feature-details-->
 
   <app-feature-details-custom *ngIf="resultSelected$.value && customFeatureDetails"
     [mobile]="mobile"
@@ -27,4 +27,9 @@
     (mapQuery)="mapQueryFromFeatureDetails($event)"
     [mapQueryClick]="mapQueryClick">
   </app-feature-details-custom>
+
+  <igo-feature-details *ngIf="resultSelected$.value && !customFeatureDetails"
+        [map]="map"
+        [feature]="resultSelected$.value.data">
+  </igo-feature-details>
 </ng-container>
