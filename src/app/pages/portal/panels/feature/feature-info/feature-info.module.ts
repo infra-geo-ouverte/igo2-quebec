@@ -6,9 +6,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IgoStopPropagationModule } from '@igo2/common';
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoSearchResultsModule } from '@igo2/geo';
-import { IgoFeatureModule } from '../feature.module';
+import { AppFeatureModule } from '../feature.module';
 import { FeatureInfoComponent } from './feature-info.component';
-import { IgoFeatureModule as IgoFeatureModules } from '@igo2/geo';
+import { IgoFeatureModule } from '@igo2/geo';
 
 @NgModule({
   imports: [
@@ -18,9 +18,9 @@ import { IgoFeatureModule as IgoFeatureModules } from '@igo2/geo';
     MatTooltipModule,
     IgoLanguageModule,
     IgoStopPropagationModule,
-    IgoFeatureModule,
+    AppFeatureModule,
     IgoSearchResultsModule,
-    IgoFeatureModules
+    IgoFeatureModule
   ],
   exports: [FeatureInfoComponent],
   declarations: [FeatureInfoComponent]

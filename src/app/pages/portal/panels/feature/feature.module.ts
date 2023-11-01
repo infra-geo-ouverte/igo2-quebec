@@ -15,4 +15,4 @@ import { IgoFeatureFormModule } from '@igo2/geo';
   declarations: [],
   providers: []
 })
-export class IgoFeatureModule {}
+export class AppFeatureModule {}

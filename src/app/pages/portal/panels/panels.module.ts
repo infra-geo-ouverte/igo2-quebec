@@ -11,7 +11,7 @@ import {MatExpansionModule} from '@angular/material/expansion'; // mobile
 import { IgoLanguageModule } from '@igo2/core';
 import { IgoMessageModule } from '@igo2/core';
 import { AppFeatureInfoModule} from './feature/feature-info/feature-info.module';
-import { IgoFeatureModule } from './feature/feature.module';
+import { AppFeatureModule } from './feature/feature.module';
 import { IgoFeatureDetailsModule} from './feature/feature-details/feature-details.module';
 
 import {
@@ -55,7 +55,7 @@ import { BottomPanelComponent } from './bottompanel/bottompanel.component';
     IgoAppSearchResultsToolModule,
     MatExpansionModule,
     AppFeatureInfoModule,
-    IgoFeatureModule,
+    AppFeatureModule,
     IgoFeatureDetailsModule,
     IgoLayerModule,
     IgoSearchResultsModule
