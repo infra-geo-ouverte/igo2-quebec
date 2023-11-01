@@ -19,7 +19,7 @@ import { TooltipPosition } from '@angular/material/tooltip';
 import { getEntityTitle } from '@igo2/common';
 
 @Component({
-  selector: 'app-feature-details-custom',
+  selector: 'app-feature-custom-details',
   templateUrl: './feature-custom-details.component.html',
   styleUrls: ['./feature-custom-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

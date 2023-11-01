@@ -20,11 +20,11 @@
         [feature]="resultSelected$.value.data">
   </igo-feature-details>
 
-  <app-feature-details-custom *ngIf="resultSelected$.value && customFeatureDetails"
+  <app-feature-custom-details *ngIf="resultSelected$.value && customFeatureDetails"
     [mobile]="mobile"
     [feature]="resultSelected$.value.data"
     (mapQuery)="mapQueryFromFeatureDetails($event)"
     [mapQueryClick]="mapQueryClick">
-  </app-feature-details-custom>
+  </app-feature-custom-details>
 
 </ng-container>
