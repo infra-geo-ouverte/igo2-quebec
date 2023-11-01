@@ -6,7 +6,7 @@ import { IgoLanguageModule } from '@igo2/core';
 import { IgoKeyValueModule, IgoImageModule } from '@igo2/common';
 import { RouterModule } from '@angular/router';
 
-import { FeatureDetailsCustomComponent } from './feature-details-custom.component';
+import { FeatureCustomDetailsComponent } from './feature-custom-details.component';
 
 /**
  * @ignore
@@ -22,10 +22,10 @@ import { FeatureDetailsCustomComponent } from './feature-details-custom.componen
     MatTooltipModule
   ],
   exports: [
-    FeatureDetailsCustomComponent,
+    FeatureCustomDetailsComponent,
   ],
   declarations: [
-    FeatureDetailsCustomComponent,
+    FeatureCustomDetailsComponent,
   ]
 })
-export class IgoFeatureDetailsModule {}
+export class FeatureCustomDetailsModule {}

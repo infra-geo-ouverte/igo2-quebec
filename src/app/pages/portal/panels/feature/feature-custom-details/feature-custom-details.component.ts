@@ -20,12 +20,12 @@ import { getEntityTitle } from '@igo2/common';
 
 @Component({
   selector: 'app-feature-details-custom',
-  templateUrl: './feature-details-custom.component.html',
-  styleUrls: ['./feature-details-custom.component.scss'],
+  templateUrl: './feature-custom-details.component.html',
+  styleUrls: ['./feature-custom-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class FeatureDetailsCustomComponent implements OnDestroy, OnInit {
+export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   private state: ConnectionState;
   private unsubscribe$ = new Subject<void>();
 
