@@ -11,20 +11,21 @@ import {
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NetworkService, ConnectionState, MessageService } from '@igo2/core';
+import { NetworkService, ConnectionState, LanguageService, MessageService } from '@igo2/core';
 import { ConfigService } from '@igo2/core';
 import { SearchSource, IgoMap, Feature } from '@igo2/geo';
 import { HttpClient } from '@angular/common/http';
-import { Clipboard } from '@igo2/utils';
+import { TooltipPosition } from '@angular/material/tooltip';
+import { getEntityTitle } from '@igo2/common';
 
 @Component({
-  selector: 'app-feature-details',
-  templateUrl: './feature-details.component.html',
-  styleUrls: ['./feature-details.component.scss'],
+  selector: 'app-feature-custom-details',
+  templateUrl: './feature-custom-details.component.html',
+  styleUrls: ['./feature-custom-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class FeatureDetailsComponent implements OnDestroy, OnInit {
+export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   private state: ConnectionState;
   private unsubscribe$ = new Subject<void>();
 
@@ -49,9 +50,23 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
     this.selectFeature.emit();
   }
 
-  @Input() mobile: boolean;
-  @Input() mapQueryClick: boolean;
-  @Output() mapQuery = new EventEmitter<boolean>();
+  @Input()
+  get mobile(): boolean {
+    return this._mobile;
+  }
+  set mobile(value: boolean) {
+    this._mobile = value;
+  }
+  private _mobile: boolean;
+
+  @Input()
+  get mapQueryClick(): boolean {
+    return this._mapQueryClick;
+  }
+  set mapQueryClick(value: boolean) {
+    this._mapQueryClick = value;
+  }
+  private _mapQueryClick: boolean;
 
   private _feature: Feature;
   private _source: SearchSource;
@@ -59,13 +74,15 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   @Output() selectFeature = new EventEmitter<boolean>();
 
-  public title: string;
+  @Input()
+  matTooltipPosition: TooltipPosition;
 
   public ready : boolean;
 
   constructor(
     private cdRef: ChangeDetectorRef,
     private networkService: NetworkService,
+    private languageService: LanguageService,
     private configService: ConfigService,
     private http: HttpClient,
     private messageService: MessageService,
@@ -77,11 +94,10 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.ready = true;
-    this.title = this.feature.properties.value;
   }
 
   ngOnDestroy() {
-    this.mapQuery.emit(false);
+    this.mapQueryClick = false;
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -90,9 +106,20 @@ export class FeatureDetailsComponent implements OnDestroy, OnInit {
     return reading.toString().replace(".", ",");
   }
 
+  tooltipPosition(){
+    if (this.mobile) {
+      this.matTooltipPosition = 'above';
+    } else {
+      this.matTooltipPosition = 'right';
+    }
+  }
+
     /**
    * @internal
    */
+    get title(): string {
+      return getEntityTitle(this.feature);
+    }
 
   isObject(value) {
     return typeof value === 'object';
@@ -181,7 +208,6 @@ filterFeatureProperties(feature) {
   const allowedFieldsAndAlias = feature.meta ? feature.meta.alias : undefined;
   this.featureTitle = feature.meta ? feature.meta.title : undefined; // will define the feature info title in the panel
   const properties = {};
-  let offlineButtonState;
 
   if (feature.properties && feature.properties.Route) {
     delete feature.properties.Route;
@@ -192,27 +218,6 @@ filterFeatureProperties(feature) {
       properties[allowedFieldsAndAlias[field]] = feature.properties[field];
     });
     return properties;
-    } else if (offlineButtonState !== undefined) {
-      if (!offlineButtonState) {
-        if (this.state.connection && feature.meta && feature.meta.excludeAttribute) {
-          const excludeAttribute = feature.meta.excludeAttribute;
-          excludeAttribute.forEach(attribute => {
-            delete feature.properties[attribute];
-          });
-        } else if (!this.state.connection && feature.meta && feature.meta.excludeAttributeOffline) {
-          const excludeAttributeOffline = feature.meta.excludeAttributeOffline;
-          excludeAttributeOffline.forEach(attribute => {
-            delete feature.properties[attribute];
-          });
-        }
-      } else {
-        if (feature.meta && feature.meta.excludeAttributeOffline) {
-          const excludeAttributeOffline = feature.meta.excludeAttributeOffline;
-          excludeAttributeOffline.forEach(attribute => {
-            delete feature.properties[attribute];
-          });
-        }
-      }
     } else {
       if (this.state.connection && feature.meta && feature.meta.excludeAttribute) {
         const excludeAttribute = feature.meta.excludeAttribute;
@@ -226,18 +231,7 @@ filterFeatureProperties(feature) {
         });
       }
     }
-
     return feature.properties;
   }
-
-    /**
-   * Copy the url to a clipboard
-   */
-    copyTextToClipboard(value: string): void {
-      const successful = Clipboard.copy(value);
-      if (successful) {
-        this.messageService.success('igo.geo.query.link.message');
-      }
-    }
 
 }

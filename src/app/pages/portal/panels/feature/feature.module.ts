@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { IgoFeatureDetailsModule } from './feature-details/feature-details.module';
+import { FeatureCustomDetailsModule } from './feature-custom-details/feature-custom-details.module';
 import { IgoFeatureFormModule } from '@igo2/geo';
 
 @NgModule({
@@ -9,10 +9,10 @@ import { IgoFeatureFormModule } from '@igo2/geo';
     CommonModule
   ],
   exports: [
-    IgoFeatureDetailsModule,
+    FeatureCustomDetailsModule,
     IgoFeatureFormModule
   ],
   declarations: [],
   providers: []
 })
-export class IgoFeatureModule {}
+export class AppFeatureModule {}
