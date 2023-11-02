@@ -38,4 +38,4 @@ import { SearchResultsToolComponent } from './search-results-tool.component';
   exports: [SearchResultsToolComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class IgoAppSearchResultsToolModule {}
+export class AppSearchResultsToolModule {}
