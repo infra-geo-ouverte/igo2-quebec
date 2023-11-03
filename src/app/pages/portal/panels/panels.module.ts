@@ -1,5 +1,5 @@
 import { IgoAppSearchModule } from '@igo2/integration';
-import { IgoAppSearchResultsToolModule } from './search-results-tool/search-results-tool.module';
+import { AppSearchResultsToolModule } from './search-results-tool/search-results-tool.module';
 import { MatCardModule } from '@angular/material/card';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -53,7 +53,7 @@ import { BottomPanelComponent } from './bottompanel/bottompanel.component';
     IgoContextMenuModule,
     IgoAppSearchModule,
     IgoSearchModule.forRoot(),
-    IgoAppSearchResultsToolModule,
+    AppSearchResultsToolModule,
     MatExpansionModule,
     AppFeatureInfoModule,
     AppFeatureModule,
