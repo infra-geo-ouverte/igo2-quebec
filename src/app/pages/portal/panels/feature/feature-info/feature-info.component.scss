@@ -27,14 +27,14 @@
 }
 
 app-feature-details {
-  float: left;
+  display: flex;
   width: 100%;
   overflow-x: clip;
   margin-right: 8px;
 }
 
 app-feature-details-custom {
-  float: left;
+  display: flex;
   width: 100%;
   overflow-x: clip;
   margin-right: 8px;
