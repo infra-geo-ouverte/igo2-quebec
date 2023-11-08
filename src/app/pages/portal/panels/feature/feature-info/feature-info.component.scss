@@ -32,3 +32,12 @@ app-feature-details {
   overflow-x: clip;
   margin-right: 8px;
 }
+
+app-feature-details-custom {
+  float: left;
+  width: 100%;
+  overflow-x: clip;
+  margin-right: 8px;
+  width: calc(100% - 30px);
+  margin-top: -28px;
+}
