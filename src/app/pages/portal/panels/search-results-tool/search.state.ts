@@ -49,36 +49,36 @@ export class SearchState {
     private searchSourceService: SearchSourceService,
     private storageService: StorageService,
     private configService: ConfigService) {
-      this.searchOverlayStyle = {
-        markerColor: '#45D7E6', // marker fill
-        markerOpacity: 0.8, // marker opacity not applied if a rgba markerColor is provided
-        markerOutlineColor: '#ffffff', // marker contour
-        fillColor: 'transparent', // poly
-        fillOpacity: 0, // poly fill opacity not applied if a rgba fillColor is provided
-        strokeColor: '#45D7E6', // line and poly
-        strokeOpacity: 0.7, // line and poly not applied if a rgba strokeColor is provided
-        strokeWidth: 4 // line and poly
-      };
-      this.searchOverlayStyleSelection = {
-        markerColor: '#45D7E6', // marker fill
-        markerOpacity: 1, // marker opacity not applied if a rgba markerColor is provided
-        markerOutlineColor: '#ffffff', // marker contour
-        fillColor: 'transparent', // poly
-        fillOpacity: 0, // poly fill opacity not applied if a rgba fillColor is provided
-        strokeColor: '#45D7E6', // line and poly
-        strokeOpacity: 1, // line and poly not applied if a rgba strokeColor is provided
-        strokeWidth: 4 // line and poly
-      };
-      this.searchOverlayStyleFocus = {
-        markerColor: '#45D7E6', // marker fill
-        markerOpacity: 1, // marker opacity not applied if a rgba markerColor is provided
-        markerOutlineColor: '#ffffff', // marker contour
-        fillColor: 'transparent', // poly
-        fillOpacity: 0, // poly fill opacity not applied if a rgba fillColor is provided
-        strokeColor: '#45D7E6', // line and poly
-        strokeOpacity: 1, // line and poly not applied if a rgba strokeColor is provided
-        strokeWidth: 4 // line and poly
-      };
+    this.searchOverlayStyle = {
+      markerColor: '#45D7E6', // marker fill
+      markerOpacity: 0.8, // marker opacity not applied if a rgba markerColor is provided
+      markerOutlineColor: '#ffffff', // marker contour
+      fillColor: 'transparent', // poly
+      fillOpacity: 0, // poly fill opacity not applied if a rgba fillColor is provided
+      strokeColor: '#45D7E6', // line and poly
+      strokeOpacity: 0.7, // line and poly not applied if a rgba strokeColor is provided
+      strokeWidth: 4 // line and poly
+    };
+    this.searchOverlayStyleSelection = {
+      markerColor: '#45D7E6', // marker fill
+      markerOpacity: 1, // marker opacity not applied if a rgba markerColor is provided
+      markerOutlineColor: '#ffffff', // marker contour
+      fillColor: 'transparent', // poly
+      fillOpacity: 0, // poly fill opacity not applied if a rgba fillColor is provided
+      strokeColor: '#45D7E6', // line and poly
+      strokeOpacity: 1, // line and poly not applied if a rgba strokeColor is provided
+      strokeWidth: 4 // line and poly
+    };
+    this.searchOverlayStyleFocus = {
+      markerColor: '#45D7E6', // marker fill
+      markerOpacity: 1, // marker opacity not applied if a rgba markerColor is provided
+      markerOutlineColor: '#ffffff', // marker contour
+      fillColor: 'transparent', // poly
+      fillOpacity: 0, // poly fill opacity not applied if a rgba fillColor is provided
+      strokeColor: '#45D7E6', // line and poly
+      strokeOpacity: 1, // line and poly not applied if a rgba strokeColor is provided
+      strokeWidth: 4 // line and poly
+    };
 
     const searchResultsGeometryEnabled = this.storageService.get('searchResultsGeometryEnabled') as boolean;
     if (searchResultsGeometryEnabled) {
@@ -91,7 +91,7 @@ export class SearchState {
     const filterClauseFunc = (record: EntityRecord<SearchResult>) => {
       return record.entity.meta.score === 100;
     };
-    return new EntityStoreFilterCustomFuncStrategy({filterClauseFunc} as EntityStoreStrategyFuncOptions);
+    return new EntityStoreFilterCustomFuncStrategy({ filterClauseFunc } as EntityStoreStrategyFuncOptions);
   }
 
   /**
