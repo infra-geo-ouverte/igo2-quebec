@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '@igo2/core/theming/prebuilt-themes/qcca';
+@use '../../../theme/qcca';
 @import '../portal/portal.variables.scss';
 
 :host {
