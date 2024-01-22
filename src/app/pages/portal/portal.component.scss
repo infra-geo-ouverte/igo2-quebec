@@ -84,8 +84,13 @@
   }
 
   igo-search-bar,
-  igo-search-results igo-list,
-  .baselayers {
+  igo-search-results igo-list {
+    left: $portal-left !important;
+  }
+
+  igo-baselayers-switcher {
+    position: absolute;
+    bottom: 8px;
     left: $portal-left !important;
   }
 
