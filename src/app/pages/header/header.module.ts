@@ -1,22 +1,20 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header.component';
-import { IgoLanguageModule } from '@igo2/core';
+import { NgModule } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
+
+import { IgoLanguageModule } from '@igo2/core';
+
 import { MenuRoutingModule } from '../menu/menu-routing/menu-routing.module';
+import { HeaderComponent } from './header.component';
 
 @NgModule({
-  declarations: [
-    HeaderComponent
-  ],
+  declarations: [HeaderComponent],
   imports: [
     CommonModule,
     IgoLanguageModule,
     MatToolbarModule,
     MenuRoutingModule
-    ],
-  exports: [
-    HeaderComponent
-  ]
+  ],
+  exports: [HeaderComponent]
 })
-export class HeaderModule { }
+export class HeaderModule {}

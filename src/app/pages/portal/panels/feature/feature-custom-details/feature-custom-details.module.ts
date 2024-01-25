@@ -1,10 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoKeyValueModule, IgoImageModule } from '@igo2/common';
 import { RouterModule } from '@angular/router';
+
+import { IgoImageModule, IgoKeyValueModule } from '@igo2/common';
+import { IgoLanguageModule } from '@igo2/core';
 
 import { FeatureCustomDetailsComponent } from './feature-custom-details.component';
 
@@ -21,11 +22,7 @@ import { FeatureCustomDetailsComponent } from './feature-custom-details.componen
     IgoImageModule,
     MatTooltipModule
   ],
-  exports: [
-    FeatureCustomDetailsComponent,
-  ],
-  declarations: [
-    FeatureCustomDetailsComponent,
-  ]
+  exports: [FeatureCustomDetailsComponent],
+  declarations: [FeatureCustomDetailsComponent]
 })
 export class FeatureCustomDetailsModule {}

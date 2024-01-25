@@ -7,11 +7,11 @@
   "header": {
     "title": "IGO",
     "language": "English",
-    "contactUsUrl" : "https://www.igouverte.org/#footer",
-    "contactUs" : "Nous joindre",
+    "contactUsUrl": "https://www.igouverte.org/#footer",
+    "contactUs": "Nous joindre",
     "externallinks": "Cet hyperlien s’ouvrira dans une nouvelle fenêtre"
   },
-  "footer":{
+  "footer": {
     "conditions": "Conditions d'utilisation",
     "url-conditions": "https://raw.githubusercontent.com/infra-geo-ouverte/igo2/master/LICENCE.txt",
     "ministry": "Nom du ministère",
@@ -30,7 +30,7 @@
     "open": "Afficher la légende"
   },
   "feature": {
-    "title" : "Objet",
+    "title": "Objet",
     "close": "Fermer le panneau",
     "tooltip": "Personnalisez ce template, même par couche avec une condition sous feature.meta.id ou autres metadatas"
   },
@@ -45,7 +45,7 @@
     "data-download-start": "Téléchargement des données pour utilisation hors-ligne. Veuillez ne pas quitter.",
     "data-download-completed": "Téléchargement des données hors-ligne terminé"
   },
-  "igo":{
+  "igo": {
     "integration": {
       "searchResultsTool": {
         "noResults": "Aucun résultat",

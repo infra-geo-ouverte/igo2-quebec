@@ -10,7 +10,7 @@
       "alwaysTracking": false,
       "enableHighAccuracy": false
     },
-    "controls" : {
+    "controls": {
       "scaleLine": {
         "target": "scaleLine"
       }
@@ -43,10 +43,8 @@
       }
     }
   ],
-  "toolbar": [
-    "searchResults"
-  ],
-  "tools": [    
+  "toolbar": ["searchResults"],
+  "tools": [
     {
       "name": "searchResults"
     }

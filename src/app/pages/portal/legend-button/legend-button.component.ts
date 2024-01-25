@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+
 import { LanguageService } from '@igo2/core';
+
 import { LegendDialogComponent } from '../legend-dialog/legend-dialog.component';
 
 @Component({
@@ -17,27 +19,33 @@ export class LegendButtonComponent implements OnInit {
   public dialogRef = null;
   public legendButtonTooltip: unknown;
 
-  constructor(public dialog: MatDialog, protected languageService: LanguageService) {}
+  constructor(
+    public dialog: MatDialog,
+    protected languageService: LanguageService
+  ) {}
 
   ngOnInit() {
-    this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
+    this.legendButtonTooltip =
+      this.languageService.translate.instant('legend.open');
   }
 
   toggleLegend(): void {
-    if (!this.legendInPanel && !this.mobile){
+    if (!this.legendInPanel && !this.mobile) {
       const dialogOpened = this.dialog.getDialogById('legend-dialog-container');
       if (!dialogOpened) {
-        this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
+        this.legendButtonTooltip =
+          this.languageService.translate.instant('legend.close');
         this.dialogRef = this.dialog.open(LegendDialogComponent, {
           id: 'legend-dialog-container',
           hasBackdrop: false,
           closeOnNavigation: true
         });
       } else {
-        this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
+        this.legendButtonTooltip =
+          this.languageService.translate.instant('legend.open');
         this.dialogRef.close();
       }
     }
-      this.legendToggled.emit();
+    this.legendToggled.emit();
   }
 }

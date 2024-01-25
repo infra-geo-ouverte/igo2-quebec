@@ -1,19 +1,22 @@
-import { LegendButtonComponent } from './legend-button.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LegendDialogModule } from '../legend-dialog/legend-dialog.module';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { IgoMapModule, IgoLayerModule } from '@igo2/geo';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { IgoLanguageModule } from '@igo2/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { IgoLanguageModule } from '@igo2/core';
+import { IgoLayerModule, IgoMapModule } from '@igo2/geo';
+
+import { LegendDialogModule } from '../legend-dialog/legend-dialog.module';
+import { LegendButtonComponent } from './legend-button.component';
 
 @NgModule({
   declarations: [LegendButtonComponent],
   imports: [
     CommonModule,
     MatButtonModule,
-    IgoMapModule, IgoLayerModule,
+    IgoMapModule,
+    IgoLayerModule,
     MatTooltipModule,
     IgoLanguageModule,
     MatDialogModule,
@@ -21,4 +24,4 @@ import { MatDialogModule } from '@angular/material/dialog';
   ],
   exports: [LegendButtonComponent]
 })
-export class LegendButtonModule { }
+export class LegendButtonModule {}

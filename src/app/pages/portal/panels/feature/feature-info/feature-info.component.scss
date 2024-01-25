@@ -1,7 +1,6 @@
 @import '../../../portal.variables';
 
 :host {
-
   @include mobile {
     width: 100%;
     overflow-x: clip;
@@ -15,9 +14,8 @@
 }
 
 h4 {
-  margin-top: 8px!important;
+  margin-top: 8px !important;
 }
-
 
 igo-feature-details {
   ::ng-deep table {
@@ -29,9 +27,11 @@ igo-feature-details {
         background-color: #fff !important;
       }
       tr {
-        border-bottom: 1px solid #DAE6F0;
+        border-bottom: 1px solid #dae6f0;
         td {
-          font: normal 16px/24px 'Open Sans', sans-serif;
+          font:
+            normal 16px/24px 'Open Sans',
+            sans-serif;
           color: #223654;
           margin-top: 4px;
           margin-bottom: 4px;
@@ -47,7 +47,7 @@ igo-feature-details {
       }
       tr:hover {
         cursor: pointer;
-        background-color: #DAE6F0 !important;
+        background-color: #dae6f0 !important;
       }
     }
   }

@@ -1,43 +1,44 @@
 import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  OnDestroy,
-  EventEmitter,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  ElementRef
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
 } from '@angular/core';
 
-import olFeature from 'ol/Feature';
-import olPoint from 'ol/geom/Point';
-
+import { ActionStore, EntityStore } from '@igo2/common';
 import { StorageService } from '@igo2/core';
-import { EntityStore, ActionStore } from '@igo2/common';
-import { BehaviorSubject, Subscription, combineLatest, tap} from 'rxjs';
-
+import { ConfigService } from '@igo2/core';
 import {
-  IgoMap,
   FEATURE,
   Feature,
   FeatureMotion,
+  IgoMap,
+  Layer,
   MapService,
   Research,
   SearchResult,
   SearchService,
-  Layer,
+  featureFromOl,
   featureToOl,
   featuresAreTooDeepInView,
-  featureFromOl,
   getCommonVectorSelectedStyle,
   getCommonVectorStyle
 } from '@igo2/geo';
 import { MapState, QueryState, StorageState } from '@igo2/integration';
-import { SearchState } from '../search-results-tool/search.state';
-import { ConfigService } from '@igo2/core';
 
+import olFeature from 'ol/Feature';
 import type { default as OlGeometry } from 'ol/geom/Geometry';
+import olPoint from 'ol/geom/Point';
+
+import { BehaviorSubject, Subscription, combineLatest, tap } from 'rxjs';
+
+import { SearchState } from '../search-results-tool/search.state';
+
 @Component({
   selector: 'app-bottompanel',
   templateUrl: './bottompanel.component.html',
@@ -45,7 +46,6 @@ import type { default as OlGeometry } from 'ol/geom/Geometry';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BottomPanelComponent implements OnInit, OnDestroy {
-
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
   @Input()
@@ -66,9 +66,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   @Input() hideToggle = false;
 
-  @Input() mobile : boolean; // to pass the input to featureDetails tooltip
+  @Input() mobile: boolean; // to pass the input to featureDetails tooltip
 
-  @Input() mapQueryClick : boolean;
+  @Input() mapQueryClick: boolean;
 
   @Output() mapQuery = new EventEmitter<boolean>();
 
@@ -133,7 +133,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     return this.searchState.store;
   }
 
-  public pageIterator: {sourceId: string}[] = [];
+  public pageIterator: { sourceId: string }[] = [];
 
   get storageService(): StorageService {
     return this.storageState.storageService;
@@ -188,36 +188,36 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     private mapState: MapState,
     private storageState: StorageState,
     private elRef: ElementRef
-    ) {
-      this.mapService.setMap(this.map);
-      this.showSearchBar = this.configService.getConfig('showSearchBar') === undefined ? true :
-      this.configService.getConfig('showSearchBar');
-      this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
-    }
+  ) {
+    this.mapService.setMap(this.map);
+    this.showSearchBar =
+      this.configService.getConfig('showSearchBar') === undefined
+        ? true
+        : this.configService.getConfig('showSearchBar');
+    this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
+  }
 
-  ngOnInit(){
+  ngOnInit() {
     this.closePanel();
     this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
 
-    this.queryStore.entities$
-    .subscribe(
-      (entities) => {
+    this.queryStore.entities$.subscribe((entities) => {
       if (entities.length > 0) {
         this.openPanel();
         this.mapQuery.emit(true);
         this.clearSearch();
         this.searchInit = false;
       } else {
-        if (!this.legendPanelOpened && !this.searchInit){
+        if (!this.legendPanelOpened && !this.searchInit) {
           this.closePanel();
         }
       }
     });
 
     this.map.propertyChange$.subscribe(() => {
-      this.mapLayersShownInLegend = this.map.layers.filter(layer => (
-        layer.showInLayerList !== false
-      ));
+      this.mapLayersShownInLegend = this.map.layers.filter(
+        (layer) => layer.showInLayerList !== false
+      );
     });
 
     let latestResult;
@@ -240,7 +240,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
         this.store.entities$
       ]).subscribe(() => this.buildResultEmphasis(latestResult, trigger));
     }
-
   }
 
   ngOnDestroy() {
@@ -264,7 +263,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.searchInit = false;
       this.clearSearch();
     } else {
-      if (this.mapQueryClick){
+      if (this.mapQueryClick) {
         this.queryState.store.softClear();
         this.mapQuery.emit(false);
         this.searchInit = true;
@@ -274,7 +273,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
     this.openPanel();
-    if (this.mapQueryClick) { // to clear the mapQuery if a search is initialized
+    if (this.mapQueryClick) {
+      // to clear the mapQuery if a search is initialized
       this.queryState.store.softClear();
       this.map.queryResultsOverlay.clear();
       this.mapQuery.emit(false);
@@ -304,7 +304,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
         } else if (source[0].source.getId() === 'nominatim') {
           moreResults = igoList.querySelector('.nominatim .moreResults');
         } else {
-          moreResults = igoList.querySelector('.' + source[0].source.getId() + ' .moreResults');
+          moreResults = igoList.querySelector(
+            '.' + source[0].source.getId() + ' .moreResults'
+          );
         }
         if (
           moreResults !== null &&
@@ -338,21 +340,30 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.focusedResult$.next(result);
     if (result.meta.dataType === FEATURE && result.data.geometry) {
       result.data.meta.style = getCommonVectorSelectedStyle(
-        Object.assign({},
+        Object.assign(
+          {},
           { feature: result.data as Feature | olFeature<OlGeometry> },
           this.searchState.searchOverlayStyleFocus,
-          result.style?.focus ? result.style.focus : {}));
+          result.style?.focus ? result.style.focus : {}
+        )
+      );
 
-      const feature = this.map.searchResultsOverlay.dataSource.ol.getFeatureById(result.meta.id);
+      const feature =
+        this.map.searchResultsOverlay.dataSource.ol.getFeatureById(
+          result.meta.id
+        );
       if (feature) {
         feature.setStyle(result.data.meta.style);
         return;
       }
-      this.map.searchResultsOverlay.addFeature(result.data as Feature, FeatureMotion.None);
+      this.map.searchResultsOverlay.addFeature(
+        result.data as Feature,
+        FeatureMotion.None
+      );
     }
     this.tryAddFeatureToMap(result);
     this.selectedFeature = (result as SearchResult<Feature>).data;
-    if (this.selectedFeature !== undefined ){
+    if (this.selectedFeature !== undefined) {
       this.closePanel();
     }
   }
@@ -362,7 +373,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
    * @param layer A search result that could be a feature
    */
   private tryAddFeatureToMap(layer: SearchResult) {
-    if ( this.searchState.setSelectedResult !== undefined){
+    if (this.searchState.setSelectedResult !== undefined) {
       this.closePanel();
     }
     if (layer.meta.dataType !== FEATURE) {
@@ -379,7 +390,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       FeatureMotion.Default
     );
     this.closePanel();
-    this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
+    this.hasFeatureEmphasisOnSelection = this.configService.getConfig(
+      'hasFeatureEmphasisOnSelection'
+    );
   }
 
   /*
@@ -403,21 +416,22 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSearchBarClick(event){ /// prevents panel to close on clear search
-    if (!this.panelOpenState && this.clearedSearchbar === false){
+  onSearchBarClick(event) {
+    /// prevents panel to close on clear search
+    if (!this.panelOpenState && this.clearedSearchbar === false) {
       this.openPanel();
     }
     event.stopPropagation();
   }
 
-  clearQuery(): void{
+  clearQuery(): void {
     this.queryState.store.softClear();
     this.queryState.store.clear();
     this.mapQuery.emit(false);
     this.removeFeatureFromMap();
   }
 
-  closePanelOnCloseQuery(){
+  closePanelOnCloseQuery() {
     this.mapQuery.emit(false);
     this.closeQuery.emit();
     this.cdRef.detectChanges();
@@ -426,12 +440,12 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  clearSearchBar(event){
+  clearSearchBar(event) {
     this.searchInit = false;
     this.clearSearch();
     this.closePanel();
     this.clearedSearchbar = true;
-    if (event){
+    if (event) {
       event.stopPropagation(); //prevents panel toggling on click or focus
     }
   }
@@ -441,10 +455,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.searchStore.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
-    this.term="";
+    this.term = '';
   }
 
-  closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
+  closePanelLegend() {
+    // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
     this.legendPanelOpened = false;
     this.closePanel();
     this.closeLegend.emit();
@@ -459,13 +474,13 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.mapQuery.emit(event);
   }
 
-  closePanel(){
-    if (!this.searchInit && !this.mapQueryClick && !this.legendPanelOpened){
+  closePanel() {
+    if (!this.searchInit && !this.mapQueryClick && !this.legendPanelOpened) {
       this.panelOpened.emit(false);
     }
   }
 
-  openPanel(){
+  openPanel() {
     this.panelOpened.emit(true);
   }
 
@@ -479,7 +494,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.abstractSelectedResult = undefined;
     }
     if (trigger === 'shown') {
-      this.shownResultsEmphasisGeometries.map(shownResult => this.map.searchResultsOverlay.removeFeature(shownResult));
+      this.shownResultsEmphasisGeometries.map((shownResult) =>
+        this.map.searchResultsOverlay.removeFeature(shownResult)
+      );
       this.shownResultsEmphasisGeometries = [];
     }
   }
@@ -496,7 +513,13 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     }
     const myOlFeature = featureToOl(result.data, this.map.projection);
     const olGeometry = myOlFeature.getGeometry();
-    if (featuresAreTooDeepInView(this.map.viewController, olGeometry.getExtent() as [number, number, number, number], 0.0025)) {
+    if (
+      featuresAreTooDeepInView(
+        this.map.viewController,
+        olGeometry.getExtent() as [number, number, number, number],
+        0.0025
+      )
+    ) {
       const extent = olGeometry.getExtent();
       const x = extent[0] + (extent[2] - extent[0]) / 2;
       const y = extent[1] + (extent[3] - extent[1]) / 2;
@@ -512,30 +535,43 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       switch (trigger) {
         case 'focused':
           computedStyle = getCommonVectorSelectedStyle(
-            Object.assign({},
+            Object.assign(
+              {},
               { feature: abstractResult },
               this.searchState.searchOverlayStyleFocus,
-              result.style?.focus ? result.style.focus : {}));
+              result.style?.focus ? result.style.focus : {}
+            )
+          );
           zIndexOffset = 2;
           break;
         case 'shown':
-          computedStyle = getCommonVectorStyle(Object.assign({},
-            { feature: abstractResult },
-            this.searchState.searchOverlayStyle,
-            result.style?.base ? result.style.base : {}));
+          computedStyle = getCommonVectorStyle(
+            Object.assign(
+              {},
+              { feature: abstractResult },
+              this.searchState.searchOverlayStyle,
+              result.style?.base ? result.style.base : {}
+            )
+          );
           break;
         case 'selected':
           computedStyle = getCommonVectorSelectedStyle(
-            Object.assign({},
+            Object.assign(
+              {},
               { feature: abstractResult },
               this.searchState.searchOverlayStyleSelection,
-              result.style?.selection ? result.style.selection : {}));
+              result.style?.selection ? result.style.selection : {}
+            )
+          );
           zIndexOffset = 1;
           break;
       }
       abstractResult.meta.style = computedStyle;
       abstractResult.meta.style.setZIndex(2000 + zIndexOffset);
-      this.map.searchResultsOverlay.addFeature(abstractResult, FeatureMotion.None);
+      this.map.searchResultsOverlay.addFeature(
+        abstractResult,
+        FeatureMotion.None
+      );
       if (trigger === 'focused') {
         this.abstractFocusedResult = abstractResult;
       }
@@ -549,5 +585,4 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
       this.clearFeatureEmphasis(trigger);
     }
   }
-
 }

@@ -4,25 +4,25 @@ import { EnvironmentOptions as IntegrationEnvironmentOptions } from '@igo2/integ
 import { MapOverlay } from 'src/app/pages/portal/map-overlay/map-overlay.interface';
 
 export interface AppEnvironmentOptions extends IntegrationEnvironmentOptions {
-    igo: EnvironmentOptions;
+  igo: EnvironmentOptions;
 }
 
 export interface EnvironmentOptions extends AllEnvironmentOptions {
-    header?: {
-        hasHeader?: boolean;
-        logo?: string;
-        logoPrint?: string;
-    };
-    hasFooter?: boolean;
-    hasMenu?: boolean;
-    title?: string;
-    theme?: string; enum?
-    description?: string;
-    mapOverlay?: MapOverlay[];
-    showRotationButtonIfNoRotation?: boolean;
-    hasFeatureEmphasisOnSelection?: boolean;
-    addFeaturetoLayer?: boolean;
-    customFeatureDetails?: string;
-    customFeatureTitle?: string;
-    queryOnlyOne?: boolean;
+  header?: {
+    hasHeader?: boolean;
+    logo?: string;
+    logoPrint?: string;
+  };
+  hasFooter?: boolean;
+  hasMenu?: boolean;
+  title?: string;
+  theme?: string; // enum?
+  description?: string;
+  mapOverlay?: MapOverlay[];
+  showRotationButtonIfNoRotation?: boolean;
+  hasFeatureEmphasisOnSelection?: boolean;
+  addFeaturetoLayer?: boolean;
+  customFeatureDetails?: string;
+  customFeatureTitle?: string;
+  queryOnlyOne?: boolean;
 }

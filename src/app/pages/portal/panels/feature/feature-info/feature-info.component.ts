@@ -1,38 +1,38 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  Input,
-  Output,
   EventEmitter,
   HostBinding,
   HostListener,
-  ChangeDetectionStrategy,
+  Input,
+  OnDestroy,
   OnInit,
-  OnDestroy
+  Output
 } from '@angular/core';
-import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
+import { EntityStore } from '@igo2/common';
 import {
-  EntityStore
-} from '@igo2/common';
+  ConfigService,
+  LanguageService,
+  MediaService,
+  StorageService
+} from '@igo2/core';
 import {
   Feature,
-  SearchResult,
-  IgoMap,
   FeatureMotion,
-  getCommonVectorStyle,
-  getCommonVectorSelectedStyle,
-  featuresAreOutOfView,
+  IgoMap,
+  SearchResult,
   computeOlFeaturesExtent,
-  featureToOl
+  featureToOl,
+  featuresAreOutOfView,
+  getCommonVectorSelectedStyle,
+  getCommonVectorStyle
 } from '@igo2/geo';
-import {
-  MediaService,
-  LanguageService,
-  StorageService,
-  ConfigService
-} from '@igo2/core';
 import { QueryState, StorageState } from '@igo2/integration';
+
+import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import { SearchState } from '../../search-results-tool/search.state';
 
 @Component({
@@ -42,7 +42,6 @@ import { SearchState } from '../../search-results-tool/search.state';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
-
   get storageService(): StorageService {
     return this.storageState.storageService;
   }
@@ -125,7 +124,9 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  get mapQueryInit(): boolean { return this._mapQueryInit; }
+  get mapQueryInit(): boolean {
+    return this._mapQueryInit;
+  }
   set mapQueryInit(mapQueryInit: boolean) {
     this._mapQueryInit = mapQueryInit;
   }
@@ -139,10 +140,14 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private searchState: SearchState
   ) {
-    this.customFeatureTitle = this.configService.getConfig('customFeatureTitle') === undefined ? false :
-      this.configService.getConfig('customFeatureTitle');
-    this.customFeatureDetails = this.configService.getConfig('customFeatureDetails') === undefined ? false :
-      this.configService.getConfig('customFeatureDetails');
+    this.customFeatureTitle =
+      this.configService.getConfig('customFeatureTitle') === undefined
+        ? false
+        : this.configService.getConfig('customFeatureTitle');
+    this.customFeatureDetails =
+      this.configService.getConfig('customFeatureDetails') === undefined
+        ? false
+        : this.configService.getConfig('customFeatureDetails');
   }
 
   private monitorResultOutOfView() {
@@ -157,9 +162,17 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
           this.isSelectedResultOutOfView$.next(false);
           return;
         }
-        const selectedOlFeature = featureToOl(selectedResult.data, this.map.projection);
-        const selectedOlFeatureExtent = computeOlFeaturesExtent([selectedOlFeature], this.map.viewProjection);
-        this.isSelectedResultOutOfView$.next(featuresAreOutOfView(this.map.getExtent(), selectedOlFeatureExtent));
+        const selectedOlFeature = featureToOl(
+          selectedResult.data,
+          this.map.projection
+        );
+        const selectedOlFeatureExtent = computeOlFeaturesExtent(
+          [selectedOlFeature],
+          this.map.viewProjection
+        );
+        this.isSelectedResultOutOfView$.next(
+          featuresAreOutOfView(this.map.getExtent(), selectedOlFeatureExtent)
+        );
       });
   }
 
@@ -180,7 +193,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTitleClick(){
+  onTitleClick() {
     /// define your own function, ex zoom to feature
     this.closeQuery.emit();
   }
@@ -200,14 +213,21 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     for (const feature of this.store.all()) {
       if (feature.meta.id === result.meta.id) {
         feature.data.meta.style = getCommonVectorSelectedStyle(
-          Object.assign({}, { feature: feature.data },
-            this.queryState.queryOverlayStyleSelection));
+          Object.assign(
+            {},
+            { feature: feature.data },
+            this.queryState.queryOverlayStyleSelection
+          )
+        );
         feature.data.meta.style.setZIndex(2000);
       } else {
         feature.data.meta.style = getCommonVectorStyle(
-          Object.assign({},
+          Object.assign(
+            {},
             { feature: feature.data },
-            this.queryState.queryOverlayStyle));
+            this.queryState.queryOverlayStyle
+          )
+        );
       }
       features.push(feature.data);
       this.featureTitle = feature.meta.title; // will define the feature info title in the panel
@@ -220,8 +240,10 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.initialized = false;
   }
 
-  getTitle(){
-    this.title = this.customFeatureTitle? this.languageService.translate.instant('feature.title') : this.featureTitle;
+  getTitle() {
+    this.title = this.customFeatureTitle
+      ? this.languageService.translate.instant('feature.title')
+      : this.featureTitle;
   }
 
   public unselectResult() {
@@ -232,12 +254,19 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     const features = [];
     for (const feature of this.store.all()) {
       feature.data.meta.style = getCommonVectorStyle(
-        Object.assign({},
+        Object.assign(
+          {},
           { feature: feature.data },
-          this.queryState.queryOverlayStyle));
+          this.queryState.queryOverlayStyle
+        )
+      );
       features.push(feature.data);
     }
-    this.map.queryResultsOverlay.setFeatures(features, FeatureMotion.None, 'map');
+    this.map.queryResultsOverlay.setFeatures(
+      features,
+      FeatureMotion.None,
+      'map'
+    );
   }
 
   public clearButton() {
@@ -252,5 +281,4 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   mapQueryFromFeatureDetails(event) {
     this.mapQuery.emit(event);
   }
-
 }

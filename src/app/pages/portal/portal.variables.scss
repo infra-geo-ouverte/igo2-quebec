@@ -4,31 +4,46 @@
 $app-mobile-min-space-right: 40px;
 $app-background-color: rgb(255, 255, 255);
 
-$menu-height : 72px;
+$menu-height: 72px;
 $menu-height-mobile: 40px;
 $header-height: 72px;
 $header-height-mobile: 72px;
 $footer-height: 29px;
 $search-bar-height: 60px;
 
-$portal-height-hasHeader-mobile: calc( 100% - #{$header-height-mobile});
-$portal-height-hasFooter-hasHeader-mobile: calc( 100% - #{$footer-height} - #{$header-height-mobile} );
-$portal-height-hasMenu-hasHeader-mobile: calc( 100% - #{$header-height-mobile} - #{$menu-height-mobile} );
-$portal-height-hasMenu-hasHeader-hasFooter-mobile: 300px;//calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} );
-$portal-height-hasMenu-mobile: calc( 100% - #{$menu-height-mobile});
-$portal-height-hasFooter: calc( 100% - #{$footer-height} );
-$portal-height-hasHeader: calc( 100% - #{$header-height});
-$portal-height-hasMenu: calc( 100% - #{$menu-height});
-$portal-height-hasMenu-hasHeader: calc( 100% - #{$header-height} - #{$menu-height} );
-$portal-height-hasFooter-hasHeader: calc( 100% - #{$footer-height} - #{$header-height} );
-$portal-height-hasFooter-hasHeader-hasMenu: calc( 100% - #{$footer-height} - #{$header-height} - #{$menu-height} );
+$portal-height-hasHeader-mobile: calc(100% - #{$header-height-mobile});
+$portal-height-hasFooter-hasHeader-mobile: calc(
+  100% - #{$footer-height} - #{$header-height-mobile}
+);
+$portal-height-hasMenu-hasHeader-mobile: calc(
+  100% - #{$header-height-mobile} - #{$menu-height-mobile}
+);
+$portal-height-hasMenu-hasHeader-hasFooter-mobile: 300px; //calc( 100% - #{$footer-height} - #{$header-height-mobile} - #{$menu-height-mobile} );
+$portal-height-hasMenu-mobile: calc(100% - #{$menu-height-mobile});
+$portal-height-hasFooter: calc(100% - #{$footer-height});
+$portal-height-hasHeader: calc(100% - #{$header-height});
+$portal-height-hasMenu: calc(100% - #{$menu-height});
+$portal-height-hasMenu-hasHeader: calc(
+  100% - #{$header-height} - #{$menu-height}
+);
+$portal-height-hasFooter-hasHeader: calc(
+  100% - #{$footer-height} - #{$header-height}
+);
+$portal-height-hasFooter-hasHeader-hasMenu: calc(
+  100% - #{$footer-height} - #{$header-height} - #{$menu-height}
+);
 
-$app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
+$app-sidenav-width-mobile: calc(
+  100% - #{$app-mobile-min-space-right} - #{$igo-margin}
+);
 $search-bar-left: $igo-icon-size;
 $portal-left: 16px;
 $app-sidenav-width: calc(400px);
 $search-bar-width: calc(#{$app-sidenav-width} - #{$search-bar-left});
-$search-bar-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$search-bar-left} - (3 * #{$igo-margin}));
+$search-bar-width-mobile: calc(
+  100% - #{$app-mobile-min-space-right} - #{$search-bar-left} -
+    (3 * #{$igo-margin})
+);
 $app-sidenav-margin-top: 50px;
 $app-sidenav-height: calc(100% - #{$app-sidenav-margin-top});
 
@@ -37,9 +52,13 @@ $app-mobile-min-space-right: 40px;
 
 $app-sidenav-margin-top: 60px;
 $app-sidenav-height: calc(100% - #{$footer-height});
-$app-sidenav-content-height: calc(100% - #{$app-sidenav-margin-top} - #{$footer-height});
+$app-sidenav-content-height: calc(
+  100% - #{$app-sidenav-margin-top} - #{$footer-height}
+);
 $app-sidenav-width: 400px;
-$app-sidenav-width-mobile: calc(100% - #{$app-mobile-min-space-right} - #{$igo-margin});
+$app-sidenav-width-mobile: calc(
+  100% - #{$app-mobile-min-space-right} - #{$igo-margin}
+);
 
 //$search-bar-left: $igo-icon-size + $igo-margin;
 $search-bar-left: 20px;

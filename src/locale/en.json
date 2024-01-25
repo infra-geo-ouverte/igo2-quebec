@@ -7,11 +7,11 @@
   "header": {
     "title": "IGO",
     "language": "Français",
-    "contactUsUrl" : "https://www.igouverte.org/#footer",
-    "contactUs" : "Contact us",
+    "contactUsUrl": "https://www.igouverte.org/#footer",
+    "contactUs": "Contact us",
     "externallinks": "This link will open in a new window"
   },
-  "footer":{
+  "footer": {
     "conditions": "Terms of use",
     "url-conditions": "https://raw.githubusercontent.com/infra-geo-ouverte/igo2/master/LICENCE.txt",
     "ministry": "Ministry name",
@@ -29,7 +29,7 @@
     "open": "Open panel"
   },
   "feature": {
-    "title" : "Object",
+    "title": "Object",
     "close": "Close panel",
     "tooltip": "Customise this template as you wish, even by layer using feature.meta.id or other layers metadatas"
   },
@@ -44,9 +44,8 @@
     "new-version": "Do you want to reload the app?",
     "data-download-start": "Downloading data for offline use. Please don't leave the current app.",
     "data-download-completed": "Offline data download completed"
-
   },
-  "igo":{
+  "igo": {
     "integration": {
       "searchResultsTool": {
         "noResults": "No result",
