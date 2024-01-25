@@ -1,33 +1,6 @@
-import { LanguageOptions } from '@igo2/core';
-import {
-  CommonVectorStyleOptions,
-  Projection,
-  SearchSourceOptions
-} from '@igo2/geo';
+import { AppEnvironmentOptions } from './environnement.interface';
 
-import { AppOptions } from './environnement.interface';
-
-interface Environment {
-  production: boolean;
-  igo: {
-    app: AppOptions;
-    language?: LanguageOptions;
-    projections?: Projection[];
-    searchSources?: { [key: string]: SearchSourceOptions };
-    queryOverlayStyle?: {
-      base?: CommonVectorStyleOptions;
-      selection?: CommonVectorStyleOptions;
-      focus?: CommonVectorStyleOptions;
-    };
-    searchOverlayStyle?: {
-      base?: CommonVectorStyleOptions;
-      selection?: CommonVectorStyleOptions;
-      focus?: CommonVectorStyleOptions;
-    };
-  };
-}
-
-export const environment: Environment = {
+export const environment: AppEnvironmentOptions = {
   production: true,
   igo: {
     app: {
