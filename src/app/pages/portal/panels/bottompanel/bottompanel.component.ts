@@ -119,8 +119,7 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   public store = new ActionStore([]);
   public showSearchBar: boolean;
-  public igoSearchPointerSummaryEnabled: boolean = false;
-    get termSplitter(): string {
+  get termSplitter(): string {
     return this.searchState.searchTermSplitter$.value;
   }
   public forceCoordsNA: boolean = false;
@@ -252,10 +251,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.map.propertyChange$.unsubscribe;
     this.queryState.store.destroy();
     this.clearSearch();
-  }
-
-  onPointerSummaryStatusChange(value) {
-    this.igoSearchPointerSummaryEnabled = value;
   }
 
   onSearchTermChange(term = '') {

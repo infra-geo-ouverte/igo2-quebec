@@ -147,7 +147,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   private context$$: Subscription;
   private searchTerm$$: Subscription;
 
-  public igoSearchPointerSummaryEnabled: boolean;
 
   private routeParams: Params;
   public toastPanelHtmlDisplay = false;
@@ -740,11 +739,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   searchCoordinate(coord: [number, number]) {
     this.searchBarTerm = coord.map((c) => c.toFixed(6)).join(', ');
-  }
-
-  onPointerSummaryStatusChange(value) {
-    this.storageService.set('searchPointerSummaryEnabled', value);
-    this.igoSearchPointerSummaryEnabled = value;
   }
 
   private readQueryParams() {
