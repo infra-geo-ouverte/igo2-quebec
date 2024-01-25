@@ -27,22 +27,22 @@ import {
   MessageService,
   StorageService,
   AnalyticsService
-  } from '@igo2/core';
+} from '@igo2/core';
 
-  import {
-    ActionbarMode,
-    Workspace,
-    WorkspaceStore,
-    ActionStore,
-    EntityStore,
-    getEntityTitle,
-    EntityTablePaginatorOptions,
-    EntityRecord
-  } from '@igo2/common';
+import {
+  ActionbarMode,
+  Workspace,
+  WorkspaceStore,
+  ActionStore,
+  EntityStore,
+  getEntityTitle,
+  EntityTablePaginatorOptions,
+  EntityRecord
+} from '@igo2/common';
 
-  import { DetailedContext } from '@igo2/context';
+import { DetailedContext } from '@igo2/context';
 
-  import {
+import {
   FEATURE,
   Feature,
   GoogleLinks,
@@ -70,7 +70,7 @@ import {
   QueryService,
   Layer,
   SearchBarComponent
-  } from '@igo2/geo';
+} from '@igo2/geo';
 
 import {
   MapState,
@@ -190,8 +190,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   get backdropShown(): boolean {
     return (
       ('(min-width: 768px)' &&
-      this.panelOpenState
-    ));
+        this.panelOpenState
+      ));
   }
 
   get expansionPanelExpanded(): boolean {
@@ -200,9 +200,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   set expansionPanelExpanded(value: boolean) {
     this.workspaceState.workspacePanelExpanded = value;
     if (value) {
-      this.map.viewController.setPadding({bottom: 280});
+      this.map.viewController.setPadding({ bottom: 280 });
     } else {
-      this.map.viewController.setPadding({bottom: 0});
+      this.map.viewController.setPadding({ bottom: 0 });
     }
   }
 
@@ -275,36 +275,36 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.dialogOpened = this.dialog.getDialogById('legend-button-dialog-container');
     this.legendButtonTooltip = this.languageService.translate.instant('legend.open');
     this.breakpoint$ = this.breakpointObserver
-    .observe(this.mobileBreakPoint)
-    .pipe(
-      tap(() => {}),
-      distinctUntilChanged()
-    );
-      this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
-        this.configService.getConfig('hasFooter');
-      this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
-        this.configService.getConfig('hasLegendButton');
-      this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
-        this.configService.getConfig('hasSideSearch');
-        this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') === undefined ? true :
-        this.configService.getConfig('searchBar.showSearchBar');
-      this.hasHomeExtentButton =
-        this.configService.getConfig('homeExtentButton') === undefined ? false : true;
-      this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
-        this.configService.getConfig('hasGeolocateButton');
-      this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
-        this.configService.getConfig('showRotationButtonIfNoRotation');
-      this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
-      this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
-      this.igoSearchPointerSummaryEnabled = this.configService.getConfig('hasSearchPointerSummary');
-      if (this.igoSearchPointerSummaryEnabled === undefined) {
-        this.igoSearchPointerSummaryEnabled = this.storageService.get('searchPointerSummaryEnabled') as boolean || false;
-      }
-      this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
-        this.configService.getConfig('mobileBreakPoint');
-      this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
-      this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
-        this.configService.getConfig('legendInPanel');
+      .observe(this.mobileBreakPoint)
+      .pipe(
+        tap(() => { }),
+        distinctUntilChanged()
+      );
+    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
+      this.configService.getConfig('hasFooter');
+    this.hasLegendButton = this.configService.getConfig('hasLegendButton') === undefined ? false :
+      this.configService.getConfig('hasLegendButton');
+    this.hasSideSearch = this.configService.getConfig('hasSideSearch') === undefined ? true :
+      this.configService.getConfig('hasSideSearch');
+    this.showSearchBar = this.configService.getConfig('searchBar.showSearchBar') === undefined ? true :
+      this.configService.getConfig('searchBar.showSearchBar');
+    this.hasHomeExtentButton =
+      this.configService.getConfig('homeExtentButton') === undefined ? false : true;
+    this.hasGeolocateButton = this.configService.getConfig('hasGeolocateButton') === undefined ? true :
+      this.configService.getConfig('hasGeolocateButton');
+    this.showRotationButtonIfNoRotation = this.configService.getConfig('showRotationButtonIfNoRotation') === undefined ? false :
+      this.configService.getConfig('showRotationButtonIfNoRotation');
+    this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
+    this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
+    this.igoSearchPointerSummaryEnabled = this.configService.getConfig('hasSearchPointerSummary');
+    if (this.igoSearchPointerSummaryEnabled === undefined) {
+      this.igoSearchPointerSummaryEnabled = this.storageService.get('searchPointerSummaryEnabled') as boolean || false;
+    }
+    this.mobileBreakPoint = this.configService.getConfig('mobileBreakPoint') === undefined ? "'(min-width: 768px)'" :
+      this.configService.getConfig('mobileBreakPoint');
+    this.hasHomeExtentButton = this.configService.getConfig('homeExtentButton') === undefined ? false : true;
+    this.legendInPanel = this.configService.getConfig('legendInPanel') === undefined ? true :
+      this.configService.getConfig('legendInPanel');
   }
 
   ngOnInit() {
@@ -368,15 +368,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.queryService.defaultFeatureCount = 1;
 
     this.queryStore.entities$
-    .subscribe(
-      (entities) => {
-      if (entities.length > 0) {
-        this.openPanelonQuery();
-      }
-    });
+      .subscribe(
+        (entities) => {
+          if (entities.length > 0) {
+            this.openPanelonQuery();
+          }
+        });
 
     this.breakpoint$.subscribe(() =>
-    this.breakpointChanged()
+      this.breakpointChanged()
     );
   }
 
@@ -384,22 +384,22 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.map.viewController.setInitialState();
   }
 
-  toggleDialogLegend(){
+  toggleDialogLegend() {
     if (!this.legendDialogOpened) {
       this.legendDialogOpened = true;
     }
   }
 
-  toggleLegend(){
-    if (this.legendInPanel || this.mobile){
+  toggleLegend() {
+    if (this.legendInPanel || this.mobile) {
       if (!this.legendPanelOpened) {
         this.legendButtonTooltip = this.languageService.translate.instant('legend.close');
         this.openPanelLegend();
-        if (this.searchInit){
+        if (this.searchInit) {
           this.clearSearch();
           this.openPanels();
         }
-        if (this.mapQueryClick){
+        if (this.mapQueryClick) {
           this.onClearQuery();
           this.mapQueryClick = false;
           this.openPanels();
@@ -424,13 +424,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.mapQueryClick = event;
   }
 
-  closePanelLegend(){
+  closePanelLegend() {
     this.legendPanelOpened = false;
     this.closePanels();
     this.map.propertyChange$.unsubscribe;
   }
 
-  openPanelLegend(){
+  openPanelLegend() {
     this.legendPanelOpened = true;
     this.openPanels();
     this.map.propertyChange$.subscribe(() => {
@@ -441,70 +441,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   public breakpointChanged() {
-    if(this.breakpointObserver.isMatched('(min-width: 768px)')) {
+    if (this.breakpointObserver.isMatched('(min-width: 768px)')) {
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
     } else {
       this.mobile = true;
     }
   }
-
-  /*
-  private initSW() {
-    const dataDownload = this.configService.getConfig('pwa.dataDownload');
-    if ('serviceWorker' in navigator && dataDownload) {
-      let downloadMessage;
-      let currentVersion;
-      const dataLoadSource = this.storageService.get('dataLoadSource');
-      navigator.serviceWorker.ready.then((registration) => {
-        console.log('Service Worker Ready');
-        this.http.get('ngsw.json').pipe(
-          concatMap((ngsw: any) => {
-            const datas$ = [];
-            let hasDataInDataDir: boolean = false;
-            if (ngsw) {
-              // IF FILE NOT IN THIS LIST... DELETE?
-              currentVersion = ngsw.appData.version;
-              const cachedDataVersion = this.storageService.get('cachedDataVersion');
-              if (currentVersion !== cachedDataVersion && dataLoadSource === 'pending') {
-                this.pwaService.updates.checkForUpdate();
-              }
-              if (dataLoadSource === 'newVersion' || !dataLoadSource) {
-                ((ngsw as any).assetGroups as any).map((assetGroup) => {
-                  if (assetGroup.name === 'contexts') {
-                    const elemToDownload = assetGroup.urls.concat(assetGroup.files).filter(f => f);
-                    elemToDownload.map((url, i) => datas$.push(this.http.get(url).pipe(delay(750))));
-                  }
-                });
-                if (hasDataInDataDir) {
-                  const message = this.languageService.translate.instant('pwa.data-download-start');
-                  downloadMessage = this.messageService
-                    .info(message, undefined, { disableTimeOut: true, progressBar: false, closeButton: true, tapToDismiss: false });
-                  this.storageService.set('cachedDataVersion', currentVersion);
-                }
-                return zip(...datas$);
-              }
-
-            }
-            return zip(...datas$);
-          })
-        )
-          .pipe(delay(1000))
-          .subscribe(() => {
-            if (downloadMessage) {
-              this.messageService.remove((downloadMessage as any).toastId);
-              const message = this.languageService.translate.instant('pwa.data-download-completed');
-              this.messageService.success(message, undefined, { timeOut: 40000 });
-              if (currentVersion) {
-                this.storageService.set('dataLoadSource', 'pending');
-                this.storageService.set('cachedDataVersion', currentVersion);
-              }
-            }
-          });
-
-      });
-    }
-  }*/
 
   createFeatureProperties(layer: ImageLayer | VectorLayer) {
     let properties = {};
@@ -550,24 +493,24 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private getWksActiveOpenInResolution(): boolean {
-    if(this.workspace) {
+    if (this.workspace) {
       const activeWks = this.workspace as WfsWorkspace;
-      if(activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
+      if (activeWks.active && activeWks.inResolutionRange$.value && this.workspaceState.workspacePanelExpanded) {
         return true;
       }
     }
     return false;
-   }
+  }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    if(this.configService.getConfig('queryOnlyOne')){
+    if (this.configService.getConfig('queryOnlyOne')) {
       event.features = [event.features[0]];
       this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
     }
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
     if (event.features.length) {
-      if (this.searchInit) {this.clearSearch();}
+      if (this.searchInit) { this.clearSearch(); }
       this.clearSearchbarterm('');
       if (this.mapQueryClick) {
         this.onClearQuery();
@@ -593,7 +536,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
           });
           querySearchSourceArray.push(querySearchSource);
         }
-          return featureToSearchResult(feature, querySearchSource);
+        return featureToSearchResult(feature, querySearchSource);
       });
       const filteredResults = results.filter(x => x !== undefined);
       const research = {
@@ -606,10 +549,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       });
     } else {
       this.mapQueryClick = false;
-      if (!this.searchInit && !this.legendPanelOpened && !this.mobile){ // in desktop keep legend opened if user clicks on the map
+      if (!this.searchInit && !this.legendPanelOpened && !this.mobile) { // in desktop keep legend opened if user clicks on the map
         this.panelOpenState = false;
       }
-      if (!this.searchInit && this.mobile){ // mobile mode, close legend when user click on the map
+      if (!this.searchInit && this.mobile) { // mobile mode, close legend when user click on the map
         this.panelOpenState = false;
       }
     }
@@ -618,7 +561,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   /**
    * Cancel ongoing add layer, if any
    */
-   private cancelOngoingAddLayer() {
+  private cancelOngoingAddLayer() {
     this.addedLayers$$.forEach((sub: Subscription) => sub.unsubscribe());
     this.addedLayers$$ = [];
   }
@@ -629,7 +572,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onSearchTermChange(term?: string) {
-    if(this.mobile) {this.panelOpenState = true;}
+    if (this.mobile) { this.panelOpenState = true; }
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
@@ -637,15 +580,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
-      if(this.mobile) {this.panelOpenState = true;}
+      if (this.mobile) { this.panelOpenState = true; }
       this.clearSearch();
       return;
     }
     this.onBeforeSearch();
   }
 
-  clearSearchbarterm(event){
-    if(!this.mobile){this.searchBar.setTerm('');}
+  clearSearchbarterm(event) {
+    if (!this.mobile) { this.searchBar.setTerm(''); }
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
@@ -683,7 +626,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private closePanels() {
-    if (!this.mapQueryClick && !this.searchInit && !this.legendPanelOpened){
+    if (!this.mapQueryClick && !this.searchInit && !this.legendPanelOpened) {
       this.panelOpenState = false;
     }
   }
@@ -741,21 +684,21 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSearchTerm('');
   }
 
-  closePanelOnCloseQuery(){
+  closePanelOnCloseQuery() {
     this.mapQueryClick = false;
     if (this.searchInit || this.legendPanelOpened) {
       this.openPanels(); // to prevent the panel to close when click searchbar after query
     }
   }
 
-  openPanelonQuery(){
+  openPanelonQuery() {
     this.mapQueryClick = true;
     this.openPanels;
     this.legendPanelOpened = false;
     this.clearSearch();
   }
 
-  onClearQuery(){
+  onClearQuery() {
     this.queryState.store.clear(); // clears the info panel
     this.queryState.store.softClear(); // clears the info panel
     this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
