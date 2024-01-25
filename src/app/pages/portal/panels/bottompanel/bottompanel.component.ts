@@ -464,7 +464,9 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   }
 
   closePanelLegend() {
-    // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
+    /* this flushes the legend whenever a user closes the panel. if not,
+     the user has to click twice on the legend button to open the legend with the button
+     */
     this.legendPanelOpened = false;
     this.closePanel();
     this.closeLegend.emit();
