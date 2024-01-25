@@ -154,7 +154,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   private context$$: Subscription;
   private searchTerm$$: Subscription;
 
-
   private routeParams: Params;
   public toastPanelHtmlDisplay = false;
   public mobile: boolean;
@@ -320,14 +319,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.hasFeatureEmphasisOnSelection = this.configService.getConfig(
       'hasFeatureEmphasisOnSelection'
     );
-    this.igoSearchPointerSummaryEnabled = this.configService.getConfig(
-      'hasSearchPointerSummary'
-    );
-    if (this.igoSearchPointerSummaryEnabled === undefined) {
-      this.igoSearchPointerSummaryEnabled =
-        (this.storageService.get('searchPointerSummaryEnabled') as boolean) ||
-        false;
-    }
     this.mobileBreakPoint =
       this.configService.getConfig('mobileBreakPoint') === undefined
         ? "'(min-width: 768px)'"
