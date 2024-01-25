@@ -2,35 +2,9 @@
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-import { LanguageOptions } from '@igo2/core';
-import {
-  Projection,
-  SearchSourceOptions,
-  CommonVectorStyleOptions
-} from '@igo2/geo';
-import { AppOptions } from './environnement.interface';
+import { AppEnvironmentOptions } from './environnement.interface';
 
-interface Environment {
-  production: boolean;
-  igo: {
-    app: AppOptions;
-    language?: LanguageOptions;
-    projections?: Projection[];
-    searchSources?: { [key: string]: SearchSourceOptions };
-    queryOverlayStyle?: {
-      base?: CommonVectorStyleOptions,
-      selection?: CommonVectorStyleOptions,
-      focus?: CommonVectorStyleOptions
-    };
-    searchOverlayStyle?: {
-      base?: CommonVectorStyleOptions,
-      selection?: CommonVectorStyleOptions,
-      focus?: CommonVectorStyleOptions
-    };
-  };
-}
-
-export const environment: Environment = {
+export const environment: AppEnvironmentOptions = {
   production: false,
   igo: {
     app: {
@@ -70,17 +44,19 @@ export const environment: Environment = {
         enabled: false
       },
       nominatim: {
-        available: false
+        available: false,
+        enabled: false
       },
       storedqueries: {
         enabled: false,
         available: false
       },
       icherche: {
-        searchUrl: '/apis/icherche/',
+        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
         order: 2,
         params: {
-          limit: '5'
+          limit: '5',
+          type: 'adresses,lieux,bornes-km,sorties-autoroute',
         },
         settings: []
       },
@@ -89,9 +65,11 @@ export const environment: Environment = {
       icherchereverse: {
         searchUrl: '/apis/terrapi',
         order: 3,
-        enabled: true
+        available: false,
+        enabled: false
       },
       ilayer: {
+        available: false,
         enabled: false,
         searchUrl: '/apis/icherche/layers',
         order: 4,
