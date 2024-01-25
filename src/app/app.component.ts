@@ -61,6 +61,37 @@ export class AppComponent {
     this.pwaService.checkForUpdates();
   }
 
+  ngOnInit(): void {
+    this.handleSplashScreen();
+  }
+
+  private handleSplashScreen(): void {
+    this.router.events
+      .pipe(
+        first((events) => events instanceof NavigationEnd),
+        delay(500)
+      )
+      .subscribe(() => {
+        this._removeSplashScreen();
+      });
+  }
+
+  private _removeSplashScreen(): void {
+    const intro = this.document.getElementById('splash-screen');
+    if (!intro) {
+      return;
+    }
+    intro.classList.add('is-destroying');
+
+    const destroyingAnimationTime = 300;
+    const stylesheet = this.document.getElementById('splash-screen-stylesheet');
+
+    setTimeout(() => {
+      DomUtils.remove(intro);
+      DomUtils.remove(stylesheet);
+    }, destroyingAnimationTime);
+  }
+
   private readTitleConfig() {
     this.languageService.translate
       .get(this.configService.getConfig('title'))
