@@ -1,8 +1,19 @@
 import { Injectable } from '@angular/core';
 
-import { EntityRecord, EntityStoreFilterCustomFuncStrategy, EntityStoreStrategyFuncOptions, EntityStore } from '@igo2/common';
+import {
+  EntityRecord,
+  EntityStore,
+  EntityStoreFilterCustomFuncStrategy,
+  EntityStoreStrategyFuncOptions
+} from '@igo2/common';
 import { ConfigService, StorageService } from '@igo2/core';
-import { SearchResult, SearchSourceService, SearchSource, CommonVectorStyleOptions } from '@igo2/geo';
+import {
+  CommonVectorStyleOptions,
+  SearchResult,
+  SearchSource,
+  SearchSourceService
+} from '@igo2/geo';
+
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 /**
@@ -19,17 +30,28 @@ export class SearchState {
   public focusedOrResolution$$: Subscription;
   public selectedOrResolution$$: Subscription;
 
-  readonly searchTermSplitter$: BehaviorSubject<string> = new BehaviorSubject('|');
+  readonly searchTermSplitter$: BehaviorSubject<string> = new BehaviorSubject(
+    '|'
+  );
 
-  readonly searchTerm$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  readonly searchTerm$: BehaviorSubject<string> = new BehaviorSubject(
+    undefined
+  );
 
-  readonly searchType$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  readonly searchType$: BehaviorSubject<string> = new BehaviorSubject(
+    undefined
+  );
 
-  readonly searchDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  readonly searchDisabled$: BehaviorSubject<boolean> = new BehaviorSubject(
+    false
+  );
 
-  readonly searchResultsGeometryEnabled$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  readonly searchResultsGeometryEnabled$: BehaviorSubject<boolean> =
+    new BehaviorSubject(false);
 
-  readonly selectedResult$: BehaviorSubject<SearchResult> = new BehaviorSubject(undefined);
+  readonly selectedResult$: BehaviorSubject<SearchResult> = new BehaviorSubject(
+    undefined
+  );
 
   /**
    * Store that holds the search results
@@ -48,7 +70,8 @@ export class SearchState {
   constructor(
     private searchSourceService: SearchSourceService,
     private storageService: StorageService,
-    private configService: ConfigService) {
+    private configService: ConfigService
+  ) {
     this.searchOverlayStyle = {
       markerColor: '#45D7E6', // marker fill
       markerOpacity: 0.8, // marker opacity not applied if a rgba markerColor is provided
@@ -80,7 +103,9 @@ export class SearchState {
       strokeWidth: 4 // line and poly
     };
 
-    const searchResultsGeometryEnabled = this.storageService.get('searchResultsGeometryEnabled') as boolean;
+    const searchResultsGeometryEnabled = this.storageService.get(
+      'searchResultsGeometryEnabled'
+    ) as boolean;
     if (searchResultsGeometryEnabled) {
       this.searchResultsGeometryEnabled$.next(searchResultsGeometryEnabled);
     }
@@ -91,7 +116,9 @@ export class SearchState {
     const filterClauseFunc = (record: EntityRecord<SearchResult>) => {
       return record.entity.meta.score === 100;
     };
-    return new EntityStoreFilterCustomFuncStrategy({ filterClauseFunc } as EntityStoreStrategyFuncOptions);
+    return new EntityStoreFilterCustomFuncStrategy({
+      filterClauseFunc
+    } as EntityStoreStrategyFuncOptions);
   }
 
   /**
@@ -99,7 +126,9 @@ export class SearchState {
    *
    */
   activateCustomFilterTermStrategy() {
-    const strategy = this.store.getStrategyOfType(EntityStoreFilterCustomFuncStrategy);
+    const strategy = this.store.getStrategyOfType(
+      EntityStoreFilterCustomFuncStrategy
+    );
     if (strategy !== undefined) {
       strategy.activate();
     }
@@ -110,7 +139,9 @@ export class SearchState {
    *
    */
   deactivateCustomFilterTermStrategy() {
-    const strategy = this.store.getStrategyOfType(EntityStoreFilterCustomFuncStrategy);
+    const strategy = this.store.getStrategyOfType(
+      EntityStoreFilterCustomFuncStrategy
+    );
     if (strategy !== undefined) {
       strategy.deactivate();
     }

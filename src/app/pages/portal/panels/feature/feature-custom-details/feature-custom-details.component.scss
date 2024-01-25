@@ -13,17 +13,19 @@ div {
 .table-row {
   display: flex;
   flex-flow: row nowrap;
-  border-bottom: 1px solid #DAE6F0;
+  border-bottom: 1px solid #dae6f0;
 }
 
 .table-row:hover {
   cursor: pointer;
-  background-color: #DAE6F0;
+  background-color: #dae6f0;
 }
 
 .table-row .key {
   width: 38%;
-  font: bold 16px/24px 'Open Sans', sans-serif;
+  font:
+    bold 16px/24px 'Open Sans',
+    sans-serif;
   color: #223654;
   margin-top: 4px;
   margin-bottom: 4px;
@@ -32,7 +34,9 @@ div {
 
 .table-row .value {
   width: 62%;
-  font: normal 16px/24px 'Open Sans', sans-serif;
+  font:
+    normal 16px/24px 'Open Sans',
+    sans-serif;
   color: #223654;
   text-align: left;
   margin-top: 4px;
@@ -50,35 +54,36 @@ div {
 }
 
 .link:hover {
-  color: #3374CC;
+  color: #3374cc;
 }
 
-::ng-deep .tooltip-right, ::ng-deep .tooltip-above{
-  position: relative!important;
+::ng-deep .tooltip-right,
+::ng-deep .tooltip-above {
+  position: relative !important;
   top: 30%;
-  z-index: 5000!important;
-  background-color:white!important;
-  color: #223654!important;
-  margin: 0 8px!important;
-  padding: 8px 12px!important;
-  font-size: 14px!important;
-  line-height: 24px!important;
+  z-index: 5000 !important;
+  background-color: white !important;
+  color: #223654 !important;
+  margin: 0 8px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
   border: 1px solid #c5cad2;
-  border-radius: 0!important;
+  border-radius: 0 !important;
   overflow: visible !important;
-  box-shadow: 0px 1px 7px #22365450!important;
+  box-shadow: 0px 1px 7px #22365450 !important;
   white-space: pre-line;
 }
 
-::ng-deep .tooltip-right::after{
-  content: ''!important;
-  position: absolute!important;
-  top: 18%!important;
-  right: 100%!important;
-  margin-top: -5px!important;
-  border-width: 10px!important;
-  border-style: solid!important;
-  border-color: transparent transparent transparent white!important;
+::ng-deep .tooltip-right::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 18% !important;
+  right: 100% !important;
+  margin-top: -5px !important;
+  border-width: 10px !important;
+  border-style: solid !important;
+  border-color: transparent transparent transparent white !important;
   transform: rotate(180deg);
 }
 

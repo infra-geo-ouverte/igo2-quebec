@@ -1,44 +1,52 @@
+import {
+  APP_INITIALIZER,
+  ApplicationRef,
+  Injector,
+  NgModule
+} from '@angular/core';
+import {
+  MAT_TOOLTIP_DEFAULT_OPTIONS,
+  MatTooltipDefaultOptions
+} from '@angular/material/tooltip';
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, ApplicationRef, Injector, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderModule } from './pages/header/header.module';
-import { FooterModule } from './pages/footer/footer.module';
-import { MenuModule } from './pages/menu/menu.module';
-import {
-  provideConfigOptions,
-  IgoMessageModule,
-  IgoGestureModule,
-  RouteService,
-  LanguageService
-} from '@igo2/core';
-import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
-import {
-  provideIChercheSearchSource,
-  provideIChercheReverseSearchSource,
-  provideCoordinatesReverseSearchSource,
-  provideILayerSearchSource,
-  provideOptionsApi,
-  provideStyleListOptions,
-  provideWorkspaceSearchSource,
-  SearchService,
-  provideOsrmDirectionsSource,
-  provideNominatimSearchSource,
-  CoordinatesSearchResultFormatter,
-  provideDefaultCoordinatesSearchResultFormatter,
-  provideDefaultIChercheSearchResultFormatter,
-  provideSearchSourceService,
-  IChercheSearchSource
-} from '@igo2/geo';
-
-
-import { environment } from '../environments/environment';
-import { PortalModule } from './pages';
-import { AppComponent } from './app.component';
+import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
+import {
+  IgoGestureModule,
+  IgoMessageModule,
+  LanguageService,
+  RouteService,
+  provideConfigOptions
+} from '@igo2/core';
+import {
+  CoordinatesSearchResultFormatter,
+  IChercheSearchSource,
+  SearchService,
+  provideCoordinatesReverseSearchSource,
+  provideDefaultCoordinatesSearchResultFormatter,
+  provideDefaultIChercheSearchResultFormatter,
+  provideIChercheReverseSearchSource,
+  provideIChercheSearchSource,
+  provideILayerSearchSource,
+  provideNominatimSearchSource,
+  provideOptionsApi,
+  provideOsrmDirectionsSource,
+  provideSearchSourceService,
+  provideStyleListOptions,
+  provideWorkspaceSearchSource
+} from '@igo2/geo';
+
 import { concatMap, first } from 'rxjs';
+
+import { environment } from '../environments/environment';
+import { AppComponent } from './app.component';
+import { PortalModule } from './pages';
+import { FooterModule } from './pages/footer/footer.module';
+import { HeaderModule } from './pages/header/header.module';
+import { MenuModule } from './pages/menu/menu.module';
 
 export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
@@ -103,26 +111,29 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
 
 function appInitializerFactory(
   injector: Injector,
   applicationRef: ApplicationRef
 ) {
   // ensure to have the proper translations loaded once, whe the app is stable.
-  return () => new Promise<any>((resolve: any) => {
-    applicationRef.isStable.pipe(
-      first(isStable => isStable === true),
-      concatMap(() => {
-        const languageService = injector.get(LanguageService);
-        const lang = languageService.getLanguage();
-        return languageService.translate.getTranslation(lang);
-      }))
-      .subscribe((translations) => {
-        const languageService = injector.get(LanguageService);
-        const lang = languageService.getLanguage();
-        languageService.translate.setTranslation(lang, translations);
-        resolve();
-      });
-  });
+  return () =>
+    new Promise<any>((resolve: any) => {
+      applicationRef.isStable
+        .pipe(
+          first((isStable) => isStable === true),
+          concatMap(() => {
+            const languageService = injector.get(LanguageService);
+            const lang = languageService.getLanguage();
+            return languageService.translate.getTranslation(lang);
+          })
+        )
+        .subscribe((translations) => {
+          const languageService = injector.get(LanguageService);
+          const lang = languageService.getLanguage();
+          languageService.translate.setTranslation(lang, translations);
+          resolve();
+        });
+    });
 }

@@ -1,14 +1,13 @@
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
-import { userAgent } from '@igo2/utils';
-import {
-  LanguageService,
-  ConfigService,
-  MessageService
-} from '@igo2/core';
-import { AuthOptions } from '@igo2/auth';
-import { PwaService } from './services/pwa.service';
 import { MatIconRegistry } from '@angular/material/icon';
+import { Meta, Title } from '@angular/platform-browser';
+
+import { AuthOptions } from '@igo2/auth';
+import { ConfigService, LanguageService, MessageService } from '@igo2/core';
+import { userAgent } from '@igo2/utils';
+
+import { PwaService } from './services/pwa.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -33,7 +32,7 @@ export class AppComponent {
     private metaService: Meta,
     private messageService: MessageService,
     private pwaService: PwaService,
-    iconRegistry: MatIconRegistry,
+    iconRegistry: MatIconRegistry
   ) {
     iconRegistry.registerFontClassAlias('Linearicons-Free', 'lnr');
     this.readTitleConfig();
@@ -42,14 +41,20 @@ export class AppComponent {
 
     this.detectOldBrowser();
 
-    this.hasHeader = this.configService.getConfig('header.hasHeader') === undefined ? false :
-      this.configService.getConfig('header.hasHeader');
+    this.hasHeader =
+      this.configService.getConfig('header.hasHeader') === undefined
+        ? false
+        : this.configService.getConfig('header.hasHeader');
 
-    this.hasFooter = this.configService.getConfig('hasFooter') === undefined ? false :
-      this.configService.getConfig('hasFooter');
+    this.hasFooter =
+      this.configService.getConfig('hasFooter') === undefined
+        ? false
+        : this.configService.getConfig('hasFooter');
 
-    this.hasMenu = this.configService.getConfig('hasMenu') === undefined ? false :
-      this.configService.getConfig('hasMenu');
+    this.hasMenu =
+      this.configService.getConfig('hasMenu') === undefined
+        ? false
+        : this.configService.getConfig('hasMenu');
 
     this.setManifest();
     this.installPrompt();
@@ -57,19 +62,24 @@ export class AppComponent {
   }
 
   private readTitleConfig() {
-    this.languageService.translate.get(this.configService.getConfig('title')).subscribe(title => {
-      if (title) {
-        this.titleService.setTitle(title);
-        this.metaService.addTag({ name: 'title', content: title });
-      }
-    });
+    this.languageService.translate
+      .get(this.configService.getConfig('title'))
+      .subscribe((title) => {
+        if (title) {
+          this.titleService.setTitle(title);
+          this.metaService.addTag({ name: 'title', content: title });
+        }
+      });
   }
 
   private setManifest() {
     const appConfig = this.configService.getConfig('app');
     if (appConfig?.install?.enabled) {
-      const manifestPath = appConfig.install.manifestPath || 'manifest.webmanifest';
-      document.querySelector('#igoManifestByConfig').setAttribute('href', manifestPath);
+      const manifestPath =
+        appConfig.install.manifestPath || 'manifest.webmanifest';
+      document
+        .querySelector('#igoManifestByConfig')
+        .setAttribute('href', manifestPath);
     }
   }
 
@@ -77,16 +87,24 @@ export class AppComponent {
     const appConfig = this.configService.getConfig('app');
     if (appConfig?.install?.enabled && appConfig?.install?.promote) {
       if (userAgent.getOSName() !== 'iOS') {
-        window.addEventListener('beforeinstallprompt', (event: any) => {
-          event.preventDefault();
-          this.promptEvent = event;
-          window.addEventListener('click', () => {
-            setTimeout(() => {
-              this.promptEvent.prompt();
-              this.promptEvent = undefined;
-            }, 750);
-          }, { once: true });
-        }, { once: true });
+        window.addEventListener(
+          'beforeinstallprompt',
+          (event: any) => {
+            event.preventDefault();
+            this.promptEvent = event;
+            window.addEventListener(
+              'click',
+              () => {
+                setTimeout(() => {
+                  this.promptEvent.prompt();
+                  this.promptEvent = undefined;
+                }, 750);
+              },
+              { once: true }
+            );
+          },
+          { once: true }
+        );
       }
     }
   }
