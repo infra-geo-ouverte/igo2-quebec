@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
 
   private readTitleConfig() {
     this.languageService.translate
-      .get(this.configService.getConfig('title', ''))
+      .get(this.configService.getConfig('title'))
       .subscribe((title) => {
         if (title) {
           this.titleService.setTitle(title);

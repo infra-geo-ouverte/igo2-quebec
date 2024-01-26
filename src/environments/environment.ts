@@ -37,20 +37,22 @@ export const environment: AppEnvironmentOptions = {
       }
     ],
     searchSources: {
-      nominatim: {
+      workspace: {
         available: false,
         enabled: false
+      },
+      nominatim: {
+        available: false
       },
       storedqueries: {
         enabled: false,
         available: false
       },
       icherche: {
-        searchUrl: 'https://geoegl.msp.gouv.qc.ca/apis/icherche',
+        searchUrl: '/apis/icherche/',
         order: 2,
         params: {
-          limit: '5',
-          type: 'adresses,lieux,bornes-km,sorties-autoroute'
+          limit: '5'
         },
         settings: []
       },
@@ -58,17 +60,7 @@ export const environment: AppEnvironmentOptions = {
       icherchereverse: {
         searchUrl: '/apis/terrapi',
         order: 3,
-        available: false,
-        enabled: false
-      },
-      ilayer: {
-        available: false,
-        enabled: false,
-        searchUrl: '/apis/icherche/layers',
-        order: 4,
-        params: {
-          limit: '3'
-        }
+        enabled: true
       }
     }
   }

@@ -4,11 +4,7 @@ import {
   Injector,
   NgModule
 } from '@angular/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import {
-  MAT_TOOLTIP_DEFAULT_OPTIONS,
-  MatTooltipDefaultOptions
-} from '@angular/material/tooltip';
+import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -16,7 +12,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import {
-  IgoGestureModule,
   IgoMessageModule,
   LanguageService,
   RouteService,
@@ -55,7 +50,6 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
-    IgoGestureModule.forRoot(),
     IgoMessageModule,
     IgoSpinnerModule,
     IgoStopPropagationModule,
@@ -89,12 +83,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     },
     provideStyleListOptions({
       path: './assets/list-style.json'
-    }),
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions },
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { appearance: 'fill' }
-    }
+    })
   ],
   bootstrap: [AppComponent]
 })
