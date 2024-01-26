@@ -21,8 +21,6 @@ import {
   ActionbarMode,
   EntityRecord,
   EntityStore,
-  Workspace,
-  WorkspaceStore,
   getEntityTitle
 } from '@igo2/common';
 import { DetailedContext } from '@igo2/context';
@@ -56,7 +54,6 @@ import {
   SearchSource,
   SearchSourceService,
   VectorLayer,
-  WfsWorkspace,
   computeOlFeaturesExtent,
   featureToSearchResult,
   generateIdFromSourceOptions,
@@ -65,12 +62,7 @@ import {
   sourceCanReverseSearch,
   sourceCanSearch
 } from '@igo2/geo';
-import {
-  ContextState,
-  MapState,
-  QueryState,
-  WorkspaceState
-} from '@igo2/integration';
+import { ContextState, MapState, QueryState } from '@igo2/integration';
 import { ObjectUtils } from '@igo2/utils';
 
 import olFormatGeoJSON from 'ol/format/GeoJSON';
@@ -106,14 +98,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
   public hasGeolocateButton: boolean = true;
-  public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
-  public workspaceEntitySortChange$: BehaviorSubject<boolean> =
-    new BehaviorSubject(false);
-  private workspaceMaximize$$: Subscription[] = [];
-  readonly workspaceMaximize$: BehaviorSubject<boolean>;
-  public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(
-    undefined
-  );
   public hasSideSearch = true;
   public showSearchBar = true;
   @ViewChild('mapBrowser', { read: ElementRef, static: true })
@@ -178,22 +162,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return '(min-width: 768px)' && this.panelOpenState;
   }
 
-  get expansionPanelExpanded(): boolean {
-    return this.workspaceState.workspacePanelExpanded;
-  }
-  set expansionPanelExpanded(value: boolean) {
-    this.workspaceState.workspacePanelExpanded = value;
-    if (value) {
-      this.map.viewController.setPadding({ bottom: 280 });
-    } else {
-      this.map.viewController.setPadding({ bottom: 0 });
-    }
-  }
-
-  get workspace(): Workspace {
-    return this.workspaceState.workspace$.value;
-  }
-
   get actionbarMode(): ActionbarMode {
     return ActionbarMode.Overlay;
   }
@@ -208,10 +176,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   get searchResultsGeometryEnabled(): boolean {
     return this.searchState.searchResultsGeometryEnabled$.value;
-  }
-
-  get workspaceStore(): WorkspaceStore {
-    return this.workspaceState.store;
   }
 
   get queryStore(): EntityStore<SearchResult> {
@@ -230,7 +194,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    public workspaceState: WorkspaceState,
     public authService: AuthService,
     public mediaService: MediaService,
     public layerService: LayerService,
@@ -254,9 +217,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private analyticsService: AnalyticsService
   ) {
     this.handleAppConfigs();
-    this.workspaceMaximize$ = new BehaviorSubject(
-      this.storageService.get('workspaceMaximize') as boolean
-    );
     this.fullExtent = this.storageService.get('fullExtent') as boolean;
     this.dialogOpened = this.dialog.getDialogById(
       'legend-button-dialog-container'
@@ -455,13 +415,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return properties;
   }
 
-  entitySortChange() {
-    this.workspaceEntitySortChange$.next(true);
-  }
-
   ngOnDestroy() {
     this.context$$.unsubscribe();
-    this.workspaceMaximize$$.map((f) => f.unsubscribe());
     this.layers$$?.unsubscribe();
     this.searchTerm$$.unsubscribe();
   }
@@ -473,33 +428,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         (searchSource: SearchSource) =>
           searchSource instanceof QuerySearchSource
       );
-  }
-
-  private getFeatureIsSameActiveWks(feature: Feature): boolean {
-    if (this.workspace) {
-      const featureTitle = feature.meta.sourceTitle;
-      const wksTitle = this.workspace.title;
-      if (wksTitle === featureTitle) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }
-
-  private getWksActiveOpenInResolution(): boolean {
-    if (this.workspace) {
-      const activeWks = this.workspace as WfsWorkspace;
-      if (
-        activeWks.active &&
-        activeWks.inResolutionRange$.value &&
-        this.workspaceState.workspacePanelExpanded
-      ) {
-        return true;
-      }
-    }
-    return false;
   }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
@@ -522,14 +450,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         let querySearchSource = querySearchSourceArray.find(
           (s) => s.title === feature.meta.sourceTitle
         );
-        if (this.getFeatureIsSameActiveWks(feature)) {
-          if (
-            this.getWksActiveOpenInResolution() &&
-            !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()
-          ) {
-            return;
-          }
-        }
         if (querySearchSource) {
           this.onClearQuery();
           this.openPanelonQuery();
@@ -665,9 +585,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     if (context === undefined) {
       return;
     }
-    if (this.workspace && !this.workspace.entityStore.empty) {
-      this.workspace.entityStore.clear();
-    }
     if (!this.queryState.store.empty) {
       this.queryState.store.softClear();
     }
@@ -783,14 +700,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         olExtent as [number, number, number, number]
       );
     }
-  }
-
-  getControlsOffsetY() {
-    return this.expansionPanelExpanded
-      ? this.workspaceMaximize$.value
-        ? 'firstRowFromBottom-expanded-maximized'
-        : 'firstRowFromBottom-expanded'
-      : 'firstRowFromBottom';
   }
 
   private computeFocusFirst() {

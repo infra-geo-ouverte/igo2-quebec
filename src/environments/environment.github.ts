@@ -18,10 +18,6 @@ export const environment: AppEnvironmentOptions = {
       prefix: ['./locale/']
     },
     searchSources: {
-      workspace: {
-        available: false,
-        enabled: false
-      },
       nominatim: {
         available: false
       },

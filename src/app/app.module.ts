@@ -30,8 +30,7 @@ import {
   provideNominatimSearchSource,
   provideOptionsApi,
   provideStoredQueriesSearchSource,
-  provideStyleListOptions,
-  provideWorkspaceSearchSource
+  provideStyleListOptions
 } from '@igo2/geo';
 
 import { concatMap, first } from 'rxjs';
@@ -77,7 +76,6 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     RouteService,
     provideNominatimSearchSource(),
     provideIChercheSearchSource(),
-    provideWorkspaceSearchSource(),
     provideIChercheReverseSearchSource(),
     provideCoordinatesReverseSearchSource(),
     provideStoredQueriesSearchSource(),

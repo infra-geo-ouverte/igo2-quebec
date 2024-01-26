@@ -36,10 +36,6 @@ export const environment: AppEnvironmentOptions = {
       }
     ],
     searchSources: {
-      workspace: {
-        available: false,
-        enabled: false
-      },
       nominatim: {
         available: false
       },

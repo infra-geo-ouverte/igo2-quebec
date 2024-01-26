@@ -20,10 +20,6 @@
     "title": "Synchronisation de layers"
   },
   {
-    "uri": "workspace",
-    "title": "Workspace (vue tabulaire)"
-  },
-  {
     "uri": "mapOverlay",
     "title": "Superposition de carte (Map overlay)"
   },
