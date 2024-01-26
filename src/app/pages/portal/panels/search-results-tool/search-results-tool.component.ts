@@ -126,7 +126,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   public term = '';
   private searchTerm$$: Subscription;
-  public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
   get termSplitter(): string {
     return this.searchState.searchTermSplitter$.value;

@@ -1,7 +1,5 @@
 <mat-sidenav-container>
   <mat-sidenav-content position="end">
-    <igo-backdrop [shown]="false" (click)="onBackdropClick()"> </igo-backdrop>
-
     <div id="searchDesktop" *ngIf="!mobile">
       <igo-search-bar
         *ngIf="showSearchBar"
@@ -48,7 +46,6 @@
 
     <igo-map-browser
       igoMapOffline
-      #mapBrowser
       igoMapContext
       igoLayerContext
       igoDropGeoFile
@@ -59,7 +56,6 @@
       (query)="onMapQuery($event)"
       [igoHoverFeatureDelay]="10"
       [map]="map"
-      (menuPosition)="onContextMenuOpen($event)"
       [ngClass]="{
         'igo-attribution-offset': map.getBaseLayers().length > 1,
         'map-hasfooter': hasFooter
@@ -101,12 +97,12 @@
         ></igo-geolocate-button>
         <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
         <igo-rotation-button
-          [showIfNoRotation]="showRotationButtonIfNoRotation"
+          [showIfNoRotation]="appConfig.showRotationButtonIfNoRotation"
           [map]="map"
           color="primary"
         ></igo-rotation-button>
         <app-legend-button
-          *ngIf="hasLegendButton"
+          *ngIf="appConfig.hasLegendButton"
           (legendToggled)="toggleLegend()"
           [legendInPanel]="appConfig.legendInPanel"
           [tooltipDisabled]="mobile"

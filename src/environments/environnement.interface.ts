@@ -27,6 +27,6 @@ export interface EnvironmentOptions extends AllEnvironmentOptions {
   queryOnlyOne?: boolean;
   useStaticIcon?: boolean;
   legendInPanel?: boolean;
-  hasSideSearch?: boolean;
   mobileBreakPoint?: string;
+  hasLegendButton?: boolean;
 }
