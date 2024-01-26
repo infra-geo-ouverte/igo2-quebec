@@ -140,14 +140,14 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private searchState: SearchState
   ) {
-    this.customFeatureTitle =
-      this.configService.getConfig('customFeatureTitle') === undefined
-        ? false
-        : this.configService.getConfig('customFeatureTitle');
-    this.customFeatureDetails =
-      this.configService.getConfig('customFeatureDetails') === undefined
-        ? false
-        : this.configService.getConfig('customFeatureDetails');
+    this.customFeatureTitle = this.configService.getConfig(
+      'customFeatureTitle',
+      false
+    );
+    this.customFeatureDetails = this.configService.getConfig(
+      'customFeatureDetails',
+      false
+    );
   }
 
   private monitorResultOutOfView() {

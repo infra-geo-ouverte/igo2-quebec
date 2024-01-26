@@ -190,10 +190,10 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     private elRef: ElementRef
   ) {
     this.mapService.setMap(this.map);
-    this.showSearchBar =
-      this.configService.getConfig('showSearchBar') === undefined
-        ? true
-        : this.configService.getConfig('showSearchBar');
+    this.showSearchBar = this.configService.getConfig(
+      'searchBar.showSearchBar',
+      true
+    );
     this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
   }
 

@@ -13,16 +13,14 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { AuthOptions, AuthService } from '@igo2/auth';
+import { AuthService } from '@igo2/auth';
 import {
   ActionStore,
   ActionbarMode,
   EntityRecord,
   EntityStore,
-  EntityTablePaginatorOptions,
   Workspace,
   WorkspaceStore,
   getEntityTitle
@@ -87,6 +85,7 @@ import {
   take,
   tap
 } from 'rxjs/operators';
+import { EnvironmentOptions } from 'src/environments/environnement.interface';
 
 import { SearchState } from './panels/search-results-tool/search.state';
 import {
@@ -102,6 +101,7 @@ import {
   animations: [controlsAnimations(), controlSlideX(), controlSlideY()]
 })
 export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
+  public appConfig: EnvironmentOptions;
   public showRotationButtonIfNoRotation: boolean = undefined;
   public hasFooter: boolean = true;
   public hasLegendButton: boolean = true;
@@ -122,19 +122,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public legendDialogOpened = false;
   public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
-  getBaseLayersUseStaticIcon(): Boolean {
-    return this.configService.getConfig('useStaticIcon');
-  }
-  public hasHomeExtentButton = false;
-  public hasFeatureEmphasisOnSelection: Boolean = false;
-  public workspacePaginator: MatPaginator;
-  public workspaceSwitchDisabled = false;
-  public paginatorOptions: EntityTablePaginatorOptions = {
-    pageSize: 50, // Number of items to display on a page.
-    pageSizeOptions: [1, 5, 10, 20, 50, 100, 500] // The set of provided page size options to display to the user.
-  };
-  public workspaceMenuClass = 'workspace-menu';
-
   public fullExtent: boolean;
 
   public matDialogRef$ = new BehaviorSubject<MatDialogRef<any>>(undefined);
@@ -145,7 +132,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public termDefinedInUrlTriggered = false;
   private addedLayers$$: Subscription[] = [];
   private layers$$: Subscription;
-  public forceCoordsNA = false;
 
   public contextMenuStore = new ActionStore([]);
   private contextMenuCoord: [number, number];
@@ -166,10 +152,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   get map(): IgoMap {
     return this.mapState.map;
-  }
-
-  get auth(): AuthOptions {
-    return this.configService.getConfig('auth');
   }
 
   isMobile(): boolean {
@@ -241,7 +223,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public searchInit = false;
 
   public mapLayersShownInLegend: Layer[];
-  public legendInPanel: boolean;
+
   public legendButtonTooltip: unknown;
 
   readonly breakpoint$: Observable<BreakpointState>;
@@ -271,6 +253,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private analyticsService: AnalyticsService
   ) {
+    this.handleAppConfigs();
     this.workspaceMaximize$ = new BehaviorSubject(
       this.storageService.get('workspaceMaximize') as boolean
     );
@@ -286,69 +269,16 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         tap(() => {}),
         distinctUntilChanged()
       );
-    this.hasFooter =
-      this.configService.getConfig('hasFooter') === undefined
-        ? false
-        : this.configService.getConfig('hasFooter');
-    this.hasLegendButton =
-      this.configService.getConfig('hasLegendButton') === undefined
-        ? false
-        : this.configService.getConfig('hasLegendButton');
-    this.hasSideSearch =
-      this.configService.getConfig('hasSideSearch') === undefined
-        ? true
-        : this.configService.getConfig('hasSideSearch');
-    this.showSearchBar =
-      this.configService.getConfig('searchBar.showSearchBar') === undefined
-        ? true
-        : this.configService.getConfig('searchBar.showSearchBar');
-    this.hasHomeExtentButton =
-      this.configService.getConfig('homeExtentButton') === undefined
-        ? false
-        : true;
-    this.hasGeolocateButton =
-      this.configService.getConfig('hasGeolocateButton') === undefined
-        ? true
-        : this.configService.getConfig('hasGeolocateButton');
-    this.showRotationButtonIfNoRotation =
-      this.configService.getConfig('showRotationButtonIfNoRotation') ===
-      undefined
-        ? false
-        : this.configService.getConfig('showRotationButtonIfNoRotation');
-    this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
-    this.hasFeatureEmphasisOnSelection = this.configService.getConfig(
-      'hasFeatureEmphasisOnSelection'
-    );
-    this.mobileBreakPoint =
-      this.configService.getConfig('mobileBreakPoint') === undefined
-        ? "'(min-width: 768px)'"
-        : this.configService.getConfig('mobileBreakPoint');
-    this.hasHomeExtentButton =
-      this.configService.getConfig('homeExtentButton') === undefined
-        ? false
-        : true;
-    this.legendInPanel =
-      this.configService.getConfig('legendInPanel') === undefined
-        ? true
-        : this.configService.getConfig('legendInPanel');
   }
 
   ngOnInit() {
     this.queryService.defaultFeatureCount = 1;
     window['IGO'] = this;
-    this.hasGeolocateButton =
-      this.configService.getConfig('hasGeolocateButton') === undefined
-        ? true
-        : this.configService.getConfig('hasGeolocateButton');
-
     this.map.ol.once('rendercomplete', () => {
       this.readQueryParams();
-      if (
-        this.configService.getConfig('geolocate.activateDefault') !== undefined
-      ) {
-        this.map.geolocationController.tracking = this.configService.getConfig(
-          'geolocate.activateDefault'
-        );
+      if (this.appConfig.geolocate?.activateDefault) {
+        this.map.geolocationController.tracking =
+          this.appConfig.geolocate?.activateDefault;
       }
     });
 
@@ -414,6 +344,37 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.breakpoint$.subscribe(() => this.breakpointChanged());
   }
 
+  private handleAppConfigs() {
+    this.appConfig = this.configService.getConfigs();
+
+    this.hasGeolocateButton = this.configService.getConfig(
+      'geolocate.button.visible',
+      true
+    );
+
+    this.showSearchBar = this.configService.getConfig(
+      'searchBar.showSearchBar',
+      true
+    );
+
+    this.hasFooter = this.configService.getConfig('hasFooter', false);
+    this.hasLegendButton = this.configService.getConfig(
+      'hasLegendButton',
+      false
+    );
+    this.hasSideSearch = this.configService.getConfig('hasSideSearch', true);
+
+    this.showRotationButtonIfNoRotation = this.configService.getConfig(
+      'showRotationButtonIfNoRotation',
+      false
+    );
+
+    this.mobileBreakPoint = this.configService.getConfig(
+      'mobileBreakPoint',
+      "'(min-width: 768px)'"
+    );
+  }
+
   ngAfterContentInit(): void {
     this.map.viewController.setInitialState();
   }
@@ -425,7 +386,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   toggleLegend() {
-    if (this.legendInPanel || this.mobile) {
+    if (this.appConfig.legendInPanel || this.mobile) {
       if (!this.legendPanelOpened) {
         this.legendButtonTooltip =
           this.languageService.translate.instant('legend.close');
@@ -542,7 +503,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    if (this.configService.getConfig('queryOnlyOne')) {
+    if (this.appConfig.queryOnlyOne) {
       event.features = [event.features[0]];
       this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
     }

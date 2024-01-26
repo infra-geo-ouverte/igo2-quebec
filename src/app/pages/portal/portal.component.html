@@ -13,7 +13,7 @@
         tooltip-position="after"
         [searchSettings]="false"
         color="primary"
-        [forceNA]="forceCoordsNA"
+        [forceNA]="appConfig.app?.forceCoordsNA"
         [term]="searchBarTerm"
         [store]="searchStore"
         [termSplitter]="termSplitter"
@@ -78,7 +78,7 @@
               : 'baselayers'
         "
         [map]="map"
-        [useStaticIcon]="getBaseLayersUseStaticIcon()"
+        [useStaticIcon]="appConfig.useStaticIcon"
       >
       </igo-baselayers-switcher>
 
@@ -108,7 +108,7 @@
         <app-legend-button
           *ngIf="hasLegendButton"
           (legendToggled)="toggleLegend()"
-          [legendInPanel]="legendInPanel"
+          [legendInPanel]="appConfig.legendInPanel"
           [tooltipDisabled]="mobile"
           [legendButtonTooltip]="legendButtonTooltip"
           color="primary"

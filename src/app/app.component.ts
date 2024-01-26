@@ -41,20 +41,9 @@ export class AppComponent {
 
     this.detectOldBrowser();
 
-    this.hasHeader =
-      this.configService.getConfig('header.hasHeader') === undefined
-        ? false
-        : this.configService.getConfig('header.hasHeader');
-
-    this.hasFooter =
-      this.configService.getConfig('hasFooter') === undefined
-        ? false
-        : this.configService.getConfig('hasFooter');
-
-    this.hasMenu =
-      this.configService.getConfig('hasMenu') === undefined
-        ? false
-        : this.configService.getConfig('hasMenu');
+    this.hasHeader = this.configService.getConfig('header.hasHeader', false);
+    this.hasFooter = this.configService.getConfig('hasFooter', false);
+    this.hasMenu = this.configService.getConfig('hasMenu', false);
 
     this.setManifest();
     this.installPrompt();
@@ -94,7 +83,7 @@ export class AppComponent {
 
   private readTitleConfig() {
     this.languageService.translate
-      .get(this.configService.getConfig('title'))
+      .get(this.configService.getConfig('title', ''))
       .subscribe((title) => {
         if (title) {
           this.titleService.setTitle(title);
@@ -104,10 +93,11 @@ export class AppComponent {
   }
 
   private setManifest() {
-    const appConfig = this.configService.getConfig('app');
-    if (appConfig?.install?.enabled) {
-      const manifestPath =
-        appConfig.install.manifestPath || 'manifest.webmanifest';
+    if (this.configService.getConfig('app.install.enabled')) {
+      const manifestPath = this.configService.getConfig(
+        'app.install.manifestPath',
+        'manifest.webmanifest'
+      );
       document
         .querySelector('#igoManifestByConfig')
         .setAttribute('href', manifestPath);
@@ -115,7 +105,7 @@ export class AppComponent {
   }
 
   private installPrompt() {
-    const appConfig = this.configService.getConfig('app');
+    const appConfig: AppOptions = this.configService.getConfig('app');
     if (appConfig?.install?.enabled && appConfig?.install?.promote) {
       if (userAgent.getOSName() !== 'iOS') {
         window.addEventListener(

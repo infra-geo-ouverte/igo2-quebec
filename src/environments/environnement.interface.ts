@@ -25,4 +25,8 @@ export interface EnvironmentOptions extends AllEnvironmentOptions {
   customFeatureDetails?: string;
   customFeatureTitle?: string;
   queryOnlyOne?: boolean;
+  useStaticIcon?: boolean;
+  legendInPanel?: boolean;
+  hasSideSearch?: boolean;
+  mobileBreakPoint?: string;
 }
