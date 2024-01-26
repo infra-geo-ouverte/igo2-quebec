@@ -27,10 +27,8 @@ import {
   provideCoordinatesReverseSearchSource,
   provideIChercheReverseSearchSource,
   provideIChercheSearchSource,
-  provideILayerSearchSource,
   provideNominatimSearchSource,
   provideOptionsApi,
-  provideOsrmDirectionsSource,
   provideStoredQueriesSearchSource,
   provideStyleListOptions,
   provideWorkspaceSearchSource
