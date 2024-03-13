@@ -38,6 +38,7 @@ import {
   DirectionState,
   MapState,
   QueryState,
+  SearchState,
   ToolState
 } from '@igo2/integration';
 
@@ -50,8 +51,6 @@ import * as olProj from 'ol/proj';
 import pointOnFeature from '@turf/point-on-feature';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-
-import { SearchState } from './search.state';
 
 /**
  * Tool to browse the search results
@@ -71,6 +70,7 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
    * to show hide results icons
    */
   @Input() showIcons: boolean = true;
+  @Input() searchState: SearchState;
 
   private hasFeatureEmphasisOnSelection: boolean;
   private showResultsGeometries$$: Subscription;
@@ -174,7 +174,6 @@ export class SearchResultsToolComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapState: MapState,
-    private searchState: SearchState,
     private elRef: ElementRef,
     public toolState: ToolState,
     private directionState: DirectionState,

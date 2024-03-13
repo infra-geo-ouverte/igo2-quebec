@@ -48,7 +48,12 @@ import {
   sourceCanReverseSearch,
   sourceCanSearch
 } from '@igo2/geo';
-import { ContextState, MapState, QueryState } from '@igo2/integration';
+import {
+  ContextState,
+  MapState,
+  QueryState,
+  SearchState
+} from '@igo2/integration';
 import { ObjectUtils } from '@igo2/utils';
 
 import olFormatGeoJSON from 'ol/format/GeoJSON';
@@ -65,7 +70,6 @@ import {
 } from 'rxjs/operators';
 import { EnvironmentOptions } from 'src/environments/environnement.interface';
 
-import { SearchState } from './panels/search-results-tool/search.state';
 import {
   controlSlideX,
   controlSlideY,

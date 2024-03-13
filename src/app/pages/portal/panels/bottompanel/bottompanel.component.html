@@ -80,6 +80,7 @@
     <div *ngIf="mapQueryClick" #getInfo>
       <app-feature-info
         [map]="map"
+        [searchState]="searchState"
         [store]="queryStore"
         [mobile]="mobile"
         (closeQuery)="closePanelOnCloseQuery()"

@@ -26,6 +26,7 @@
       <app-sidepanel
         #sidepanel
         class="sidepanel"
+        [searchState]="searchState"
         [map]="map"
         [mobile]="mobile"
         [(opened)]="panelOpenState"
@@ -113,6 +114,7 @@
 
       <app-bottompanel
         *ngIf="mobile"
+        [searchState]="searchState"
         [mobile]="mobile"
         [store]="searchStore"
         [searchInit]="searchInit"
