@@ -30,7 +30,7 @@
   "importExport": {
     "url": "/apis/ogre"
   },
-  "mobileBreakPoint": "'(min-width: 768px)'",
+  "mobileBreakPoint": "(min-width: 768px)",
   "language": {
     "prefix": [
       "./locale/"

@@ -65,8 +65,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   skipWhile,
-  take,
-  tap
+  take
 } from 'rxjs/operators';
 import { EnvironmentOptions } from 'src/environments/environnement.interface';
 
@@ -172,10 +171,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.languageService.translate.instant('legend.open');
     this.breakpoint$ = this.breakpointObserver
       .observe(this.mobileBreakPoint)
-      .pipe(
-        tap(() => {}),
-        distinctUntilChanged()
-      );
+      .pipe(distinctUntilChanged());
   }
 
   ngOnInit() {
