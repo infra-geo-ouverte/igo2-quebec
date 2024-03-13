@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -65,7 +65,6 @@ import { FeatureInfoComponent } from '../feature/feature-info/feature-info.compo
   imports: [
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    NgIf,
     SearchBarComponent,
     MatTooltip,
     MatIconButton,
@@ -75,7 +74,7 @@ import { FeatureInfoComponent } from '../feature/feature-info/feature-info.compo
     SearchResultsComponent,
     AsyncPipe,
     TranslateModule
-  ]
+]
 })
 export class BottomPanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);

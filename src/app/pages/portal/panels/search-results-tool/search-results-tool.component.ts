@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -70,12 +70,11 @@ import { debounceTime, map } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
     FlexibleComponent,
     SearchResultsComponent,
     SearchResultAddButtonComponent,
     AsyncPipe
-  ]
+]
 })
 export class SearchResultsToolComponent implements OnInit, OnDestroy {
   /**

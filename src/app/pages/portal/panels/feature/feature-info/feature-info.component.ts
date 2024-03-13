@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -46,7 +46,6 @@ import { FeatureCustomDetailsComponent } from '../feature-custom-details/feature
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
     MatIconButton,
     StopPropagationDirective,
     MatTooltip,
@@ -55,7 +54,7 @@ import { FeatureCustomDetailsComponent } from '../feature-custom-details/feature
     FeatureCustomDetailsComponent,
     AsyncPipe,
     TranslateModule
-  ]
+]
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
   get storageService(): StorageService {

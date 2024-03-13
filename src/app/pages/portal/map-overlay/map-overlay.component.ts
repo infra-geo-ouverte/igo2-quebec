@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 
 import { Context, ContextService } from '@igo2/context';
@@ -14,7 +14,7 @@ import { MapOverlay } from './map-overlay.interface';
   templateUrl: './map-overlay.component.html',
   styleUrls: ['./map-overlay.component.scss'],
   standalone: true,
-  imports: [NgFor, NgClass, NgIf, NgStyle]
+  imports: [NgClass, NgStyle]
 })
 export class MapOverlayComponent implements AfterViewInit, OnDestroy {
   public mapOverlay: MapOverlay[] = [];

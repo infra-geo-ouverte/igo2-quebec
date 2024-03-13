@@ -3,7 +3,7 @@ import {
   BreakpointState,
   Breakpoints
 } from '@angular/cdk/layout';
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
@@ -106,7 +106,6 @@ import {
   imports: [
     MatSidenavContainer,
     MatSidenavContent,
-    NgIf,
     SearchBarComponent,
     MatTooltip,
     SidePanelComponent,
@@ -198,7 +197,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     public capabilitiesService: CapabilitiesService,
     private contextState: ContextState,
     private mapState: MapState,
-    private searchState: SearchState,
+    public searchState: SearchState,
     private queryState: QueryState,
     private searchSourceService: SearchSourceService,
     private configService: ConfigService,

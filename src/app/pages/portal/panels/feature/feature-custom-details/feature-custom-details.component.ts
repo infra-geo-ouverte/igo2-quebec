@@ -1,11 +1,4 @@
-import {
-  AsyncPipe,
-  JsonPipe,
-  KeyValuePipe,
-  NgFor,
-  NgIf,
-  NgStyle
-} from '@angular/common';
+import { AsyncPipe, JsonPipe, KeyValuePipe, NgStyle } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -42,10 +35,8 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
     MatIcon,
     MatTooltip,
-    NgFor,
     NgStyle,
     ImageErrorDirective,
     AsyncPipe,
@@ -282,4 +273,6 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
     }
     return feature.properties;
   }
+
+  copyTextToClipboard(value: any) {}
 }

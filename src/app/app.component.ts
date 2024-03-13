@@ -1,4 +1,4 @@
-import { DOCUMENT, NgClass, NgIf } from '@angular/common';
+import { DOCUMENT, NgClass } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -33,12 +33,11 @@ import { PwaService } from './services/pwa.service';
   imports: [
     SpinnerComponent,
     SpinnerActivityDirective,
-    NgIf,
     HeaderComponent,
     MenuComponent,
     PortalComponent,
     NgClass
-  ]
+]
 })
 export class AppComponent implements OnInit {
   private themeClass = 'qcca-theme';

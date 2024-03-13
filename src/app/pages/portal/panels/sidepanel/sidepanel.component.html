@@ -8,86 +8,82 @@
     (closeLegend)="closePanelLegend()"
   >
     <div #content class="app-sidenav-content">
-      <div
-        *ngIf="legendPanelOpened"
-        id="legend"
-        class="legend-container"
-        [mapQueryClick]="mapQueryClick"
-        [legendPanelOpened]="legendPanelOpened"
-        [panelOpenState]="panelOpenState"
-      >
-        <div class="flex justify-content-space-between align-items-center">
-          <h4 class="title" mat-dialog-title>
-            {{ 'legend.title' | translate }}
-          </h4>
-          <button
-            mat-icon-button
-            [matTooltip]="'legend.close' | translate"
-            color="primary"
-            (click)="closePanelLegend()"
+      @if (legendPanelOpened) {
+        <div id="legend" class="legend-container">
+          <div class="flex justify-content-space-between align-items-center">
+            <h4 class="title" mat-dialog-title>
+              {{ 'legend.title' | translate }}
+            </h4>
+            <button
+              mat-icon-button
+              [matTooltip]="'legend.close' | translate"
+              color="primary"
+              (click)="closePanelLegend()"
+            >
+              <mat-icon svgIcon="close"></mat-icon>
+            </button>
+          </div>
+          <igo-layer-legend-list
+            [layers]="mapLayersShownInLegend"
+            [excludeBaseLayers]="true"
+            [allowShowAllLegends]="false"
+            [updateLegendOnResolutionChange]="true"
+            [showAllLegendsValue]="false"
+            [layers]="layers"
           >
-            <mat-icon svgIcon="close"></mat-icon>
-          </button>
+          </igo-layer-legend-list>
         </div>
-        <igo-layer-legend-list
-          [layers]="mapLayersShownInLegend"
-          [excludeBaseLayers]="true"
-          [allowShowAllLegends]="false"
-          [updateLegendOnResolutionChange]="true"
-          [showAllLegendsValue]="false"
-          [layers]="layers"
-        >
-        </igo-layer-legend-list>
-      </div>
+      }
 
-      <div
-        *ngIf="!searchInit && (queryStore.empty$ | async) && !legendPanelOpened"
-        style="margin: 24px"
-      >
-        <section>
-          <h5>
-            {{ 'igo.integration.searchResultsTool.noResults' | translate }}
-          </h5>
-          <h6>
-            {{ 'igo.integration.searchResultsTool.doSearch' | translate }}
-          </h6>
-          <p
-            [innerHTML]="
-              'igo.integration.searchResultsTool.examples' | translate
-            "
-          ></p>
-        </section>
-      </div>
+      @if (!searchInit && (queryStore.empty$ | async) && !legendPanelOpened) {
+        <div style="margin: 24px">
+          <section>
+            <h5>
+              {{ 'igo.integration.searchResultsTool.noResults' | translate }}
+            </h5>
+            <h6>
+              {{ 'igo.integration.searchResultsTool.doSearch' | translate }}
+            </h6>
+            <p
+              [innerHTML]="
+                'igo.integration.searchResultsTool.examples' | translate
+              "
+            ></p>
+          </section>
+        </div>
+      }
 
-      <div *ngIf="mapQueryClick" #getInfo>
-        <app-feature-info
-          [map]="map"
-          [mobile]="mobile"
-          [store]="queryStore"
-          [mapQueryClick]="mapQueryClick"
-          (closeQuery)="closePanelOnCloseQuery()"
-          (clearSearchbarterm)="($event)"
-          (panelOpened)="panelOpenedFromFeature($event)"
-          (mapQuery)="mapQueryFromFeature($event)"
-          [title]="featureTitle"
-          [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
-        >
-        </app-feature-info>
-      </div>
+      @if (mapQueryClick) {
+        <div #getInfo>
+          <app-feature-info
+            [map]="map"
+            [mobile]="mobile"
+            [store]="queryStore"
+            [mapQueryClick]="mapQueryClick"
+            (closeQuery)="closePanelOnCloseQuery()"
+            (clearSearchbarterm)="($event)"
+            (panelOpened)="panelOpenedFromFeature($event)"
+            (mapQuery)="mapQueryFromFeature($event)"
+            [title]="featureTitle"
+          >
+          </app-feature-info>
+        </div>
+      }
 
-      <div *ngIf="searchInit" #search>
-        <app-search-results-tool
-          #searchresults
-          [searchState]="searchState"
-          [showIcons]="true"
-          placeholder="false"
-          [mapQueryClick]="mapQueryClick"
-          [legendPanelOpened]="legendPanelOpened"
-          [panelOpenState]="panelOpenState"
-          [searchInit]="searchInit"
-        >
-        </app-search-results-tool>
-      </div>
+      @if (searchInit) {
+        <div #search>
+          <app-search-results-tool
+            #searchresults
+            [searchState]="searchState"
+            [showIcons]="true"
+            placeholder="false"
+            [mapQueryClick]="mapQueryClick"
+            [legendPanelOpened]="legendPanelOpened"
+            [searchInit]="searchInit"
+          >
+          </app-search-results-tool>
+        </div>
+      }
     </div>
   </mat-sidenav>
   <div

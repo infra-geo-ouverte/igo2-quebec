@@ -1,4 +1,4 @@
-import { AsyncPipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -42,7 +42,6 @@ import { SearchResultsToolComponent } from '../search-results-tool/search-result
   standalone: true,
   imports: [
     MatSidenav,
-    NgIf,
     MatIconButton,
     MatTooltip,
     MatIcon,
@@ -53,7 +52,7 @@ import { SearchResultsToolComponent } from '../search-results-tool/search-result
     MatMiniFabButton,
     AsyncPipe,
     TranslateModule
-  ]
+]
 })
 export class SidePanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
