@@ -13,16 +13,16 @@ import { MenuRoutingModule } from './menu-routing/menu-routing.module';
 import { MenuComponent } from './menu.component';
 
 @NgModule({
-  declarations: [MenuComponent, HomeComponent, AboutComponent, MapComponent],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MenuRoutingModule,
-    PortalModule,
-    FooterModule,
-    MatToolbarModule
-  ],
-  exports: [MenuComponent, MenuRoutingModule]
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        MenuRoutingModule,
+        PortalModule,
+        FooterModule,
+        MatToolbarModule,
+        MenuComponent, HomeComponent, AboutComponent, MapComponent
+    ],
+    exports: [MenuComponent, MenuRoutingModule]
 })
 export class MenuModule {}

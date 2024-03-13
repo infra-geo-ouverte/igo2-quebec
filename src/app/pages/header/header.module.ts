@@ -8,13 +8,13 @@ import { MenuRoutingModule } from '../menu/menu-routing/menu-routing.module';
 import { HeaderComponent } from './header.component';
 
 @NgModule({
-  declarations: [HeaderComponent],
-  imports: [
-    CommonModule,
-    IgoLanguageModule,
-    MatToolbarModule,
-    MenuRoutingModule
-  ],
-  exports: [HeaderComponent]
+    imports: [
+        CommonModule,
+        IgoLanguageModule,
+        MatToolbarModule,
+        MenuRoutingModule,
+        HeaderComponent
+    ],
+    exports: [HeaderComponent]
 })
 export class HeaderModule {}

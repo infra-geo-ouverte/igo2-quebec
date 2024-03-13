@@ -9,9 +9,9 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { TooltipPosition } from '@angular/material/tooltip';
+import { TooltipPosition, MatTooltip } from '@angular/material/tooltip';
 
-import { getEntityTitle } from '@igo2/common';
+import { getEntityTitle, ImageErrorDirective, SecureImagePipe } from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
 import { MessageService } from '@igo2/core/message';
@@ -20,12 +20,17 @@ import { Feature, IgoMap, SearchSource } from '@igo2/geo';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor, NgStyle, AsyncPipe, JsonPipe, KeyValuePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-feature-custom-details',
-  templateUrl: './feature-custom-details.component.html',
-  styleUrls: ['./feature-custom-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-feature-custom-details',
+    templateUrl: './feature-custom-details.component.html',
+    styleUrls: ['./feature-custom-details.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, MatIcon, MatTooltip, NgFor, NgStyle, ImageErrorDirective, AsyncPipe, JsonPipe, KeyValuePipe, TranslateModule, SecureImagePipe]
 })
 export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   private state: ConnectionState;

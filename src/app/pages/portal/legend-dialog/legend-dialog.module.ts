@@ -10,16 +10,16 @@ import { IgoLayerModule, IgoMapModule } from '@igo2/geo';
 import { LegendDialogComponent } from './legend-dialog.component';
 
 @NgModule({
-  declarations: [LegendDialogComponent],
-  imports: [
-    MatIconModule,
-    MatDialogModule,
-    IgoLayerModule,
-    IgoMapModule,
-    MatButtonModule,
-    MatTooltipModule,
-    IgoLanguageModule
-  ],
-  exports: [LegendDialogComponent]
+    imports: [
+        MatIconModule,
+        MatDialogModule,
+        IgoLayerModule,
+        IgoMapModule,
+        MatButtonModule,
+        MatTooltipModule,
+        IgoLanguageModule,
+        LegendDialogComponent
+    ],
+    exports: [LegendDialogComponent]
 })
 export class LegendDialogModule {}

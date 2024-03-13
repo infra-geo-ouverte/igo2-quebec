@@ -13,16 +13,16 @@ import { FeatureCustomDetailsComponent } from './feature-custom-details.componen
  * @ignore
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    IgoLanguageModule,
-    IgoKeyValueModule,
-    RouterModule,
-    IgoImageModule,
-    MatTooltipModule
-  ],
-  exports: [FeatureCustomDetailsComponent],
-  declarations: [FeatureCustomDetailsComponent]
+    imports: [
+        CommonModule,
+        MatIconModule,
+        IgoLanguageModule,
+        IgoKeyValueModule,
+        RouterModule,
+        IgoImageModule,
+        MatTooltipModule,
+        FeatureCustomDetailsComponent
+    ],
+    exports: [FeatureCustomDetailsComponent]
 })
 export class FeatureCustomDetailsModule {}

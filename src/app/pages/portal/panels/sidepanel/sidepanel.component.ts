@@ -12,23 +12,26 @@ import {
 
 import { ActionStore, EntityStore } from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
-import {
-  FEATURE,
-  Feature,
-  FeatureMotion,
-  IgoMap,
-  Layer,
-  SearchResult
-} from '@igo2/geo';
+import { FEATURE, Feature, FeatureMotion, IgoMap, Layer, SearchResult, LayerLegendListComponent } from '@igo2/geo';
 import { QueryState, SearchState } from '@igo2/integration';
 
 import { BehaviorSubject } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { SearchResultsToolComponent } from '../search-results-tool/search-results-tool.component';
+import { FeatureInfoComponent } from '../feature/feature-info/feature-info.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-sidepanel',
-  templateUrl: './sidepanel.component.html',
-  styleUrls: ['./sidepanel.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-sidepanel',
+    templateUrl: './sidepanel.component.html',
+    styleUrls: ['./sidepanel.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [MatSidenav, NgIf, MatIconButton, MatTooltip, MatIcon, LayerLegendListComponent, FeatureInfoComponent, SearchResultsToolComponent, NgClass, MatMiniFabButton, AsyncPipe, TranslateModule]
 })
 export class SidePanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);

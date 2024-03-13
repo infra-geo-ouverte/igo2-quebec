@@ -23,22 +23,22 @@ import { SearchResultsToolComponent } from './search-results-tool.component';
  * @ignore
  */
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatBadgeModule,
-    MatTooltipModule,
-    MatButtonModule,
-    IgoLanguageModule,
-    IgoFeatureModule,
-    IgoSearchModule,
-    IgoFlexibleModule,
-    IgoPanelModule,
-    IgoFeatureDetailsModule,
-    IgoCustomHtmlModule
-  ],
-  declarations: [SearchResultsToolComponent],
-  exports: [SearchResultsToolComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatBadgeModule,
+        MatTooltipModule,
+        MatButtonModule,
+        IgoLanguageModule,
+        IgoFeatureModule,
+        IgoSearchModule,
+        IgoFlexibleModule,
+        IgoPanelModule,
+        IgoFeatureDetailsModule,
+        IgoCustomHtmlModule,
+        SearchResultsToolComponent
+    ],
+    exports: [SearchResultsToolComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppSearchResultsToolModule {}

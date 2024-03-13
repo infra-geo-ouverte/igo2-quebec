@@ -34,36 +34,35 @@ import { AppSearchResultsToolModule } from './search-results-tool/search-results
 import { SidePanelComponent } from './sidepanel/sidepanel.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatTooltipModule,
-    IgoLanguageModule,
-    IgoPanelModule,
-    IgoFlexibleModule,
-    IgoContextManagerModule,
-    IgoToolModule,
-    //SEARCH
-    MatCardModule,
-    IgoMessageModule,
-    IgoMapModule,
-    IgoSearchModule,
-    IgoActionbarModule,
-    IgoContextMenuModule,
-    IgoAppSearchModule,
-    IgoSearchModule.forRoot(),
-    AppSearchResultsToolModule,
-    MatExpansionModule,
-    AppFeatureInfoModule,
-    AppFeatureModule,
-    FeatureCustomDetailsModule,
-    IgoLayerModule,
-    IgoSearchResultsModule
-  ],
-  exports: [SidePanelComponent, BottomPanelComponent],
-  //SEARCH
-  declarations: [SidePanelComponent, BottomPanelComponent]
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatTooltipModule,
+        IgoLanguageModule,
+        IgoPanelModule,
+        IgoFlexibleModule,
+        IgoContextManagerModule,
+        IgoToolModule,
+        //SEARCH
+        MatCardModule,
+        IgoMessageModule,
+        IgoMapModule,
+        IgoSearchModule,
+        IgoActionbarModule,
+        IgoContextMenuModule,
+        IgoAppSearchModule,
+        IgoSearchModule.forRoot(),
+        AppSearchResultsToolModule,
+        MatExpansionModule,
+        AppFeatureInfoModule,
+        AppFeatureModule,
+        FeatureCustomDetailsModule,
+        IgoLayerModule,
+        IgoSearchResultsModule,
+        SidePanelComponent, BottomPanelComponent
+    ],
+    exports: [SidePanelComponent, BottomPanelComponent]
 })
 export class AppPanelsModule {}

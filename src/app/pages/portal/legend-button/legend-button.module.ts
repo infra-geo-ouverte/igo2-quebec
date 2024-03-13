@@ -11,17 +11,17 @@ import { LegendDialogModule } from '../legend-dialog/legend-dialog.module';
 import { LegendButtonComponent } from './legend-button.component';
 
 @NgModule({
-  declarations: [LegendButtonComponent],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    IgoMapModule,
-    IgoLayerModule,
-    MatTooltipModule,
-    IgoLanguageModule,
-    MatDialogModule,
-    LegendDialogModule
-  ],
-  exports: [LegendButtonComponent]
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        IgoMapModule,
+        IgoLayerModule,
+        MatTooltipModule,
+        IgoLanguageModule,
+        MatDialogModule,
+        LegendDialogModule,
+        LegendButtonComponent
+    ],
+    exports: [LegendButtonComponent]
 })
 export class LegendButtonModule {}

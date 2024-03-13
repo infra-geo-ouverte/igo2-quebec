@@ -12,17 +12,17 @@ import { AppFeatureModule } from '../feature.module';
 import { FeatureInfoComponent } from './feature-info.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    IgoLanguageModule,
-    IgoStopPropagationModule,
-    AppFeatureModule,
-    IgoFeatureModule
-  ],
-  exports: [FeatureInfoComponent],
-  declarations: [FeatureInfoComponent]
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        IgoLanguageModule,
+        IgoStopPropagationModule,
+        AppFeatureModule,
+        IgoFeatureModule,
+        FeatureInfoComponent
+    ],
+    exports: [FeatureInfoComponent]
 })
 export class AppFeatureInfoModule {}

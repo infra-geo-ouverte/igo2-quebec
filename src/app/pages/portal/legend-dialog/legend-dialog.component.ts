@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogState } from '@angular/material/dialog';
+import { MatDialogState, MatDialogTitle, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 
-import { IgoMap, Layer } from '@igo2/geo';
+import { IgoMap, Layer, LayerLegendListComponent } from '@igo2/geo';
 import { MapState } from '@igo2/integration';
 
 import { Observable } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-legend-dialog',
-  templateUrl: 'legend-dialog.component.html',
-  styleUrls: ['./legend-dialog.component.scss']
+    selector: 'app-legend-dialog',
+    templateUrl: 'legend-dialog.component.html',
+    styleUrls: ['./legend-dialog.component.scss'],
+    standalone: true,
+    imports: [MatDialogTitle, MatDialogActions, MatIconButton, MatDialogClose, MatIcon, LayerLegendListComponent, TranslateModule]
 })
 export class LegendDialogComponent implements OnInit {
   public getState: MatDialogState;

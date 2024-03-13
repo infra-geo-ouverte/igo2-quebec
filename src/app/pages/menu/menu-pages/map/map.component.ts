@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
 
 import { ConfigService } from '@igo2/core/config';
+import { NgClass } from '@angular/common';
+import { PortalComponent } from '../../../portal/portal.component';
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+    selector: 'app-map',
+    templateUrl: './map.component.html',
+    styleUrls: ['./map.component.scss'],
+    standalone: true,
+    imports: [PortalComponent, NgClass]
 })
 export class MapComponent {
   public hasHeader = true;

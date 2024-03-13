@@ -4,11 +4,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { LanguageService } from '@igo2/core/language';
 
 import { LegendDialogComponent } from '../legend-dialog/legend-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-legend-button',
-  templateUrl: './legend-button.component.html',
-  styleUrls: ['./legend-button.component.scss']
+    selector: 'app-legend-button',
+    templateUrl: './legend-button.component.html',
+    styleUrls: ['./legend-button.component.scss'],
+    standalone: true,
+    imports: [MatButton, MatTooltip, TranslateModule]
 })
 export class LegendButtonComponent implements OnInit {
   @Output() legendToggled = new EventEmitter<boolean>();
