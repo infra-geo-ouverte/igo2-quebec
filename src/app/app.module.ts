@@ -23,7 +23,7 @@ import {
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { PortalModule } from './pages';
-import { FooterModule } from './pages/footer/footer.module';
+
 import { HeaderModule } from './pages/header/header.module';
 import { MenuModule } from './pages/menu/menu.module';
 
@@ -44,13 +44,12 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     IgoStopPropagationModule,
     PortalModule,
     HeaderModule,
-    FooterModule,
     MenuModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.igo.app.pwa.enabled,
-      registrationStrategy: 'registerWithDelay:5000'
+        enabled: environment.igo.app.pwa.enabled,
+        registrationStrategy: 'registerWithDelay:5000'
     })
-  ],
+],
   providers: [
     provideConfigOptions({
       default: environment.igo,
