@@ -27,14 +27,10 @@ import {
 import { IgoAppSearchModule } from '@igo2/integration';
 
 import { BottomPanelComponent } from './bottompanel/bottompanel.component';
-
-
-
-
 import { SidePanelComponent } from './sidepanel/sidepanel.component';
 
 @NgModule({
-    imports: [
+  imports: [
     CommonModule,
     MatIconModule,
     MatButtonModule,
@@ -57,8 +53,9 @@ import { SidePanelComponent } from './sidepanel/sidepanel.component';
     MatExpansionModule,
     IgoLayerModule,
     IgoSearchResultsModule,
-    SidePanelComponent, BottomPanelComponent
-],
-    exports: [SidePanelComponent, BottomPanelComponent]
+    SidePanelComponent,
+    BottomPanelComponent
+  ],
+  exports: [SidePanelComponent, BottomPanelComponent]
 })
 export class AppPanelsModule {}

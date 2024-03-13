@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
+
 import { TranslateModule } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    standalone: true,
-    imports: [RouterLink, TranslateModule]
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [RouterLink, TranslateModule]
 })
 export class HeaderComponent {
   public headerLogo: string;

@@ -1,3 +1,4 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -9,11 +10,36 @@ import {
   OnInit,
   Output
 } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader
+} from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { ActionStore, EntityStore } from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
 import { StorageService } from '@igo2/core/storage';
-import { FEATURE, Feature, FeatureMotion, IgoMap, Layer, MapService, Research, SearchResult, SearchService, featureFromOl, featureToOl, featuresAreTooDeepInView, getCommonVectorSelectedStyle, getCommonVectorStyle, SearchBarComponent, LayerLegendListComponent, SearchResultsComponent } from '@igo2/geo';
+import {
+  FEATURE,
+  Feature,
+  FeatureMotion,
+  IgoMap,
+  Layer,
+  LayerLegendListComponent,
+  MapService,
+  Research,
+  SearchBarComponent,
+  SearchResult,
+  SearchResultsComponent,
+  SearchService,
+  featureFromOl,
+  featureToOl,
+  featuresAreTooDeepInView,
+  getCommonVectorSelectedStyle,
+  getCommonVectorStyle
+} from '@igo2/geo';
 import {
   MapState,
   QueryState,
@@ -25,22 +51,31 @@ import olFeature from 'ol/Feature';
 import type { default as OlGeometry } from 'ol/geom/Geometry';
 import olPoint from 'ol/geom/Point';
 
-import { BehaviorSubject, Subscription, combineLatest, tap } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { BehaviorSubject, Subscription, combineLatest, tap } from 'rxjs';
+
 import { FeatureInfoComponent } from '../feature/feature-info/feature-info.component';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
-import { NgIf, AsyncPipe } from '@angular/common';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 
 @Component({
-    selector: 'app-bottompanel',
-    templateUrl: './bottompanel.component.html',
-    styleUrls: ['./bottompanel.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [MatExpansionPanel, MatExpansionPanelHeader, NgIf, SearchBarComponent, MatTooltip, MatIconButton, MatIcon, LayerLegendListComponent, FeatureInfoComponent, SearchResultsComponent, AsyncPipe, TranslateModule]
+  selector: 'app-bottompanel',
+  templateUrl: './bottompanel.component.html',
+  styleUrls: ['./bottompanel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    NgIf,
+    SearchBarComponent,
+    MatTooltip,
+    MatIconButton,
+    MatIcon,
+    LayerLegendListComponent,
+    FeatureInfoComponent,
+    SearchResultsComponent,
+    AsyncPipe,
+    TranslateModule
+  ]
 })
 export class BottomPanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);

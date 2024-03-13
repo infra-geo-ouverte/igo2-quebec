@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-menu-home',
-    templateUrl: './home.component.html',
-    styles: [
-        `
+  selector: 'app-menu-home',
+  templateUrl: './home.component.html',
+  styles: [
+    `
       .linkExtImg {
         max-height: 11px;
         max-width: 11px;
@@ -14,8 +14,8 @@ import { Component } from '@angular/core';
         text-align: left;
       }
     `
-    ],
-    standalone: true
+  ],
+  standalone: true
 })
 export class HomeComponent {
   getHomeComponent: any;

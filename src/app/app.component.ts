@@ -1,4 +1,4 @@
-import { DOCUMENT, NgIf, NgClass } from '@angular/common';
+import { DOCUMENT, NgClass, NgIf } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -11,6 +11,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
+import { SpinnerActivityDirective, SpinnerComponent } from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
 import { MessageService } from '@igo2/core/message';
@@ -19,18 +20,25 @@ import { DomUtils, userAgent } from '@igo2/utils';
 
 import { delay, first } from 'rxjs';
 
-import { PwaService } from './services/pwa.service';
-import { PortalComponent } from './pages/portal/portal.component';
-import { MenuComponent } from './pages/menu/menu.component';
 import { HeaderComponent } from './pages/header/header.component';
-import { SpinnerComponent, SpinnerActivityDirective } from '@igo2/common';
+import { MenuComponent } from './pages/menu/menu.component';
+import { PortalComponent } from './pages/portal/portal.component';
+import { PwaService } from './services/pwa.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: true,
-    imports: [SpinnerComponent, SpinnerActivityDirective, NgIf, HeaderComponent, MenuComponent, PortalComponent, NgClass]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    SpinnerComponent,
+    SpinnerActivityDirective,
+    NgIf,
+    HeaderComponent,
+    MenuComponent,
+    PortalComponent,
+    NgClass
+  ]
 })
 export class AppComponent implements OnInit {
   private themeClass = 'qcca-theme';

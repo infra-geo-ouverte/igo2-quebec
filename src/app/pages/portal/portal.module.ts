@@ -34,15 +34,11 @@ import {
 } from '@igo2/geo';
 import { IgoAppSearchBarModule, IgoIntegrationModule } from '@igo2/integration';
 
-
-
-
-
 import { AppPanelsModule } from './panels/panels.module';
 import { PortalComponent } from './portal.component';
 
 @NgModule({
-    imports: [
+  imports: [
     IgoLayerModule,
     IgoAppSearchBarModule,
     AppPanelsModule,
@@ -73,7 +69,7 @@ import { PortalComponent } from './portal.component';
     IgoEntityTableModule,
     IgoEntityTablePaginatorModule,
     PortalComponent
-],
-    exports: [PortalComponent]
+  ],
+  exports: [PortalComponent]
 })
 export class PortalModule {}

@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-
 import { PortalModule } from '../portal';
 import { AboutComponent } from './menu-pages/about/about.component';
 import { HomeComponent } from './menu-pages/home/home.component';
@@ -13,15 +12,18 @@ import { MenuRoutingModule } from './menu-routing/menu-routing.module';
 import { MenuComponent } from './menu.component';
 
 @NgModule({
-    imports: [
+  imports: [
     CommonModule,
     MatButtonModule,
     MatIconModule,
     MenuRoutingModule,
     PortalModule,
     MatToolbarModule,
-    MenuComponent, HomeComponent, AboutComponent, MapComponent
-],
-    exports: [MenuComponent, MenuRoutingModule]
+    MenuComponent,
+    HomeComponent,
+    AboutComponent,
+    MapComponent
+  ],
+  exports: [MenuComponent, MenuRoutingModule]
 })
 export class MenuModule {}

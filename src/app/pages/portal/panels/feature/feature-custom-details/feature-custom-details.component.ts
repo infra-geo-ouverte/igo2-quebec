@@ -1,3 +1,11 @@
+import {
+  AsyncPipe,
+  JsonPipe,
+  KeyValuePipe,
+  NgFor,
+  NgIf,
+  NgStyle
+} from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -9,28 +17,43 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { TooltipPosition, MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip, TooltipPosition } from '@angular/material/tooltip';
 
-import { getEntityTitle, ImageErrorDirective, SecureImagePipe } from '@igo2/common';
+import {
+  ImageErrorDirective,
+  SecureImagePipe,
+  getEntityTitle
+} from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
 import { MessageService } from '@igo2/core/message';
 import { ConnectionState, NetworkService } from '@igo2/core/network';
 import { Feature, IgoMap, SearchSource } from '@igo2/geo';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatIcon } from '@angular/material/icon';
-import { NgIf, NgFor, NgStyle, AsyncPipe, JsonPipe, KeyValuePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-feature-custom-details',
-    templateUrl: './feature-custom-details.component.html',
-    styleUrls: ['./feature-custom-details.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [NgIf, MatIcon, MatTooltip, NgFor, NgStyle, ImageErrorDirective, AsyncPipe, JsonPipe, KeyValuePipe, TranslateModule, SecureImagePipe]
+  selector: 'app-feature-custom-details',
+  templateUrl: './feature-custom-details.component.html',
+  styleUrls: ['./feature-custom-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatIcon,
+    MatTooltip,
+    NgFor,
+    NgStyle,
+    ImageErrorDirective,
+    AsyncPipe,
+    JsonPipe,
+    KeyValuePipe,
+    TranslateModule,
+    SecureImagePipe
+  ]
 })
 export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   private state: ConnectionState;

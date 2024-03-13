@@ -1,3 +1,4 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,9 +11,33 @@ import {
   Output
 } from '@angular/core';
 
-import { EntityState, EntityStore, ToolComponent, getEntityTitle, FlexibleComponent } from '@igo2/common';
+import {
+  EntityState,
+  EntityStore,
+  FlexibleComponent,
+  ToolComponent,
+  getEntityTitle
+} from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
-import { FEATURE, Feature, FeatureMotion, IgoMap, Research, SearchResult, computeOlFeaturesExtent, featureFromOl, featureToOl, featuresAreOutOfView, featuresAreTooDeepInView, getCommonVectorSelectedStyle, getCommonVectorStyle, moveToOlFeatures, roundCoordTo, SearchResultsComponent, SearchResultAddButtonComponent } from '@igo2/geo';
+import {
+  FEATURE,
+  Feature,
+  FeatureMotion,
+  IgoMap,
+  Research,
+  SearchResult,
+  SearchResultAddButtonComponent,
+  SearchResultsComponent,
+  computeOlFeaturesExtent,
+  featureFromOl,
+  featureToOl,
+  featuresAreOutOfView,
+  featuresAreTooDeepInView,
+  getCommonVectorSelectedStyle,
+  getCommonVectorStyle,
+  moveToOlFeatures,
+  roundCoordTo
+} from '@igo2/geo';
 import {
   DirectionState,
   MapState,
@@ -30,7 +55,6 @@ import * as olProj from 'ol/proj';
 import pointOnFeature from '@turf/point-on-feature';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { NgIf, AsyncPipe } from '@angular/common';
 
 /**
  * Tool to browse the search results
@@ -41,11 +65,17 @@ import { NgIf, AsyncPipe } from '@angular/common';
   icon: 'magnify'
 })
 @Component({
-    selector: 'app-search-results-tool',
-    templateUrl: './search-results-tool.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [NgIf, FlexibleComponent, SearchResultsComponent, SearchResultAddButtonComponent, AsyncPipe]
+  selector: 'app-search-results-tool',
+  templateUrl: './search-results-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    FlexibleComponent,
+    SearchResultsComponent,
+    SearchResultAddButtonComponent,
+    AsyncPipe
+  ]
 })
 export class SearchResultsToolComponent implements OnInit, OnDestroy {
   /**
