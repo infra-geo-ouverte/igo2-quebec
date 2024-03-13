@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { IgoStopPropagationModule } from '@igo2/common';
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 import { IgoFeatureModule } from '@igo2/geo';
 
 import { AppFeatureModule } from '../feature.module';

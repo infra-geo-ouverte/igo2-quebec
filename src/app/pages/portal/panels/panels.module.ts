@@ -16,8 +16,8 @@ import {
 } from '@igo2/common';
 import { IgoContextManagerModule } from '@igo2/context';
 // mobile
-import { IgoLanguageModule } from '@igo2/core';
-import { IgoMessageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
+import { IgoMessageModule } from '@igo2/core/message';
 import {
   IgoLayerModule,
   IgoMapModule,

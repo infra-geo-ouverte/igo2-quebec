@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
 
 @Component({
   selector: 'app-map',

@@ -12,13 +12,10 @@ import {
 import { TooltipPosition } from '@angular/material/tooltip';
 
 import { getEntityTitle } from '@igo2/common';
-import {
-  ConnectionState,
-  LanguageService,
-  MessageService,
-  NetworkService
-} from '@igo2/core';
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { MessageService } from '@igo2/core/message';
+import { ConnectionState, NetworkService } from '@igo2/core/network';
 import { Feature, IgoMap, SearchSource } from '@igo2/geo';
 
 import { Subject } from 'rxjs';

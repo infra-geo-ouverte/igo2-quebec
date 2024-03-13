@@ -5,7 +5,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 
 import { IgoImageModule, IgoKeyValueModule } from '@igo2/common';
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 
 import { FeatureCustomDetailsComponent } from './feature-custom-details.component';
 

@@ -16,14 +16,11 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { EntityRecord, EntityStore } from '@igo2/common';
 import { DetailedContext } from '@igo2/context';
-import {
-  AnalyticsService,
-  ConfigService,
-  LanguageService,
-  Media,
-  MediaService,
-  MessageService
-} from '@igo2/core';
+import { AnalyticsService } from '@igo2/core/analytics';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { Media, MediaService } from '@igo2/core/media';
+import { MessageService } from '@igo2/core/message';
 import {
   CapabilitiesService,
   DataSourceService,

@@ -1,9 +1,4 @@
-import {
-  APP_INITIALIZER,
-  ApplicationRef,
-  Injector,
-  NgModule
-} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,12 +6,9 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
-import {
-  IgoMessageModule,
-  LanguageService,
-  RouteService,
-  provideConfigOptions
-} from '@igo2/core';
+import { provideConfigOptions } from '@igo2/core/config';
+import { provideRootTranslation } from '@igo2/core/language';
+import { RouteService } from '@igo2/core/route';
 import {
   provideCadastreSearchSource,
   provideCoordinatesReverseSearchSource,
@@ -27,8 +19,6 @@ import {
   provideStoredQueriesSearchSource,
   provideStyleListOptions
 } from '@igo2/geo';
-
-import { concatMap, first } from 'rxjs';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -50,7 +40,6 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
-    IgoMessageModule,
     IgoSpinnerModule,
     IgoStopPropagationModule,
     PortalModule,
@@ -75,12 +64,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     provideStoredQueriesSearchSource(),
     provideOptionsApi(),
     provideCadastreSearchSource(),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appInitializerFactory,
-      deps: [Injector, ApplicationRef],
-      multi: true
-    },
+    provideRootTranslation(),
     provideStyleListOptions({
       path: './assets/list-style.json'
     })
@@ -88,28 +72,3 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-
-function appInitializerFactory(
-  injector: Injector,
-  applicationRef: ApplicationRef
-) {
-  // ensure to have the proper translations loaded once, when the app is stable.
-  return () =>
-    new Promise<any>((resolve: any) => {
-      applicationRef.isStable
-        .pipe(
-          first((isStable) => isStable === true),
-          concatMap(() => {
-            const languageService = injector.get(LanguageService);
-            const lang = languageService.getLanguage();
-            return languageService.translate.getTranslation(lang);
-          })
-        )
-        .subscribe((translations) => {
-          const languageService = injector.get(LanguageService);
-          const lang = languageService.getLanguage();
-          languageService.translate.setTranslation(lang, translations);
-          resolve();
-        });
-    });
-}

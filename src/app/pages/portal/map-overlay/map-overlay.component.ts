@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 
 import { Context, ContextService } from '@igo2/context';
-import { ConfigService, MediaService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
+import { MediaService } from '@igo2/core/media';
 
 import { Subscription } from 'rxjs';
 

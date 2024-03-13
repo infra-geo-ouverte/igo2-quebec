@@ -11,7 +11,9 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { ConfigService, LanguageService, MessageService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { MessageService } from '@igo2/core/message';
 import { AnalyticsListenerService, AppOptions } from '@igo2/integration';
 import { DomUtils, userAgent } from '@igo2/utils';
 

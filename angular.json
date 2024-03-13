@@ -58,7 +58,6 @@
               ]
             },
             "allowedCommonJsDependencies": [
-              "hammerjs",
               "typy",
               "jwt-decode",
               "pbf",

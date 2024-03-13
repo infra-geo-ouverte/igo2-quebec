@@ -10,7 +10,7 @@ import {
   IgoFlexibleModule,
   IgoPanelModule
 } from '@igo2/common';
-import { IgoLanguageModule } from '@igo2/core';
+import { IgoLanguageModule } from '@igo2/core/language';
 import {
   IgoFeatureDetailsModule,
   IgoFeatureModule,

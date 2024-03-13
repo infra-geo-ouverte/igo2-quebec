@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ConfigService, LanguageService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
 
 @Component({
   selector: 'app-header',

@@ -11,12 +11,10 @@ import {
 } from '@angular/core';
 
 import { EntityStore } from '@igo2/common';
-import {
-  ConfigService,
-  LanguageService,
-  MediaService,
-  StorageService
-} from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { MediaService } from '@igo2/core/media';
+import { StorageService } from '@igo2/core/storage';
 import {
   Feature,
   FeatureMotion,
