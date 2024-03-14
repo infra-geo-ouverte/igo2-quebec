@@ -81,12 +81,22 @@
   <app-search-results-panel
     [map]="map"
     [searchState]="searchState"
+    [expanded]="openedPanel"
+    (opened)="openWithinPanel()"
     (closed)="closeWithinPanel()"
   ></app-search-results-panel>
 </ng-template>
 
 <!-- ==================== -->
-<ng-template #mapQueryResults> mapQueryResults </ng-template>
+<ng-template #mapQueryResults>
+  <app-query-results-panel
+    [map]="map"
+    [queryState]="queryState"
+    [expanded]="openedPanel"
+    (opened)="openWithinPanel()"
+    (closed)="closeWithinPanel()"
+  ></app-query-results-panel>
+</ng-template>
 <!-- ==================== -->
 <ng-template #mapLegend>
   <app-legend-panel

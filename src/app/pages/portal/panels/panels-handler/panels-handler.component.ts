@@ -24,13 +24,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatTooltip } from '@angular/material/tooltip';
 
 import { IgoMap, SearchBarComponent } from '@igo2/geo';
-import { SearchState } from '@igo2/integration';
+import { QueryState, SearchState } from '@igo2/integration';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, concatMap, distinctUntilChanged, of } from 'rxjs';
 
 import { ShownComponent } from './panels-handler.enum';
 import { LegendPanelComponent } from './panels/legend/legend-panel.component';
+import { MapQueryResultsPanelComponent } from './panels/map-query-results/map-query-results-panel.component';
 import { SearchResultPanelComponent } from './panels/search-results/search-results-panel.component';
 
 @Component({
@@ -55,17 +56,19 @@ import { SearchResultPanelComponent } from './panels/search-results/search-resul
     NgSwitch,
     NgSwitchCase,
     LegendPanelComponent,
-    SearchResultPanelComponent
+    SearchResultPanelComponent,
+    MapQueryResultsPanelComponent
   ]
 })
 export class PanelsHandlerComponent implements OnInit, OnDestroy {
   public mobileMode$: Observable<boolean>;
   public openedPanel: boolean = false;
-  public shownComponent: ShownComponent = ShownComponent.Legend;
+  public shownComponent: ShownComponent = ShownComponent.Query;
 
   @Input() searchState: SearchState;
   @Input() searchBar: TemplateRef<SearchBarComponent>;
   @Input() map: IgoMap;
+  @Input() queryState: QueryState;
 
   constructor(private breakpointObserver: BreakpointObserver) {
     this.mobileMode$ = this.breakpointObserver
@@ -82,9 +85,12 @@ export class PanelsHandlerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {}
 
-  handlePanels(opened: boolean) {
-    console.log('panel opened: ', opened);
-    this.openedPanel = opened;
+  handlePanels(value: boolean) {
+    this.openedPanel = value;
+  }
+
+  openWithinPanel() {
+    this.handlePanels(true);
   }
 
   closeWithinPanel() {
