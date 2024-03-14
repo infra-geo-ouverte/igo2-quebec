@@ -17,6 +17,7 @@
     "build": "ng build",
     "lint": "ng lint",
     "lint.fix": "ng lint --fix",
+    "format": "prettier --write ./src/**/*.{ts,js,html,scss,css,json}",
     "e2e": "ng e2e --port 4300",
     "postinstall": "npm run copyLocaleToDemo",
     "build.prod": "ng build --configuration production",
@@ -83,6 +84,7 @@
     "@angular-eslint/template-parser": "^16.1.0",
     "@angular/cli": "^16.1.6",
     "@angular/compiler-cli": "^16.1.7",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/hammerjs": "^2.0.41",
     "@types/jasmine": "^4.3.5",
     "@types/jasminewd2": "~2.0.10",
@@ -103,6 +105,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "protractor": "~7.0.0",
     "ts-node": "^10.9.1",
+    "prettier": "^3.0.3",
     "typescript": "~5.1.0"
   }
 }

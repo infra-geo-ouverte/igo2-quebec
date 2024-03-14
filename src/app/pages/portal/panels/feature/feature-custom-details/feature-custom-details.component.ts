@@ -1,22 +1,28 @@
+import { HttpClient } from '@angular/common/http';
 import {
-  Component,
-  Input,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Output,
+  Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
+  Output
 } from '@angular/core';
+import { TooltipPosition } from '@angular/material/tooltip';
+
+import { getEntityTitle } from '@igo2/common';
+import {
+  ConnectionState,
+  LanguageService,
+  MessageService,
+  NetworkService
+} from '@igo2/core';
+import { ConfigService } from '@igo2/core';
+import { Feature, IgoMap, SearchSource } from '@igo2/geo';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NetworkService, ConnectionState, LanguageService, MessageService } from '@igo2/core';
-import { ConfigService } from '@igo2/core';
-import { SearchSource, IgoMap, Feature } from '@igo2/geo';
-import { HttpClient } from '@angular/common/http';
-import { TooltipPosition } from '@angular/material/tooltip';
-import { getEntityTitle } from '@igo2/common';
 
 @Component({
   selector: 'app-feature-custom-details',
@@ -24,7 +30,6 @@ import { getEntityTitle } from '@igo2/common';
   styleUrls: ['./feature-custom-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   private state: ConnectionState;
   private unsubscribe$ = new Subject<void>();
@@ -77,7 +82,7 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   @Input()
   matTooltipPosition: TooltipPosition;
 
-  public ready : boolean;
+  public ready: boolean;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -85,11 +90,14 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
     private languageService: LanguageService,
     private configService: ConfigService,
     private http: HttpClient,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {
-    this.networkService.currentState().pipe(takeUntil(this.unsubscribe$)).subscribe((state: ConnectionState) => {
-      this.state = state;
-    });
+    this.networkService
+      .currentState()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((state: ConnectionState) => {
+        this.state = state;
+      });
   }
 
   ngOnInit() {
@@ -103,10 +111,10 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   }
 
   formatReading(reading: number): string {
-    return reading.toString().replace(".", ",");
+    return reading.toString().replace('.', ',');
   }
 
-  tooltipPosition(){
+  tooltipPosition() {
     if (this.mobile) {
       this.matTooltipPosition = 'above';
     } else {
@@ -114,12 +122,12 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
     }
   }
 
-    /**
+  /**
    * @internal
    */
-    get title(): string {
-      return getEntityTitle(this.feature);
-    }
+  get title(): string {
+    return getEntityTitle(this.feature);
+  }
 
   isObject(value) {
     return typeof value === 'object';
@@ -144,7 +152,7 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
   }
 
   isImg(value) {
-    if (typeof value ==='string') {
+    if (typeof value === 'string') {
       if (this.isUrl(value)) {
         const regex = /(jpe?g|png|gif)$/;
         return regex.test(value.toLowerCase());
@@ -156,82 +164,97 @@ export class FeatureCustomDetailsComponent implements OnDestroy, OnInit {
 
   isEmbeddedLink(value) {
     if (typeof value === 'string') {
-        const matchRegex = /<a/g;
-        const match = value.match(matchRegex) || [];
-        const count = match.length;
-        if (count === 1) {
-            return true;
-        } else {
-            return false;
-        }
+      const matchRegex = /<a/g;
+      const match = value.match(matchRegex) || [];
+      const count = match.length;
+      if (count === 1) {
+        return true;
+      } else {
+        return false;
+      }
     }
     return false;
   }
 
-openSecureUrl(value) {
-  let url: string;
-  const regexDepot = new RegExp(this.configService?.getConfig('depot.url') + '.*?(?="|$)');
+  openSecureUrl(value) {
+    let url: string;
+    const regexDepot = new RegExp(
+      this.configService?.getConfig('depot.url') + '.*?(?="|$)'
+    );
 
-  if (regexDepot.test(value)) {
-    url = value.match(regexDepot)[0];
+    if (regexDepot.test(value)) {
+      url = value.match(regexDepot)[0];
 
-    this.http.get(url, {
-      responseType: 'blob'
-    })
-    .subscribe((docOrImage) => {
-      const fileUrl = URL.createObjectURL(docOrImage);
-      window.open(fileUrl, '_blank');
-      this.cdRef.detectChanges();
-    },
-    (error: Error) => {
-      this.messageService.error('igo.geo.targetHtmlUrlUnauthorized', 'igo.geo.targetHtmlUrlUnauthorizedTitle');
-    });
-  } else {
-    let url = value;
-    if (this.isEmbeddedLink(value)) {
-      var div = document.createElement('div');
-      div.innerHTML = value;
-      url = div.children[0].getAttribute('href');
-    }
-    window.open(url, '_blank');
-  }
-}
-
-getEmbeddedLinkText(value) {
-  const regex = /(?:>).*?(?=<|$)/;
-  let text = value.match(regex)[0] as string;
-  text = text.replace(/>/g, '');
-  return text;
-}
-
-filterFeatureProperties(feature) {
-  const allowedFieldsAndAlias = feature.meta ? feature.meta.alias : undefined;
-  this.featureTitle = feature.meta ? feature.meta.title : undefined; // will define the feature info title in the panel
-  const properties = {};
-
-  if (feature.properties && feature.properties.Route) {
-    delete feature.properties.Route;
-  }
-
-  if (allowedFieldsAndAlias) {
-    Object.keys(allowedFieldsAndAlias).forEach(field => {
-      properties[allowedFieldsAndAlias[field]] = feature.properties[field];
-    });
-    return properties;
+      this.http
+        .get(url, {
+          responseType: 'blob'
+        })
+        .subscribe(
+          (docOrImage) => {
+            const fileUrl = URL.createObjectURL(docOrImage);
+            window.open(fileUrl, '_blank');
+            this.cdRef.detectChanges();
+          },
+          (error: Error) => {
+            this.messageService.error(
+              'igo.geo.targetHtmlUrlUnauthorized',
+              'igo.geo.targetHtmlUrlUnauthorizedTitle'
+            );
+          }
+        );
     } else {
-      if (this.state.connection && feature.meta && feature.meta.excludeAttribute) {
+      let url = value;
+      if (this.isEmbeddedLink(value)) {
+        var div = document.createElement('div');
+        div.innerHTML = value;
+        url = div.children[0].getAttribute('href');
+      }
+      window.open(url, '_blank');
+    }
+  }
+
+  getEmbeddedLinkText(value) {
+    const regex = /(?:>).*?(?=<|$)/;
+    let text = value.match(regex)[0] as string;
+    text = text.replace(/>/g, '');
+    return text;
+  }
+
+  filterFeatureProperties(feature) {
+    const allowedFieldsAndAlias = feature.meta ? feature.meta.alias : undefined;
+    this.featureTitle = feature.meta ? feature.meta.title : undefined; // will define the feature info title in the panel
+    const properties = {};
+
+    if (feature.properties && feature.properties.Route) {
+      delete feature.properties.Route;
+    }
+
+    if (allowedFieldsAndAlias) {
+      Object.keys(allowedFieldsAndAlias).forEach((field) => {
+        properties[allowedFieldsAndAlias[field]] = feature.properties[field];
+      });
+      return properties;
+    } else {
+      if (
+        this.state.connection &&
+        feature.meta &&
+        feature.meta.excludeAttribute
+      ) {
         const excludeAttribute = feature.meta.excludeAttribute;
-        excludeAttribute.forEach(attribute => {
+        excludeAttribute.forEach((attribute) => {
           delete feature.properties[attribute];
         });
-      } else if (!this.state.connection && feature.meta && feature.meta.excludeAttributeOffline) {
+      } else if (
+        !this.state.connection &&
+        feature.meta &&
+        feature.meta.excludeAttributeOffline
+      ) {
         const excludeAttributeOffline = feature.meta.excludeAttributeOffline;
-        excludeAttributeOffline.forEach(attribute => {
+        excludeAttributeOffline.forEach((attribute) => {
           delete feature.properties[attribute];
         });
       }
     }
     return feature.properties;
   }
-
 }

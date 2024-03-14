@@ -8,6 +8,5 @@ import { Component } from '@angular/core';
 export class MenuComponent {
   public color = 'accent';
 
-  constructor() { }
-
+  constructor() {}
 }

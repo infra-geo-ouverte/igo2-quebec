@@ -37,7 +37,6 @@ $theme: map.merge(
   )
 );
 
-
 @include mat.core();
 @include mat.typography-hierarchy(qcca.$typo-typography);
 @include mat.all-component-themes($theme);

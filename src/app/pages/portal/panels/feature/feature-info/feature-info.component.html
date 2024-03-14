@@ -1,6 +1,8 @@
-<ng-container *ngIf="(store.entities$ | async)"
+<ng-container
+  *ngIf="store.entities$ | async"
   class="featureInfo"
-  (keydown)="handleKeyboardEvent($event)">
+  (keydown)="handleKeyboardEvent($event)"
+>
   <div class="title">
     <h4 color="primary">{{ title }}</h4>
 
@@ -9,22 +11,26 @@
       mat-icon-button
       igoStopPropagation
       (click)="clearButton()"
-      [matTooltip]="'feature.close'| translate"
-      color="primary">
+      [matTooltip]="'feature.close' | translate"
+      color="primary"
+    >
       <mat-icon svgIcon="close"></mat-icon>
     </button>
   </div>
 
-  <igo-feature-details *ngIf="resultSelected$.value && !customFeatureDetails"
-        [map]="map"
-        [feature]="resultSelected$.value.data">
+  <igo-feature-details
+    *ngIf="resultSelected$.value && !customFeatureDetails"
+    [map]="map"
+    [feature]="resultSelected$.value.data"
+  >
   </igo-feature-details>
 
-  <app-feature-custom-details *ngIf="resultSelected$.value && customFeatureDetails"
+  <app-feature-custom-details
+    *ngIf="resultSelected$.value && customFeatureDetails"
     [mobile]="mobile"
     [feature]="resultSelected$.value.data"
     (mapQuery)="mapQueryFromFeatureDetails($event)"
-    [mapQueryClick]="mapQueryClick">
+    [mapQueryClick]="mapQueryClick"
+  >
   </app-feature-custom-details>
-
 </ng-container>

@@ -5,26 +5,25 @@
   width: 100%;
 }
 
-
 ::ng-deep igo-search-results {
   position: relative;
-  left: $portal-left!important;
+  left: $portal-left !important;
   width: calc($search-bar-width - 2 * $igo-margin);
   display: contents;
   height: calc(100% - $igo-icon-size - $igo-margin);
 }
 
 igo-search-results-tool {
-    display: block;
-    position: relative;
-    margin: 0 calc(4 * $igo-margin);
-    top: calc(2 * $igo-margin);
-    height: 100%;
-    width: 100%;
+  display: block;
+  position: relative;
+  margin: 0 calc(4 * $igo-margin);
+  top: calc(2 * $igo-margin);
+  height: 100%;
+  width: 100%;
 }
 
 ::ng-deep app-search-results-tool > div > section > h4 > strong {
-  font-size: 21px!important;
+  font-size: 21px !important;
 }
 
 //// MOBILE
@@ -36,14 +35,14 @@ igo-search-bar {
 }
 
 ::ng-deep app-bottompanel .mat-expansion-panel-content {
-  overflow-y: scroll!important;
+  overflow-y: scroll !important;
   overflow-x: clip;
   height: 264px; // expanded panel height
   max-width: 100%;
 }
 
 ::ng-deep .igo-search-bar-container .mat-icon {
-  fill: #FFFFFF;
+  fill: #ffffff;
 }
 
 #bottomPanelMobile {
@@ -58,7 +57,6 @@ app-feature-info {
 
 :host ::ng-deep .mat-expansion-panel {
   .mat-expansion-indicator {
-
     &::after {
       transform: rotate(-135deg) !important;
     }
@@ -73,7 +71,10 @@ app-feature-info {
 
 // Legend
 
-.mat-icon, mat-button-wrapper, .mat-mdc-icon-button .mat-icon, .mat-icon-button {
+.mat-icon,
+mat-button-wrapper,
+.mat-mdc-icon-button .mat-icon,
+.mat-icon-button {
   line-height: 26px;
   height: 24px;
   width: 24px;
@@ -90,39 +91,39 @@ app-feature-info {
 
 // angular material
 
-::ng-deep .tooltip-above{
-  position: relative!important;
+::ng-deep .tooltip-above {
+  position: relative !important;
   top: 30%;
-  z-index: 5000!important;
-  background-color:white!important;
-  color: #223654!important;
-  margin: 0 8px!important;
-  padding: 8px 12px!important;
-  font-size: 14px!important;
-  line-height: 24px!important;
+  z-index: 5000 !important;
+  background-color: white !important;
+  color: #223654 !important;
+  margin: 0 8px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
   border: 1px solid #c5cad2;
-  border-radius: 0!important;
+  border-radius: 0 !important;
   overflow: visible !important;
-  box-shadow: 0px 1px 7px #22365450!important;
+  box-shadow: 0px 1px 7px #22365450 !important;
   white-space: pre-line;
 }
 
 ::ng-deep .tooltip-above::after {
-  content: ''!important;
-  position: absolute!important;
-  top: 18%!important;
-  right: 100%!important;
-  margin-top: -5px!important;
-  border-width: 10px!important;
-  border-style: solid!important;
-  border-color: transparent transparent transparent white!important;
+  content: '' !important;
+  position: absolute !important;
+  top: 18% !important;
+  right: 100% !important;
+  margin-top: -5px !important;
+  border-width: 10px !important;
+  border-style: solid !important;
+  border-color: transparent transparent transparent white !important;
   transform: rotate(180deg);
 }
 
-:host ::ng-deep .mat-expansion-indicator{
-padding: 10px;
+:host ::ng-deep .mat-expansion-indicator {
+  padding: 10px;
 }
 
 :host ::ng-deep .mat-expansion-panel-header {
-  padding: 0 8px!important;
+  padding: 0 8px !important;
 }

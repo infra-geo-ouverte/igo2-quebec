@@ -1,24 +1,31 @@
 <div id="sidepanel" class="sidepanel">
-  <mat-sidenav #sidenav
+  <mat-sidenav
+    #sidenav
     mode="side"
     [autoFocus]="false"
     [(opened)]="panelOpenState"
     (closed)="closePanelLegend()"
-    (closeLegend)="closePanelLegend()">
+    (closeLegend)="closePanelLegend()"
+  >
     <div #content class="app-sidenav-content">
-      <div *ngIf="legendPanelOpened"
+      <div
+        *ngIf="legendPanelOpened"
         id="legend"
         class="legend-container"
         [mapQueryClick]="mapQueryClick"
         [legendPanelOpened]="legendPanelOpened"
-        [panelOpenState]="panelOpenState">
+        [panelOpenState]="panelOpenState"
+      >
         <div class="flex justify-content-space-between align-items-center">
-          <h4 class="title" mat-dialog-title>{{ 'legend.title' | translate }}</h4>
+          <h4 class="title" mat-dialog-title>
+            {{ 'legend.title' | translate }}
+          </h4>
           <button
             mat-icon-button
             [matTooltip]="'legend.close' | translate"
             color="primary"
-            (click)="closePanelLegend()">
+            (click)="closePanelLegend()"
+          >
             <mat-icon svgIcon="close"></mat-icon>
           </button>
         </div>
@@ -28,16 +35,27 @@
           [allowShowAllLegends]="false"
           [updateLegendOnResolutionChange]="true"
           [showAllLegendsValue]="false"
-          [layers]="layers">
+          [layers]="layers"
+        >
         </igo-layer-legend-list>
       </div>
 
-      <div *ngIf="!searchInit && (queryStore.empty$ | async) && !legendPanelOpened"
-        style="margin:24px">
+      <div
+        *ngIf="!searchInit && (queryStore.empty$ | async) && !legendPanelOpened"
+        style="margin: 24px"
+      >
         <section>
-          <h5>{{ 'igo.integration.searchResultsTool.noResults' | translate }}</h5>
-          <h6>{{ 'igo.integration.searchResultsTool.doSearch' | translate }}</h6>
-          <p [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"></p>
+          <h5>
+            {{ 'igo.integration.searchResultsTool.noResults' | translate }}
+          </h5>
+          <h6>
+            {{ 'igo.integration.searchResultsTool.doSearch' | translate }}
+          </h6>
+          <p
+            [innerHTML]="
+              'igo.integration.searchResultsTool.examples' | translate
+            "
+          ></p>
         </section>
       </div>
 
@@ -52,34 +70,44 @@
           (panelOpened)="panelOpenedFromFeature($event)"
           (mapQuery)="mapQueryFromFeature($event)"
           [title]="featureTitle"
-          [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection">
+          [hasFeatureEmphasisOnSelection]="hasFeatureEmphasisOnSelection"
+        >
         </app-feature-info>
       </div>
 
       <div *ngIf="searchInit" #search>
-        <app-search-results-tool #searchresults
+        <app-search-results-tool
+          #searchresults
           [showIcons]="true"
           placeholder="false"
           [mapQueryClick]="mapQueryClick"
           [legendPanelOpened]="legendPanelOpened"
           [panelOpenState]="panelOpenState"
-          [searchInit]="searchInit">
+          [searchInit]="searchInit"
+        >
         </app-search-results-tool>
       </div>
     </div>
   </mat-sidenav>
   <div
     class="sidepanel-button-container"
-    [ngClass]="sidenav.opened ? 'sidepanel-opened' : 'sidepanel-closed'">
+    [ngClass]="sidenav.opened ? 'sidepanel-opened' : 'sidepanel-closed'"
+  >
     <button
       mat-mini-fab
       color="primary"
-      [matTooltip]="sidenav.opened ? ('sidePanel.close' | translate) : ('sidePanel.open' | translate)"
+      [matTooltip]="
+        sidenav.opened
+          ? ('sidePanel.close' | translate)
+          : ('sidePanel.open' | translate)
+      "
       matTooltipPosition="after"
-      (click)="sidenav.toggle()">
+      (click)="sidenav.toggle()"
+    >
       <mat-icon
         class="icon"
-        [svgIcon]="sidenav.opened ? 'chevron-left' : 'chevron-right'">
+        [svgIcon]="sidenav.opened ? 'chevron-left' : 'chevron-right'"
+      >
       </mat-icon>
     </button>
   </div>

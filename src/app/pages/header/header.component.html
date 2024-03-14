@@ -4,14 +4,15 @@
       <div class="row">
         <div class="col-6 col-md-10 flex flex-wrap align-items-center">
           <a class="logo" tabindex="5" routerLink="">
-            <img id="header-logo" alt="Logo" src="{{ headerLogo }}"/>
+            <img id="header-logo" alt="Logo" src="{{ headerLogo }}" />
           </a>
           <img
             id="header-logo-print"
             alt="Logo"
             src="{{ headerLogoPrint }}"
             width="199"
-            height="60"/>
+            height="60"
+          />
           <p lang="fr" id="title-desktop" class="zone-title d-none d-md-block">
             {{ 'header.title' | translate }}
           </p>
@@ -24,7 +25,9 @@
                 rel="noopener noreferrer"
                 alt="'header.contactUsUrl' | translate"
                 href="{{ 'header.contactUsUrl' | translate }}"
-                target="_blank">{{ 'header.contactUs' | translate }}</a>
+                target="_blank"
+                >{{ 'header.contactUs' | translate }}</a
+              >
             </li>
           </ul>
         </div>

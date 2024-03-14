@@ -1,29 +1,29 @@
 import {
-  Component,
-  Input,
-  Output,
-  OnInit,
-  OnDestroy,
-  EventEmitter,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
   HostListener,
-  ChangeDetectorRef
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
 } from '@angular/core';
 
-import { EntityStore, ActionStore } from '@igo2/common';
-
-import { BehaviorSubject } from 'rxjs';
-
+import { ActionStore, EntityStore } from '@igo2/common';
+import { ConfigService } from '@igo2/core';
 import {
-  IgoMap,
   FEATURE,
   Feature,
   FeatureMotion,
-  SearchResult,
-  Layer
+  IgoMap,
+  Layer,
+  SearchResult
 } from '@igo2/geo';
 import { QueryState } from '@igo2/integration';
-import { ConfigService } from '@igo2/core';
+
+import { BehaviorSubject } from 'rxjs';
+
 import { SearchState } from '../search-results-tool/search.state';
 
 @Component({
@@ -139,75 +139,74 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     private searchState: SearchState,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef
-    ) {
-    }
+  ) {}
 
-    ngOnInit(){
-      this.queryStore.entities$ // clear the search when a mapQuery is initialised
-      .subscribe(
-        (entities) => {
+  ngOnInit() {
+    this.queryStore.entities$ // clear the search when a mapQuery is initialised
+      .subscribe((entities) => {
         if (entities.length > 0) {
           this.mapQuery.emit(true);
           this.legendPanelOpened = false;
           this.panelOpened.emit(true);
           this.clearSearch();
-        }
-        else {
+        } else {
           this.closePanelOnCloseQuery();
         }
       });
+  }
+
+  @HostListener('change')
+  ngOnDestroy() {
+    this.store.destroy();
+    this.store.entities$.unsubscribe();
+    this.legendPanelOpened = false;
+    this.clearSearch();
+    this.clearQuery();
+    this.map.propertyChange$.unsubscribe;
+  }
+
+  isScrolledIntoView(elemSource, elem) {
+    const padding = 6;
+    const docViewTop = elemSource.scrollTop;
+    const docViewBottom = docViewTop + elemSource.clientHeight;
+    const elemTop = elem.offsetTop;
+    const elemBottom = elemTop + elem.clientHeight + padding;
+    return elemBottom <= docViewBottom && elemTop >= docViewTop;
+  }
+
+  /**
+   * Try to add a feature to the map when it's being focused
+   * @internal
+   * @param result A search result that could be a feature
+   */
+  onResultFocus(result: SearchResult) {
+    this.tryAddFeatureToMap(result);
+    this.selectedFeature = (result as SearchResult<Feature>).data;
+  }
+
+  /**
+   * Try to add a feature to the map overlay
+   * @param layer A search result that could be a feature
+   */
+  private tryAddFeatureToMap(layer: SearchResult) {
+    if (layer.meta.dataType !== FEATURE) {
+      return undefined;
     }
 
-    @HostListener('change')
-    ngOnDestroy() {
-      this.store.destroy();
-      this.store.entities$.unsubscribe();
-      this.legendPanelOpened = false;
-      this.clearSearch();
-      this.clearQuery();
-      this.map.propertyChange$.unsubscribe;
+    // Somethimes features have no geometry. It happens with some GetFeatureInfo
+    if (layer.data.geometry === undefined) {
+      return;
     }
 
-    isScrolledIntoView(elemSource, elem) {
-      const padding = 6;
-      const docViewTop = elemSource.scrollTop;
-      const docViewBottom = docViewTop + elemSource.clientHeight;
-      const elemTop = elem.offsetTop;
-      const elemBottom = elemTop + elem.clientHeight + padding;
-      return elemBottom <= docViewBottom && elemTop >= docViewTop;
-    }
+    this.map.searchResultsOverlay.setFeatures(
+      [layer.data] as Feature[],
+      FeatureMotion.Default
+    );
 
-    /**
-     * Try to add a feature to the map when it's being focused
-     * @internal
-     * @param result A search result that could be a feature
-     */
-    onResultFocus(result: SearchResult) {
-      this.tryAddFeatureToMap(result);
-      this.selectedFeature = (result as SearchResult<Feature>).data;
-    }
-
-    /**
-     * Try to add a feature to the map overlay
-     * @param layer A search result that could be a feature
-     */
-    private tryAddFeatureToMap(layer: SearchResult) {
-      if (layer.meta.dataType !== FEATURE) {
-        return undefined;
-      }
-
-      // Somethimes features have no geometry. It happens with some GetFeatureInfo
-      if (layer.data.geometry === undefined) {
-        return;
-      }
-
-      this.map.searchResultsOverlay.setFeatures(
-        [layer.data] as Feature[],
-        FeatureMotion.Default
-      );
-
-      this.hasFeatureEmphasisOnSelection = this.configService.getConfig('hasFeatureEmphasisOnSelection');
-    }
+    this.hasFeatureEmphasisOnSelection = this.configService.getConfig(
+      'hasFeatureEmphasisOnSelection'
+    );
+  }
 
   /*
    * Remove a feature to the map overlay
@@ -216,12 +215,13 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.map.searchResultsOverlay.clear();
   }
 
-  closePanelOnCloseQuery(){
+  closePanelOnCloseQuery() {
     this.closeQuery.emit();
     this.mapQuery.emit(false);
-    if (!this.searchInit && !this.legendPanelOpened){
+    if (!this.searchInit && !this.legendPanelOpened) {
       this.panelOpened.emit(false);
-    } if (this.searchInit || this.legendPanelOpened) {
+    }
+    if (this.searchInit || this.legendPanelOpened) {
       this.panelOpened.emit(true);
     }
   }
@@ -235,14 +235,17 @@ export class SidePanelComponent implements OnInit, OnDestroy {
     this.searchState.setSearchTerm('');
   }
 
-  clearQuery(): void{
+  clearQuery(): void {
     this.queryState.store.softClear();
     this.queryState.store.clear();
     this.mapQuery.emit(false);
     this.removeFeatureFromMap();
   }
 
-  closePanelLegend() { // this flushes the legend whenever a user closes the panel. if not, the user has to click twice on the legend button to open the legend with the button
+  closePanelLegend() {
+    /* this flushes the legend whenever a user closes the panel. if not,
+     the user has to click twice on the legend button to open the legend with the button
+     */
     this.legendPanelOpened = false;
     this.closeLegend.emit();
     this.map.propertyChange$.unsubscribe;
@@ -255,6 +258,4 @@ export class SidePanelComponent implements OnInit, OnDestroy {
   mapQueryFromFeature(event) {
     this.mapQuery.emit(event);
   }
-
 }
-
