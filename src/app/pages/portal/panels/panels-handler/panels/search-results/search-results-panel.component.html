@@ -1,15 +1,33 @@
-<igo-search-results
-  [store]="searchState.store"
-  showIcons="true"
-  [term]="searchState.searchTerm$ | async"
-  placeholder="false"
-  (searchTermChange)="onSearchTermChange($event)"
-  (featureSelected)="close()"
-  (resultFocus)="onResult(searchResultActions.Focus, $event)"
-  (resultSelect)="onResult(searchResultActions.Select, $event)"
-  (resultUnfocus)="onResult(searchResultActions.Unfocus, $event)"
-  (resultMouseenter)="onResult(searchResultActions.Focus, $event)"
-  (resultMouseleave)="onResult(searchResultActions.Unfocus, $event)"
-  (moreResults)="onResult(searchResultActions.Search, $event)"
->
-</igo-search-results>
+@if (searchState.store.empty$ | async) {
+  <div style="margin: 20px">
+    <section>
+      <h5>
+        {{ 'igo.integration.searchResultsTool.noResults' | translate }}
+      </h5>
+      <h6>
+        {{ 'igo.integration.searchResultsTool.doSearch' | translate }}
+      </h6>
+      <p
+        [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"
+      ></p>
+    </section>
+  </div>
+}
+<!-- todo necessaire mais je ne comprends pas pourquoi -->
+@if ((searchState.store.empty$ | async) === false) {
+  <igo-search-results
+    [map]="map"
+    [store]="searchState.store"
+    showIcons="true"
+    [term]="searchState.searchTerm$ | async"
+    placeholder="false"
+    (searchTermChange)="onSearchTermChange($event)"
+    (resultFocus)="onResult(searchResultActions.Focus, $event)"
+    (resultSelect)="onResult(searchResultActions.Select, $event)"
+    (resultUnfocus)="onResult(searchResultActions.Unfocus, $event)"
+    (resultMouseenter)="onResult(searchResultActions.Focus, $event)"
+    (resultMouseleave)="onResult(searchResultActions.Unfocus, $event)"
+    (moreResults)="onMoreResults($event)"
+  >
+  </igo-search-results>
+}

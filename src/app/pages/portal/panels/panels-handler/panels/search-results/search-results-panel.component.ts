@@ -1,7 +1,9 @@
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -12,17 +14,23 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { IgoMap, Layer, SearchResultsComponent } from '@igo2/geo';
+import {
+  FeatureMotion,
+  IgoMap,
+  Layer,
+  Research,
+  SearchResult,
+  SearchResultsComponent
+} from '@igo2/geo';
 import { SearchState } from '@igo2/integration';
 
 import { TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 import { SearchResultAction } from '../../panels-handler.enum';
 import {
-  onResultFocus,
-  onResultSelect,
-  onResultUnfocus,
-  onSearch
+  onResultSelectOrFocus,
+  onResultUnfocus
 } from './search-results-panel.utils';
 
 @Component({
@@ -42,39 +50,57 @@ import {
 })
 export class SearchResultPanelComponent implements OnInit, OnDestroy {
   public searchResultActions = SearchResultAction;
+  private empty$$: Subscription;
 
   @Input() map: IgoMap;
   @Input() searchState: SearchState;
+  @Input() expanded: boolean;
 
+  @Output() opened = new EventEmitter();
   @Output() closed = new EventEmitter();
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.empty$$ = this.searchState.store.empty$.subscribe((e) => {
+      if (!e && !this.expanded) {
+        this.opened.emit();
+      }
+    });
+  }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.empty$$.unsubscribe();
+  }
 
   onSearchTermChange(term: string) {
     this.searchState.setSearchTerm(term);
   }
 
-  onResult(searchResultAction: SearchResultAction, event) {
-    console.log('searchResultAction', searchResultAction, event);
+  onResult(searchResultAction: SearchResultAction, searchResult: SearchResult) {
     switch (searchResultAction) {
       case SearchResultAction.Focus:
-        onResultFocus();
-        break;
-      case SearchResultAction.Search:
-        onSearch();
+        onResultSelectOrFocus(searchResult, this.map, this.searchState, {
+          featureMotion: FeatureMotion.None
+        });
         break;
       case SearchResultAction.Select:
-        onResultSelect();
+        onResultSelectOrFocus(searchResult, this.map, this.searchState);
         this.close();
         break;
       case SearchResultAction.Unfocus:
-        onResultUnfocus();
+        onResultUnfocus(searchResult, this.map, this.searchState);
         break;
     }
+  }
+  onMoreResults(event: { research: Research; results: SearchResult[] }) {
+    const results = event.results;
+    this.searchState.store.state.updateAll({ focused: false, selected: false });
+    const newResults = this.searchState.store.entities$.value
+      .filter((result: SearchResult) => result.source !== event.research.source)
+      .concat(results);
+    this.searchState.store.updateMany(newResults);
+    // todo scroll into view
   }
 
   close() {
