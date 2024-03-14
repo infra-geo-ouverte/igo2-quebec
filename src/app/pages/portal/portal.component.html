@@ -1,26 +1,14 @@
 <mat-sidenav-container>
   <mat-sidenav-content position="end">
+    <app-panels-handler
+      [searchState]="searchState"
+      [searchBar]="searchBar"
+      [map]="map"
+    ></app-panels-handler>
     @if (!mobile) {
       <div id="searchDesktop">
         @if (showSearchBar) {
-          <igo-search-bar
-            #searchbar
-            appearance="outline"
-            searchIcon="magnify"
-            [matTooltip]="'searchBar' | translate"
-            matTooltipShowDelay="500"
-            tooltip-position="after"
-            [searchSettings]="false"
-            color="primary"
-            [forceNA]="appConfig.app?.forceCoordsNA"
-            [term]="searchBarTerm"
-            [store]="searchStore"
-            [termSplitter]="termSplitter"
-            (searchTermChange)="onSearchTermChange($event)"
-            (search)="onSearch($event)"
-            (clearFeature)="clearSearch()"
-          >
-          </igo-search-bar>
+          <ng-container *ngTemplateOutlet="searchBar"></ng-container>
         }
         @if (mobile) {
           <div id="scaleLine"></div>
@@ -149,3 +137,23 @@
     </app-map-overlay>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #searchBar>
+  <igo-search-bar
+    (click)="$event.stopPropagation()"
+    appearance="outline"
+    searchIcon="magnify"
+    [matTooltip]="'searchBar' | translate"
+    matTooltipShowDelay="500"
+    tooltip-position="after"
+    [searchSettings]="false"
+    color="primary"
+    [forceNA]="appConfig.app?.forceCoordsNA"
+    [term]="searchState.searchTerm$ | async"
+    [store]="searchStore"
+    (searchTermChange)="onSearchTermChange($event)"
+    (search)="onSearch($event)"
+    (clearFeature)="clearSearch()"
+  >
+  </igo-search-bar>
+</ng-template>

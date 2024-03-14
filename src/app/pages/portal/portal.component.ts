@@ -3,7 +3,7 @@ import {
   BreakpointState,
   Breakpoints
 } from '@angular/cdk/layout';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
@@ -90,6 +90,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { LegendButtonComponent } from './legend-button/legend-button.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
 import { BottomPanelComponent } from './panels/bottompanel/bottompanel.component';
+import { PanelsHandlerComponent } from './panels/panels-handler/panels-handler.component';
 import { SidePanelComponent } from './panels/sidepanel/sidepanel.component';
 import {
   controlSlideX,
@@ -126,7 +127,9 @@ import {
     FooterComponent,
     MapOverlayComponent,
     AsyncPipe,
-    TranslateModule
+    TranslateModule,
+    PanelsHandlerComponent,
+    NgTemplateOutlet
   ]
 })
 export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
@@ -138,9 +141,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public legendPanelOpened = false;
   public legendDialogOpened = false;
 
-  public searchBarTerm = '';
   public termDefinedInUrl = false;
-  public termSplitter = '|';
   public termDefinedInUrlTriggered = false;
   private addedLayers$$: Subscription[] = [];
   private layers$$: Subscription;
@@ -232,8 +233,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
           this.appConfig.geolocate?.activateDefault;
       }
     });
-
-    this.searchState.searchTermSplitter$.next(this.termSplitter);
 
     this.route.queryParams.subscribe((params) => {
       this.readLanguageParam(params);
@@ -532,7 +531,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
     this.searchInit = false;
-    this.searchBarTerm = ''; // the searchbarterm doesn't clear up
     this.searchState.setSearchTerm('');
   }
 
@@ -650,7 +648,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
             this.map.viewController.zoomToExtent(totalExtent);
           });
       }
-      this.searchBarTerm = this.routeParams['search'];
+      this.searchState.setSearchTerm(this.routeParams['search']);
     }
     if (this.routeParams['searchGeom'] === '1') {
       this.searchState.searchResultsGeometryEnabled$.next(true);
