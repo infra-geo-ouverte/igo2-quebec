@@ -7,6 +7,5 @@ export enum ShownComponent {
 export enum SearchResultAction {
   Focus = 'focus',
   Select = 'select',
-  Unfocus = 'unfocus',
-  Search = 'search'
+  Unfocus = 'unfocus'
 }
