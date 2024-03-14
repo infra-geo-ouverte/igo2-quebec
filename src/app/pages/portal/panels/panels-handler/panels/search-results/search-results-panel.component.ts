@@ -46,7 +46,7 @@ export class SearchResultPanelComponent implements OnInit, OnDestroy {
   @Input() map: IgoMap;
   @Input() searchState: SearchState;
 
-  @Output() closed = new EventEmitter<boolean>();
+  @Output() closed = new EventEmitter();
 
   constructor() {}
 
@@ -78,6 +78,6 @@ export class SearchResultPanelComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.closed.emit(true);
+    this.closed.emit();
   }
 }

@@ -34,7 +34,7 @@ export class LegendPanelComponent implements OnInit, OnDestroy {
   public mapLayersShownInLegend: Layer[];
   private layers$$: Subscription;
   @Input() map: IgoMap;
-  @Output() closed = new EventEmitter<boolean>();
+  @Output() closed = new EventEmitter();
 
   constructor() {}
 
@@ -51,6 +51,6 @@ export class LegendPanelComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.closed.emit(true);
+    this.closed.emit();
   }
 }
