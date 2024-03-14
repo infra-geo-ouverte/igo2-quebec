@@ -1,0 +1,15 @@
+<igo-search-results
+  [store]="searchState.store"
+  showIcons="true"
+  [term]="searchState.searchTerm$ | async"
+  placeholder="false"
+  (searchTermChange)="onSearchTermChange($event)"
+  (featureSelected)="close()"
+  (resultFocus)="onResult(searchResultActions.Focus, $event)"
+  (resultSelect)="onResult(searchResultActions.Select, $event)"
+  (resultUnfocus)="onResult(searchResultActions.Unfocus, $event)"
+  (resultMouseenter)="onResult(searchResultActions.Focus, $event)"
+  (resultMouseleave)="onResult(searchResultActions.Unfocus, $event)"
+  (moreResults)="onResult(searchResultActions.Search, $event)"
+>
+</igo-search-results>
