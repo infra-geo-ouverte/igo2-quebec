@@ -135,6 +135,7 @@ import {
   ]
 })
 export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
+  public shownComponents = ShownComponent;
   public appConfig: EnvironmentOptions;
   public hasFooter: boolean;
 

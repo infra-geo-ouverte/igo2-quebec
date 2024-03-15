@@ -21,7 +21,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SearchResultAction } from '../../panels-handler.enum';
 import { PanelsHandlerState } from '../../panels-handler.state';
 import {
-  onResultSelectOrFocus,
+  onResultFocus,
+  onResultSelect,
   onResultUnfocus
 } from './search-results-panel.utils';
 
@@ -56,7 +57,7 @@ export class SearchResultPanelComponent implements OnInit, OnDestroy {
   onResult(searchResultAction: SearchResultAction, searchResult: SearchResult) {
     switch (searchResultAction) {
       case SearchResultAction.Focus:
-        onResultSelectOrFocus(
+        onResultFocus(
           searchResult,
           this.panelsHandlerState.map,
           this.panelsHandlerState.searchState,
@@ -66,7 +67,8 @@ export class SearchResultPanelComponent implements OnInit, OnDestroy {
         );
         break;
       case SearchResultAction.Select:
-        onResultSelectOrFocus(
+        this, this.panelsHandlerState.map.searchResultsOverlay.clear();
+        onResultSelect(
           searchResult,
           this.panelsHandlerState.map,
           this.panelsHandlerState.searchState
@@ -74,11 +76,7 @@ export class SearchResultPanelComponent implements OnInit, OnDestroy {
         this.close();
         break;
       case SearchResultAction.Unfocus:
-        onResultUnfocus(
-          searchResult,
-          this.panelsHandlerState.map,
-          this.panelsHandlerState.searchState
-        );
+        onResultUnfocus(searchResult, this.panelsHandlerState.map);
         break;
     }
   }
