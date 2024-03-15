@@ -1,4 +1,4 @@
-@if (searchState.store.empty$ | async) {
+@if (panelsHandlerState.searchState.store.empty$ | async) {
   <div style="margin: 20px">
     <section>
       <h5>
@@ -14,12 +14,12 @@
   </div>
 }
 <!-- todo necessaire mais je ne comprends pas pourquoi -->
-@if ((searchState.store.empty$ | async) === false) {
+@if ((panelsHandlerState.searchState.store.empty$ | async) === false) {
   <igo-search-results
-    [map]="map"
-    [store]="searchState.store"
+    [map]="panelsHandlerState.map"
+    [store]="panelsHandlerState.searchState.store"
     showIcons="true"
-    [term]="searchState.searchTerm$ | async"
+    [term]="panelsHandlerState.searchState.searchTerm$ | async"
     placeholder="false"
     (searchTermChange)="onSearchTermChange($event)"
     (resultFocus)="onResult(searchResultActions.Focus, $event)"

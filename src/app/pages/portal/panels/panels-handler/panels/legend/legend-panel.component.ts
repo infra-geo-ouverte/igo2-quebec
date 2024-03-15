@@ -1,20 +1,20 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
   OnDestroy,
-  OnInit,
-  Output
+  OnInit
 } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
-import { IgoMap, Layer, LayerLegendListComponent } from '@igo2/geo';
+import { Layer, LayerLegendListComponent } from '@igo2/geo';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+
+import { ShownComponent } from '../../panels-handler.enum';
+import { PanelsHandlerState } from '../../panels-handler.state';
 
 @Component({
   selector: 'app-legend-panel',
@@ -33,13 +33,11 @@ import { Subscription } from 'rxjs';
 export class LegendPanelComponent implements OnInit, OnDestroy {
   public mapLayersShownInLegend: Layer[];
   private layers$$: Subscription;
-  @Input() map: IgoMap;
-  @Output() closed = new EventEmitter();
 
-  constructor() {}
+  constructor(public panelsHandlerState: PanelsHandlerState) {}
 
   ngOnInit() {
-    this.layers$$ = this.map.layers$.subscribe((layers) => {
+    this.layers$$ = this.panelsHandlerState.map.layers$.subscribe((layers) => {
       this.mapLayersShownInLegend = layers.filter(
         (layer) => layer.showInLayerList !== false
       );
@@ -50,7 +48,7 @@ export class LegendPanelComponent implements OnInit, OnDestroy {
     this.layers$$.unsubscribe();
   }
 
-  close() {
-    this.closed.emit();
+  clear() {
+    this.panelsHandlerState.componentToClose(ShownComponent.Legend);
   }
 }

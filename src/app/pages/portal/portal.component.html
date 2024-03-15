@@ -96,7 +96,7 @@
         ></igo-rotation-button>
         @if (appConfig.hasLegendButton) {
           <app-legend-button
-            (legendToggled)="toggleLegend()"
+            (legendToggled)="togglePanelComponent(shownComponents.Legend)"
             [legendInPanel]="appConfig.legendInPanel"
             [tooltipDisabled]="mobile"
             color="primary"

@@ -1,14 +1,9 @@
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  ElementRef,
-  EventEmitter,
-  Input,
   OnDestroy,
-  OnInit,
-  Output
+  OnInit
 } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -16,18 +11,15 @@ import { MatTooltip } from '@angular/material/tooltip';
 
 import {
   FeatureMotion,
-  IgoMap,
-  Layer,
   Research,
   SearchResult,
   SearchResultsComponent
 } from '@igo2/geo';
-import { SearchState } from '@igo2/integration';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
 
 import { SearchResultAction } from '../../panels-handler.enum';
+import { PanelsHandlerState } from '../../panels-handler.state';
 import {
   onResultSelectOrFocus,
   onResultUnfocus
@@ -50,60 +42,60 @@ import {
 })
 export class SearchResultPanelComponent implements OnInit, OnDestroy {
   public searchResultActions = SearchResultAction;
-  private empty$$: Subscription;
 
-  @Input() map: IgoMap;
-  @Input() searchState: SearchState;
-  @Input() expanded: boolean;
+  constructor(public panelsHandlerState: PanelsHandlerState) {}
 
-  @Output() opened = new EventEmitter();
-  @Output() closed = new EventEmitter();
+  ngOnInit() {}
 
-  constructor() {}
-
-  ngOnInit() {
-    this.empty$$ = this.searchState.store.empty$.subscribe((e) => {
-      if (!e && !this.expanded) {
-        this.opened.emit();
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.empty$$.unsubscribe();
-  }
+  ngOnDestroy() {}
 
   onSearchTermChange(term: string) {
-    this.searchState.setSearchTerm(term);
+    this.panelsHandlerState.searchState.setSearchTerm(term);
   }
 
   onResult(searchResultAction: SearchResultAction, searchResult: SearchResult) {
     switch (searchResultAction) {
       case SearchResultAction.Focus:
-        onResultSelectOrFocus(searchResult, this.map, this.searchState, {
-          featureMotion: FeatureMotion.None
-        });
+        onResultSelectOrFocus(
+          searchResult,
+          this.panelsHandlerState.map,
+          this.panelsHandlerState.searchState,
+          {
+            featureMotion: FeatureMotion.None
+          }
+        );
         break;
       case SearchResultAction.Select:
-        onResultSelectOrFocus(searchResult, this.map, this.searchState);
+        onResultSelectOrFocus(
+          searchResult,
+          this.panelsHandlerState.map,
+          this.panelsHandlerState.searchState
+        );
         this.close();
         break;
       case SearchResultAction.Unfocus:
-        onResultUnfocus(searchResult, this.map, this.searchState);
+        onResultUnfocus(
+          searchResult,
+          this.panelsHandlerState.map,
+          this.panelsHandlerState.searchState
+        );
         break;
     }
   }
   onMoreResults(event: { research: Research; results: SearchResult[] }) {
     const results = event.results;
-    this.searchState.store.state.updateAll({ focused: false, selected: false });
-    const newResults = this.searchState.store.entities$.value
+    this.panelsHandlerState.searchState.store.state.updateAll({
+      focused: false,
+      selected: false
+    });
+    const newResults = this.panelsHandlerState.searchState.store.entities$.value
       .filter((result: SearchResult) => result.source !== event.research.source)
       .concat(results);
-    this.searchState.store.updateMany(newResults);
+    this.panelsHandlerState.searchState.store.updateMany(newResults);
     // todo scroll into view
   }
 
   close() {
-    this.closed.emit();
+    this.panelsHandlerState.setOpenedState(false);
   }
 }

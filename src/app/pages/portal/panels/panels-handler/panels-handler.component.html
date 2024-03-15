@@ -6,7 +6,7 @@
       [opened]="openedPanel"
       [autoFocus]="false"
       (openedChange)="handlePanels($event)"
-      [ngSwitch]="shownComponent"
+      [ngSwitch]="panelsHandlerState.shownComponent$ | async"
     >
       <div #content class="app-sidenav-content">
         <ng-container *ngSwitchCase="'search'">
@@ -31,7 +31,7 @@
           (sidepanel.opened ? 'sidenav.close' : 'sidenav.open') | translate
         "
         matTooltipPosition="after"
-        (click)="sidepanel.toggle()"
+        (click)="panelsHandlerState.togglePanels()"
       >
         <mat-icon
           class="icon"
@@ -48,11 +48,11 @@
     #bottompanel
     [expanded]="openedPanel"
     [hideToggle]="false"
-    (opened)="handlePanels(true)"
-    (closed)="handlePanels(false)"
+    (opened)="panelsHandlerState.setOpenedState(true)"
+    (closed)="panelsHandlerState.setOpenedState(false)"
     (keydown.Enter)="$event.stopPropagation()"
     (click)="$event.stopPropagation()"
-    [ngSwitch]="shownComponent"
+    [ngSwitch]="panelsHandlerState.shownComponent$ | async"
   >
     <mat-expansion-panel-header collapsedHeight="56px">
       <ng-container *ngTemplateOutlet="searchBar"></ng-container>
@@ -78,31 +78,16 @@
 <!-- ==================== -->
 
 <ng-template #searchResults>
-  <app-search-results-panel
-    [map]="map"
-    [searchState]="searchState"
-    [expanded]="openedPanel"
-    (opened)="openWithinPanel()"
-    (closed)="closeWithinPanel()"
-  ></app-search-results-panel>
+  <app-search-results-panel></app-search-results-panel>
 </ng-template>
 
 <!-- ==================== -->
 <ng-template #mapQueryResults>
-  <app-query-results-panel
-    [map]="map"
-    [queryState]="queryState"
-    [expanded]="openedPanel"
-    (opened)="openWithinPanel()"
-    (closed)="closeWithinPanel()"
-  ></app-query-results-panel>
+  <app-query-results-panel></app-query-results-panel>
 </ng-template>
 <!-- ==================== -->
 <ng-template #mapLegend>
-  <app-legend-panel
-    [map]="map"
-    (closed)="closeWithinPanel()"
-  ></app-legend-panel>
+  <app-legend-panel></app-legend-panel>
 </ng-template>
 
 <!--  -->

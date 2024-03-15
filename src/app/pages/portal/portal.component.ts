@@ -91,6 +91,8 @@ import { LegendButtonComponent } from './legend-button/legend-button.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
 import { BottomPanelComponent } from './panels/bottompanel/bottompanel.component';
 import { PanelsHandlerComponent } from './panels/panels-handler/panels-handler.component';
+import { ShownComponent } from './panels/panels-handler/panels-handler.enum';
+import { PanelsHandlerState } from './panels/panels-handler/panels-handler.state';
 import { SidePanelComponent } from './panels/sidepanel/sidepanel.component';
 import {
   controlSlideX,
@@ -199,7 +201,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private contextState: ContextState,
     private mapState: MapState,
     public searchState: SearchState,
-    private queryState: QueryState,
+    public queryState: QueryState,
     private searchSourceService: SearchSourceService,
     private configService: ConfigService,
     private importService: ImportService,
@@ -210,7 +212,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     public dialog: MatDialog,
     public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private panelsHandlerState: PanelsHandlerState
   ) {
     this.handleAppConfigs();
     this.dialogOpened = this.dialog.getDialogById(
@@ -224,6 +227,10 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.panelsHandlerState.map = this.map;
+    this.panelsHandlerState.queryState = this.queryState;
+    this.panelsHandlerState.searchState = this.searchState;
+
     this.queryService.defaultFeatureCount = 1;
     window['IGO'] = this;
     this.map.ol.once('rendercomplete', () => {
@@ -295,30 +302,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.map.viewController.setInitialState();
   }
 
-  toggleLegend() {
-    if (this.appConfig.legendInPanel || this.mobile) {
-      if (!this.legendPanelOpened) {
-        this.legendButtonTooltip =
-          this.languageService.translate.instant('legend.close');
-        this.openPanelLegend();
-        if (this.searchInit) {
-          this.clearSearch();
-          this.openPanels();
-        }
-        if (this.mapQueryClick) {
-          this.onClearQuery();
-          this.mapQueryClick = false;
-          this.openPanels();
-        }
-      } else {
-        this.legendButtonTooltip =
-          this.languageService.translate.instant('legend.open');
-        this.closePanelLegend();
-      }
+  togglePanelComponent(component: ShownComponent) {
+    const currentComponent = this.panelsHandlerState.shownComponent$.getValue();
+    const opened = this.panelsHandlerState.opened$.getValue();
+
+    if (component !== currentComponent && opened) {
+      this.panelsHandlerState.setShownComponent(component);
     } else {
-      if (!this.legendDialogOpened) {
-        this.legendDialogOpened = true;
-      }
+      this.panelsHandlerState.setShownComponent(component);
+      this.panelsHandlerState.togglePanels();
     }
   }
 
