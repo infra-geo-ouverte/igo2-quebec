@@ -74,7 +74,7 @@ import { debounceTime, map } from 'rxjs/operators';
     SearchResultsComponent,
     SearchResultAddButtonComponent,
     AsyncPipe
-]
+  ]
 })
 export class SearchResultsToolComponent implements OnInit, OnDestroy {
   /**

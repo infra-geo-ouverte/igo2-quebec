@@ -32,6 +32,8 @@
   },
   "mobileBreakPoint": "(min-width: 768px)",
   "language": {
-    "prefix": ["./locale/"]
+    "prefix": [
+      "./locale/"
+    ]
   }
 }

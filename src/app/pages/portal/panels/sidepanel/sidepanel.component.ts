@@ -52,7 +52,7 @@ import { SearchResultsToolComponent } from '../search-results-tool/search-result
     MatMiniFabButton,
     AsyncPipe,
     TranslateModule
-]
+  ]
 })
 export class SidePanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
