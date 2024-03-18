@@ -24,7 +24,6 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatTooltip } from '@angular/material/tooltip';
 
 import { SearchBarComponent } from '@igo2/geo';
-import { QueryState, SearchState } from '@igo2/integration';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, concatMap, distinctUntilChanged, of } from 'rxjs';

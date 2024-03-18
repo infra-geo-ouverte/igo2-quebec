@@ -82,11 +82,9 @@ import { EnvironmentOptions } from 'src/environments/environnement.interface';
 import { FooterComponent } from '../footer/footer.component';
 import { LegendButtonComponent } from './legend-button/legend-button.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
-import { BottomPanelComponent } from './panels/bottompanel/bottompanel.component';
 import { PanelsHandlerComponent } from './panels/panels-handler/panels-handler.component';
 import { ShownComponent } from './panels/panels-handler/panels-handler.enum';
 import { PanelsHandlerState } from './panels/panels-handler/panels-handler.state';
-import { SidePanelComponent } from './panels/sidepanel/sidepanel.component';
 import { controlSlideX, controlsAnimations } from './portal.animation';
 
 @Component({
