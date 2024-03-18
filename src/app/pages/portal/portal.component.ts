@@ -3,6 +3,7 @@ import {
   BreakpointState,
   Breakpoints
 } from '@angular/cdk/layout';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
@@ -12,34 +13,49 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatSidenavContainer,
+  MatSidenavContent
+} from '@angular/material/sidenav';
+import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { EntityRecord, EntityStore } from '@igo2/common';
-import { DetailedContext } from '@igo2/context';
 import {
-  AnalyticsService,
-  ConfigService,
-  LanguageService,
-  Media,
-  MediaService,
-  MessageService
-} from '@igo2/core';
+  DetailedContext,
+  LayerContextDirective,
+  MapContextDirective
+} from '@igo2/context';
+import { AnalyticsService } from '@igo2/core/analytics';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { Media, MediaService } from '@igo2/core/media';
+import { MessageService } from '@igo2/core/message';
 import {
+  BaseLayersSwitcherComponent,
   CapabilitiesService,
   DataSourceService,
+  DropGeoFileDirective,
   FEATURE,
   Feature,
+  GeolocateButtonComponent,
+  HoverFeatureDirective,
   IgoMap,
   ImportService,
   Layer,
   LayerService,
+  MapBrowserComponent,
+  MapOfflineDirective,
+  QueryDirective,
   QuerySearchSource,
   QueryService,
   Research,
+  RotationButtonComponent,
   SearchBarComponent,
   SearchResult,
   SearchSource,
   SearchSourceService,
+  ZoomButtonComponent,
   computeOlFeaturesExtent,
   featureToSearchResult,
   generateIdFromSourceOptions,
@@ -59,6 +75,7 @@ import { ObjectUtils } from '@igo2/utils';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import * as olProj from 'ol/proj';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { MapBrowserEvent } from 'ol';
 import { Observable, Subscription, of, skip } from 'rxjs';
 import {
@@ -69,6 +86,11 @@ import {
 } from 'rxjs/operators';
 import { EnvironmentOptions } from 'src/environments/environnement.interface';
 
+import { FooterComponent } from '../footer/footer.component';
+import { LegendButtonComponent } from './legend-button/legend-button.component';
+import { MapOverlayComponent } from './map-overlay/map-overlay.component';
+import { BottomPanelComponent } from './panels/bottompanel/bottompanel.component';
+import { SidePanelComponent } from './panels/sidepanel/sidepanel.component';
 import {
   controlSlideX,
   controlSlideY,
@@ -79,7 +101,33 @@ import {
   selector: 'app-portal',
   templateUrl: './portal.component.html',
   styleUrls: ['./portal.component.scss'],
-  animations: [controlsAnimations(), controlSlideX(), controlSlideY()]
+  animations: [controlsAnimations(), controlSlideX(), controlSlideY()],
+  standalone: true,
+  imports: [
+    MatSidenavContainer,
+    MatSidenavContent,
+    SearchBarComponent,
+    MatTooltip,
+    SidePanelComponent,
+    MapBrowserComponent,
+    MapOfflineDirective,
+    MapContextDirective,
+    LayerContextDirective,
+    DropGeoFileDirective,
+    HoverFeatureDirective,
+    QueryDirective,
+    NgClass,
+    BaseLayersSwitcherComponent,
+    GeolocateButtonComponent,
+    ZoomButtonComponent,
+    RotationButtonComponent,
+    LegendButtonComponent,
+    BottomPanelComponent,
+    FooterComponent,
+    MapOverlayComponent,
+    AsyncPipe,
+    TranslateModule
+  ]
 })
 export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public appConfig: EnvironmentOptions;
@@ -149,7 +197,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     public capabilitiesService: CapabilitiesService,
     private contextState: ContextState,
     private mapState: MapState,
-    private searchState: SearchState,
+    public searchState: SearchState,
     private queryState: QueryState,
     private searchSourceService: SearchSourceService,
     private configService: ConfigService,

@@ -1,11 +1,6 @@
-<ng-container
-  *ngIf="store.entities$ | async"
-  class="featureInfo"
-  (keydown)="handleKeyboardEvent($event)"
->
+@if (store.entities$ | async) {
   <div class="title">
     <h4 color="primary">{{ title }}</h4>
-
     <button
       class="clear-button"
       mat-icon-button
@@ -17,20 +12,17 @@
       <mat-icon svgIcon="close"></mat-icon>
     </button>
   </div>
-
-  <igo-feature-details
-    *ngIf="resultSelected$.value && !customFeatureDetails"
-    [map]="map"
-    [feature]="resultSelected$.value.data"
-  >
-  </igo-feature-details>
-
-  <app-feature-custom-details
-    *ngIf="resultSelected$.value && customFeatureDetails"
-    [mobile]="mobile"
-    [feature]="resultSelected$.value.data"
-    (mapQuery)="mapQueryFromFeatureDetails($event)"
-    [mapQueryClick]="mapQueryClick"
-  >
-  </app-feature-custom-details>
-</ng-container>
+  @if (resultSelected$.value && !customFeatureDetails) {
+    <igo-feature-details [map]="map" [feature]="resultSelected$.value.data">
+    </igo-feature-details>
+  }
+  @if (resultSelected$.value && customFeatureDetails) {
+    <app-feature-custom-details
+      [mobile]="mobile"
+      [feature]="resultSelected$.value.data"
+      (mapQuery)="mapQueryFromFeatureDetails($event)"
+      [mapQueryClick]="mapQueryClick"
+    >
+    </app-feature-custom-details>
+  }
+}

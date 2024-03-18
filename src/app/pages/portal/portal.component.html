@@ -1,49 +1,50 @@
 <mat-sidenav-container>
   <mat-sidenav-content position="end">
-    <div id="searchDesktop" *ngIf="!mobile">
-      <igo-search-bar
-        *ngIf="showSearchBar"
-        #searchbar
-        appearance="outline"
-        searchIcon="magnify"
-        [matTooltip]="'searchBar' | translate"
-        matTooltipShowDelay="500"
-        tooltip-position="after"
-        [searchSettings]="false"
-        color="primary"
-        [forceNA]="appConfig.app?.forceCoordsNA"
-        [term]="searchBarTerm"
-        [store]="searchStore"
-        [termSplitter]="termSplitter"
-        (searchTermChange)="onSearchTermChange($event)"
-        (search)="onSearch($event)"
-        (clearFeature)="clearSearch()"
-      >
-      </igo-search-bar>
-
-      <div *ngIf="mobile" id="scaleLine"></div>
-
-      <app-sidepanel
-        #sidepanel
-        class="sidepanel"
-        [searchState]="searchState"
-        [map]="map"
-        [mobile]="mobile"
-        [(opened)]="panelOpenState"
-        [searchInit]="searchInit"
-        [store]="queryStore"
-        [legendPanelOpened]="legendPanelOpened"
-        [mapQueryClick]="mapQueryClick"
-        [panelOpenState]="panelOpenState"
-        (panelOpened)="panelOpened($event)"
-        (toggleLegend)="togglePanelLegend()"
-        (closeLegend)="closePanelLegend()"
-        (closeQuery)="closePanelOnCloseQuery()"
-        (openLegend)="openPanelLegend()"
-        [layers]="mapLayersShownInLegend"
-      >
-      </app-sidepanel>
-    </div>
+    @if (!mobile) {
+      <div id="searchDesktop">
+        @if (showSearchBar) {
+          <igo-search-bar
+            #searchbar
+            appearance="outline"
+            searchIcon="magnify"
+            [matTooltip]="'searchBar' | translate"
+            matTooltipShowDelay="500"
+            tooltip-position="after"
+            [searchSettings]="false"
+            color="primary"
+            [forceNA]="appConfig.app?.forceCoordsNA"
+            [term]="searchBarTerm"
+            [store]="searchStore"
+            [termSplitter]="termSplitter"
+            (searchTermChange)="onSearchTermChange($event)"
+            (search)="onSearch($event)"
+            (clearFeature)="clearSearch()"
+          >
+          </igo-search-bar>
+        }
+        @if (mobile) {
+          <div id="scaleLine"></div>
+        }
+        <app-sidepanel
+          #sidepanel
+          class="sidepanel"
+          [searchState]="searchState"
+          [map]="map"
+          [mobile]="mobile"
+          [(opened)]="panelOpenState"
+          [searchInit]="searchInit"
+          [legendPanelOpened]="legendPanelOpened"
+          [mapQueryClick]="mapQueryClick"
+          [panelOpenState]="panelOpenState"
+          (panelOpened)="panelOpened($event)"
+          (closeLegend)="closePanelLegend()"
+          (closeQuery)="closePanelOnCloseQuery()"
+          (openLegend)="openPanelLegend()"
+          [layers]="mapLayersShownInLegend"
+        >
+        </app-sidepanel>
+      </div>
+    }
 
     <igo-map-browser
       igoMapOffline
@@ -62,7 +63,9 @@
         'map-hasfooter': hasFooter
       }"
     >
-      <div *ngIf="mobile" id="scaleLine"></div>
+      @if (mobile) {
+        <div id="scaleLine"></div>
+      }
 
       <igo-baselayers-switcher
         [ngClass]="
@@ -91,48 +94,50 @@
               : 'map-buttons'
         "
       >
-        <igo-geolocate-button
-          *ngIf="hasGeolocateButton"
-          [map]="map"
-          color="primary"
-        ></igo-geolocate-button>
+        @if (hasGeolocateButton) {
+          <igo-geolocate-button
+            [map]="map"
+            color="primary"
+          ></igo-geolocate-button>
+        }
         <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
         <igo-rotation-button
           [showIfNoRotation]="appConfig.showRotationButtonIfNoRotation"
           [map]="map"
           color="primary"
         ></igo-rotation-button>
-        <app-legend-button
-          *ngIf="appConfig.hasLegendButton"
-          (legendToggled)="toggleLegend()"
-          [legendInPanel]="appConfig.legendInPanel"
-          [tooltipDisabled]="mobile"
-          [legendButtonTooltip]="legendButtonTooltip"
-          color="primary"
-        ></app-legend-button>
+        @if (appConfig.hasLegendButton) {
+          <app-legend-button
+            (legendToggled)="toggleLegend()"
+            [legendInPanel]="appConfig.legendInPanel"
+            [tooltipDisabled]="mobile"
+            color="primary"
+          ></app-legend-button>
+        }
       </div>
 
-      <app-bottompanel
-        *ngIf="mobile"
-        [searchState]="searchState"
-        [mobile]="mobile"
-        [store]="searchStore"
-        [searchInit]="searchInit"
-        [mapQueryClick]="mapQueryClick"
-        [legendPanelOpened]="legendPanelOpened"
-        [panelOpenState]="panelOpenState"
-        (panelOpened)="panelOpened($event)"
-        (mapQuery)="mapQuery($event)"
-        (closeQuery)="closePanelOnCloseQuery()"
-        (closeLegend)="closePanelLegend()"
-        (openLegend)="openPanelLegend()"
-        (toggleLegend)="togglePanelLegend()"
-        [layers]="mapLayersShownInLegend"
-      >
-      </app-bottompanel>
+      @if (mobile) {
+        <app-bottompanel
+          [searchState]="searchState"
+          [mobile]="mobile"
+          [searchInit]="searchInit"
+          [mapQueryClick]="mapQueryClick"
+          [legendPanelOpened]="legendPanelOpened"
+          [panelOpenState]="panelOpenState"
+          (panelOpened)="panelOpened($event)"
+          (mapQuery)="mapQuery($event)"
+          (closeQuery)="closePanelOnCloseQuery()"
+          (closeLegend)="closePanelLegend()"
+          (openLegend)="openPanelLegend()"
+          [layers]="mapLayersShownInLegend"
+        >
+        </app-bottompanel>
+      }
     </igo-map-browser>
 
-    <app-footer *ngIf="hasFooter && !mobile" [mobile]="mobile"></app-footer>
+    @if (hasFooter && !mobile) {
+      <app-footer></app-footer>
+    }
 
     <app-map-overlay
       [@controlStateX]="

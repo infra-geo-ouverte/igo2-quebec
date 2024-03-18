@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgClass } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -11,18 +11,33 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { ConfigService, LanguageService, MessageService } from '@igo2/core';
+import { SpinnerActivityDirective, SpinnerComponent } from '@igo2/common';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { MessageService } from '@igo2/core/message';
 import { AnalyticsListenerService, AppOptions } from '@igo2/integration';
 import { DomUtils, userAgent } from '@igo2/utils';
 
 import { delay, first } from 'rxjs';
 
+import { HeaderComponent } from './pages/header/header.component';
+import { MenuComponent } from './pages/menu/menu.component';
+import { PortalComponent } from './pages/portal/portal.component';
 import { PwaService } from './services/pwa.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    SpinnerComponent,
+    SpinnerActivityDirective,
+    HeaderComponent,
+    MenuComponent,
+    PortalComponent,
+    NgClass
+  ]
 })
 export class AppComponent implements OnInit {
   private themeClass = 'qcca-theme';

@@ -34,10 +34,6 @@ import {
 } from '@igo2/geo';
 import { IgoAppSearchBarModule, IgoIntegrationModule } from '@igo2/integration';
 
-import { FooterModule } from './../footer/footer.module';
-import { LegendButtonModule } from './legend-button/legend-button.module';
-import { LegendDialogModule } from './legend-dialog/legend-dialog.module';
-import { MapOverlayModule } from './map-overlay/map-overlay.module';
 import { AppPanelsModule } from './panels/panels.module';
 import { PortalComponent } from './portal.component';
 
@@ -46,9 +42,6 @@ import { PortalComponent } from './portal.component';
     IgoLayerModule,
     IgoAppSearchBarModule,
     AppPanelsModule,
-    LegendDialogModule,
-    LegendButtonModule,
-    FooterModule,
     CommonModule,
     MatTooltipModule,
     MatButtonModule,
@@ -71,13 +64,12 @@ import { PortalComponent } from './portal.component';
     IgoBackdropModule,
     IgoFlexibleModule,
     IgoIntegrationModule,
-    MapOverlayModule,
     IgoContextManagerModule,
     IgoContextMapButtonModule,
     IgoEntityTableModule,
-    IgoEntityTablePaginatorModule
+    IgoEntityTablePaginatorModule,
+    PortalComponent
   ],
-  exports: [PortalComponent],
-  declarations: [PortalComponent]
+  exports: [PortalComponent]
 })
 export class PortalModule {}

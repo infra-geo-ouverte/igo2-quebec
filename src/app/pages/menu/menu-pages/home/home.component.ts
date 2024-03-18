@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         text-align: left;
       }
     `
-  ]
+  ],
+  standalone: true
 })
 export class HomeComponent {
   getHomeComponent: any;

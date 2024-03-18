@@ -1,10 +1,15 @@
 <igo-spinner igoSpinnerActivity></igo-spinner>
 
-<app-header *ngIf="hasHeader" #header></app-header>
+@if (hasHeader) {
+  <app-header #header></app-header>
+}
 
-<app-menu *ngIf="hasMenu" class="flex flex-col flex-1"></app-menu>
+@if (hasMenu) {
+  <app-menu class="flex flex-col flex-1"></app-menu>
+}
 
-<app-portal
-  *ngIf="!hasMenu"
-  [ngClass]="hasHeader ? 'portal-hasHeader' : 'portal'"
-></app-portal>
+@if (!hasMenu) {
+  <app-portal
+    [ngClass]="hasHeader ? 'portal-hasHeader' : 'portal'"
+  ></app-portal>
+}

@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,10 +14,11 @@ import {
 import {
   EntityState,
   EntityStore,
+  FlexibleComponent,
   ToolComponent,
   getEntityTitle
 } from '@igo2/common';
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
 import {
   FEATURE,
   Feature,
@@ -24,6 +26,8 @@ import {
   IgoMap,
   Research,
   SearchResult,
+  SearchResultAddButtonComponent,
+  SearchResultsComponent,
   computeOlFeaturesExtent,
   featureFromOl,
   featureToOl,
@@ -63,7 +67,14 @@ import { debounceTime, map } from 'rxjs/operators';
 @Component({
   selector: 'app-search-results-tool',
   templateUrl: './search-results-tool.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FlexibleComponent,
+    SearchResultsComponent,
+    SearchResultAddButtonComponent,
+    AsyncPipe
+  ]
 })
 export class SearchResultsToolComponent implements OnInit, OnDestroy {
   /**

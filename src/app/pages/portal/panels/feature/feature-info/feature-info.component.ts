@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,16 +10,18 @@ import {
   OnInit,
   Output
 } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
-import { EntityStore } from '@igo2/common';
-import {
-  ConfigService,
-  LanguageService,
-  MediaService,
-  StorageService
-} from '@igo2/core';
+import { EntityStore, StopPropagationDirective } from '@igo2/common';
+import { ConfigService } from '@igo2/core/config';
+import { LanguageService } from '@igo2/core/language';
+import { MediaService } from '@igo2/core/media';
+import { StorageService } from '@igo2/core/storage';
 import {
   Feature,
+  FeatureDetailsComponent,
   FeatureMotion,
   IgoMap,
   SearchResult,
@@ -30,14 +33,28 @@ import {
 } from '@igo2/geo';
 import { QueryState, SearchState, StorageState } from '@igo2/integration';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+
+import { FeatureCustomDetailsComponent } from '../feature-custom-details/feature-custom-details.component';
 
 @Component({
   selector: 'app-feature-info',
   templateUrl: './feature-info.component.html',
   styleUrls: ['./feature-info.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatIconButton,
+    StopPropagationDirective,
+    MatTooltip,
+    MatIcon,
+    FeatureDetailsComponent,
+    FeatureCustomDetailsComponent,
+    AsyncPipe,
+    TranslateModule
+  ]
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
   get storageService(): StorageService {

@@ -1,3 +1,4 @@
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -9,26 +10,49 @@ import {
   OnInit,
   Output
 } from '@angular/core';
+import { MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { ActionStore, EntityStore } from '@igo2/common';
-import { ConfigService } from '@igo2/core';
+import { ConfigService } from '@igo2/core/config';
 import {
   FEATURE,
   Feature,
   FeatureMotion,
   IgoMap,
   Layer,
+  LayerLegendListComponent,
   SearchResult
 } from '@igo2/geo';
 import { QueryState, SearchState } from '@igo2/integration';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
+
+import { FeatureInfoComponent } from '../feature/feature-info/feature-info.component';
+import { SearchResultsToolComponent } from '../search-results-tool/search-results-tool.component';
 
 @Component({
   selector: 'app-sidepanel',
   templateUrl: './sidepanel.component.html',
   styleUrls: ['./sidepanel.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatSidenav,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    LayerLegendListComponent,
+    FeatureInfoComponent,
+    SearchResultsToolComponent,
+    NgClass,
+    MatMiniFabButton,
+    AsyncPipe,
+    TranslateModule
+  ]
 })
 export class SidePanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
