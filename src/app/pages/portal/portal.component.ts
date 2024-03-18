@@ -5,13 +5,7 @@ import {
 } from '@angular/cdk/layout';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import {
-  AfterContentInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   MatSidenavContainer,
@@ -20,7 +14,7 @@ import {
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { EntityRecord, EntityStore } from '@igo2/common';
+import { EntityRecord } from '@igo2/common';
 import {
   DetailedContext,
   LayerContextDirective,
@@ -29,7 +23,7 @@ import {
 import { AnalyticsService } from '@igo2/core/analytics';
 import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
-import { Media, MediaService } from '@igo2/core/media';
+import { MediaService } from '@igo2/core/media';
 import { MessageService } from '@igo2/core/message';
 import {
   BaseLayersSwitcherComponent,
@@ -42,7 +36,6 @@ import {
   HoverFeatureDirective,
   IgoMap,
   ImportService,
-  Layer,
   LayerService,
   MapBrowserComponent,
   MapOfflineDirective,
@@ -134,7 +127,10 @@ import {
     NgTemplateOutlet
   ]
 })
-export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
+export class PortalComponent implements OnInit, OnDestroy {
+  readonly breakpoint$: Observable<BreakpointState>;
+  public Breakpoints = Breakpoints;
+
   public shownComponents = ShownComponent;
   public appConfig: EnvironmentOptions;
   public hasFooter: boolean;
@@ -154,44 +150,20 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   private searchTerm$$: Subscription;
 
   private routeParams: Params;
+  // renommer mobileMode plutot que mobile?
   public mobile: boolean;
   @ViewChild('searchbar') searchBar: SearchBarComponent;
 
   public dialogOpened: MatDialogRef<unknown>;
 
+  public mobileBreakPoint: string = '(min-width: 768px)';
+
+  public currentBreakpoint: string = '';
+  public legendButtonTooltip: unknown;
+
   get map(): IgoMap {
     return this.mapState.map;
   }
-
-  isMobile(): boolean {
-    return this.mediaService.getMedia() === Media.Mobile;
-  }
-
-  public mobileBreakPoint: string = '(min-width: 768px)';
-  public Breakpoints = Breakpoints;
-  public currentBreakpoint: string = '';
-
-  get searchStore(): EntityStore<SearchResult> {
-    return this.searchState.store;
-  }
-
-  get searchResultsGeometryEnabled(): boolean {
-    return this.searchState.searchResultsGeometryEnabled$.value;
-  }
-
-  get queryStore(): EntityStore<SearchResult> {
-    //FeatureInfo
-    return this.queryState.store;
-  }
-  public panelOpenState = false;
-  public mapQueryClick = false;
-  public searchInit = false;
-
-  public mapLayersShownInLegend: Layer[];
-
-  public legendButtonTooltip: unknown;
-
-  readonly breakpoint$: Observable<BreakpointState>;
 
   constructor(
     private route: ActivatedRoute,
@@ -214,7 +186,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
     private analyticsService: AnalyticsService,
-    private panelsHandlerState: PanelsHandlerState
+    public panelsHandlerState: PanelsHandlerState
   ) {
     this.handleAppConfigs();
     this.dialogOpened = this.dialog.getDialogById(
@@ -228,15 +200,12 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.panelsHandlerState.map = this.map;
-    this.panelsHandlerState.queryState = this.queryState;
-    this.panelsHandlerState.searchState = this.searchState;
-
+    this.initPanelsHandlerState();
     this.queryService.defaultFeatureCount = 1;
     window['IGO'] = this;
     this.map.ol.once('rendercomplete', () => {
       this.readQueryParams();
-      if (this.appConfig.geolocate?.activateDefault) {
+      if (this.appConfig.geolocate?.activateDefault !== undefined) {
         this.map.geolocationController.tracking =
           this.appConfig.geolocate?.activateDefault;
       }
@@ -249,12 +218,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.context$$ = this.contextState.context$.subscribe(
       (context: DetailedContext) => this.onChangeContext(context)
     );
-
-    this.searchState.selectedResult$.subscribe((result) => {
-      if (result && this.isMobile()) {
-        this.closePanels();
-      }
-    });
 
     this.searchTerm$$ = this.searchState.searchTerm$
       .pipe(skip(1))
@@ -269,38 +232,30 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
     this.queryService.defaultFeatureCount = 1;
 
-    this.queryStore.entities$.subscribe((entities) => {
-      if (entities.length > 0) {
-        this.openPanelonQuery();
-      }
-    });
-
     this.breakpoint$.subscribe(() => this.breakpointChanged());
   }
 
   private handleAppConfigs() {
     this.appConfig = this.configService.getConfigs();
-
     this.hasGeolocateButton = this.configService.getConfig(
       'geolocate.button.visible',
       true
     );
-
     this.showSearchBar = this.configService.getConfig(
       'searchBar.showSearchBar',
       true
     );
-
     this.hasFooter = this.configService.getConfig('hasFooter', true);
-
     this.mobileBreakPoint = this.configService.getConfig(
       'mobileBreakPoint',
-      "'(min-width: 768px)'"
+      '(min-width: 768px)'
     );
   }
 
-  ngAfterContentInit(): void {
-    this.map.viewController.setInitialState();
+  private initPanelsHandlerState() {
+    this.panelsHandlerState.map = this.map;
+    this.panelsHandlerState.queryState = this.queryState;
+    this.panelsHandlerState.searchState = this.searchState;
   }
 
   togglePanelComponent(component: ShownComponent) {
@@ -315,31 +270,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  panelOpened(event) {
-    this.panelOpenState = event;
-  }
-
-  mapQuery(event) {
-    this.mapQueryClick = event;
-  }
-
-  closePanelLegend() {
-    this.legendPanelOpened = false;
-    this.closePanels();
-    this.map.propertyChange$.unsubscribe;
-  }
-
-  openPanelLegend() {
-    this.legendPanelOpened = true;
-    this.openPanels();
-    this.map.propertyChange$.subscribe(() => {
-      this.mapLayersShownInLegend = this.map.layers.filter(
-        (layer) => layer.showInLayerList !== false
-      );
-    });
-  }
-
   public breakpointChanged() {
+    // todo service distinct? renommer mobileMode plutot que mobile?
     if (this.breakpointObserver.isMatched('(min-width: 768px)')) {
       this.currentBreakpoint = this.mobileBreakPoint;
       this.mobile = false;
@@ -352,6 +284,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.context$$.unsubscribe();
     this.layers$$?.unsubscribe();
     this.searchTerm$$.unsubscribe();
+  }
+
+  public onClearSearch() {
+    this.map.searchResultsOverlay.clear();
+    this.searchState.store.clear();
+    this.searchState.setSelectedResult(undefined);
+    this.searchState.deactivateCustomFilterTermStrategy();
   }
 
   private getQuerySearchSource(): SearchSource {
@@ -385,7 +324,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       source: baseQuerySearchSource
     };
     research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
-      this.queryStore.load(queryResults);
+      this.queryState.store.load(queryResults);
     });
   }
 
@@ -398,34 +337,19 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onSearchTermChange(term?: string) {
-    if (this.mobile) {
-      this.panelOpenState = true;
-    }
     if (this.routeParams?.search && term !== this.routeParams.search) {
       this.searchState.deactivateCustomFilterTermStrategy();
     }
-
+    this.searchState.searchTerm$.next(term);
     this.searchState.setSearchTerm(term);
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
     if (termWithoutHashtag.length < 2) {
-      if (this.mobile) {
-        this.panelOpenState = true;
-      }
-      this.clearSearch();
+      this.onClearSearch();
       return;
     }
-    this.onBeforeSearch();
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
-    this.searchInit = true;
-    this.legendPanelOpened = false;
-    this.panelOpenState = true;
-    if (this.mapQueryClick) {
-      this.onClearQuery();
-      this.mapQueryClick = false;
-      this.panelOpenState = true;
-    }
     const results = event.results;
 
     const isReverseSearch = !sourceCanSearch(event.research.source);
@@ -441,24 +365,14 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         .filter(sourceCanSearch);
     }
 
-    const newResults = this.searchStore.entities$.value
+    const newResults = this.searchState.store.entities$.value
       .filter(
         (result: SearchResult) =>
           result.source !== event.research.source &&
           enabledSources.includes(result.source)
       )
       .concat(results);
-    this.searchStore.updateMany(newResults);
-  }
-
-  private closePanels() {
-    if (!this.mapQueryClick && !this.searchInit && !this.legendPanelOpened) {
-      this.panelOpenState = false;
-    }
-  }
-
-  private openPanels() {
-    this.panelOpenState = true;
+    this.searchState.store.updateMany(newResults);
   }
 
   private onChangeContext(context: DetailedContext) {
@@ -479,37 +393,12 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.contextLoaded = true;
   }
 
-  private onBeforeSearch() {
-    this.openPanels();
-  }
-
   clearSearch() {
     this.map.searchResultsOverlay.clear();
-    this.searchStore.clear();
+    this.searchState.store.clear();
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
-    this.searchInit = false;
     this.searchState.setSearchTerm('');
-  }
-
-  closePanelOnCloseQuery() {
-    this.mapQueryClick = false;
-    if (this.searchInit || this.legendPanelOpened) {
-      this.openPanels(); // to prevent the panel to close when click searchbar after query
-    }
-  }
-
-  openPanelonQuery() {
-    this.mapQueryClick = true;
-    this.openPanels;
-    this.legendPanelOpened = false;
-    // this.clearSearch();
-  }
-
-  onClearQuery() {
-    this.queryState.store.clear(); // clears the info panel
-    this.queryState.store.softClear(); // clears the info panel
-    this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
   }
 
   private readQueryParams() {
@@ -531,9 +420,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.routeParams['zoomExtent']) {
       const extentParams = this.routeParams['zoomExtent'].split(',');
       const olExtent = olProj.transformExtent(
-        extentParams,
+        extentParams.map((str) => Number(str.trim())),
         'EPSG:4326',
-        this.map.projection
+        this.map.projectionCode
       );
       this.map.viewController.zoomToExtent(
         olExtent as [number, number, number, number]
@@ -554,7 +443,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private readFocusFirst() {
     if (this.routeParams['sf'] === '1' && this.termDefinedInUrl) {
-      const entities$$ = this.searchStore.stateView
+      const entities$$ = this.searchState.store.stateView
         .all$()
         .pipe(
           skipWhile((entities) => entities.length === 0),
@@ -582,7 +471,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         !this.routeParams['zoom'] &&
         this.routeParams['sf'] !== '1'
       ) {
-        const entities$$ = this.searchStore.stateView
+        const entities$$ = this.searchState.store.stateView
           .all$()
           .pipe(
             skipWhile((entities) => entities.length === 0),
@@ -606,7 +495,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
             this.map.viewController.zoomToExtent(totalExtent);
           });
       }
-      this.searchState.setSearchTerm(this.routeParams['search']);
+      this.searchState.searchTerm$.next(this.routeParams['search']);
     }
     if (this.routeParams['searchGeom'] === '1') {
       this.searchState.searchResultsGeometryEnabled$.next(true);
@@ -683,6 +572,9 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         url = url
           .replace('VERSION=' + version, '')
           .replace('version=' + version, '');
+      }
+      if (url.endsWith('?')) {
+        url = url.substring(0, url.length - 1);
       }
 
       const currentLayersByService = this.extractLayersByService(

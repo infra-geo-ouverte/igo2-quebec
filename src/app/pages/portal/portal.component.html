@@ -40,7 +40,7 @@
             ? !hasFooter
               ? 'igo-baselayers-switcher-mobile footer-mobile-offset'
               : 'igo-baselayers-switcher-mobile'
-            : panelOpenState
+            : (panelsHandlerState.opened$ | async)
               ? 'baselayers-pushed'
               : 'baselayers'
         "
@@ -90,7 +90,8 @@
 
     <app-map-overlay
       [@controlStateX]="
-        (mediaService.media$ | async) !== 'mobile' && panelOpenState
+        (mediaService.media$ | async) !== 'mobile' &&
+        (panelsHandlerState.opened$ | async)
           ? 'right'
           : 'left'
       "
@@ -111,7 +112,7 @@
     color="primary"
     [forceNA]="appConfig.app?.forceCoordsNA"
     [term]="searchState.searchTerm$ | async"
-    [store]="searchStore"
+    [store]="searchState.store"
     (searchTermChange)="onSearchTermChange($event)"
     (search)="onSearch($event)"
     (clearFeature)="clearSearch()"
