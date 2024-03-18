@@ -1,10 +1,7 @@
 <mat-sidenav-container>
+  <!-- todo enlever ceci -->
   <mat-sidenav-content position="end">
-    <app-panels-handler
-      [searchState]="searchState"
-      [searchBar]="searchBar"
-      [map]="map"
-    ></app-panels-handler>
+    <app-panels-handler [searchBar]="searchBar"></app-panels-handler>
     @if (!mobile) {
       <div id="searchDesktop">
         @if (showSearchBar) {
@@ -13,24 +10,6 @@
         @if (mobile) {
           <div id="scaleLine"></div>
         }
-        <app-sidepanel
-          #sidepanel
-          class="sidepanel"
-          [searchState]="searchState"
-          [map]="map"
-          [mobile]="mobile"
-          [(opened)]="panelOpenState"
-          [searchInit]="searchInit"
-          [legendPanelOpened]="legendPanelOpened"
-          [mapQueryClick]="mapQueryClick"
-          [panelOpenState]="panelOpenState"
-          (panelOpened)="panelOpened($event)"
-          (closeLegend)="closePanelLegend()"
-          (closeQuery)="closePanelOnCloseQuery()"
-          (openLegend)="openPanelLegend()"
-          [layers]="mapLayersShownInLegend"
-        >
-        </app-sidepanel>
       </div>
     }
 
@@ -103,24 +82,6 @@
           ></app-legend-button>
         }
       </div>
-
-      @if (mobile) {
-        <app-bottompanel
-          [searchState]="searchState"
-          [mobile]="mobile"
-          [searchInit]="searchInit"
-          [mapQueryClick]="mapQueryClick"
-          [legendPanelOpened]="legendPanelOpened"
-          [panelOpenState]="panelOpenState"
-          (panelOpened)="panelOpened($event)"
-          (mapQuery)="mapQuery($event)"
-          (closeQuery)="closePanelOnCloseQuery()"
-          (closeLegend)="closePanelLegend()"
-          (openLegend)="openPanelLegend()"
-          [layers]="mapLayersShownInLegend"
-        >
-        </app-bottompanel>
-      }
     </igo-map-browser>
 
     @if (hasFooter && !mobile) {

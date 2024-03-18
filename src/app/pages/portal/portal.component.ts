@@ -364,58 +364,29 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    if (this.appConfig.queryOnlyOne) {
-      event.features = [event.features[0]];
-      this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
-    }
     const baseQuerySearchSource = this.getQuerySearchSource();
     const querySearchSourceArray: QuerySearchSource[] = [];
-    if (event.features.length) {
-      if (this.searchInit) {
-        this.clearSearch();
+    const results = event.features.map((feature: Feature) => {
+      let querySearchSource = querySearchSourceArray.find(
+        (s) => s.title === feature.meta.sourceTitle
+      );
+      if (!querySearchSource) {
+        querySearchSource = new QuerySearchSource({
+          title: feature.meta.sourceTitle
+        });
+        querySearchSourceArray.push(querySearchSource);
       }
-      this.clearSearchbarterm('');
-      if (this.mapQueryClick) {
-        this.onClearQuery();
-      }
-      this.openPanelonQuery();
-      const results = event.features.map((feature: Feature) => {
-        let querySearchSource = querySearchSourceArray.find(
-          (s) => s.title === feature.meta.sourceTitle
-        );
-        if (querySearchSource) {
-          this.onClearQuery();
-          this.openPanelonQuery();
-          this.mapQueryClick = true;
-        }
-        if (!querySearchSource) {
-          querySearchSource = new QuerySearchSource({
-            title: feature.meta.sourceTitle
-          });
-          querySearchSourceArray.push(querySearchSource);
-        }
-        return featureToSearchResult(feature, querySearchSource);
-      });
-      const filteredResults = results.filter((x) => x !== undefined);
-      const research = {
-        request: of(filteredResults),
-        reverse: false,
-        source: baseQuerySearchSource
-      };
-      research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
-        this.queryStore.load(queryResults);
-      });
-    } else {
-      this.mapQueryClick = false;
-      if (!this.searchInit && !this.legendPanelOpened && !this.mobile) {
-        // in desktop keep legend opened if user clicks on the map
-        this.panelOpenState = false;
-      }
-      if (!this.searchInit && this.mobile) {
-        // mobile mode, close legend when user click on the map
-        this.panelOpenState = false;
-      }
-    }
+      return featureToSearchResult(feature, querySearchSource);
+    });
+    const filteredResults = results.filter((x) => x !== undefined);
+    const research = {
+      request: of(filteredResults),
+      reverse: false,
+      source: baseQuerySearchSource
+    };
+    research.request.subscribe((queryResults: SearchResult<Feature>[]) => {
+      this.queryStore.load(queryResults);
+    });
   }
 
   /**
@@ -444,12 +415,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       return;
     }
     this.onBeforeSearch();
-  }
-
-  clearSearchbarterm(event) {
-    if (!this.mobile) {
-      this.searchBar.setTerm('');
-    }
   }
 
   onSearch(event: { research: Research; results: SearchResult[] }) {
@@ -538,7 +503,7 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.mapQueryClick = true;
     this.openPanels;
     this.legendPanelOpened = false;
-    this.clearSearch();
+    // this.clearSearch();
   }
 
   onClearQuery() {
