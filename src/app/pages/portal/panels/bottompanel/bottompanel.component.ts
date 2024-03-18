@@ -74,7 +74,7 @@ import { FeatureInfoComponent } from '../feature/feature-info/feature-info.compo
     SearchResultsComponent,
     AsyncPipe,
     TranslateModule
-]
+  ]
 })
 export class BottomPanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);

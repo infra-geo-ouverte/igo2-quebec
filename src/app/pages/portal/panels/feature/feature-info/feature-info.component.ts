@@ -54,7 +54,7 @@ import { FeatureCustomDetailsComponent } from '../feature-custom-details/feature
     FeatureCustomDetailsComponent,
     AsyncPipe,
     TranslateModule
-]
+  ]
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
   get storageService(): StorageService {

@@ -37,7 +37,7 @@ import { PwaService } from './services/pwa.service';
     MenuComponent,
     PortalComponent,
     NgClass
-]
+  ]
 })
 export class AppComponent implements OnInit {
   private themeClass = 'qcca-theme';
