@@ -20,10 +20,6 @@
     "title": "Synchronisation de layers"
   },
   {
-    "uri": "workspace",
-    "title": "Workspace (vue tabulaire)"
-  },
-  {
     "uri": "mapOverlay",
     "title": "Superposition de carte (Map overlay)"
   },
@@ -42,9 +38,5 @@
   {
     "uri": "legends",
     "title": "Exemples de légendes"
-  },
-  {
-    "uri": "homeExtent",
-    "title": "Étendue de la carte(Home Extent)"
   }
 ]

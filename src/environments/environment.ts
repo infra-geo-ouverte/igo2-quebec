@@ -2,36 +2,9 @@
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-import { LanguageOptions } from '@igo2/core';
-import {
-  CommonVectorStyleOptions,
-  Projection,
-  SearchSourceOptions
-} from '@igo2/geo';
+import { AppEnvironmentOptions } from './environnement.interface';
 
-import { AppOptions } from './environnement.interface';
-
-interface Environment {
-  production: boolean;
-  igo: {
-    app: AppOptions;
-    language?: LanguageOptions;
-    projections?: Projection[];
-    searchSources?: { [key: string]: SearchSourceOptions };
-    queryOverlayStyle?: {
-      base?: CommonVectorStyleOptions;
-      selection?: CommonVectorStyleOptions;
-      focus?: CommonVectorStyleOptions;
-    };
-    searchOverlayStyle?: {
-      base?: CommonVectorStyleOptions;
-      selection?: CommonVectorStyleOptions;
-      focus?: CommonVectorStyleOptions;
-    };
-  };
-}
-
-export const environment: Environment = {
+export const environment: AppEnvironmentOptions = {
   production: false,
   igo: {
     app: {
@@ -81,25 +54,13 @@ export const environment: Environment = {
         params: {
           limit: '5'
         },
-        settings: [],
-        showInPointerSummary: true
+        settings: []
       },
-      coordinatesreverse: {
-        showInPointerSummary: true
-      },
+      coordinatesreverse: {},
       icherchereverse: {
-        showInPointerSummary: true,
         searchUrl: '/apis/terrapi',
         order: 3,
         enabled: true
-      },
-      ilayer: {
-        enabled: false,
-        searchUrl: '/apis/icherche/layers',
-        order: 4,
-        params: {
-          limit: '3'
-        }
       }
     }
   }

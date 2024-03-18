@@ -10,8 +10,10 @@
   "hasLegendButton": true,
   "legendInPanel": true,
   "showRotationButtonIfNoRotation": true,
-  "hasGeolocateButton": true,
   "geolocate": {
+    "button": {
+      "visible": true
+    },
     "basic": true,
     "followPosition": false,
     "activateDefault": false
@@ -28,8 +30,10 @@
   "importExport": {
     "url": "/apis/ogre"
   },
-  "mobileBreakPoint": "'(min-width: 768px)'",
+  "mobileBreakPoint": "(min-width: 768px)",
   "language": {
-    "prefix": ["./locale/"]
+    "prefix": [
+      "./locale/"
+    ]
   }
 }

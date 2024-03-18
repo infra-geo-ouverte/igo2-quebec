@@ -29,8 +29,6 @@
         [termSplitter]="termSplitter"
         [forceNA]="forceCoordsNA"
         [store]="searchStore"
-        [pointerSummaryEnabled]="igoSearchPointerSummaryEnabled"
-        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
         [searchResultsGeometryEnabled]="searchResultsGeometryEnabled"
         (searchResultsGeometryStatus)="
           onSearchResultsGeometryStatusChange($event)
@@ -82,6 +80,7 @@
     <div *ngIf="mapQueryClick" #getInfo>
       <app-feature-info
         [map]="map"
+        [searchState]="searchState"
         [store]="queryStore"
         [mobile]="mobile"
         (closeQuery)="closePanelOnCloseQuery()"

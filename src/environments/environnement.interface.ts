@@ -1,17 +1,32 @@
-export interface AppOptions {
-  forceCoordsNA: boolean;
-  install: {
-    enabled?: boolean;
-    promote?: boolean;
-    manifestPath?: string;
-  };
-  pwa?: {
-    enabled?: boolean;
-    path?: string;
-  };
+import { AllEnvironmentOptions } from '@igo2/integration';
+import { EnvironmentOptions as IntegrationEnvironmentOptions } from '@igo2/integration';
+
+import { MapOverlay } from 'src/app/pages/portal/map-overlay/map-overlay.interface';
+
+export interface AppEnvironmentOptions extends IntegrationEnvironmentOptions {
+  igo: EnvironmentOptions;
 }
 
-export interface InteractiveTourConfigOptions {
-  tourInMobile: boolean;
-  pathToConfigFile: string;
+export interface EnvironmentOptions extends AllEnvironmentOptions {
+  header?: {
+    hasHeader?: boolean;
+    logo?: string;
+    logoPrint?: string;
+  };
+  hasFooter?: boolean;
+  hasMenu?: boolean;
+  title?: string;
+  theme?: string; // enum?
+  description?: string;
+  mapOverlay?: MapOverlay[];
+  showRotationButtonIfNoRotation?: boolean;
+  hasFeatureEmphasisOnSelection?: boolean;
+  addFeaturetoLayer?: boolean;
+  customFeatureDetails?: string;
+  customFeatureTitle?: string;
+  queryOnlyOne?: boolean;
+  useStaticIcon?: boolean;
+  legendInPanel?: boolean;
+  mobileBreakPoint?: string;
+  hasLegendButton?: boolean;
 }

@@ -28,12 +28,10 @@ import {
   getCommonVectorSelectedStyle,
   getCommonVectorStyle
 } from '@igo2/geo';
-import { QueryState, StorageState } from '@igo2/integration';
+import { QueryState, SearchState, StorageState } from '@igo2/integration';
 
 import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-
-import { SearchState } from '../../search-results-tool/search.state';
 
 @Component({
   selector: 'app-feature-info',
@@ -85,6 +83,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   public customFeatureTitle: boolean;
   public customFeatureDetails: boolean;
 
+  @Input() searchState: SearchState;
   @Input()
   get feature(): Feature {
     return this._feature;
@@ -137,17 +136,16 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     public languageService: LanguageService,
     private storageState: StorageState,
     private queryState: QueryState,
-    private configService: ConfigService,
-    private searchState: SearchState
+    private configService: ConfigService
   ) {
-    this.customFeatureTitle =
-      this.configService.getConfig('customFeatureTitle') === undefined
-        ? false
-        : this.configService.getConfig('customFeatureTitle');
-    this.customFeatureDetails =
-      this.configService.getConfig('customFeatureDetails') === undefined
-        ? false
-        : this.configService.getConfig('customFeatureDetails');
+    this.customFeatureTitle = this.configService.getConfig(
+      'customFeatureTitle',
+      false
+    );
+    this.customFeatureDetails = this.configService.getConfig(
+      'customFeatureDetails',
+      false
+    );
   }
 
   private monitorResultOutOfView() {

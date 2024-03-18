@@ -1,12 +1,9 @@
 <mat-sidenav-container>
   <mat-sidenav-content position="end">
-    <igo-backdrop [shown]="false" (click)="onBackdropClick()"> </igo-backdrop>
-
     <div id="searchDesktop" *ngIf="!mobile">
       <igo-search-bar
         *ngIf="showSearchBar"
         #searchbar
-        (pointerSummaryStatus)="onPointerSummaryStatusChange($event)"
         appearance="outline"
         searchIcon="magnify"
         [matTooltip]="'searchBar' | translate"
@@ -14,7 +11,7 @@
         tooltip-position="after"
         [searchSettings]="false"
         color="primary"
-        [forceNA]="forceCoordsNA"
+        [forceNA]="appConfig.app?.forceCoordsNA"
         [term]="searchBarTerm"
         [store]="searchStore"
         [termSplitter]="termSplitter"
@@ -29,6 +26,7 @@
       <app-sidepanel
         #sidepanel
         class="sidepanel"
+        [searchState]="searchState"
         [map]="map"
         [mobile]="mobile"
         [(opened)]="panelOpenState"
@@ -49,7 +47,6 @@
 
     <igo-map-browser
       igoMapOffline
-      #mapBrowser
       igoMapContext
       igoLayerContext
       igoDropGeoFile
@@ -60,7 +57,6 @@
       (query)="onMapQuery($event)"
       [igoHoverFeatureDelay]="10"
       [map]="map"
-      (menuPosition)="onContextMenuOpen($event)"
       [ngClass]="{
         'igo-attribution-offset': map.getBaseLayers().length > 1,
         'map-hasfooter': hasFooter
@@ -79,7 +75,7 @@
               : 'baselayers'
         "
         [map]="map"
-        [useStaticIcon]="getBaseLayersUseStaticIcon()"
+        [useStaticIcon]="appConfig.useStaticIcon"
       >
       </igo-baselayers-switcher>
 
@@ -102,14 +98,14 @@
         ></igo-geolocate-button>
         <igo-zoom-button [map]="map" color="primary"></igo-zoom-button>
         <igo-rotation-button
-          [showIfNoRotation]="showRotationButtonIfNoRotation"
+          [showIfNoRotation]="appConfig.showRotationButtonIfNoRotation"
           [map]="map"
           color="primary"
         ></igo-rotation-button>
         <app-legend-button
-          *ngIf="hasLegendButton"
+          *ngIf="appConfig.hasLegendButton"
           (legendToggled)="toggleLegend()"
-          [legendInPanel]="legendInPanel"
+          [legendInPanel]="appConfig.legendInPanel"
           [tooltipDisabled]="mobile"
           [legendButtonTooltip]="legendButtonTooltip"
           color="primary"
@@ -118,6 +114,7 @@
 
       <app-bottompanel
         *ngIf="mobile"
+        [searchState]="searchState"
         [mobile]="mobile"
         [store]="searchStore"
         [searchInit]="searchInit"

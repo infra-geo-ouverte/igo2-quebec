@@ -4,39 +4,28 @@ import {
   Injector,
   NgModule
 } from '@angular/core';
-import {
-  MAT_TOOLTIP_DEFAULT_OPTIONS,
-  MatTooltipDefaultOptions
-} from '@angular/material/tooltip';
-import { BrowserModule, HammerModule } from '@angular/platform-browser';
+import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { IgoSpinnerModule, IgoStopPropagationModule } from '@igo2/common';
 import {
-  IgoGestureModule,
   IgoMessageModule,
   LanguageService,
   RouteService,
   provideConfigOptions
 } from '@igo2/core';
 import {
-  CoordinatesSearchResultFormatter,
-  IChercheSearchSource,
-  SearchService,
+  provideCadastreSearchSource,
   provideCoordinatesReverseSearchSource,
-  provideDefaultCoordinatesSearchResultFormatter,
-  provideDefaultIChercheSearchResultFormatter,
   provideIChercheReverseSearchSource,
   provideIChercheSearchSource,
-  provideILayerSearchSource,
   provideNominatimSearchSource,
   provideOptionsApi,
-  provideOsrmDirectionsSource,
-  provideSearchSourceService,
-  provideStyleListOptions,
-  provideWorkspaceSearchSource
+  provideStoredQueriesSearchSource,
+  provideStyleListOptions
 } from '@igo2/geo';
 
 import { concatMap, first } from 'rxjs';
@@ -61,12 +50,10 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
-    IgoGestureModule.forRoot(),
     IgoMessageModule,
     IgoSpinnerModule,
     IgoStopPropagationModule,
     PortalModule,
-    HammerModule,
     HeaderModule,
     FooterModule,
     MenuModule,
@@ -80,24 +67,14 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
       default: environment.igo,
       path: './config/config.json'
     }),
-    provideCoordinatesReverseSearchSource(),
-    provideIChercheSearchSource(),
-    provideNominatimSearchSource(),
-    provideIChercheReverseSearchSource(),
-    provideILayerSearchSource(),
-    provideOsrmDirectionsSource(),
-    provideOptionsApi(),
-    CoordinatesSearchResultFormatter,
-    provideDefaultCoordinatesSearchResultFormatter(),
-    provideDefaultIChercheSearchResultFormatter(),
-    provideSearchSourceService(),
-    SearchService,
-    IChercheSearchSource,
-    provideStyleListOptions({
-      path: './assets/list-style.json'
-    }),
     RouteService,
-    provideWorkspaceSearchSource(),
+    provideNominatimSearchSource(),
+    provideIChercheSearchSource(),
+    provideIChercheReverseSearchSource(),
+    provideCoordinatesReverseSearchSource(),
+    provideStoredQueriesSearchSource(),
+    provideOptionsApi(),
+    provideCadastreSearchSource(),
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFactory,
@@ -106,8 +83,7 @@ export const defaultTooltipOptions: MatTooltipDefaultOptions = {
     },
     provideStyleListOptions({
       path: './assets/list-style.json'
-    }),
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: defaultTooltipOptions }
+    })
   ],
   bootstrap: [AppComponent]
 })
@@ -117,7 +93,7 @@ function appInitializerFactory(
   injector: Injector,
   applicationRef: ApplicationRef
 ) {
-  // ensure to have the proper translations loaded once, whe the app is stable.
+  // ensure to have the proper translations loaded once, when the app is stable.
   return () =>
     new Promise<any>((resolve: any) => {
       applicationRef.isStable

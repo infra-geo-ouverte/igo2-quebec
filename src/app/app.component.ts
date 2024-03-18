@@ -1,10 +1,21 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Meta, Title } from '@angular/platform-browser';
+import { NavigationEnd, Router } from '@angular/router';
 
-import { AuthOptions } from '@igo2/auth';
 import { ConfigService, LanguageService, MessageService } from '@igo2/core';
-import { userAgent } from '@igo2/utils';
+import { AnalyticsListenerService, AppOptions } from '@igo2/integration';
+import { DomUtils, userAgent } from '@igo2/utils';
+
+import { delay, first } from 'rxjs';
 
 import { PwaService } from './services/pwa.service';
 
@@ -13,11 +24,10 @@ import { PwaService } from './services/pwa.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  public authConfig: AuthOptions;
+export class AppComponent implements OnInit {
   private themeClass = 'qcca-theme';
-  public hasHeader: boolean = true;
-  public hasFooter: boolean = true;
+  public hasHeader: boolean;
+  public hasFooter: boolean;
   private promptEvent: any;
   public hasMenu: boolean = false;
 
@@ -25,13 +35,16 @@ export class AppComponent {
   searchBar: ElementRef;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     protected languageService: LanguageService,
     private configService: ConfigService,
+    private analyticsListenerService: AnalyticsListenerService,
     private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
     private messageService: MessageService,
     private pwaService: PwaService,
+    private router: Router,
     iconRegistry: MatIconRegistry
   ) {
     iconRegistry.registerFontClassAlias('Linearicons-Free', 'lnr');
@@ -39,26 +52,48 @@ export class AppComponent {
     this.readThemeConfig();
     this.readDescriptionConfig();
 
+    this.analyticsListenerService.listen();
+
     this.detectOldBrowser();
 
-    this.hasHeader =
-      this.configService.getConfig('header.hasHeader') === undefined
-        ? false
-        : this.configService.getConfig('header.hasHeader');
-
-    this.hasFooter =
-      this.configService.getConfig('hasFooter') === undefined
-        ? false
-        : this.configService.getConfig('hasFooter');
-
-    this.hasMenu =
-      this.configService.getConfig('hasMenu') === undefined
-        ? false
-        : this.configService.getConfig('hasMenu');
+    this.hasHeader = this.configService.getConfig('header.hasHeader', false);
+    this.hasFooter = this.configService.getConfig('hasFooter', false);
+    this.hasMenu = this.configService.getConfig('hasMenu', false);
 
     this.setManifest();
     this.installPrompt();
     this.pwaService.checkForUpdates();
+  }
+
+  ngOnInit(): void {
+    this.handleSplashScreen();
+  }
+
+  private handleSplashScreen(): void {
+    this.router.events
+      .pipe(
+        first((events) => events instanceof NavigationEnd),
+        delay(500)
+      )
+      .subscribe(() => {
+        this._removeSplashScreen();
+      });
+  }
+
+  private _removeSplashScreen(): void {
+    const intro = this.document.getElementById('splash-screen');
+    if (!intro) {
+      return;
+    }
+    intro.classList.add('is-destroying');
+
+    const destroyingAnimationTime = 300;
+    const stylesheet = this.document.getElementById('splash-screen-stylesheet');
+
+    setTimeout(() => {
+      DomUtils.remove(intro);
+      DomUtils.remove(stylesheet);
+    }, destroyingAnimationTime);
   }
 
   private readTitleConfig() {
@@ -73,10 +108,11 @@ export class AppComponent {
   }
 
   private setManifest() {
-    const appConfig = this.configService.getConfig('app');
-    if (appConfig?.install?.enabled) {
-      const manifestPath =
-        appConfig.install.manifestPath || 'manifest.webmanifest';
+    if (this.configService.getConfig('app.install.enabled')) {
+      const manifestPath = this.configService.getConfig(
+        'app.install.manifestPath',
+        'manifest.webmanifest'
+      );
       document
         .querySelector('#igoManifestByConfig')
         .setAttribute('href', manifestPath);
@@ -84,7 +120,7 @@ export class AppComponent {
   }
 
   private installPrompt() {
-    const appConfig = this.configService.getConfig('app');
+    const appConfig: AppOptions = this.configService.getConfig('app');
     if (appConfig?.install?.enabled && appConfig?.install?.promote) {
       if (userAgent.getOSName() !== 'iOS') {
         window.addEventListener(

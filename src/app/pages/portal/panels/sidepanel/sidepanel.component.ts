@@ -20,11 +20,9 @@ import {
   Layer,
   SearchResult
 } from '@igo2/geo';
-import { QueryState } from '@igo2/integration';
+import { QueryState, SearchState } from '@igo2/integration';
 
 import { BehaviorSubject } from 'rxjs';
-
-import { SearchState } from '../search-results-tool/search.state';
 
 @Component({
   selector: 'app-sidepanel',
@@ -34,6 +32,7 @@ import { SearchState } from '../search-results-tool/search.state';
 })
 export class SidePanelComponent implements OnInit, OnDestroy {
   title$: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  @Input() searchState: SearchState;
 
   @Input()
   get map(): IgoMap {
@@ -136,7 +135,6 @@ export class SidePanelComponent implements OnInit, OnDestroy {
 
   constructor(
     private configService: ConfigService,
-    private searchState: SearchState,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef
   ) {}

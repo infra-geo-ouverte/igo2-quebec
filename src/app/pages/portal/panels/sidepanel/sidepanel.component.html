@@ -78,6 +78,7 @@
       <div *ngIf="searchInit" #search>
         <app-search-results-tool
           #searchresults
+          [searchState]="searchState"
           [showIcons]="true"
           placeholder="false"
           [mapQueryClick]="mapQueryClick"

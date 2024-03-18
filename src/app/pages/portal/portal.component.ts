@@ -7,49 +7,32 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
   Component,
-  ElementRef,
   OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { AuthOptions, AuthService } from '@igo2/auth';
-import {
-  ActionStore,
-  ActionbarMode,
-  EntityRecord,
-  EntityStore,
-  EntityTablePaginatorOptions,
-  Workspace,
-  WorkspaceStore,
-  getEntityTitle
-} from '@igo2/common';
+import { EntityRecord, EntityStore } from '@igo2/common';
 import { DetailedContext } from '@igo2/context';
 import {
   AnalyticsService,
   ConfigService,
   LanguageService,
   Media,
-  MediaOrientation,
   MediaService,
-  MessageService,
-  StorageService
+  MessageService
 } from '@igo2/core';
 import {
   CapabilitiesService,
   DataSourceService,
   FEATURE,
   Feature,
-  GoogleLinks,
   IgoMap,
-  ImageLayer,
   ImportService,
   Layer,
   LayerService,
-  MapExtent,
   QuerySearchSource,
   QueryService,
   Research,
@@ -57,8 +40,6 @@ import {
   SearchResult,
   SearchSource,
   SearchSourceService,
-  VectorLayer,
-  WfsWorkspace,
   computeOlFeaturesExtent,
   featureToSearchResult,
   generateIdFromSourceOptions,
@@ -71,7 +52,7 @@ import {
   ContextState,
   MapState,
   QueryState,
-  WorkspaceState
+  SearchState
 } from '@igo2/integration';
 import { ObjectUtils } from '@igo2/utils';
 
@@ -79,16 +60,15 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import * as olProj from 'ol/proj';
 
 import { MapBrowserEvent } from 'ol';
-import { BehaviorSubject, Observable, Subscription, of, skip } from 'rxjs';
+import { Observable, Subscription, of, skip } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
   skipWhile,
-  take,
-  tap
+  take
 } from 'rxjs/operators';
+import { EnvironmentOptions } from 'src/environments/environnement.interface';
 
-import { SearchState } from './panels/search-results-tool/search.state';
 import {
   controlSlideX,
   controlSlideY,
@@ -102,66 +82,27 @@ import {
   animations: [controlsAnimations(), controlSlideX(), controlSlideY()]
 })
 export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
-  public showRotationButtonIfNoRotation: boolean = undefined;
-  public hasFooter: boolean = true;
-  public hasLegendButton: boolean = true;
-  public hasGeolocateButton: boolean = true;
-  public workspaceNotAvailableMessage: String = 'workspace.disabled.resolution';
-  public workspaceEntitySortChange$: BehaviorSubject<boolean> =
-    new BehaviorSubject(false);
-  private workspaceMaximize$$: Subscription[] = [];
-  readonly workspaceMaximize$: BehaviorSubject<boolean>;
-  public selectedWorkspace$: BehaviorSubject<Workspace> = new BehaviorSubject(
-    undefined
-  );
-  public hasSideSearch = true;
-  public showSearchBar = true;
-  @ViewChild('mapBrowser', { read: ElementRef, static: true })
-  mapBrowser: ElementRef;
+  public appConfig: EnvironmentOptions;
+  public hasFooter: boolean;
+
+  public hasGeolocateButton: boolean;
+  public showSearchBar: boolean;
   public legendPanelOpened = false;
   public legendDialogOpened = false;
-  public settingsChange$ = new BehaviorSubject<boolean>(undefined);
 
-  getBaseLayersUseStaticIcon(): Boolean {
-    return this.configService.getConfig('useStaticIcon');
-  }
-  public hasHomeExtentButton = false;
-  public hasFeatureEmphasisOnSelection: Boolean = false;
-  public workspacePaginator: MatPaginator;
-  public workspaceSwitchDisabled = false;
-  public paginatorOptions: EntityTablePaginatorOptions = {
-    pageSize: 50, // Number of items to display on a page.
-    pageSizeOptions: [1, 5, 10, 20, 50, 100, 500] // The set of provided page size options to display to the user.
-  };
-  public workspaceMenuClass = 'workspace-menu';
-
-  public fullExtent: boolean;
-
-  public matDialogRef$ = new BehaviorSubject<MatDialogRef<any>>(undefined);
   public searchBarTerm = '';
-  public onSettingsChange$ = new BehaviorSubject<boolean>(undefined);
   public termDefinedInUrl = false;
   public termSplitter = '|';
   public termDefinedInUrlTriggered = false;
   private addedLayers$$: Subscription[] = [];
   private layers$$: Subscription;
-  public forceCoordsNA = false;
-
-  public contextMenuStore = new ActionStore([]);
-  private contextMenuCoord: [number, number];
 
   private contextLoaded = false;
   private context$$: Subscription;
   private searchTerm$$: Subscription;
 
-  public igoSearchPointerSummaryEnabled: boolean;
-
   private routeParams: Params;
-  public toastPanelHtmlDisplay = false;
   public mobile: boolean;
-  public homeExtent: MapExtent;
-  public homeCenter: [number, number];
-  public homeZoom: number;
   @ViewChild('searchbar') searchBar: SearchBarComponent;
 
   public dialogOpened: MatDialogRef<unknown>;
@@ -170,57 +111,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.mapState.map;
   }
 
-  get auth(): AuthOptions {
-    return this.configService.getConfig('auth');
-  }
-
   isMobile(): boolean {
     return this.mediaService.getMedia() === Media.Mobile;
-  }
-
-  isTablet(): boolean {
-    return this.mediaService.getMedia() === Media.Tablet;
-  }
-
-  isLandscape(): boolean {
-    return this.mediaService.getOrientation() === MediaOrientation.Landscape;
-  }
-
-  isPortrait(): boolean {
-    return this.mediaService.getOrientation() === MediaOrientation.Portrait;
   }
 
   public mobileBreakPoint: string = '(min-width: 768px)';
   public Breakpoints = Breakpoints;
   public currentBreakpoint: string = '';
-
-  get backdropShown(): boolean {
-    return '(min-width: 768px)' && this.panelOpenState;
-  }
-
-  get expansionPanelExpanded(): boolean {
-    return this.workspaceState.workspacePanelExpanded;
-  }
-  set expansionPanelExpanded(value: boolean) {
-    this.workspaceState.workspacePanelExpanded = value;
-    if (value) {
-      this.map.viewController.setPadding({ bottom: 280 });
-    } else {
-      this.map.viewController.setPadding({ bottom: 0 });
-    }
-  }
-
-  get workspace(): Workspace {
-    return this.workspaceState.workspace$.value;
-  }
-
-  get actionbarMode(): ActionbarMode {
-    return ActionbarMode.Overlay;
-  }
-
-  get actionbarWithTitle(): boolean {
-    return this.actionbarMode === ActionbarMode.Overlay;
-  }
 
   get searchStore(): EntityStore<SearchResult> {
     return this.searchState.store;
@@ -228,10 +125,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   get searchResultsGeometryEnabled(): boolean {
     return this.searchState.searchResultsGeometryEnabled$.value;
-  }
-
-  get workspaceStore(): WorkspaceStore {
-    return this.workspaceState.store;
   }
 
   get queryStore(): EntityStore<SearchResult> {
@@ -243,15 +136,13 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   public searchInit = false;
 
   public mapLayersShownInLegend: Layer[];
-  public legendInPanel: boolean;
+
   public legendButtonTooltip: unknown;
 
   readonly breakpoint$: Observable<BreakpointState>;
 
   constructor(
     private route: ActivatedRoute,
-    public workspaceState: WorkspaceState,
-    public authService: AuthService,
     public mediaService: MediaService,
     public layerService: LayerService,
     public dataSourceService: DataSourceService,
@@ -267,16 +158,12 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     private languageService: LanguageService,
     private messageService: MessageService,
     public dialogWindow: MatDialog,
-    private storageService: StorageService,
     public dialog: MatDialog,
     public queryService: QueryService,
     private breakpointObserver: BreakpointObserver,
     private analyticsService: AnalyticsService
   ) {
-    this.workspaceMaximize$ = new BehaviorSubject(
-      this.storageService.get('workspaceMaximize') as boolean
-    );
-    this.fullExtent = this.storageService.get('fullExtent') as boolean;
+    this.handleAppConfigs();
     this.dialogOpened = this.dialog.getDialogById(
       'legend-button-dialog-container'
     );
@@ -284,89 +171,21 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       this.languageService.translate.instant('legend.open');
     this.breakpoint$ = this.breakpointObserver
       .observe(this.mobileBreakPoint)
-      .pipe(
-        tap(() => {}),
-        distinctUntilChanged()
-      );
-    this.hasFooter =
-      this.configService.getConfig('hasFooter') === undefined
-        ? false
-        : this.configService.getConfig('hasFooter');
-    this.hasLegendButton =
-      this.configService.getConfig('hasLegendButton') === undefined
-        ? false
-        : this.configService.getConfig('hasLegendButton');
-    this.hasSideSearch =
-      this.configService.getConfig('hasSideSearch') === undefined
-        ? true
-        : this.configService.getConfig('hasSideSearch');
-    this.showSearchBar =
-      this.configService.getConfig('searchBar.showSearchBar') === undefined
-        ? true
-        : this.configService.getConfig('searchBar.showSearchBar');
-    this.hasHomeExtentButton =
-      this.configService.getConfig('homeExtentButton') === undefined
-        ? false
-        : true;
-    this.hasGeolocateButton =
-      this.configService.getConfig('hasGeolocateButton') === undefined
-        ? true
-        : this.configService.getConfig('hasGeolocateButton');
-    this.showRotationButtonIfNoRotation =
-      this.configService.getConfig('showRotationButtonIfNoRotation') ===
-      undefined
-        ? false
-        : this.configService.getConfig('showRotationButtonIfNoRotation');
-    this.forceCoordsNA = this.configService.getConfig('app.forceCoordsNA');
-    this.hasFeatureEmphasisOnSelection = this.configService.getConfig(
-      'hasFeatureEmphasisOnSelection'
-    );
-    this.igoSearchPointerSummaryEnabled = this.configService.getConfig(
-      'hasSearchPointerSummary'
-    );
-    if (this.igoSearchPointerSummaryEnabled === undefined) {
-      this.igoSearchPointerSummaryEnabled =
-        (this.storageService.get('searchPointerSummaryEnabled') as boolean) ||
-        false;
-    }
-    this.mobileBreakPoint =
-      this.configService.getConfig('mobileBreakPoint') === undefined
-        ? "'(min-width: 768px)'"
-        : this.configService.getConfig('mobileBreakPoint');
-    this.hasHomeExtentButton =
-      this.configService.getConfig('homeExtentButton') === undefined
-        ? false
-        : true;
-    this.legendInPanel =
-      this.configService.getConfig('legendInPanel') === undefined
-        ? true
-        : this.configService.getConfig('legendInPanel');
+      .pipe(distinctUntilChanged());
   }
 
   ngOnInit() {
     this.queryService.defaultFeatureCount = 1;
     window['IGO'] = this;
-    this.hasGeolocateButton =
-      this.configService.getConfig('hasGeolocateButton') === undefined
-        ? true
-        : this.configService.getConfig('hasGeolocateButton');
-
     this.map.ol.once('rendercomplete', () => {
       this.readQueryParams();
-      if (
-        this.configService.getConfig('geolocate.activateDefault') !== undefined
-      ) {
-        this.map.geolocationController.tracking = this.configService.getConfig(
-          'geolocate.activateDefault'
-        );
+      if (this.appConfig.geolocate?.activateDefault) {
+        this.map.geolocationController.tracking =
+          this.appConfig.geolocate?.activateDefault;
       }
     });
 
     this.searchState.searchTermSplitter$.next(this.termSplitter);
-
-    this.authService.authenticate$.subscribe((authenticated) => {
-      this.contextLoaded = false;
-    });
 
     this.route.queryParams.subscribe((params) => {
       this.readLanguageParam(params);
@@ -375,26 +194,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.context$$ = this.contextState.context$.subscribe(
       (context: DetailedContext) => this.onChangeContext(context)
     );
-
-    const contextActions = [
-      {
-        id: 'coordinates',
-        title: 'coordinates',
-        handler: () => this.searchCoordinate(this.contextMenuCoord)
-      },
-      {
-        id: 'googleMaps',
-        title: 'googleMap',
-        handler: () => this.openGoogleMaps(this.contextMenuCoord)
-      },
-      {
-        id: 'googleStreetView',
-        title: 'googleStreetView',
-        handler: () => this.openGoogleStreetView(this.contextMenuCoord)
-      }
-    ];
-
-    this.contextMenuStore.load(contextActions);
 
     this.searchState.selectedResult$.subscribe((result) => {
       if (result && this.isMobile()) {
@@ -424,18 +223,33 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.breakpoint$.subscribe(() => this.breakpointChanged());
   }
 
+  private handleAppConfigs() {
+    this.appConfig = this.configService.getConfigs();
+
+    this.hasGeolocateButton = this.configService.getConfig(
+      'geolocate.button.visible',
+      true
+    );
+
+    this.showSearchBar = this.configService.getConfig(
+      'searchBar.showSearchBar',
+      true
+    );
+
+    this.hasFooter = this.configService.getConfig('hasFooter', true);
+
+    this.mobileBreakPoint = this.configService.getConfig(
+      'mobileBreakPoint',
+      "'(min-width: 768px)'"
+    );
+  }
+
   ngAfterContentInit(): void {
     this.map.viewController.setInitialState();
   }
 
-  toggleDialogLegend() {
-    if (!this.legendDialogOpened) {
-      this.legendDialogOpened = true;
-    }
-  }
-
   toggleLegend() {
-    if (this.legendInPanel || this.mobile) {
+    if (this.appConfig.legendInPanel || this.mobile) {
       if (!this.legendPanelOpened) {
         this.legendButtonTooltip =
           this.languageService.translate.instant('legend.close');
@@ -494,23 +308,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  createFeatureProperties(layer: ImageLayer | VectorLayer) {
-    let properties = {};
-    layer.options.sourceOptions.sourceFields.forEach((field) => {
-      if (!field.primary && field.visible) {
-        properties[field.name] = '';
-      }
-    });
-    return properties;
-  }
-
-  entitySortChange() {
-    this.workspaceEntitySortChange$.next(true);
-  }
-
   ngOnDestroy() {
     this.context$$.unsubscribe();
-    this.workspaceMaximize$$.map((f) => f.unsubscribe());
     this.layers$$?.unsubscribe();
     this.searchTerm$$.unsubscribe();
   }
@@ -524,35 +323,8 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
       );
   }
 
-  private getFeatureIsSameActiveWks(feature: Feature): boolean {
-    if (this.workspace) {
-      const featureTitle = feature.meta.sourceTitle;
-      const wksTitle = this.workspace.title;
-      if (wksTitle === featureTitle) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }
-
-  private getWksActiveOpenInResolution(): boolean {
-    if (this.workspace) {
-      const activeWks = this.workspace as WfsWorkspace;
-      if (
-        activeWks.active &&
-        activeWks.inResolutionRange$.value &&
-        this.workspaceState.workspacePanelExpanded
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   onMapQuery(event: { features: Feature[]; event: MapBrowserEvent<any> }) {
-    if (this.configService.getConfig('queryOnlyOne')) {
+    if (this.appConfig.queryOnlyOne) {
       event.features = [event.features[0]];
       this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
     }
@@ -571,14 +343,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         let querySearchSource = querySearchSourceArray.find(
           (s) => s.title === feature.meta.sourceTitle
         );
-        if (this.getFeatureIsSameActiveWks(feature)) {
-          if (
-            this.getWksActiveOpenInResolution() &&
-            !(this.workspace as WfsWorkspace).getLayerWksOptionMapQuery()
-          ) {
-            return;
-          }
-        }
         if (querySearchSource) {
           this.onClearQuery();
           this.openPanelonQuery();
@@ -620,11 +384,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
   private cancelOngoingAddLayer() {
     this.addedLayers$$.forEach((sub: Subscription) => sub.unsubscribe());
     this.addedLayers$$ = [];
-  }
-
-  onBackdropClick() {
-    this.closePanels();
-    this.mapQueryClick = false;
   }
 
   onSearchTermChange(term?: string) {
@@ -697,31 +456,15 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.panelOpenState = true;
   }
 
-  private computeHomeExtentValues(context: DetailedContext) {
-    if (context?.map?.view?.homeExtent) {
-      this.homeExtent = context.map.view.homeExtent.extent;
-      this.homeCenter = context.map.view.homeExtent.center;
-      this.homeZoom = context.map.view.homeExtent.zoom;
-    } else {
-      this.homeExtent = undefined;
-      this.homeCenter = undefined;
-      this.homeZoom = undefined;
-    }
-  }
-
   private onChangeContext(context: DetailedContext) {
     this.cancelOngoingAddLayer();
     if (context === undefined) {
       return;
     }
-    if (this.workspace && !this.workspace.entityStore.empty) {
-      this.workspace.entityStore.clear();
-    }
     if (!this.queryState.store.empty) {
       this.queryState.store.softClear();
     }
 
-    this.computeHomeExtentValues(context);
     this.route.queryParams.pipe(debounceTime(250)).subscribe((qParams) => {
       if (!qParams['context'] || qParams['context'] === context.uri) {
         this.readLayersQueryParams(qParams);
@@ -765,50 +508,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
     this.map.queryResultsOverlay.clear(); // to avoid double-selection in the map
   }
 
-  getTitle(result: SearchResult) {
-    return getEntityTitle(result);
-  }
-
-  onContextMenuOpen(event: { x: number; y: number }) {
-    this.contextMenuCoord = this.getClickCoordinate(event) as [number, number];
-  }
-
-  private getClickCoordinate(event: { x: number; y: number }) {
-    const contextmenuPoint = event;
-    const boundingMapBrowser =
-      this.mapBrowser.nativeElement.getBoundingClientRect();
-    contextmenuPoint.y =
-      contextmenuPoint.y -
-      boundingMapBrowser.top +
-      (window.scrollY || window.pageYOffset);
-    contextmenuPoint.x =
-      contextmenuPoint.x -
-      boundingMapBrowser.left +
-      (window.scrollX || window.pageXOffset);
-    const pixel = [contextmenuPoint.x, contextmenuPoint.y];
-
-    const coord = this.map.ol.getCoordinateFromPixel(pixel);
-    const proj = this.map.projection;
-    return olProj.transform(coord, proj, 'EPSG:4326');
-  }
-
-  private openGoogleMaps(coord: [number, number]) {
-    window.open(GoogleLinks.getGoogleMapsCoordLink(coord[0], coord[1]));
-  }
-
-  private openGoogleStreetView(coord: [number, number]) {
-    window.open(GoogleLinks.getGoogleStreetViewLink(coord[0], coord[1]));
-  }
-
-  searchCoordinate(coord: [number, number]) {
-    this.searchBarTerm = coord.map((c) => c.toFixed(6)).join(', ');
-  }
-
-  onPointerSummaryStatusChange(value) {
-    this.storageService.set('searchPointerSummaryEnabled', value);
-    this.igoSearchPointerSummaryEnabled = value;
-  }
-
   private readQueryParams() {
     this.route.queryParams.subscribe((params) => {
       this.routeParams = params;
@@ -820,7 +519,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private readLanguageParam(params) {
     if (params['lang']) {
-      this.authService.languageForce = true;
       this.languageService.setLanguage(params['lang']);
     }
   }
@@ -837,14 +535,6 @@ export class PortalComponent implements OnInit, AfterContentInit, OnDestroy {
         olExtent as [number, number, number, number]
       );
     }
-  }
-
-  getControlsOffsetY() {
-    return this.expansionPanelExpanded
-      ? this.workspaceMaximize$.value
-        ? 'firstRowFromBottom-expanded-maximized'
-        : 'firstRowFromBottom-expanded'
-      : 'firstRowFromBottom';
   }
 
   private computeFocusFirst() {

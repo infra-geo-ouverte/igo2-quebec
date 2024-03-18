@@ -29,15 +29,18 @@ import {
   getCommonVectorSelectedStyle,
   getCommonVectorStyle
 } from '@igo2/geo';
-import { MapState, QueryState, StorageState } from '@igo2/integration';
+import {
+  MapState,
+  QueryState,
+  SearchState,
+  StorageState
+} from '@igo2/integration';
 
 import olFeature from 'ol/Feature';
 import type { default as OlGeometry } from 'ol/geom/Geometry';
 import olPoint from 'ol/geom/Point';
 
 import { BehaviorSubject, Subscription, combineLatest, tap } from 'rxjs';
-
-import { SearchState } from '../search-results-tool/search.state';
 
 @Component({
   selector: 'app-bottompanel',
@@ -69,6 +72,8 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   @Input() mobile: boolean; // to pass the input to featureDetails tooltip
 
   @Input() mapQueryClick: boolean;
+
+  @Input() searchState: SearchState;
 
   @Output() mapQuery = new EventEmitter<boolean>();
 
@@ -119,7 +124,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
 
   public store = new ActionStore([]);
   public showSearchBar: boolean;
-  public igoSearchPointerSummaryEnabled: boolean = false;
   get termSplitter(): string {
     return this.searchState.searchTermSplitter$.value;
   }
@@ -182,7 +186,6 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
   constructor(
     private configService: ConfigService,
     private mapService: MapService,
-    private searchState: SearchState,
     private searchService: SearchService,
     private queryState: QueryState,
     private cdRef: ChangeDetectorRef,
@@ -191,10 +194,10 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     private elRef: ElementRef
   ) {
     this.mapService.setMap(this.map);
-    this.showSearchBar =
-      this.configService.getConfig('showSearchBar') === undefined
-        ? true
-        : this.configService.getConfig('showSearchBar');
+    this.showSearchBar = this.configService.getConfig(
+      'searchBar.showSearchBar',
+      true
+    );
     this.zoomAuto = this.storageService.get('zoomAuto') as boolean;
   }
 
@@ -253,15 +256,11 @@ export class BottomPanelComponent implements OnInit, OnDestroy {
     this.clearSearch();
   }
 
-  onPointerSummaryStatusChange(value) {
-    this.igoSearchPointerSummaryEnabled = value;
-  }
-
   onSearchTermChange(term = '') {
     this.term = term;
     this.clearedSearchbar = false;
     const termWithoutHashtag = term.replace(/(#[^\s]*)/g, '').trim();
-
+    this.searchState.setSearchTerm(term);
     if (termWithoutHashtag.length < 2) {
       this.searchStore.clear();
       this.selectedFeature = undefined;
