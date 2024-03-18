@@ -87,24 +87,19 @@ import { PanelsHandlerComponent } from './panels/panels-handler/panels-handler.c
 import { ShownComponent } from './panels/panels-handler/panels-handler.enum';
 import { PanelsHandlerState } from './panels/panels-handler/panels-handler.state';
 import { SidePanelComponent } from './panels/sidepanel/sidepanel.component';
-import {
-  controlSlideX,
-  controlSlideY,
-  controlsAnimations
-} from './portal.animation';
+import { controlSlideX, controlsAnimations } from './portal.animation';
 
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
   styleUrls: ['./portal.component.scss'],
-  animations: [controlsAnimations(), controlSlideX(), controlSlideY()],
+  animations: [controlsAnimations(), controlSlideX()],
   standalone: true,
   imports: [
     MatSidenavContainer,
     MatSidenavContent,
     SearchBarComponent,
     MatTooltip,
-    SidePanelComponent,
     MapBrowserComponent,
     MapOfflineDirective,
     MapContextDirective,
@@ -118,7 +113,6 @@ import {
     ZoomButtonComponent,
     RotationButtonComponent,
     LegendButtonComponent,
-    BottomPanelComponent,
     FooterComponent,
     MapOverlayComponent,
     AsyncPipe,
@@ -137,7 +131,7 @@ export class PortalComponent implements OnInit, OnDestroy {
 
   public hasGeolocateButton: boolean;
   public showSearchBar: boolean;
-  public legendPanelOpened = false;
+
   public legendDialogOpened = false;
 
   public termDefinedInUrl = false;
@@ -399,6 +393,10 @@ export class PortalComponent implements OnInit, OnDestroy {
     this.searchState.setSelectedResult(undefined);
     this.searchState.deactivateCustomFilterTermStrategy();
     this.searchState.setSearchTerm('');
+  }
+
+  getControlsOffsetY() {
+    return this.mobile ? 'secondRowFromBottom' : 'firstRowFromBottom';
   }
 
   private readQueryParams() {

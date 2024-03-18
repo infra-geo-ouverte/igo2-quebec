@@ -44,8 +44,6 @@
 }
 @if (mobileMode$ | async) {
   <mat-expansion-panel
-    id="bottomPanelMobile"
-    #bottompanel
     [expanded]="openedPanel"
     [hideToggle]="false"
     (opened)="panelsHandlerState.setOpenedState(true)"

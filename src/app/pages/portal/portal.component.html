@@ -33,33 +33,20 @@
       @if (mobile) {
         <div id="scaleLine"></div>
       }
-
-      <igo-baselayers-switcher
-        [ngClass]="
-          mobile
-            ? !hasFooter
-              ? 'igo-baselayers-switcher-mobile footer-mobile-offset'
-              : 'igo-baselayers-switcher-mobile'
-            : (panelsHandlerState.opened$ | async)
-              ? 'baselayers-pushed'
-              : 'baselayers'
-        "
-        [map]="map"
-        [useStaticIcon]="appConfig.useStaticIcon"
+      <div
+        class="map-actions --vertical --bottom --left"
+        [@controlsOffsetY]="getControlsOffsetY()"
       >
-      </igo-baselayers-switcher>
+        <igo-baselayers-switcher
+          [map]="map"
+          [useStaticIcon]="appConfig.useStaticIcon"
+        >
+        </igo-baselayers-switcher>
+      </div>
 
       <div
-        id="map-buttons"
-        [ngClass]="
-          !hasFooter
-            ? mobile
-              ? 'map-buttons-mobile footer-mobile-offset'
-              : 'map-buttons'
-            : mobile
-              ? 'map-buttons-mobile'
-              : 'map-buttons'
-        "
+        class="map-actions --vertical --bottom --right"
+        [@controlsOffsetY]="getControlsOffsetY()"
       >
         @if (hasGeolocateButton) {
           <igo-geolocate-button
