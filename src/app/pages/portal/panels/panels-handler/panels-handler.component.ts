@@ -10,7 +10,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
   TemplateRef
 } from '@angular/core';
@@ -62,7 +61,7 @@ import { SearchResultPanelComponent } from './panels/search-results/search-resul
     FilterPanelComponent
   ]
 })
-export class PanelsHandlerComponent implements OnInit, OnDestroy {
+export class PanelsHandlerComponent implements OnInit {
   public mobileMode$: Observable<boolean>;
   public openedPanel: boolean = false;
 
@@ -99,8 +98,6 @@ export class PanelsHandlerComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  ngOnDestroy() {}
 
   handlePanels(value: boolean) {
     this.openedPanel = value;
