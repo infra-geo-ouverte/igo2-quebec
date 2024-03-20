@@ -1,0 +1,24 @@
+<div class="close-button">
+  <h4 class="title" mat-dialog-title>
+    {{ 'filter.title' | translate }}
+  </h4>
+  <button
+    mat-icon-button
+    [matTooltip]="'filter.close' | translate"
+    color="primary"
+    (click)="clear()"
+  >
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
+</div>
+@for (
+  layer of panelsHandlerState.map.layers$ | async | filterableDataSource: 'ogc';
+  track layer
+) {
+  <igo-ogc-filterable-item
+    [map]="panelsHandlerState.map"
+    [layer]="layer"
+    [header]="false"
+  >
+  </igo-ogc-filterable-item>
+}

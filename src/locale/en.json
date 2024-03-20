@@ -39,6 +39,12 @@
     "close": "Close legend",
     "open": "Open legend"
   },
+  "filter": {
+    "title": "Filters",
+    "button": "Filters",
+    "close": "Close filter panel",
+    "open": "Open filter panel"
+  },
   "pwa": {
     "new-version-title": "New version available. ",
     "new-version": "Do you want to reload the app?",

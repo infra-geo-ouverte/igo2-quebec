@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@use '../../../style/breakpoints';
+
 @import './portal.variables';
 
 /*** Main ***/
@@ -9,40 +12,6 @@
   mat-icon.disabled {
     color: rgba(0, 0, 0, 0.38);
   }
-
-  /*** Layer toggle ***/
-  .layer-toggle {
-    display: flex;
-    flex-flow: column;
-    position: absolute;
-    z-index: 1002 !important;
-    background-color: rgba(255, 255, 255, 0.95);
-  }
-
-  .layer-toggle-desktop {
-    top: calc(4 * $igo-margin);
-    right: 8px;
-  }
-
-  .layer-toggle-mobile {
-    top: calc(2 * $igo-margin);
-    right: 50%;
-    transform: translate(50%);
-    ::ng-deep .layer-toggles-title {
-      font-size: 14px;
-    }
-    ::ng-deep .layer-toggle-title {
-      font-size: 14px;
-    }
-    ::ng-deep .button-group {
-      transform: scale(0.9);
-    }
-
-    ::ng-deep .mat-expansion-panel-body {
-      padding: 0 8px 8px;
-    }
-  }
-
   /*** Sidenav ***/
   mat-sidenav-container {
     height: 100%;
@@ -57,12 +26,6 @@
       z-index: auto;
     }
   }
-
-  /*** Expansion Panel ***/
-  .spacer {
-    flex: 1 1 auto;
-  }
-
   /*** Search bar ***/
   igo-search-bar {
     background-color: $app-background-color;
@@ -72,14 +35,12 @@
     z-index: 4;
     height: $igo-icon-size;
     margin: 0 $igo-margin;
-  }
 
-  igo-search-bar {
     width: $search-bar-width;
 
     @include mobile {
       width: $search-bar-width-mobile;
-      max-width: 360px;
+      top: 15%;
     }
   }
 
@@ -100,51 +61,10 @@
 
   // Mobile pushed elements
 
-  ::ng-deep .baselayers-pushed {
-    left: calc($app-sidenav-width + 4px) !important;
-    animation-duration: 3s;
-    visibility: visible;
-    opacity: 1;
-    opacity: 0;
-    animation: fadeIn 0.1s;
-    animation-delay: 0s;
-    animation-fill-mode: forwards;
-  }
-
-  .igo-baselayers-switcher-mobile {
-    left: 4px;
-    bottom: 36px;
-    z-index: 1;
-  }
-
-  .footer-mobile-offset {
-    bottom: 62px;
-  }
-
-  .igo-baselayers-switcher {
-    z-index: 1;
-  }
-
-  ::ng-deep igo-search-bar {
-    height: 100%;
-  }
-
   igo-search-bar svg {
     color: white;
     height: 40px;
     width: 40px;
-  }
-
-  ::ng-deep .igo-search-bar-container > mat-form-field {
-    padding: 0 !important;
-  }
-
-  /** search bar mobile **/
-  app-bottompanel {
-    position: fixed;
-    display: block;
-    bottom: 0;
-    z-index: 9999;
   }
 
   /*** Map browser ***/
@@ -188,6 +108,54 @@
     }
   }
 
+  .map-actions {
+    position: absolute;
+    display: flex;
+    transition:
+      bottom 250ms,
+      left 250ms;
+
+    .spinner-spacer {
+      height: 40px;
+    }
+
+    &.--vertical {
+      flex-direction: column;
+
+      > :not(:first-child) {
+        margin-top: 8px;
+      }
+    }
+
+    &.--horizontal {
+      > :not(:first-child) {
+        margin-right: 8px;
+      }
+    }
+
+    &.--bottom {
+      bottom: 4px;
+    }
+
+    &.--right {
+      right: 4px;
+      align-items: flex-end; // todo ajouter a igo
+    }
+
+    &.--top {
+      top: 4px;
+    }
+
+    &.--horizontal.--bottom.--right {
+      right: calc(40px + 4px * 2);
+    }
+
+    &.--left {
+      left: 4px;
+      align-items: flex-start; // todo ajouter a igo
+    }
+  }
+
   igo-map-browser ::ng-deep .ol-overlaycontainer-stopevent {
     position: absolute;
     width: 100%;
@@ -206,44 +174,12 @@
     }
   }
 
-  .map-buttons {
-    display: flex;
-    flex-direction: column;
-    z-index: 10;
-    max-height: 50%;
-    position: absolute;
-    bottom: 6px;
-    right: 16px;
-  }
-
-  .map-buttons-mobile {
-    display: flex;
-    flex-direction: column;
-    z-index: 10;
-    position: absolute;
-    bottom: 36px;
-    max-height: 50%;
-    right: 4px;
-  }
-
-  .igo-zoom-button-container,
-  button,
-  app-legend-button,
-  igo-rotation-button,
-  igo-zoom-button,
-  igo-offline-button,
-  igo-geolocate-button,
-  igo-home-extent-button {
-    margin-top: 4px !important;
-    position: unset !important;
-    bottom: unset !important;
-    margin-left: auto;
-    align-self: flex-end;
-    margin-top: auto;
-  }
-
   igo-zoom-button {
-    @include tablet {
+    ::ng-deep button {
+      @include mat.elevation(2);
+    }
+
+    @include breakpoints.media-breakpoint-down('mobile') {
       display: none;
     }
   }
