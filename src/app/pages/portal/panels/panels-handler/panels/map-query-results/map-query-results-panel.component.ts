@@ -1,10 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -37,7 +32,7 @@ import { onResultSelect } from './map-query-results-panel.utils';
     AsyncPipe
   ]
 })
-export class MapQueryResultsPanelComponent implements OnInit, OnDestroy {
+export class MapQueryResultsPanelComponent implements OnInit {
   public title$: BehaviorSubject<string> = new BehaviorSubject(undefined);
   public customFeatureTitle: boolean;
   public customFeatureDetails: boolean;
@@ -89,8 +84,6 @@ export class MapQueryResultsPanelComponent implements OnInit, OnDestroy {
         })
       );
   }
-
-  ngOnDestroy() {}
 
   clear() {
     this.panelsHandlerState.componentToClose(ShownComponent.Query);

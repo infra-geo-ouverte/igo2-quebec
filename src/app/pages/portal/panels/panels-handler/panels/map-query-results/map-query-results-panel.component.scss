@@ -2,6 +2,11 @@
 @import '../../../../portal.variables';
 
 :host {
+  .close-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center !important;
+  }
   igo-feature-details {
     ::ng-deep table {
       margin: 2em auto;

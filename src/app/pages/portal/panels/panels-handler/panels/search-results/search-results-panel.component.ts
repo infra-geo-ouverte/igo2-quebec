@@ -1,10 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -41,14 +36,10 @@ import {
     AsyncPipe
   ]
 })
-export class SearchResultPanelComponent implements OnInit, OnDestroy {
+export class SearchResultPanelComponent {
   public searchResultActions = SearchResultAction;
 
   constructor(public panelsHandlerState: PanelsHandlerState) {}
-
-  ngOnInit() {}
-
-  ngOnDestroy() {}
 
   onSearchTermChange(term: string) {
     this.panelsHandlerState.searchState.setSearchTerm(term);
