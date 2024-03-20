@@ -1,7 +1,8 @@
 export enum ShownComponent {
   Query = 'query',
   Search = 'search',
-  Legend = 'legend'
+  Legend = 'legend',
+  Filter = 'filter'
 }
 
 export enum SearchResultAction {

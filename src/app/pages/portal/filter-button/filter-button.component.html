@@ -1,0 +1,13 @@
+<button
+  id="filter-button"
+  mat-raised-button
+  (click)="toggleFilter()"
+  [matTooltip]="
+    ((panelsHandlerState.opened$ | async) ? 'filter.close' : 'filter.open')
+      | translate
+  "
+  matTooltipPosition="left"
+  [matTooltipDisabled]="tooltipDisabled"
+>
+  {{ 'filter.button' | translate }}
+</button>

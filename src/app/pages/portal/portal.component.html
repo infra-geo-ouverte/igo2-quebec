@@ -60,6 +60,16 @@
           [map]="map"
           color="primary"
         ></igo-rotation-button>
+        @if (
+          (panelsHandlerState.map.layers$ | async | filterableDataSource: 'ogc')
+            .length > 0
+        ) {
+          <app-filter-button
+            (filterToggled)="togglePanelComponent(shownComponents.Filter)"
+            [tooltipDisabled]="mobile"
+            color="primary"
+          ></app-filter-button>
+        }
         @if (appConfig.hasLegendButton) {
           <app-legend-button
             (legendToggled)="togglePanelComponent(shownComponents.Legend)"

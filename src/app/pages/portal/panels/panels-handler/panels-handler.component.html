@@ -18,6 +18,9 @@
         <ng-container *ngSwitchCase="'legend'">
           <ng-container *ngTemplateOutlet="mapLegend"></ng-container
         ></ng-container>
+        <ng-container *ngSwitchCase="'filter'">
+          <ng-container *ngTemplateOutlet="layerFilter"></ng-container
+        ></ng-container>
       </div>
     </mat-sidenav>
     <div
@@ -66,6 +69,9 @@
       <ng-container *ngSwitchCase="'legend'">
         <ng-container *ngTemplateOutlet="mapLegend"></ng-container
       ></ng-container>
+      <ng-container *ngSwitchCase="'filter'">
+        <ng-container *ngTemplateOutlet="layerFilter"></ng-container
+      ></ng-container>
     </div>
   </mat-expansion-panel>
 }
@@ -87,5 +93,7 @@
 <ng-template #mapLegend>
   <app-legend-panel></app-legend-panel>
 </ng-template>
-
-<!--  -->
+<!-- ==================== -->
+<ng-template #layerFilter>
+  <app-filter-panel></app-filter-panel>
+</ng-template>

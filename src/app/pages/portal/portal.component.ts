@@ -32,6 +32,7 @@ import {
   DropGeoFileDirective,
   FEATURE,
   Feature,
+  FilterableDataSourcePipe,
   GeolocateButtonComponent,
   HoverFeatureDirective,
   IgoMap,
@@ -80,6 +81,7 @@ import {
 import { EnvironmentOptions } from 'src/environments/environnement.interface';
 
 import { FooterComponent } from '../footer/footer.component';
+import { FilterButtonComponent } from './filter-button/filter-button.component';
 import { LegendButtonComponent } from './legend-button/legend-button.component';
 import { MapOverlayComponent } from './map-overlay/map-overlay.component';
 import { PanelsHandlerComponent } from './panels/panels-handler/panels-handler.component';
@@ -111,12 +113,14 @@ import { controlSlideX, controlsAnimations } from './portal.animation';
     ZoomButtonComponent,
     RotationButtonComponent,
     LegendButtonComponent,
+    FilterButtonComponent,
     FooterComponent,
     MapOverlayComponent,
     AsyncPipe,
     TranslateModule,
     PanelsHandlerComponent,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    FilterableDataSourcePipe
   ]
 })
 export class PortalComponent implements OnInit, OnDestroy {

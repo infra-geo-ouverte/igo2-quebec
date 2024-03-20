@@ -30,6 +30,7 @@ import { Observable, concatMap, distinctUntilChanged, of } from 'rxjs';
 
 import { ShownComponent } from './panels-handler.enum';
 import { PanelsHandlerState } from './panels-handler.state';
+import { FilterPanelComponent } from './panels/filter/filter-panel.component';
 import { LegendPanelComponent } from './panels/legend/legend-panel.component';
 import { MapQueryResultsPanelComponent } from './panels/map-query-results/map-query-results-panel.component';
 import { SearchResultPanelComponent } from './panels/search-results/search-results-panel.component';
@@ -57,7 +58,8 @@ import { SearchResultPanelComponent } from './panels/search-results/search-resul
     NgSwitchCase,
     LegendPanelComponent,
     SearchResultPanelComponent,
-    MapQueryResultsPanelComponent
+    MapQueryResultsPanelComponent,
+    FilterPanelComponent
   ]
 })
 export class PanelsHandlerComponent implements OnInit, OnDestroy {
