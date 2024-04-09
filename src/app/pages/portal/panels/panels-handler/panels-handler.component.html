@@ -1,0 +1,99 @@
+@if ((mobileMode$ | async) === false) {
+  <div id="sidepanel" class="sidepanel">
+    <mat-sidenav
+      #sidepanel
+      mode="side"
+      [opened]="openedPanel"
+      [autoFocus]="false"
+      (openedChange)="handlePanels($event)"
+      [ngSwitch]="panelsHandlerState.shownComponent$ | async"
+    >
+      <div #content class="app-sidenav-content">
+        <ng-container *ngSwitchCase="'search'">
+          <ng-container *ngTemplateOutlet="searchResults"></ng-container
+        ></ng-container>
+        <ng-container *ngSwitchCase="'query'">
+          <ng-container *ngTemplateOutlet="mapQueryResults"></ng-container
+        ></ng-container>
+        <ng-container *ngSwitchCase="'legend'">
+          <ng-container *ngTemplateOutlet="mapLegend"></ng-container
+        ></ng-container>
+        <ng-container *ngSwitchCase="'filter'">
+          <ng-container *ngTemplateOutlet="layerFilter"></ng-container
+        ></ng-container>
+      </div>
+    </mat-sidenav>
+    <div
+      class="sidenav-button-container"
+      [ngClass]="sidepanel.opened ? 'sidenav-opened' : 'sidenav-closed'"
+    >
+      <button
+        mat-mini-fab
+        color="primary"
+        [matTooltip]="
+          (sidepanel.opened ? 'sidenav.close' : 'sidenav.open') | translate
+        "
+        matTooltipPosition="after"
+        (click)="panelsHandlerState.togglePanels()"
+      >
+        <mat-icon
+          class="icon"
+          [svgIcon]="sidepanel.opened ? 'chevron-left' : 'chevron-right'"
+        >
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+}
+@if (mobileMode$ | async) {
+  <mat-expansion-panel
+    [expanded]="openedPanel"
+    [hideToggle]="false"
+    (opened)="panelsHandlerState.setOpenedState(true)"
+    (closed)="panelsHandlerState.setOpenedState(false)"
+    (keydown.Enter)="$event.stopPropagation()"
+    (click)="$event.stopPropagation()"
+    [ngSwitch]="panelsHandlerState.shownComponent$ | async"
+  >
+    <mat-expansion-panel-header collapsedHeight="56px">
+      <ng-container *ngTemplateOutlet="searchBar"></ng-container>
+    </mat-expansion-panel-header>
+
+    <div #content class="app-sidenav-content">
+      <ng-container *ngSwitchCase="'search'">
+        <ng-container *ngTemplateOutlet="searchResults"></ng-container
+      ></ng-container>
+      <ng-container *ngSwitchCase="'query'">
+        <ng-container *ngTemplateOutlet="mapQueryResults"></ng-container
+      ></ng-container>
+      <ng-container *ngSwitchCase="'legend'">
+        <ng-container *ngTemplateOutlet="mapLegend"></ng-container
+      ></ng-container>
+      <ng-container *ngSwitchCase="'filter'">
+        <ng-container *ngTemplateOutlet="layerFilter"></ng-container
+      ></ng-container>
+    </div>
+  </mat-expansion-panel>
+}
+
+<!-- ==================== -->
+<!-- ==================== -->
+<!-- ==================== -->
+<!-- ==================== -->
+
+<ng-template #searchResults>
+  <app-search-results-panel></app-search-results-panel>
+</ng-template>
+
+<!-- ==================== -->
+<ng-template #mapQueryResults>
+  <app-query-results-panel></app-query-results-panel>
+</ng-template>
+<!-- ==================== -->
+<ng-template #mapLegend>
+  <app-legend-panel></app-legend-panel>
+</ng-template>
+<!-- ==================== -->
+<ng-template #layerFilter>
+  <app-filter-panel></app-filter-panel>
+</ng-template>

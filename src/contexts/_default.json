@@ -3,21 +3,106 @@
   "base": "_base",
   "layers": [
     {
-      "id": "mtq",
-      "title": "Établissements MTQ",
-      "showInLayerList": true,
-      "visible": true,
-      "baseLayer": false,
+      "title": "Photo radar",
       "sourceOptions": {
         "type": "wms",
         "url": "https://ws.mapserver.transports.gouv.qc.ca/swtq",
-        "params": {
-          "layers": "etablissement_mtq",
-          "version": "1.3.0"
-        },
         "queryable": true,
-        "queryLayerFeatures": true,
-        "queryTitle": "Établissements MTQ"
+        "params": {
+          "layers": "radars_photos"
+        },
+        "sourceFields": [
+          {
+            "order": 1,
+            "alias": "Type d'appareil",
+            "name": "typeAppareil"
+          },
+          {
+            "alias": "Début",
+            "name": "dateDebutService"
+          },
+          {
+            "alias": "Fin",
+            "name": "dateFinService"
+          },
+          {
+            "alias": "Description",
+            "name": "description"
+          },
+          {
+            "alias": "Arrondissement",
+            "name": "arrondissement"
+          },
+          {
+            "alias": "Municipalité",
+            "name": "municipalite"
+          },
+          {
+            "alias": "Région",
+            "name": "region"
+          },
+          {
+            "alias": "Fiche technique",
+            "name": "urlImage"
+          }
+        ],
+        "ogcFilters": {
+          "enabled": true,
+          "editable": false,
+          "checkboxes": {
+            "order": 1,
+            "groups": [
+              {
+                "title": "Group 1 Title",
+                "name": "1",
+                "ids": [
+                  "id1"
+                ]
+              }
+            ],
+            "bundles": [
+              {
+                "id": "id1",
+                "logical": "Or",
+                "title": "Type de radar photo",
+                "selectors": [
+                  {
+                    "title": "Radar photo fixe",
+                    "filters": {
+                      "operator": "PropertyIsEqualTo",
+                      "propertyName": "typeAppareil",
+                      "expression": "Radar photo fixe"
+                    }
+                  },
+                  {
+                    "title": "Radar photo mobile",
+                    "filters": {
+                      "operator": "PropertyIsEqualTo",
+                      "propertyName": "typeAppareil",
+                      "expression": "Radar photo mobile"
+                    }
+                  },
+                  {
+                    "title": "Radar photo fixe + feu rouge",
+                    "filters": {
+                      "operator": "PropertyIsEqualTo",
+                      "propertyName": "typeAppareil",
+                      "expression": "Radar photo fixe et surveillance au feu rouge"
+                    }
+                  },
+                  {
+                    "title": "Radar feu rouge",
+                    "filters": {
+                      "operator": "PropertyIsEqualTo",
+                      "propertyName": "typeAppareil",
+                      "expression": "Appareil de surveillance au feu rouge"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
       }
     }
   ]

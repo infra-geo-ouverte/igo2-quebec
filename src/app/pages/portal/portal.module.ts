@@ -34,14 +34,12 @@ import {
 } from '@igo2/geo';
 import { IgoAppSearchBarModule, IgoIntegrationModule } from '@igo2/integration';
 
-import { AppPanelsModule } from './panels/panels.module';
 import { PortalComponent } from './portal.component';
 
 @NgModule({
   imports: [
     IgoLayerModule,
     IgoAppSearchBarModule,
-    AppPanelsModule,
     CommonModule,
     MatTooltipModule,
     MatButtonModule,

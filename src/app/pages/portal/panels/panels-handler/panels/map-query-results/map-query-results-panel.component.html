@@ -1,0 +1,23 @@
+@if (selectedFeature$ | async) {
+  <div class="close-button">
+    <h4 class="title" mat-dialog-title>
+      {{ title$ | async | translate }}
+    </h4>
+    <button
+      mat-icon-button
+      [matTooltip]="'feature.close' | translate"
+      color="primary"
+      (click)="clear()"
+    >
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  </div>
+  @if (selectedFeature$ | async; as selectedFeature) {
+    @if (!customFeatureDetails) {
+      <igo-feature-details [feature]="selectedFeature"> </igo-feature-details>
+    } @else {
+      <app-feature-custom-details [feature]="selectedFeature">
+      </app-feature-custom-details>
+    }
+  }
+}

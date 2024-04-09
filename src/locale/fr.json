@@ -29,6 +29,12 @@
     "close": "Fermer la légende",
     "open": "Afficher la légende"
   },
+  "filter": {
+    "title": "Filtre",
+    "button": "Filtre",
+    "close": "Fermer le(s) filtre(s)",
+    "open": "Afficher le(s) filtre(s)"
+  },
   "feature": {
     "title": "Objet",
     "close": "Fermer le panneau",

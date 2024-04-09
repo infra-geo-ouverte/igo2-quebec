@@ -1,0 +1,60 @@
+@use 'variables';
+@import '../../portal.variables';
+
+:host {
+  background-color: rgb(255, 255, 255);
+
+  mat-sidenav {
+    ::ng-deep .mat-drawer-inner-container {
+      top: $search-bar-height;
+      position: relative;
+      height: calc(100% - $search-bar-height);
+    }
+
+    @extend %box-shadowed-bottom-right;
+
+    height: $app-sidenav-height;
+    width: $app-sidenav-width;
+
+    overflow: visible;
+
+    .app-sidenav-content {
+      padding: 0 16px 0 16px !important;
+    }
+  }
+
+  .sidenav-button-container {
+    position: absolute;
+    top: 50%;
+    left: calc($app-sidenav-width + 1px);
+    z-index: 1;
+    padding: 0;
+    transition: left 300ms;
+
+    button {
+      border-radius: 0;
+      &:hover {
+        background-color: #156bb2;
+      }
+    }
+  }
+
+  .sidenav-closed {
+    left: 0 !important;
+    position: absolute;
+  }
+
+  mat-expansion-panel {
+    position: fixed;
+    display: block;
+    bottom: 0;
+    z-index: 9999;
+    width: 100%;
+
+    ::ng-deep .mat-expansion-panel-content {
+      overflow-y: scroll !important;
+      overflow-x: clip;
+      height: 264px;
+    }
+  }
+}

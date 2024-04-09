@@ -1,48 +1,15 @@
 <mat-sidenav-container>
+  <!-- todo enlever ceci -->
   <mat-sidenav-content position="end">
+    <app-panels-handler [searchBar]="searchBar"></app-panels-handler>
     @if (!mobile) {
       <div id="searchDesktop">
         @if (showSearchBar) {
-          <igo-search-bar
-            #searchbar
-            appearance="outline"
-            searchIcon="magnify"
-            [matTooltip]="'searchBar' | translate"
-            matTooltipShowDelay="500"
-            tooltip-position="after"
-            [searchSettings]="false"
-            color="primary"
-            [forceNA]="appConfig.app?.forceCoordsNA"
-            [term]="searchBarTerm"
-            [store]="searchStore"
-            [termSplitter]="termSplitter"
-            (searchTermChange)="onSearchTermChange($event)"
-            (search)="onSearch($event)"
-            (clearFeature)="clearSearch()"
-          >
-          </igo-search-bar>
+          <ng-container *ngTemplateOutlet="searchBar"></ng-container>
         }
         @if (mobile) {
           <div id="scaleLine"></div>
         }
-        <app-sidepanel
-          #sidepanel
-          class="sidepanel"
-          [searchState]="searchState"
-          [map]="map"
-          [mobile]="mobile"
-          [(opened)]="panelOpenState"
-          [searchInit]="searchInit"
-          [legendPanelOpened]="legendPanelOpened"
-          [mapQueryClick]="mapQueryClick"
-          [panelOpenState]="panelOpenState"
-          (panelOpened)="panelOpened($event)"
-          (closeLegend)="closePanelLegend()"
-          (closeQuery)="closePanelOnCloseQuery()"
-          (openLegend)="openPanelLegend()"
-          [layers]="mapLayersShownInLegend"
-        >
-        </app-sidepanel>
       </div>
     }
 
@@ -66,33 +33,20 @@
       @if (mobile) {
         <div id="scaleLine"></div>
       }
-
-      <igo-baselayers-switcher
-        [ngClass]="
-          mobile
-            ? !hasFooter
-              ? 'igo-baselayers-switcher-mobile footer-mobile-offset'
-              : 'igo-baselayers-switcher-mobile'
-            : panelOpenState
-              ? 'baselayers-pushed'
-              : 'baselayers'
-        "
-        [map]="map"
-        [useStaticIcon]="appConfig.useStaticIcon"
+      <div
+        class="map-actions --vertical --bottom --left"
+        [@controlsOffsetY]="getControlsOffsetY()"
       >
-      </igo-baselayers-switcher>
+        <igo-baselayers-switcher
+          [map]="map"
+          [useStaticIcon]="appConfig.useStaticIcon"
+        >
+        </igo-baselayers-switcher>
+      </div>
 
       <div
-        id="map-buttons"
-        [ngClass]="
-          !hasFooter
-            ? mobile
-              ? 'map-buttons-mobile footer-mobile-offset'
-              : 'map-buttons'
-            : mobile
-              ? 'map-buttons-mobile'
-              : 'map-buttons'
-        "
+        class="map-actions --vertical --bottom --right"
+        [@controlsOffsetY]="getControlsOffsetY()"
       >
         @if (hasGeolocateButton) {
           <igo-geolocate-button
@@ -106,33 +60,25 @@
           [map]="map"
           color="primary"
         ></igo-rotation-button>
+        @if (
+          (panelsHandlerState.map.layers$ | async | filterableDataSource: 'ogc')
+            .length > 0
+        ) {
+          <app-filter-button
+            (filterToggled)="togglePanelComponent(shownComponents.Filter)"
+            [tooltipDisabled]="mobile"
+            color="primary"
+          ></app-filter-button>
+        }
         @if (appConfig.hasLegendButton) {
           <app-legend-button
-            (legendToggled)="toggleLegend()"
+            (legendToggled)="togglePanelComponent(shownComponents.Legend)"
             [legendInPanel]="appConfig.legendInPanel"
             [tooltipDisabled]="mobile"
             color="primary"
           ></app-legend-button>
         }
       </div>
-
-      @if (mobile) {
-        <app-bottompanel
-          [searchState]="searchState"
-          [mobile]="mobile"
-          [searchInit]="searchInit"
-          [mapQueryClick]="mapQueryClick"
-          [legendPanelOpened]="legendPanelOpened"
-          [panelOpenState]="panelOpenState"
-          (panelOpened)="panelOpened($event)"
-          (mapQuery)="mapQuery($event)"
-          (closeQuery)="closePanelOnCloseQuery()"
-          (closeLegend)="closePanelLegend()"
-          (openLegend)="openPanelLegend()"
-          [layers]="mapLayersShownInLegend"
-        >
-        </app-bottompanel>
-      }
     </igo-map-browser>
 
     @if (hasFooter && !mobile) {
@@ -141,7 +87,8 @@
 
     <app-map-overlay
       [@controlStateX]="
-        (mediaService.media$ | async) !== 'mobile' && panelOpenState
+        (mediaService.media$ | async) !== 'mobile' &&
+        (panelsHandlerState.opened$ | async)
           ? 'right'
           : 'left'
       "
@@ -149,3 +96,23 @@
     </app-map-overlay>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #searchBar>
+  <igo-search-bar
+    (click)="$event.stopPropagation()"
+    appearance="outline"
+    searchIcon="magnify"
+    [matTooltip]="'searchBar' | translate"
+    matTooltipShowDelay="500"
+    tooltip-position="after"
+    [searchSettings]="false"
+    color="primary"
+    [forceNA]="appConfig.app?.forceCoordsNA"
+    [term]="searchState.searchTerm$ | async"
+    [store]="searchState.store"
+    (searchTermChange)="onSearchTermChange($event)"
+    (search)="onSearch($event)"
+    (clearFeature)="clearSearch()"
+  >
+  </igo-search-bar>
+</ng-template>

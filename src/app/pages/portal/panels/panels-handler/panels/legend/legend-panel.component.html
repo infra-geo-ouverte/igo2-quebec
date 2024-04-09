@@ -1,0 +1,21 @@
+<div class="close-button">
+  <h4 class="title" mat-dialog-title>
+    {{ 'legend.title' | translate }}
+  </h4>
+  <button
+    mat-icon-button
+    [matTooltip]="'legend.close' | translate"
+    color="primary"
+    (click)="clear()"
+  >
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
+</div>
+<igo-layer-legend-list
+  [layers]="mapLayersShownInLegend"
+  [excludeBaseLayers]="true"
+  [allowShowAllLegends]="false"
+  [updateLegendOnResolutionChange]="true"
+  [showAllLegendsValue]="false"
+>
+</igo-layer-legend-list>

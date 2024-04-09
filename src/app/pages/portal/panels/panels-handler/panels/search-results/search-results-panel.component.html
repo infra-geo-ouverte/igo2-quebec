@@ -1,0 +1,33 @@
+@if (panelsHandlerState.searchState.store.empty$ | async) {
+  <div class="no-results">
+    <section>
+      <h5>
+        {{ 'igo.integration.searchResultsTool.noResults' | translate }}
+      </h5>
+      <h6>
+        {{ 'igo.integration.searchResultsTool.doSearch' | translate }}
+      </h6>
+      <p
+        [innerHTML]="'igo.integration.searchResultsTool.examples' | translate"
+      ></p>
+    </section>
+  </div>
+}
+<!-- todo necessaire mais je ne comprends pas pourquoi -->
+@if ((panelsHandlerState.searchState.store.empty$ | async) === false) {
+  <igo-search-results
+    [map]="panelsHandlerState.map"
+    [store]="panelsHandlerState.searchState.store"
+    showIcons="true"
+    [term]="panelsHandlerState.searchState.searchTerm$ | async"
+    placeholder="false"
+    (searchTermChange)="onSearchTermChange($event)"
+    (resultFocus)="onResult(searchResultActions.Focus, $event)"
+    (resultSelect)="onResult(searchResultActions.Select, $event)"
+    (resultUnfocus)="onResult(searchResultActions.Unfocus, $event)"
+    (resultMouseenter)="onResult(searchResultActions.Focus, $event)"
+    (resultMouseleave)="onResult(searchResultActions.Unfocus, $event)"
+    (moreResults)="onMoreResults($event)"
+  >
+  </igo-search-results>
+}
