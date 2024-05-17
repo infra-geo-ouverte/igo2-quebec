@@ -1,6 +1,9 @@
 {
   "root": true,
   "plugins": ["unused-imports"],
+  "ignorePatterns": [
+    "!**/*"
+  ],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -23,7 +26,10 @@
         ],
         "unused-imports/no-unused-imports": "error",
         "no-multi-spaces": "error",
-        "eqeqeq": ["error", "always"],
+        "eqeqeq": [
+          "error",
+          "smart"
+        ],
         "semi": ["error", "always"],
         "no-trailing-spaces": "error",
         "no-multiple-empty-lines": "error",

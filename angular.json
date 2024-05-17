@@ -17,14 +17,20 @@
       "architect": {
         "build": {
           "defaultConfiguration": "developpement",
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "aot": true,
-            "outputPath": "dist/igo2-quebec",
+            "outputPath": "dist",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "browser": "src/main.ts",
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "src/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "sourceMap": {
+              "scripts": true,
+              "styles": true,
+              "vendor": true
+            },
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -43,21 +49,23 @@
               },
               {
                 "glob": "**/*",
+                "input": "./node_modules/@igo2/core/locale/",
+                "output": "./locale/libs_locale",
+                "ignore": ["**/*.core.json"]
+              },
+              {
+                "glob": "**/*",
                 "input": "./node_modules/@igo2/geo/assets/",
                 "output": "./assets/igo2/geo/"
-              },
-              "src/manifest.webmanifest"
+              }
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/style/partial",
-                "src/app/pages/portal",
-                "node_modules"
-              ]
+              "includePaths": ["node_modules"]
             },
             "allowedCommonJsDependencies": [
+              "hammerjs",
               "typy",
               "jwt-decode",
               "pbf",
@@ -103,17 +111,47 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false,
               "serviceWorker": false
             },
             "developpement": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "developpement-link": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "assets": [
+                "src/favicon.ico",
+                "src/assets",
+                "src/config",
+                "src/contexts",
+                "src/locale",
+                {
+                  "glob": "**/*",
+                  "input": "../../node_modules/@igo2/common/assets/",
+                  "output": "./assets/igo2/common/"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "../../node_modules/@igo2/core/assets/",
+                  "output": "./assets/igo2/core/"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "../../node_modules/@igo2/core/locale/",
+                  "output": "./locale/libs_locale",
+                  "ignore": ["**/*.core.json"]
+                },
+                {
+                  "glob": "**/*",
+                  "input": "../../node_modules/@igo2/geo/assets/",
+                  "output": "./assets/igo2/geo/"
+                }
+              ]
             },
             "github": {
               "budgets": [
@@ -134,33 +172,7 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false,
               "serviceWorker": false
-            },
-            "pwa": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "12kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.pwa.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false,
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
@@ -173,6 +185,9 @@
           "configurations": {
             "developpement": {
               "buildTarget": "igo2-quebec:build:developpement"
+            },
+            "developpement-link": {
+              "buildTarget": "igo2-quebec:build:developpement-link"
             },
             "production": {
               "buildTarget": "igo2-quebec:build:production"
@@ -214,10 +229,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -236,18 +248,14 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "e2e/**/*.ts"
-            ]
+            "lintFilePatterns": ["e2e/**/*.ts"]
           }
         }
       }
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ],
+    "schematicCollections": ["@angular-eslint/schematics"],
     "cache": {
       "enabled": false,
       "environment": "all"

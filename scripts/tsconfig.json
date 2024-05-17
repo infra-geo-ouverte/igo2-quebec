@@ -2,6 +2,7 @@
   "compilerOptions": {
     "lib": ["es2022"],
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "es2022",
     "rootDir": "./src",
     "baseUrl": "./",
@@ -12,8 +13,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node"
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules"]
 }

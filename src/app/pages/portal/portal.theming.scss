@@ -1,5 +1,0 @@
-@use './panels/panels.theming' as panels;
-
-@mixin themes($theme) {
-  @include panels.themes($theme);
-}

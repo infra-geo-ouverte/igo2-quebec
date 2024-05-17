@@ -1,8 +1,5 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# bundled locale for the demo
-/src/locale/libs_locale
-
 # compiled output
 /dist
 /tmp
@@ -39,6 +36,3 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
-
-#Compodoc
-/documentation

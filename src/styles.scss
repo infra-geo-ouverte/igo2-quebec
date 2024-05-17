@@ -1,8 +1,12 @@
 @use '@igo2/core/all-style';
-@use '@igo2/core/layout' as igo-layout;
-@use 'style/layout';
+@use '@igo2/sdg/layout';
 
 @use 'theme/theme.scss';
+
+body,
+html {
+  height: 100%;
+}
 
 body {
   margin: 0;
@@ -33,4 +37,8 @@ ol {
 mat-icon.lnr {
   font-size: 18px;
   line-height: 24px;
+}
+
+pre {
+  white-space: pre-wrap;
 }

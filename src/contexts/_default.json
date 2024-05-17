@@ -55,9 +55,7 @@
               {
                 "title": "Group 1 Title",
                 "name": "1",
-                "ids": [
-                  "id1"
-                ]
+                "ids": ["id1"]
               }
             ],
             "bundles": [

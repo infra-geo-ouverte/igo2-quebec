@@ -1,6 +1,0 @@
-@use './feature-custom-details/feature-custom-details.theming' as
-  feature-custom-details;
-
-@mixin themes($theme) {
-  @include feature-custom-details.theme($theme);
-}

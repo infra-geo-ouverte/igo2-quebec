@@ -2,20 +2,52 @@
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-import { AppEnvironmentOptions } from './environnement.interface';
+import { EnvironmentOptions } from './environnement.interface';
 
-export const environment: AppEnvironmentOptions = {
+export const environment: EnvironmentOptions = {
   production: false,
-  igo: {
-    app: {
-      forceCoordsNA: true,
-      install: {
-        enabled: false,
-        promote: false
+  title: "Angular - Système d'assemblage gouvernemental",
+  header: {
+    logo: {
+      primary: 'assets/images/signature-PIV.svg',
+      print: 'assets/images/signature-PIV.svg'
+    },
+    options: {
+      contactUs: {
+        label: 'header.contactUs',
+        redirectionRoute: 'contact-us'
       },
-      pwa: {
-        enabled: false
+      language: {
+        choices: [
+          {
+            label: 'English',
+            key: 'en'
+          },
+          {
+            label: 'Francais',
+            key: 'fr'
+          }
+        ],
+        default: 'fr'
       }
+    }
+  },
+  navigation: {
+    options: {
+      title: {
+        suffix: 'IGO',
+        separator: '·'
+      }
+    }
+  },
+  igo: {
+    geolocate: {
+      button: {
+        visible: true
+      },
+      basic: true,
+      followPosition: false,
+      activateDefault: false
     },
     language: {
       prefix: ['./locale/']
@@ -53,10 +85,8 @@ export const environment: AppEnvironmentOptions = {
         order: 2,
         params: {
           limit: '5'
-        },
-        settings: []
+        }
       },
-      coordinatesreverse: {},
       icherchereverse: {
         searchUrl: '/apis/terrapi',
         order: 3,
