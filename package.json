@@ -24,7 +24,6 @@
     "test": "ng test --watch=false --browsers=ChromeHeadless",
     "test.watch": "ng test",
     "test.all": "npm run test && npm run e2e",
-    "circular-deps.check": "madge --circular --extensions ts src",
     "source-map-explorer": "source-map-explorer dist/browser/main.*.js"
   },
   "dependencies": {
@@ -41,10 +40,9 @@
     "@angular/service-worker": "^17.2.4",
     "@igo2/common": "^17.0.0-next.7",
     "@igo2/core": "^17.0.0-next.7",
-    "@igo2/geo": "^17.0.0-next.7",
     "@igo2/integration": "^17.0.0-next.7",
     "@igo2/utils": "^17.0.0-next.7",
-    "@igo2/sdg": "1.0.0-next.1",
+    "@igo2/sdg": "1.0.0-next.7",
     "core-js": "^3.24.1",
     "rxjs": "^7.5.6",
     "tslib": "^2.6.0",
@@ -77,11 +75,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "madge": "^6.1.0",
     "prettier": "^3.2.0",
     "protractor": "~7.0.0",
     "source-map-explorer": "^2.5.3",
-    "ts-node": "^10.9.1",
     "typescript": "~5.3.3"
   }
 }
