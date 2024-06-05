@@ -1,28 +1,16 @@
 {
-  "title": "IGO",
+  "title": "Angular - Système d'assemblage gouvernemental",
   "header": {
-    "hasHeader": true,
-    "logo": "assets/images/signature-PIV.svg",
-    "logoPrint": "assets/images/signature-PIV.svg"
+    "logo": {
+      "primary": "assets/images/signature-PIV.svg",
+      "print": "assets/images/signature-PIV.svg"
+    }
   },
   "hasMenu": false,
   "hasFooter": true,
   "hasLegendButton": true,
   "legendInPanel": true,
   "showRotationButtonIfNoRotation": true,
-  "geolocate": {
-    "button": {
-      "visible": true
-    },
-    "basic": true,
-    "followPosition": false,
-    "activateDefault": false
-  },
-  "hasFeatureEmphasisOnSelection": true,
-  "addFeaturetoLayer": false,
-  "useStaticIcon": false,
-  "customFeatureTitle": false,
-  "customFeatureDetails": false,
   "searchBar": {
     "showSearchBar": true,
     "showSearchButton": true
@@ -30,10 +18,7 @@
   "importExport": {
     "url": "/apis/ogre"
   },
-  "mobileBreakPoint": "(min-width: 768px)",
   "language": {
-    "prefix": [
-      "./locale/"
-    ]
+    "prefix": ["./locale/"]
   }
 }

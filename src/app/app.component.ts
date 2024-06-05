@@ -4,26 +4,24 @@ import {
   ElementRef,
   Inject,
   OnInit,
-  Renderer2,
+  Signal,
   ViewChild
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { Meta, Title } from '@angular/platform-browser';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
-import { SpinnerActivityDirective, SpinnerComponent } from '@igo2/common';
 import { ConfigService } from '@igo2/core/config';
 import { LanguageService } from '@igo2/core/language';
-import { MessageService } from '@igo2/core/message';
-import { AnalyticsListenerService, AppOptions } from '@igo2/integration';
-import { DomUtils, userAgent } from '@igo2/utils';
+import { HeaderComponent, NavigationComponent } from '@igo2/sdg';
+import { DomUtils } from '@igo2/utils';
 
 import { delay, first } from 'rxjs';
 
-import { HeaderComponent } from './pages/header/header.component';
-import { MenuComponent } from './pages/menu/menu.component';
-import { PortalComponent } from './pages/portal/portal.component';
-import { PwaService } from './services/pwa.service';
+import { EnvironmentOptions } from '../environments/environnement.interface';
+import { routes } from './app.routes';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -31,53 +29,48 @@ import { PwaService } from './services/pwa.service';
   styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [
-    SpinnerComponent,
-    SpinnerActivityDirective,
+    NgClass,
+    NavigationComponent,
     HeaderComponent,
-    MenuComponent,
-    PortalComponent,
-    NgClass
+    RouterOutlet,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class AppComponent implements OnInit {
-  private themeClass = 'qcca-theme';
   public hasHeader: boolean;
   public hasFooter: boolean;
-  private promptEvent: any;
   public hasMenu: boolean = false;
+  config: EnvironmentOptions;
+  routes = routes.filter((route) => route.redirectTo == null);
 
   @ViewChild('searchBar', { read: ElementRef, static: true })
   searchBar: ElementRef;
+
+  get isHandset(): Signal<boolean> {
+    return this.appService.isHandset;
+  }
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     protected languageService: LanguageService,
     private configService: ConfigService,
-    private analyticsListenerService: AnalyticsListenerService,
-    private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
-    private messageService: MessageService,
-    private pwaService: PwaService,
     private router: Router,
+    private appService: AppService,
     iconRegistry: MatIconRegistry
   ) {
     iconRegistry.registerFontClassAlias('Linearicons-Free', 'lnr');
+
+    this.config = this.configService.getConfigs();
+
     this.readTitleConfig();
-    this.readThemeConfig();
     this.readDescriptionConfig();
-
-    this.analyticsListenerService.listen();
-
-    this.detectOldBrowser();
 
     this.hasHeader = this.configService.getConfig('header.hasHeader', false);
     this.hasFooter = this.configService.getConfig('hasFooter', false);
     this.hasMenu = this.configService.getConfig('hasMenu', false);
-
-    this.setManifest();
-    this.installPrompt();
-    this.pwaService.checkForUpdates();
   }
 
   ngOnInit(): void {
@@ -122,70 +115,10 @@ export class AppComponent implements OnInit {
       });
   }
 
-  private setManifest() {
-    if (this.configService.getConfig('app.install.enabled')) {
-      const manifestPath = this.configService.getConfig(
-        'app.install.manifestPath',
-        'manifest.webmanifest'
-      );
-      document
-        .querySelector('#igoManifestByConfig')
-        .setAttribute('href', manifestPath);
-    }
-  }
-
-  private installPrompt() {
-    const appConfig: AppOptions = this.configService.getConfig('app');
-    if (appConfig?.install?.enabled && appConfig?.install?.promote) {
-      if (userAgent.getOSName() !== 'iOS') {
-        window.addEventListener(
-          'beforeinstallprompt',
-          (event: any) => {
-            event.preventDefault();
-            this.promptEvent = event;
-            window.addEventListener(
-              'click',
-              () => {
-                setTimeout(() => {
-                  this.promptEvent.prompt();
-                  this.promptEvent = undefined;
-                }, 750);
-              },
-              { once: true }
-            );
-          },
-          { once: true }
-        );
-      }
-    }
-  }
-
-  private readThemeConfig() {
-    const theme = this.configService.getConfig('theme') || this.themeClass;
-    if (theme) {
-      this.renderer.addClass(document.body, theme);
-    }
-  }
-
   private readDescriptionConfig() {
     const description = this.configService.getConfig('description');
     if (description) {
       this.metaService.addTag({ name: 'description', content: description });
-    }
-  }
-
-  private detectOldBrowser() {
-    const oldBrowser = userAgent.satisfies({
-      ie: '<=11',
-      chrome: '<64',
-      firefox: '<60',
-      safari: '<=11'
-    });
-
-    if (oldBrowser) {
-      this.messageService.alert('oldBrowser.message', 'oldBrowser.title', {
-        timeOut: 15000
-      });
     }
   }
 }

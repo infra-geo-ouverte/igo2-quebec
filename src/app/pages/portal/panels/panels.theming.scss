@@ -1,7 +1,0 @@
-@use '@angular/material' as mat;
-
-@use './feature/feature.theming.scss' as feature;
-
-@mixin themes($theme) {
-  @include feature.themes($theme);
-}

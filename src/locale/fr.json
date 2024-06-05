@@ -41,15 +41,9 @@
     "tooltip": "Personnalisez ce template, même par couche avec une condition sous feature.meta.id ou autres metadatas"
   },
   "searchBar": "Faire une recherche",
-  "sidePanel": {
+  "sidenav": {
     "close": "Masquer le panneau",
     "open": "Ouvrir le panneau"
-  },
-  "pwa": {
-    "new-version-title": "Une nouvelle version de l'application est disponible. ",
-    "new-version": "Voulez-vous recharger l'application?",
-    "data-download-start": "Téléchargement des données pour utilisation hors-ligne. Veuillez ne pas quitter.",
-    "data-download-completed": "Téléchargement des données hors-ligne terminé"
   },
   "igo": {
     "integration": {

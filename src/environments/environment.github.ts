@@ -9,9 +9,6 @@ export const environment: AppEnvironmentOptions = {
         enabled: true,
         promote: true,
         manifestPath: './config/github.webmanifest'
-      },
-      pwa: {
-        enabled: false
       }
     },
     language: {

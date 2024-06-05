@@ -1,16 +1,47 @@
-import { AppEnvironmentOptions } from './environnement.interface';
+import { EnvironmentOptions } from './environnement.interface';
 
-export const environment: AppEnvironmentOptions = {
+export const environment: EnvironmentOptions = {
   production: true,
+  title: "Angular - Système d'assemblage gouvernemental",
+  header: {
+    logo: {
+      primary: 'assets/images/signature-PIV.svg',
+      print: 'assets/images/signature-PIV.svg'
+    },
+    options: {
+      contactUs: {
+        label: 'header.contactUs',
+        redirectionRoute: 'contact-us'
+      },
+      language: {
+        choices: [
+          {
+            label: 'English',
+            key: 'en'
+          },
+          {
+            label: 'Francais',
+            key: 'fr'
+          }
+        ],
+        default: 'fr'
+      }
+    }
+  },
+  navigation: {
+    options: {
+      title: {
+        suffix: 'IGO',
+        separator: '·'
+      }
+    }
+  },
   igo: {
     app: {
       forceCoordsNA: true,
       install: {
         enabled: false,
         promote: false
-      },
-      pwa: {
-        enabled: false
       }
     },
     language: {

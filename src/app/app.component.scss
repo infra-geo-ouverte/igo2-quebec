@@ -1,43 +1,10 @@
-@import '@igo2/core/partial/core.variables';
-@import './pages/portal/portal.variables.scss';
-
-$header-height: 72px;
-$header-height-mobile: 72px;
-$footer-height: 29px;
-
 :host {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   height: 100%;
+}
 
-  igo-message-center
-    ::ng-deep
-    simple-notifications
-    ::ng-deep
-    div.simple-notification-wrapper {
-    right: 10px;
-  }
-  ::ng-deep .portal-hasHeader {
-    height: $portal-height-hasHeader-mobile !important;
-    display: block;
-  }
-
-  ::ng-deep .portal {
-    height: 100%;
-  }
-
-  @media (min-width: 768px) {
-    ::ng-deep .portal-hasHeader {
-      height: $portal-height-hasHeader !important;
-      display: block;
-    }
-  }
-
-  igo-spinner {
-    position: absolute;
-    top: 50% !important;
-    right: 50%;
-    z-index: 100;
-  }
+igo-message-center ::ng-deep .simple-notification-wrapper {
+  right: 10px;
 }

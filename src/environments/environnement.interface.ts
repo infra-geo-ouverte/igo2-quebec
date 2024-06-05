@@ -1,32 +1,26 @@
 import { AllEnvironmentOptions } from '@igo2/integration';
-import { EnvironmentOptions as IntegrationEnvironmentOptions } from '@igo2/integration';
-
-import { MapOverlay } from 'src/app/pages/portal/map-overlay/map-overlay.interface';
-
-export interface AppEnvironmentOptions extends IntegrationEnvironmentOptions {
-  igo: EnvironmentOptions;
-}
+import { IHeaderConfig, INavigationConfig } from '@igo2/sdg';
+import { MapOverlay } from '@igo2/sdg/geo';
 
 export interface EnvironmentOptions extends AllEnvironmentOptions {
-  header?: {
-    hasHeader?: boolean;
-    logo?: string;
-    logoPrint?: string;
-  };
-  hasFooter?: boolean;
-  hasMenu?: boolean;
-  title?: string;
-  theme?: string; // enum?
+  production: boolean;
+  title: string;
   description?: string;
+  header: IHeaderConfig;
+  navigation?: INavigationConfig;
+  hasFooter?: boolean;
+  /** Que signifie hasMenu, définir son objectif et son comportement */
+  hasMenu?: boolean;
+  // Exemple de config potentielle:
+  // map: {
+  //   rotation: {
+  //     alwaysShow: true;
+  //   }
+  // }
   mapOverlay?: MapOverlay[];
   showRotationButtonIfNoRotation?: boolean;
-  hasFeatureEmphasisOnSelection?: boolean;
-  addFeaturetoLayer?: boolean;
-  customFeatureDetails?: string;
-  customFeatureTitle?: string;
-  queryOnlyOne?: boolean;
   useStaticIcon?: boolean;
   legendInPanel?: boolean;
-  mobileBreakPoint?: string;
   hasLegendButton?: boolean;
+  igo: AllEnvironmentOptions;
 }

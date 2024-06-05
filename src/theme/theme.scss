@@ -1,63 +1,23 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-@use '@igo2/core' as core;
-@use '@igo2/core/theming/all-theme' as igo-all-theme;
+@use '@igo2/core/theming/all-theme' as igo2-lib;
+@use '@igo2/sdg';
 
-@use '../app/app.theming' as app;
+@use '../app/components/components-theme' as app-components;
 
-@use './qcca';
-
-// https://design.quebec.ca/a-propos-systeme-design
-$primary: mat.define-palette(qcca.$palette, 500, 400, 700);
-$accent: mat.define-palette(qcca.$palette, 400, 100, 700);
-$warn: mat.define-palette(qcca.$palette, 800);
-$success: mat.define-palette(qcca.$palette, 900);
-$background: mat.define-palette(qcca.$palette, 100, 100, 100);
-$foreground: mat.define-palette(qcca.$palette, 700, 700, 700);
-
-$theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      success: $success,
-      background: $background
-    ),
-    typography: qcca.$typo-typography,
-    density: 0
-  )
-);
-$theme: map.merge(
-  $theme,
-  (
-    foreground:
-      core.theme-foreground(mat.define-palette(qcca.$palette, 500, 100, 700))
-  )
-);
+$theme: sdg.$theme;
 
 @include mat.core();
-@include mat.typography-hierarchy(qcca.$typo-typography);
+@include mat.typography-hierarchy(sdg.$typo-typography);
 @include mat.all-component-themes($theme);
 
-@include igo-all-theme.all-component-themes($theme);
+@include igo2-lib.all-component-themes($theme);
+@include sdg.all-component-themes($theme);
+@include app-components.themes($theme);
 
-@include qcca.all-component-themes($theme);
-
-@media (max-width: 1200px) {
-  @include mat.typography-hierarchy(qcca.$typo-typography-mobile);
+@include sdg.breakpoint-down(tablet) {
+  @include mat.typography-hierarchy(sdg.$typo-typography-mobile);
 }
 
-@include qcca.typo-set-base-styles();
-
-@include app.themes($theme);
-
-igo-rotation-button,
-igo-zoom-button button,
-igo-offline-button,
-igo-home-extent-button,
-igo-baselayers-switcher,
-igo-geolocate-button {
-  @include mat.elevation(2);
-}
+@include sdg.typo-set-base-styles();
